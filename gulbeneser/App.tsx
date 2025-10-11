@@ -18,6 +18,21 @@ import CertificateModal from './components/modals/CertificateModal';
 import AccessibilityModal from './components/modals/AccessibilityModal';
 import CoverLetterModal from './components/modals/CoverLetterModal';
 
+const formatPhoneNumber = (phone: string) => {
+  const digits = phone.replace(/\D/g, '');
+
+  if (!digits.startsWith('90') || digits.length < 12) {
+    return phone;
+  }
+
+  const areaCode = digits.slice(2, 5);
+  const part1 = digits.slice(5, 8);
+  const part2 = digits.slice(8, 10);
+  const part3 = digits.slice(10, 12);
+
+  return `+90 (${areaCode}) ${part1} ${part2} ${part3}`;
+};
+
 const App = () => {
   const [language, setLanguage] = useState('tr');
   const [selectedCert, setSelectedCert] = useState<any>(null);
@@ -64,7 +79,7 @@ const App = () => {
         
         doc.setFontSize(9);
         doc.setTextColor(t.pdfColors.text);
-        const contactInfo = `${t.contactInfo.email} | ${t.contactInfo.phone} | ${t.contactInfo.address}`;
+        const contactInfo = `${t.contactInfo.email} | ${formatPhoneNumber(t.contactInfo.phone)} | ${t.contactInfo.address}`;
         doc.text(contactInfo, pageWidth / 2, y, { align: 'center' });
         y += 30;
 

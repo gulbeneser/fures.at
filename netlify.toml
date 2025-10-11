@@ -3,6 +3,36 @@
   publish = "dist"
 
 [[redirects]]
+  from = "/gulbeneser"
+  to = "/gulbeneser/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/gulbeneser/*"
+  to = "/gulbeneser/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/furkanyonat"
+  to = "/furkanyonat/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/furkanyonat/*"
+  to = "/furkanyonat/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/kariyer"
+  to = "/kariyer/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/kariyer/*"
+  to = "/kariyer/index.html"
+  status = 200
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200

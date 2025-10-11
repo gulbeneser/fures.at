@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "node scripts/build-profiles.mjs && tsc && vite build",
+    "build:profiles": "node scripts/build-profiles.mjs",
     "preview": "vite preview"
   },
   "dependencies": {

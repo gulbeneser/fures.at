@@ -130,8 +130,8 @@ export function CTA() {
             {
               icon: Phone,
               title: t('contact.phone'),
-              content: "+90 548 991 01 06",
-              href: "tel:+905489910106"
+              content: "+90 (548) 876 68 19",
+              href: "tel:+905488766819"
             },
             {
               icon: MapPin,
