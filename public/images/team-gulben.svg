@@ -1,0 +1,11 @@
+<svg width="320" height="320" viewBox="0 0 320 320" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="320" height="320" rx="48" fill="#1B0F0F"/>
+  <circle cx="160" cy="160" r="120" fill="url(#grad)"/>
+  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="'Space Grotesk', sans-serif" font-size="96" font-weight="700" fill="white">GE</text>
+  <defs>
+    <linearGradient id="grad" x1="40" y1="40" x2="280" y2="280" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FF6B35"/>
+      <stop offset="1" stop-color="#9D4EDD"/>
+    </linearGradient>
+  </defs>
+</svg>

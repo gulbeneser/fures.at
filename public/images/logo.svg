@@ -1,0 +1,10 @@
+<svg width="160" height="48" viewBox="0 0 160 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="160" height="48" rx="12" fill="url(#grad)"/>
+  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="'Space Grotesk', sans-serif" font-size="24" font-weight="700" fill="white">Fures</text>
+  <defs>
+    <linearGradient id="grad" x1="0" y1="0" x2="160" y2="48" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FF6B35"/>
+      <stop offset="1" stop-color="#9D4EDD"/>
+    </linearGradient>
+  </defs>
+</svg>
