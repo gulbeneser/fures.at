@@ -21,12 +21,12 @@ export default function App() {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/preview_page.html" element={<HomePage />} />
-              <Route path="/hakkimizda" element={<AboutPage />} />
-              <Route path="/hizmetler" element={<ServicesPage />} />
-              <Route path="/projeler" element={<ProjectsPage />} />
-              <Route path="/ekip" element={<TeamPage />} />
-              <Route path="/sss" element={<FAQPage />} />
-              <Route path="/iletisim" element={<ContactPage />} />
+              <Route path="/hakkimizda/*" element={<AboutPage />} />
+              <Route path="/hizmetler/*" element={<ServicesPage />} />
+              <Route path="/projeler/*" element={<ProjectsPage />} />
+              <Route path="/ekip/*" element={<TeamPage />} />
+              <Route path="/sss/*" element={<FAQPage />} />
+              <Route path="/iletisim/*" element={<ContactPage />} />
               <Route path="/furkanyonat/*" element={<ProfileViewer profile={PROFILE_CONFIG.furkanyonat} />} />
               <Route path="/gulbeneser/*" element={<ProfileViewer profile={PROFILE_CONFIG.gulbeneser} />} />
               <Route path="/kariyer/*" element={<ProfileViewer profile={PROFILE_CONFIG.kariyer} />} />

@@ -6,6 +6,7 @@ export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, '.', '');
     const geminiKey = env.apikey ?? env.API_KEY ?? env.GEMINI_API_KEY ?? '';
     return {
+      base: '/furkanyonat/',
       server: {
         port: 3000,
         host: '0.0.0.0',
