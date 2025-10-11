@@ -19,7 +19,14 @@ export function Header() {
 
   const closeMenu = () => setIsMenuOpen(false);
 
-  const isActive = (path: string) => location.pathname === path;
+  const normalizePath = (path: string) => {
+    if (path === "/") {
+      return "/";
+    }
+    return path.replace(/\/+$/, "");
+  };
+
+  const isActive = (path: string) => normalizePath(location.pathname) === normalizePath(path);
 
   const navLinkClasses = (path: string) =>
     `relative flex items-center px-4 py-2 text-sm font-medium rounded-full transition-all duration-300 ${
