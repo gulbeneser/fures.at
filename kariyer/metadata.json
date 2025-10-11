@@ -1,0 +1,7 @@
+{
+  "name": "Professional AI CV Builder",
+  "description": "An intelligent CV builder that helps users create, enhance, and analyze their resumes using AI. It can extract data from PDFs, images, or text, generate professional headshots, and provide expert analysis for career development.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}

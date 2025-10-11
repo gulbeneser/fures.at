@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="tr" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gülben Eser - CV</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --background-start-rgb: 249, 250, 251; /* slate-50 */
+        --background-end-rgb: 226, 232, 240;   /* slate-200 */
+        --blue-950: #172554;
+        --blue-800: #1e40af;
+        --pink-600: #db2777;
+        --pink-500: #ec4899;
+        --slate-900: #0f172a;
+        --slate-800: #1e293b;
+        --slate-700: #334155;
+        --slate-600: #475569;
+        --slate-500: #64748b;
+        --slate-100: #f1f5f9;
+      }
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: rgb(var(--background-start-rgb));
+        background-image: radial-gradient(at 50% 0%, rgba(255, 255, 255, 0.3) 0px, transparent 50%), 
+                          radial-gradient(at right top, #bfdbfe 0px, transparent 40%),
+                          radial-gradient(at bottom left, #fbcfe8 0px, transparent 50%);
+        color: var(--slate-700);
+      }
+      /* Custom scrollbar for a better aesthetic */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #f1f5f9; /* slate-100 */
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #94a3b8; /* slate-400 */
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #64748b; /* slate-500 */
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://aistudiocdn.com/react@^19.1.1/",
+    "react": "https://aistudiocdn.com/react@^19.1.1",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.1.1/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.21.0",
+    "jspdf": "https://esm.sh/jspdf@2.5.1",
+    "html2canvas": "https://esm.sh/html2canvas@1.4.1"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,7 @@
+{
+  "name": "Furkan Yonat - CV",
+  "description": "A personal resume web application for Furkan Yonat showcasing his experience as a Hotel General Coordinator and AI & Web Developer.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}

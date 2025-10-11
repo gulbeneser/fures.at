@@ -1,0 +1,7 @@
+{
+  "name": "Gülben Eser - CV",
+  "description": "A personal resume web application for Gülben Eser, showcasing education, work experience, skills, and certificates in a visually appealing design.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
