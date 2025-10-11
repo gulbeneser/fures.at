@@ -2,6 +2,7 @@ import { execSync } from 'node:child_process';
 import { cpSync, rmSync, mkdirSync, existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { syncStaticProjects } from './sync-static-projects.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -31,3 +32,4 @@ for (const app of apps) {
 }
 
 console.log('\nAll profile builds completed.');
+syncStaticProjects();
