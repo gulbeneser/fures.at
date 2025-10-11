@@ -144,8 +144,8 @@ export const translations = {
     },
     contactInfo: { 
       email: 'furkanyonat@gmail.com', 
-      phone: '+905338704176',
-      whatsapp: 'https://wa.me/905338704176', 
+      phone: '+905488766819',
+      whatsapp: 'https://wa.me/905488766819',
       portfolio: 'https://www.fures.at/furkanyonat/', 
       profileImage: 'https://i.imgur.com/5d2y3tD.jpeg', 
       linkedin: 'https://www.linkedin.com/in/furkan-yonat-2745061ba/',
@@ -310,8 +310,8 @@ export const translations = {
     },
     contactInfo: { 
       email: 'furkanyonat@gmail.com', 
-      phone: '+905338704176',
-      whatsapp: 'https://wa.me/905338704176', 
+      phone: '+905488766819',
+      whatsapp: 'https://wa.me/905488766819',
       portfolio: 'https://www.fures.at/furkanyonat/', 
       profileImage: 'https://i.imgur.com/5d2y3tD.jpeg', 
       linkedin: 'https://www.linkedin.com/in/furkan-yonat-2745061ba/',
