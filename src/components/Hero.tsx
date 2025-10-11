@@ -117,7 +117,7 @@ export function Hero() {
             transition={{ duration: 0.5 }}
             className="text-5xl sm:text-6xl lg:text-8xl mb-6"
           >
-            <span className="block gradient-flow bg-clip-text text-transparent font-bold">
+            <span className="block text-white font-bold">
               {rotatingTexts[textIndex]}
             </span>
             <span className="block mt-2 bg-gradient-to-r from-orange-400 via-orange-500 to-purple-600 bg-clip-text text-transparent font-bold">

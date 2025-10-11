@@ -3,7 +3,7 @@ import { useLanguage } from "../contexts/LanguageContext";
 
 export function Footer() {
   const { t } = useLanguage();
-  const logoSrc = "/images/logo.svg";
+  const logoSrc = "/images/fures.png";
 
   const footerLinks = [
     { title: t('nav.about'), href: "/hakkimizda" },
