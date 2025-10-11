@@ -73,17 +73,17 @@ export function WhyUs() {
           {features.map((feature, index) => (
             <div
               key={index}
-              className="group relative p-8 rounded-2xl bg-gradient-to-br from-white/5 to-white/0 border border-white/10 hover:border-orange-500/50 transition-all duration-500 hover:transform hover:scale-105"
+              className="group surface-card p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_25px_65px_-35px_rgba(255,122,41,0.55)]"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-orange-500/0 to-purple-600/0 rounded-2xl opacity-0 group-hover:opacity-100 group-hover:from-orange-500/5 group-hover:to-purple-600/5 transition-opacity duration-500"></div>
-              
+              <div className="absolute inset-0 bg-gradient-to-br from-orange-500/0 to-purple-600/0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-hover:from-orange-500/12 group-hover:to-purple-600/10"></div>
+
               <div className="relative z-10">
-                <div className={`w-14 h-14 bg-gradient-to-r ${feature.gradient} rounded-2xl flex items-center justify-center mb-6 group-hover:rotate-6 transition-transform duration-300 shadow-lg`}>
+                <div className={`w-14 h-14 bg-gradient-to-r ${feature.gradient} rounded-2xl flex items-center justify-center mb-6 group-hover:-rotate-3 transition-transform duration-300 shadow-lg`}>
                   <feature.icon className="h-7 w-7 text-white" />
                 </div>
-                
-                <h4 className="text-xl text-white mb-3">{feature.title}</h4>
-                <p className="text-gray-400 leading-relaxed">{feature.description}</p>
+
+                <h4 className="text-xl text-white mb-3 font-semibold">{feature.title}</h4>
+                <p className="text-gray-300/80 leading-relaxed">{feature.description}</p>
               </div>
             </div>
           ))}
@@ -101,7 +101,7 @@ export function WhyUs() {
             {benefits.map((benefit, index) => (
               <div
                 key={index}
-                className="relative p-8 rounded-2xl bg-gradient-to-br from-white/5 to-white/0 border border-white/10"
+                className="surface-card p-8"
               >
                 <div className="flex items-start gap-4">
                   <div className="flex-shrink-0">

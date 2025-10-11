@@ -4,6 +4,10 @@ import { CVData } from '../types';
 import { LanguageContext } from '../App';
 import * as geminiService from '../services/geminiService';
 
+const GEMINI_KEY = (process.env.API_KEY ||
+  (process.env as Record<string, string | undefined>).apikey ||
+  process.env.GEMINI_API_KEY) as string | undefined;
+
 type Voice = 'Zephyr' | 'Puck' | 'Charon' | 'Kore' | 'Fenrir';
 
 interface InterviewSimulatorModalProps {
@@ -83,10 +87,10 @@ const InterviewSimulatorModal: React.FC<InterviewSimulatorModalProps> = ({ cvDat
 
 
     useEffect(() => {
-        if (process.env.API_KEY) {
-            setAi(new GoogleGenAI({ apiKey: process.env.API_KEY }));
+        if (GEMINI_KEY) {
+            setAi(new GoogleGenAI({ apiKey: GEMINI_KEY }));
         } else {
-            setError("API_KEY environment variable not set.");
+            setError("API anahtarı bulunamadı. Lütfen 'apikey' değişkenini tanımlayın.");
         }
         return () => { handleEndInterview(true); };
         // eslint-disable-next-line react-hooks/exhaustive-deps

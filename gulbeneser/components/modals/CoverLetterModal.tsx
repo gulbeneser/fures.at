@@ -2,6 +2,10 @@ import React, { useState, useMemo } from 'react';
 import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
 import { translations } from '../../data/translations';
 
+const GEMINI_KEY = (process.env.API_KEY ||
+  (process.env as Record<string, string | undefined>).apikey ||
+  process.env.GEMINI_API_KEY) as string | undefined;
+
 const CoverLetterModal = ({ onClose, t }: { onClose: () => void, t: any }) => {
     const [companyName, setCompanyName] = useState('');
     const [jobTitle, setJobTitle] = useState('');
@@ -9,7 +13,7 @@ const CoverLetterModal = ({ onClose, t }: { onClose: () => void, t: any }) => {
     const [generatedLetter, setGeneratedLetter] = useState('');
     const [copySuccess, setCopySuccess] = useState('');
 
-    const ai = useMemo(() => process.env.API_KEY ? new GoogleGenAI({ apiKey: process.env.API_KEY }) : null, []);
+    const ai = useMemo(() => (GEMINI_KEY ? new GoogleGenAI({ apiKey: GEMINI_KEY }) : null), []);
 
     const handleGenerate = async () => {
         if (!companyName.trim() || !jobTitle.trim() || !ai) return;

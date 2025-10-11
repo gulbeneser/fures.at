@@ -80,31 +80,29 @@ export function ServicePackages() {
           {packages.map((pkg, index) => (
             <div
               key={index}
-              className={`group relative p-8 rounded-3xl bg-gradient-to-br from-white/5 to-white/0 border transition-all duration-500 hover:transform hover:scale-105 ${
-                pkg.featured
-                  ? 'border-orange-500/50 lg:col-span-1 lg:row-span-2'
-                  : 'border-white/10 hover:border-orange-500/50'
+              className={`group surface-card p-9 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_25px_65px_-30px_rgba(255,122,41,0.6)] ${
+                pkg.featured ? 'lg:col-span-1 lg:row-span-2 ring-1 ring-orange-400/30' : ''
               }`}
             >
               {pkg.featured && (
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-orange-500 to-purple-600 rounded-full text-xs text-white shadow-lg">
+                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-orange-500 via-orange-400 to-purple-600 rounded-full text-xs font-semibold text-white shadow-lg">
                   Popüler
                 </div>
               )}
 
-              <div className="absolute inset-0 bg-gradient-to-br from-orange-500/0 to-purple-600/0 rounded-3xl opacity-0 group-hover:opacity-100 group-hover:from-orange-500/10 group-hover:to-purple-600/5 transition-opacity duration-500"></div>
-              
+              <div className="absolute inset-0 bg-gradient-to-br from-orange-500/0 to-purple-600/0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-hover:from-orange-500/12 group-hover:to-purple-600/8"></div>
+
               <div className="relative z-10">
-                <div className={`w-14 h-14 bg-gradient-to-r ${pkg.gradient} rounded-2xl flex items-center justify-center mb-6 group-hover:rotate-6 transition-transform duration-300 shadow-lg`}>
+                <div className={`w-14 h-14 bg-gradient-to-r ${pkg.gradient} rounded-2xl flex items-center justify-center mb-6 group-hover:-rotate-3 transition-transform duration-300 shadow-lg`}>
                   <pkg.icon className="h-7 w-7 text-white" />
                 </div>
-                
-                <h3 className="text-2xl text-white mb-2">{pkg.name}</h3>
-                <p className="text-sm text-orange-400 mb-4">{pkg.subtitle}</p>
-                <p className="text-sm text-gray-400 leading-relaxed mb-6">{pkg.description}</p>
-                
+
+                <h3 className="text-2xl text-white mb-2 font-semibold tracking-tight">{pkg.name}</h3>
+                <p className="text-sm text-orange-300 mb-4 uppercase tracking-[0.15em]">{pkg.subtitle}</p>
+                <p className="text-sm text-gray-300/80 leading-relaxed mb-6">{pkg.description}</p>
+
                 <div className="pt-6 border-t border-white/10">
-                  <p className="text-lg text-white">{pkg.price}</p>
+                  <p className="text-lg text-white font-semibold">{pkg.price}</p>
                 </div>
               </div>
             </div>

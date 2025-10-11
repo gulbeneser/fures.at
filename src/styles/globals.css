@@ -6,16 +6,16 @@
 
 :root {
   --font-size: 16px;
-  --background: #0A0A0A;
-  --background-dark: #1B0F0F;
+  --background: #050507;
+  --background-dark: #110d14;
   --foreground: oklch(0.985 0 0);
-  --card: #1A1A1A;
+  --card: #121017;
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.145 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: #FF6B35;
+  --primary: #FF7A29;
   --primary-foreground: oklch(1 0 0);
-  --secondary: #9D4EDD;
+  --secondary: #8F5BFF;
   --secondary-foreground: oklch(1 0 0);
   --muted: oklch(0.269 0 0);
   --muted-foreground: oklch(0.708 0 0);
@@ -23,9 +23,9 @@
   --accent-foreground: oklch(0.985 0 0);
   --destructive: #d4183d;
   --destructive-foreground: #ffffff;
-  --border: rgba(255, 255, 255, 0.1);
+  --border: rgba(255, 255, 255, 0.08);
   --input: transparent;
-  --input-background: rgba(255, 255, 255, 0.05);
+  --input-background: rgba(255, 255, 255, 0.06);
   --switch-background: #cbced4;
   --font-weight-medium: 500;
   --font-weight-normal: 400;
@@ -73,7 +73,11 @@
 
   body {
     @apply bg-black text-foreground;
-    background: radial-gradient(ellipse at center, #1B0F0F 0%, #0A0A0A 100%);
+    background:
+      radial-gradient(circle at 20% 20%, rgba(255, 122, 41, 0.15), transparent 45%),
+      radial-gradient(circle at 80% 10%, rgba(143, 91, 255, 0.18), transparent 50%),
+      radial-gradient(circle at 50% 85%, rgba(255, 122, 41, 0.12), transparent 55%),
+      #050507;
     background-attachment: fixed;
     font-family: var(--font-body);
   }
@@ -94,7 +98,34 @@
   }
   
   .glow-gradient {
-    box-shadow: 0 0 30px rgba(255, 107, 53, 0.2), 0 0 60px rgba(157, 78, 221, 0.2);
+    box-shadow: 0 0 30px rgba(255, 122, 41, 0.25), 0 0 60px rgba(143, 91, 255, 0.18);
+  }
+
+  .surface-card {
+    position: relative;
+    border-radius: 1.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: linear-gradient(140deg, rgba(20, 16, 29, 0.92), rgba(10, 9, 14, 0.9));
+    box-shadow: 0 25px 45px -30px rgba(0, 0, 0, 0.8);
+    overflow: hidden;
+  }
+
+  .surface-card::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(255, 122, 41, 0.4), rgba(143, 91, 255, 0.35));
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .surface-card:hover::before {
+    opacity: 1;
   }
   
   .text-glow {
