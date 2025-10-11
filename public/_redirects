@@ -1,7 +1,9 @@
-/gulbeneser      /gulbeneser/index.html      200
-/gulbeneser/*    /gulbeneser/index.html      200
-/furkanyonat     /furkanyonat/index.html     200
-/furkanyonat/*   /furkanyonat/index.html     200
-/kariyer         /kariyer/index.html         200
-/kariyer/*       /kariyer/index.html         200
-/*               /index.html                 200
+/gulbeneser               /gulbeneser/index.html               200
+/gulbeneser/*             /gulbeneser/index.html               200
+/furkanyonat              /furkanyonat/index.html              200
+/furkanyonat/*            /furkanyonat/index.html              200
+/kariyer                  /kariyer/index.html                  200
+/kariyer/*                /kariyer/index.html                  200
+/projects/:project        /projects/:project/index.html        200
+/projects/:project/*      /projects/:project/index.html        200
+/*                        /index.html                          200

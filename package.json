@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "predev": "node scripts/sync-static-projects.mjs",
     "dev": "vite",
     "build": "node scripts/build-profiles.mjs && tsc && vite build",
     "build:profiles": "node scripts/build-profiles.mjs",
