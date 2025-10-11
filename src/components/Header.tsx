@@ -15,7 +15,7 @@ export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { t } = useLanguage();
   const location = useLocation();
-  const logoSrc = "/images/logo.svg";
+  const logoSrc = "/images/fures.png";
 
   const closeMenu = () => setIsMenuOpen(false);
 
