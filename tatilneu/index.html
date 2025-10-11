@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="tr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yapay Zeka Destekli Kuzey Kıbrıs Keşif Rehberi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .hero-bg {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://placehold.co/1920x1080/0B2447/A5D7E8?text=Kuzey+Kıbrıs');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        .sticky-nav {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #0d9488;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* Chatbot Styles */
+        .chat-fab {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background-color: #0d9488; /* Soft Teal */
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transition: transform 0.2s ease-in-out;
+            z-index: 1000;
+        }
+        .chat-fab:hover {
+            transform: scale(1.1);
+        }
+        .chat-widget {
+            position: fixed;
+            bottom: 6.5rem;
+            right: 2rem;
+            width: 90%;
+            max-width: 400px;
+            height: 500px;
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transform: scale(0.95);
+            opacity: 0;
+            transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+            transform-origin: bottom right;
+            z-index: 999;
+        }
+        .chat-widget.open {
+            transform: scale(1);
+            opacity: 1;
+        }
+        .chat-header {
+            background-color: #0d9488; /* Soft Teal */
+            color: white;
+            padding: 1rem;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .chat-messages {
+            flex-grow: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .chat-message {
+            padding: 0.5rem 1rem;
+            border-radius: 1rem;
+            max-width: 80%;
+        }
+        .user-message {
+            background-color: #ccfbf1;
+            color: #115e59;
+            align-self: flex-end;
+            border-bottom-right-radius: 0;
+        }
+        .bot-message {
+            background-color: #e5e7eb;
+            color: #1f2937;
+            align-self: flex-start;
+            border-bottom-left-radius: 0;
+        }
+        .chat-input-area {
+            border-top: 1px solid #e5e7eb;
+            padding: 0.75rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+        .chat-input {
+            flex-grow: 1;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            padding: 0.5rem 0.75rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .chat-input:focus {
+            border-color: #0d9488;
+        }
+        .chat-send-btn {
+            background-color: #0d9488; /* Soft Teal */
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0 1rem;
+            cursor: pointer;
+            font-size: 1.25rem;
+            transition: background-color 0.2s;
+        }
+        .chat-send-btn:hover {
+            background-color: #0f766e;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- Hero Section -->
+    <header class="hero-bg text-white shadow-lg">
+        <div class="container mx-auto px-6 py-24 md:py-40 text-center">
+            <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-4 tracking-tight">KUZEY KIBRIS KEŞİF REHBERİ</h1>
+            <p class="text-lg md:text-xl max-w-3xl mx-auto text-blue-200">Adanın bilinen güzelliklerinin ötesine geçin; antik kentlerden el değmemiş plajlara, yerel lezzet duraklarından saklı kalmış doğa harikalarına uzanan eksiksiz bir macera sizi bekliyor.</p>
+        </div>
+    </header>
+    
+    <!-- Sticky Navigation -->
+    <nav id="navbar" class="sticky-nav bg-white/90 backdrop-blur-md shadow-md">
+        <div class="container mx-auto">
+            <div class="flex justify-center items-center p-2 overflow-x-auto">
+                 <div class="flex space-x-2 md:space-x-4 text-sm md:text-base">
+                    <a href="#planner" class="py-2 px-3 font-semibold text-teal-600 hover:text-teal-800 transition-colors whitespace-nowrap">✨ Gezi Planlayıcı</a>
+                    <a href="#ydu" class="py-2 px-3 font-semibold text-gray-600 hover:text-teal-600 transition-colors whitespace-nowrap">Yakın Doğu Üni.</a>
+                    <a href="#oteller" class="py-2 px-3 font-semibold text-gray-600 hover:text-teal-600 transition-colors whitespace-nowrap">Oteller</a>
+                    <a href="#tarih" class="py-2 px-3 font-semibold text-gray-600 hover:text-teal-600 transition-colors whitespace-nowrap">Tarih & Müzeler</a>
+                    <a href="#plajlar" class="py-2 px-3 font-semibold text-gray-600 hover:text-teal-600 transition-colors whitespace-nowrap">Plajlar</a>
+                 </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 md:px-6 py-12">
+        
+        <!-- Gemini Itinerary Planner Section -->
+        <section id="planner" class="mb-20 bg-white p-6 md:p-10 rounded-2xl shadow-lg">
+            <div class="text-center mb-8">
+                <h2 class="text-4xl font-extrabold text-gray-800">✨ Kişisel Gezi Planlayıcısı</h2>
+                <p class="mt-2 text-lg text-gray-500">Yapay zeka ile hayalinizdeki Kıbrıs tatilini planlayın!</p>
+            </div>
+            <div class="max-w-4xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label for="trip-duration" class="block text-sm font-medium text-gray-700 mb-1">Gezi Süresi (Gün)</label>
+                        <input type="number" id="trip-duration" value="3" min="1" max="14" class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">İlgi Alanları</label>
+                        <div class="flex flex-wrap gap-x-4 gap-y-2">
+                            <label class="inline-flex items-center"><input type="checkbox" class="interest-checkbox rounded text-teal-600 focus:ring-teal-500" value="Tarih" checked> <span class="ml-2">Tarih</span></label>
+                            <label class="inline-flex items-center"><input type="checkbox" class="interest-checkbox rounded text-teal-600 focus:ring-teal-500" value="Doğa"> <span class="ml-2">Doğa</span></label>
+                            <label class="inline-flex items-center"><input type="checkbox" class="interest-checkbox rounded text-teal-600 focus:ring-teal-500" value="Lezzet"> <span class="ml-2">Lezzet</span></label>
+                            <label class="inline-flex items-center"><input type="checkbox" class="interest-checkbox rounded text-teal-600 focus:ring-teal-500" value="Macera"> <span class="ml-2">Macera</span></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-6">
+                     <label for="locations-select" class="block text-sm font-medium text-gray-700 mb-1">Görmek İstediğiniz Yerler (İsteğe Bağlı)</label>
+                     <select id="locations-select" multiple class="w-full h-40 p-2 border border-gray-300 rounded-md focus:ring-teal-500 focus:border-teal-500"></select>
+                </div>
+                <button id="generate-plan-btn" class="w-full bg-teal-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-teal-700 transition-colors text-lg flex items-center justify-center">
+                    <i class="fas fa-magic-sparkles mr-2"></i> Plan Oluştur
+                </button>
+            </div>
+            <div id="itinerary-result" class="mt-8 p-6 bg-teal-50 rounded-lg prose max-w-none hidden"></div>
+        </section>
+
+        <!-- Yakin Dogu Universitesi Section -->
+        <section id="ydu" class="mb-20 bg-white p-6 md:p-10 rounded-2xl shadow-lg">
+            <div class="text-center mb-12">
+                <i class="fas fa-university text-5xl text-teal-600 mb-4"></i>
+                <h2 class="text-4xl font-extrabold text-gray-800">Yakın Doğu Üniversitesi</h2>
+                <p class="mt-2 text-lg text-gray-500">Kampüs İçi ve Dışı İmkanları Keşfedin</p>
+            </div>
+            <div class="mb-12">
+                <h3 class="text-2xl font-bold text-teal-800 border-b-2 border-teal-200 pb-2 mb-6">Kampüs İçi Sosyal, Kültürel ve Alışveriş Noktaları</h3>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="bg-teal-50 p-6 rounded-xl"><h4 class="font-bold text-lg text-teal-900">NCS Kebap House & Pizza Pizza</h4><p class="text-sm text-gray-600 mt-2">Kampüsün popüler lezzet durakları, leziz döner, kebap ve pizza menüleriyle öğrencilerin ve misafirlerin vazgeçilmezi.</p></div>
+                    <div class="bg-teal-50 p-6 rounded-xl"><h4 class="font-bold text-lg text-teal-900">Kaffo & Patisserie</h4><p class="text-sm text-gray-600 mt-2">Taze kahveler, özel harmanlar ve günlük tatlılarla keyifli molaların adresi.</p></div>
+                    <div class="bg-teal-50 p-6 rounded-xl"><h4 class="font-bold text-lg text-teal-900">İkas Süpermarket</h4><p class="text-sm text-gray-600 mt-2">Gıdadan kişisel bakıma, tüm günlük ihtiyaçlarınızı karşılayabileceğiniz pratik alışveriş noktası.</p></div>
+                    <div class="bg-teal-50 p-6 rounded-xl"><h4 class="font-bold text-lg text-teal-900">Kıbrıs Modern Sanat Müzesi</h4><p class="text-sm text-gray-600 mt-2">Çağdaş sanatın kalbinin attığı, yağlı boya, heykel ve seramik gibi çeşitli disiplinlerden eserlerin yer aldığı merkez.</p></div>
+                    <div class="bg-teal-50 p-6 rounded-xl"><h4 class="font-bold text-lg text-teal-900">Kıbrıs Araba Müzesi</h4><p class="text-sm text-gray-600 mt-2">1899'dan günümüze 140'tan fazla klasik araçla ulaşım tarihinde zamanda yolculuk yapın.</p></div>
+                    <div class="bg-teal-50 p-6 rounded-xl"><h4 class="font-bold text-lg text-teal-900">Herbaryum & Doğa Tarihi Müzesi</h4><p class="text-sm text-gray-600 mt-2">Binlerce bitki örneği, mantar ve alg koleksiyonuyla Kıbrıs'ın endemik türlerini keşfedin.</p></div>
+                </div>
+            </div>
+            <div>
+                <h3 class="text-2xl font-bold text-teal-800 border-b-2 border-teal-200 pb-2 mb-6">Spor Tesisleri</h3>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="bg-teal-50 p-6 rounded-xl"><h4 class="font-bold text-lg text-teal-900">Olimpik Kapalı Havuz</h4><p class="text-sm text-gray-600 mt-2">Yıl boyunca hizmet veren modern havuzda yüzme kurslarına katılın veya serbest yüzmenin keyfini çıkarın.</p></div>
+                    <div class="bg-teal-50 p-6 rounded-xl"><h4 class="font-bold text-lg text-teal-900">Sports Tower</h4><p class="text-sm text-gray-600 mt-2">Yoga, pilates, spinning gibi grup derslerinin yanı sıra cryotherapy gibi özel sağlık destekli uygulamalar sunar.</p></div>
+                    <div class="bg-teal-50 p-6 rounded-xl"><h4 class="font-bold text-lg text-teal-900">Açık Spor Sahaları</h4><p class="text-sm text-gray-600 mt-2">Halka açık tenis, basketbol, voleybol ve futbol sahalarında spor yapmanın keyfini çıkarın.</p></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dorana Hotels Section -->
+        <section id="oteller" class="mb-20">
+             <div class="text-center mb-12"><i class="fas fa-hotel text-5xl text-teal-600 mb-4"></i><h2 class="text-4xl font-extrabold text-gray-800">Dorana Hotels Grubu</h2><p class="mt-2 text-lg text-gray-500">Konforlu Konaklama Seçenekleri</p></div>
+             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col"><div class="p-6 flex-grow"><h3 class="text-xl font-bold text-teal-900">Dorana Residence (Kampüs İçi)</h3><p class="text-sm text-gray-600 mt-2">YDÜ kampüsü içinde, akademik ziyaretçiler ve aileler için modern olanaklarla donatılmış ideal konaklama.</p></div><div class="p-6 bg-gray-100 grid grid-cols-2 gap-4"><a href="http://doranaresidence.com" target="_blank" class="text-center block bg-teal-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-teal-700 transition-colors"><i class="fas fa-globe mr-2"></i>Web</a><a href="https://www.google.com/search?q=Dorana+Residence+Lefkoşa" target="_blank" class="text-center block bg-gray-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors"><i class="fas fa-map-marked-alt mr-2"></i>Harita</a></div></div>
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col"><div class="p-6 flex-grow"><h3 class="text-xl font-bold text-teal-900">Dorana Hotel (Girne Merkez)</h3><p class="text-sm text-gray-600 mt-2">Girne merkezinde, sahile yakın, 30 odalı bu otel hem iş hem tatil için modern ve samimi bir atmosfer sunar.</p></div><div class="p-6 bg-gray-100 grid grid-cols-2 gap-4"><a href="http://hoteldorana.com" target="_blank" class="text-center block bg-teal-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-teal-700 transition-colors"><i class="fas fa-globe mr-2"></i>Web</a><a href="https://www.google.com/search?q=Dorana+Hotel+Girne" target="_blank" class="text-center block bg-gray-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors"><i class="fas fa-map-marked-alt mr-2"></i>Harita</a></div></div>
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col"><div class="p-6 flex-grow"><h3 class="text-xl font-bold text-teal-900">Dorana Art Hotel (Girne)</h3><p class="text-sm text-gray-600 mt-2">Sanat ve estetiği buluşturan, 64 odalı bu otel her köşesindeki özgün tasarımla kültürel bir deneyim sunar.</p></div><div class="p-6 bg-gray-100 grid grid-cols-2 gap-4"><a href="http://doranaarthotel.com" target="_blank" class="text-center block bg-teal-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-teal-700 transition-colors"><i class="fas fa-globe mr-2"></i>Web</a><a href="https://www.google.com/search?q=Dorana+Art+Hotel+Girne" target="_blank" class="text-center block bg-gray-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors"><i class="fas fa-map-marked-alt mr-2"></i>Harita</a></div></div>
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col"><div class="p-6 flex-grow"><h3 class="text-xl font-bold text-teal-900">Park Palace Hotel (Girne)</h3><p class="text-sm text-gray-600 mt-2">Girne merkezinde, iş ve eğlence için ideal, modern ve şık tasarımlı odalarıyla konforlu bir konaklama.</p></div><div class="p-6 bg-gray-100 grid grid-cols-2 gap-4"><a href="http://hotelparkpalace.com" target="_blank" class="text-center block bg-teal-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-teal-700 transition-colors"><i class="fas fa-globe mr-2"></i>Web</a><a href="https://www.google.com/search?q=Park+Palace+Hotel+Girne" target="_blank" class="text-center block bg-gray-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors"><i class="fas fa-map-marked-alt mr-2"></i>Harita</a></div></div>
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col"><div class="p-6 flex-grow"><h3 class="text-xl font-bold text-teal-900">Mimoza Beach Hotel (Yeni Boğaziçi)</h3><p class="text-sm text-gray-600 mt-2">Denize sıfır, her şey dahil konsepti, özel plajı, havuzu ve canlı müziğiyle tam bir tatil cenneti.</p></div><div class="p-6 bg-gray-100 grid grid-cols-2 gap-4"><a href="http://mimozabeachhotel.com" target="_blank" class="text-center block bg-teal-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-teal-700 transition-colors"><i class="fas fa-globe mr-2"></i>Web</a><a href="https://www.google.com/search?q=Mimoza+Beach+Hotel+Yeni+Boğaziçi" target="_blank" class="text-center block bg-gray-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors"><i class="fas fa-map-marked-alt mr-2"></i>Harita</a></div></div>
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col"><div class="p-6 flex-grow"><h3 class="text-xl font-bold text-teal-900">Bellapais Oasis Hotel (Bellapais)</h3><p class="text-sm text-gray-600 mt-2">Tarihi Bellapais'in sakin atmosferinde, açık havuzu ve teras-barı ile huzurlu bir konaklama deneyimi.</p></div><div class="p-6 bg-gray-100 grid grid-cols-2 gap-4"><a href="https://hoteloasisbellapais.com/tr" target="_blank" class="text-center block bg-teal-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-teal-700 transition-colors"><i class="fas fa-globe mr-2"></i>Web</a><a href="https://www.google.com/search?q=Bellapais+Oasis+Hotel+Girne" target="_blank" class="text-center block bg-gray-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors"><i class="fas fa-map-marked-alt mr-2"></i>Harita</a></div></div>
+             </div>
+        </section>
+
+        <div id="dynamic-sections"></div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2025 <a href="http://www.fures.tech" target="_blank" class="text-teal-300 hover:text-teal-200 transition-colors">fures.tech</a>. Tüm hakları saklıdır.</p>
+            <p class="text-sm text-gray-400 mt-2">Geliştiren: <a href="https://fures.tech/furkanyonat/" target="_blank" class="text-teal-300 hover:text-teal-200 transition-colors">Furkan Yonat</a></p>
+        </div>
+    </footer>
+
+    <!-- Gemini Modal -->
+    <div id="gemini-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 items-center justify-center hidden">
+        <div class="bg-white rounded-lg shadow-xl m-4 md:m-8 max-w-2xl w-full max-h-[90vh] flex flex-col">
+            <div class="flex justify-between items-center p-4 border-b">
+                <h3 id="modal-title" class="text-xl font-bold text-teal-900"></h3>
+                <button id="modal-close-btn" class="text-gray-500 hover:text-gray-800">&times;</button>
+            </div>
+            <div id="modal-content" class="p-6 overflow-y-auto">
+                <!-- Content will be injected here -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Chatbot -->
+    <div id="chat-fab" class="chat-fab">
+        <i class="fas fa-comments"></i>
+    </div>
+    <div id="chat-widget" class="chat-widget">
+        <div class="chat-header">
+            <span>Yapay Zeka Asistan</span>
+            <button id="chat-close-btn" class="text-xl">&times;</button>
+        </div>
+        <div id="chat-messages" class="chat-messages">
+            <!-- Messages will be appended here -->
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chat-input" class="chat-input" placeholder="Bir soru sorun...">
+            <button id="chat-send-btn" class="chat-send-btn"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+
+<script>
+    // --- DATA ---
+    const ALL_LOCATIONS = [
+        { name: "Girne Kalesi", type: 'landmark', address: "Girne", lat: 35.3415, lng: 33.3220, description: "Girne'nin ikonik limanına demirlemiş dev bir gemi gibi duran bu kale, Bizans'tan Osmanlı'ya uzanan zengin tarihi katmanlarıyla adeta bir tarih kitabıdır. İçindeki Batık Gemi Müzesi ise sizi antik çağların deniz ticaretine götürecek." },
+        { name: "St. Hilarion Kalesi", type: 'landmark', address: "Girne", lat: 35.3125, lng: 33.2808, description: "Beşparmak Dağları'nın zirvesinde, bulutların arasında yükselen bu kale, sizi adeta bir masal diyarına götürür. Walt Disney'in 'Pamuk Prenses' şatosuna ilham verdiği rivayet edilir." },
+        { name: "Buffavento Kalesi", type: 'landmark', address: "Girne", lat: 35.2872, lng: 33.4103, description: "Adanın en yüksekteki kalesi olan Buffavento, 'Rüzgara Boyun Eğmeyen' anlamına gelir. Ulaşımı zorlu olsa da, zirvedeki 360 derecelik panoramik manzarası nefes kesicidir." },
+        { name: "Kantara Kalesi", type: 'landmark', address: "Gazimağusa", lat: 35.4053, lng: 33.9239, description: "Beşparmak Dağları'nın en doğudaki bekçisidir. Diğer dağ kalelerine göre ulaşımı daha kolaydır ve Karpaz Yarımadası'nın başlangıcını gören harika manzaralar sunar." },
+        { name: "Othello Kalesi", type: 'landmark', address: "Gazimağusa", lat: 35.1275, lng: 33.9442, description: "Gazimağusa limanını koruyan bu Venedik kalesi, Shakespeare'in ünlü trajedisine adını vermesiyle tanınır. Kalenin avlusunda mermer Venedik aslanı heykeli bulunur." },
+        { name: "Salamis Antik Kenti", type: 'landmark', address: "Gazimağusa", lat: 35.1878, lng: 33.8961, description: "Bir zamanlar Kıbrıs'ın başkenti olan Salamis, Roma döneminin ihtişamını yansıtan devasa bir alana yayılmıştır. Tiyatrosu, gymnasiumu ve sütunlu caddeleriyle etkileyicidir." },
+        { name: "Soli Antik Kenti", type: 'landmark', address: "Lefke", lat: 35.1412, lng: 32.8123, description: "Adını bilge Solon'dan aldığı söylenen bu kent, zarif kuğu mozaiği ve denize nazır muhteşem manzaralı Roma tiyatrosu ile ünlüdür." },
+        { name: "Vuni Sarayı", type: 'landmark', address: "Lefke", lat: 35.1633, lng: 32.7936, description: "Pers yanlısı bir kral tarafından komşu Soli'yi gözetlemek için inşa edilen saray, hem bir güç mücadelesinin hem de lüks bir yaşamın izlerini taşır." },
+        { name: "Kapalı Maraş", type: 'landmark', address: "Gazimağusa", lat: 35.1097, lng: 33.9550, description: "Bir zamanlar Akdeniz'in en lüks tatil beldelerinden biri olan ve 1974'ten beri kapalı olan bu 'hayalet şehir', yakın tarihin en dokunaklı tanıklarından biridir." },
+        { name: "Mavi Köşk", type: 'landmark', address: "Çamlıbel", lat: 35.3167, lng: 33.1500, description: "İtalyan asıllı bir Rum olan silah kaçakçısı Paulo Paolides'e ait olduğu söylenen bu gizemli köşk, modern mimarisi ve sırlarla dolu odalarıyla ziyaretçilerini büyüler." },
+        { name: "Bellapais Manastırı", type: 'landmark', address: "Girne", lat: 35.3056, lng: 33.3556, description: "Gotik mimarinin en zarif örneklerinden biri olan bu manastır, Beşparmak Dağları'nın eteklerinde, Girne'ye hakim bir konumda yer alır. Huzurlu atmosferi ve muhteşem manzarasıyla ünlüdür." },
+        { name: "Büyük Han", type: 'landmark', address: "Lefkoşa", lat: 35.1767, lng: 33.3625, description: "Osmanlı döneminden kalma bu kervansaray, bugün restore edilmiş haliyle sanat atölyelerine, el işi dükkanlarına ve kafelere ev sahipliği yapan canlı bir kültür merkezidir." },
+        { name: "Apostolos Andreas Manastırı", type: 'landmark', address: "Karpaz", lat: 35.6592, lng: 34.5800, description: "Karpaz Yarımadası'nın en ucunda, denize nazır bir konumda yer alan bu manastır, hem Rumlar hem de Türkler için kutsal sayılan önemli bir inanç merkezidir." },
+        { name: "Altınkum Plajı", type: 'beach', address: "Karpaz", lat: 35.6560, lng: 34.5600, description: "Karpaz Yarımadası'nın en ucunda yer alan bu el değmemiş plaj, adını aldığı altın sarısı incecik kumları ve kilometrelerce uzanan sahiliyle adeta bir doğa harikasıdır." },
+        { name: "Alagadi (Kaplumbağa) Plajı", type: 'beach', address: "Girne", lat: 35.3458, lng: 33.4833, description: "Caretta caretta ve Chelonia mydas türü deniz kaplumbağalarının yumurtlama alanı olan bu koruma altındaki plaj, doğal yaşamı gözlemlemek için eşsiz bir fırsat sunar." },
+        { name: "Glapsides Plajı", type: 'beach', address: "Gazimağusa", lat: 35.1610, lng: 33.9213, description: "Gazimağusa'nın en popüler halk plajlarından biridir. Sığ ve sakin denizi, ince kumu ve geniş olanaklarıyla özellikle aileler için ideal bir seçenektir." },
+        { name: "Escape Plajı (Yavuz Çıkarma Plajı)", type: 'beach', address: "Girne", lat: 35.3375, lng: 33.2500, description: "Hem tarihi önemi hem de sunduğu su sporları ve eğlence olanaklarıyla bilinen bu plaj, Girne'nin en hareketli ve popüler plajlarından biridir." },
+        { name: "İncirli Mağarası", type: 'natural_wonder', address: "Çınarlı, Gazimağusa", lat: 35.3267, lng: 33.7442, description: "Adını girişindeki dev incir ağacından alan bu mağara, Kıbrıs'ın en büyük doğal mağarasıdır. İçindeki sarkıt ve dikit oluşumları büyüleyicidir." },
+        { name: "CMC Maden Sahası", type: 'industrial_heritage', address: "Lefke/Gemikonağı", lat: 35.1099, lng: 32.8364, description: "Bir zamanlar Kıbrıs'ın en büyük zenginlik kaynağı olan bakır madenlerinden geriye kalan bu devasa alan, paslanmış trenleri ve asidik göletleriyle post-apokaliptik bir manzara sunar." },
+        { name: "Zafer Burnu", type: 'natural_wonder', address: "Dipkarpaz", lat: 35.6946, lng: 34.5876, description: "Karpaz Yarımadası'nın ve Kıbrıs adasının en uç noktasıdır. Yaban eşeklerini görebileceğiniz, vahşi ve etkileyici bir coğrafyaya sahiptir." },
+        { name: "Ayios Sozomenos", type: 'abandoned_village', address: "Arpalık, Lefkoşa", lat: 35.0658, lng: 33.4383, description: "Yeşil Hat üzerinde, kerpiçten yapılmış evleri zamanla eriyen bu köy, adeta bir western filmi platosunu andırır. Doğanın geri aldığı bir hüzün anıtıdır." },
+        { name: "Taşköy (Petra)", type: 'abandoned_village', address: "Yeşil Hat", lat: 35.1278, lng: 32.8986, description: "Bir zamanlar Türk ve Rumların bir arada yaşadığı bu köy, adanın trajik tarihinin bir özetidir. Bugün askeri bölge içinde tamamen sessizliğe gömülmüştür." },
+        { name: "Arıdamı (Artemi)", type: 'abandoned_village', address: "İskele", lat: 35.2558, lng: 33.7222, description: "Bir çatışma nedeniyle değil, sakinlerinin kendi istekleriyle terk ettiği bu köy, adadaki nüfus hareketlerinin sosyo-ekonomik dinamiklerini gösteren nadir bir örnektir." },
+        { name: "Kaplıca Doğal Havuzu", type: 'natural_wonder', address: "Kaplıca, Girne", lat: 35.4194, lng: 33.7997, description: "Deniz kenarında, kayaların oyulmasıyla oluşmuş bu doğal havuz, dalgalı denizde bile güvenle yüzmek için harika bir alternatiftir." },
+    ];
+    const hiddenGemNames = [ 'İncirli Mağarası', 'CMC Maden Sahası', 'Ayios Sozomenos', 'Taşköy (Petra)', 'Arıdamı (Artemi)', 'Kaplıca Doğal Havuzu' ];
+    const categoryConfig = {
+        tarih: { id: 'tarih', title: 'Tarihi Yerler & Müzeler', types: ['landmark', 'museum'], color: 'teal', icon: 'fa-landmark' },
+        plajlar: { id: 'plajlar', title: 'El Değmemiş Plajlar', types: ['beach'], color: 'sky', icon: 'fa-umbrella-beach' },
+        doga: { id: 'doga', title: 'Doğa, Macera & Endüstriyel Miras', types: ['natural_wonder', 'hiking', 'activity', 'industrial_heritage'], color: 'teal', icon: 'fa-tree' },
+        koyler: { id: 'koyler', title: 'Zamanın Durduğu Sessiz Köyler', types: ['abandoned_village'], color: 'orange', icon: 'fa-house-chimney-crack' }
+    };
+    
+    // --- GEMINI API HELPER ---
+    async function callGemini(prompt, history = []) {
+        const apiKey = "AIzaSyBEpqKAEZKYSyznxeZsQ1MYO-9hqV5LGoA"; // User-provided API Key
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+        
+        const payload = {
+            contents: [...history, { role: "user", parts: [{ text: prompt }] }]
+        };
+
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                const errorBody = await response.json();
+                console.error("API Error Body:", errorBody);
+                throw new Error(`API isteği başarısız oldu: ${response.status} - ${errorBody.error?.message || 'Bilinmeyen hata'}`);
+            }
+
+            const result = await response.json();
+            
+            if (result.candidates && result.candidates.length > 0 &&
+                result.candidates[0].content && result.candidates[0].content.parts &&
+                result.candidates[0].content.parts.length > 0) {
+                return result.candidates[0].content.parts[0].text;
+            } else {
+                console.error("Beklenmeyen API yanıt yapısı:", result);
+                return "Yapay zekadan bir yanıt alınamadı. Lütfen tekrar deneyin.";
+            }
+        } catch (error) {
+            console.error("Gemini API çağrısında hata:", error);
+            return `Bir hata oluştu: ${error.message}. Lütfen daha sonra tekrar deneyin.`;
+        }
+    }
+
+    // --- UI ELEMENTS ---
+    const dynamicSectionsContainer = document.getElementById('dynamic-sections');
+    const modal = document.getElementById('gemini-modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalContent = document.getElementById('modal-content');
+    const modalCloseBtn = document.getElementById('modal-close-btn');
+    const locationsSelect = document.getElementById('locations-select');
+    const generatePlanBtn = document.getElementById('generate-plan-btn');
+    const itineraryResultDiv = document.getElementById('itinerary-result');
+    
+    // Chatbot UI Elements
+    const chatFab = document.getElementById('chat-fab');
+    const chatWidget = document.getElementById('chat-widget');
+    const chatCloseBtn = document.getElementById('chat-close-btn');
+    const chatMessages = document.getElementById('chat-messages');
+    const chatInput = document.getElementById('chat-input');
+    const chatSendBtn = document.getElementById('chat-send-btn');
+
+
+    // --- MODAL LOGIC ---
+    function showModal(title, content) {
+        modalTitle.textContent = title;
+        modalContent.innerHTML = content;
+        modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+        modal.style.display = 'none';
+    }
+
+    modalCloseBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+
+    // --- CARD & SECTION CREATION ---
+    function createCard(location, config) {
+        const isHiddenGem = hiddenGemNames.includes(location.name);
+        const mapUrl = `https://www.google.com/search?q=${encodeURIComponent(location.name + ' Kuzey Kıbrıs')}`;
+        
+        const card = document.createElement('div');
+        card.className = "bg-white rounded-2xl shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 flex flex-col h-full";
+        card.innerHTML = `
+            <div class="p-6 flex-grow">
+                <div class="flex justify-between items-start mb-2">
+                    <h3 class="text-xl font-bold text-gray-800 pr-2">${location.name}</h3>
+                    ${isHiddenGem ? `<i class="fas fa-gem text-teal-500 text-xl flex-shrink-0" title="Saklı Hazine"></i>` : ''}
+                </div>
+                <p class="text-gray-500 mb-4 text-sm"><i class="fas fa-map-marker-alt mr-2 text-${config.color}-500"></i>${location.address}</p>
+                <p class="text-gray-600 mb-4 text-sm">${location.description || ''}</p>
+            </div>
+            <div class="p-4 bg-gray-50 mt-auto grid grid-cols-2 gap-2 text-xs sm:text-sm">
+                 <a href="${mapUrl}" target="_blank" class="w-full text-center block bg-gray-600 text-white font-bold py-2 px-3 rounded-lg hover:bg-gray-700 transition-colors flex items-center justify-center">
+                    <i class="fas fa-map-marked-alt mr-1"></i>Harita
+                 </a>
+                 <button data-location-name="${location.name}" class="gemini-explore-btn w-full text-center block bg-teal-700 text-white font-bold py-2 px-3 rounded-lg hover:bg-teal-800 transition-colors flex items-center justify-center">
+                    <i class="fas fa-book-open mr-1"></i>Detaylar
+                 </button>
+                 <button data-location-name="${location.name}" class="gemini-food-btn w-full col-span-2 text-center block bg-amber-600 text-white font-bold py-2 px-3 rounded-lg hover:bg-amber-700 transition-colors flex items-center justify-center">
+                    <i class="fas fa-utensils mr-1"></i>Yakınlarda Ne Yemeli?
+                 </button>
+            </div>
+        `;
+
+        card.querySelector('.gemini-explore-btn').addEventListener('click', async (e) => {
+            const locationName = e.currentTarget.dataset.locationName;
+            showModal(`${locationName} Hakkında ✨`, '<div class="loader"></div>');
+            const prompt = `Lütfen Kuzey Kıbrıs'taki "${locationName}" adlı yer hakkında daha önce bahsedilmeyen, az bilinen gerçekler, tarihi anekdotlar veya onu özel kılan detaylar içeren, hikaye tadında sürükleyici bir anlatım oluştur. Cevabını sadece Türkçe olarak ver.`;
+            const result = await callGemini(prompt);
+            modalContent.innerHTML = result.replace(/\n/g, '<br>');
+        });
+
+        card.querySelector('.gemini-food-btn').addEventListener('click', async (e) => {
+            const locationName = e.currentTarget.dataset.locationName;
+            showModal(`${locationName} Yakınlarında Ne Yemeli? ✨`, '<div class="loader"></div>');
+            const prompt = `Kuzey Kıbrıs'taki "${locationName}" adlı yeri ziyaret ettikten sonra denemem için hangi yöresel Kıbrıs yemeğini veya lezzetini önerirsin? Bu önerini kısa bir açıklama ile birlikte sun. Cevabını sadece Türkçe olarak ver.`;
+            const result = await callGemini(prompt);
+            modalContent.innerHTML = result.replace(/\n/g, '<br>');
+        });
+
+        return card;
+    }
+
+    function createSection(config) {
+        const section = document.createElement('section');
+        section.id = config.id;
+        section.className = "mb-20";
+        
+        const locations = ALL_LOCATIONS.filter(loc => config.types.includes(loc.type));
+        if (locations.length === 0) return section;
+
+        const grid = document.createElement('div');
+        grid.className = "grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8";
+        locations.forEach(loc => grid.appendChild(createCard(loc, config)));
+        
+        section.innerHTML = `
+            <div class="text-center mb-12">
+                <i class="fas ${config.icon} text-5xl text-teal-600 mb-4"></i>
+                <h2 class="text-4xl font-extrabold text-gray-800">${config.title}</h2>
+            </div>
+        `;
+        section.appendChild(grid);
+        return section;
+    }
+    
+    // --- ITINERARY PLANNER LOGIC ---
+    function populateLocationsSelect() {
+        ALL_LOCATIONS
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .forEach(loc => {
+                const option = document.createElement('option');
+                option.value = loc.name;
+                option.textContent = loc.name;
+                locationsSelect.appendChild(option);
+            });
+    }
+
+    generatePlanBtn.addEventListener('click', async () => {
+        const duration = document.getElementById('trip-duration').value;
+        const interests = Array.from(document.querySelectorAll('.interest-checkbox:checked')).map(el => el.value).join(', ');
+        const selectedLocations = Array.from(locationsSelect.selectedOptions).map(opt => opt.value);
+
+        let prompt = `Kuzey Kıbrıs için ${duration} günlük detaylı bir gezi planı oluştur. Gezginin ilgi alanları: ${interests}. `;
+        if (selectedLocations.length > 0) {
+            prompt += `Planda özellikle şu yerlere yer ver: ${selectedLocations.join(', ')}. `;
+        }
+        prompt += `Plan mantıklı ve verimli bir rota içermeli. Her gün için sabah, öğle ve akşam aktiviteleri öner. Restoran önerileri de ekle. Cevabını sadece Türkçe olarak ve Markdown formatında (günler için # başlık, yerler için ## başlık ve aktiviteler için liste kullanarak) ver.`;
+
+        itineraryResultDiv.innerHTML = '<div class="loader"></div>';
+        itineraryResultDiv.style.display = 'block';
+        
+        const result = await callGemini(prompt);
+        
+        let htmlResult = result
+            .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+            .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+            .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\*(.*?)\*/g, '<em>$1</em>')
+            .replace(/^\* (.*$)/gim, '<li>$1</li>');
+        htmlResult = htmlResult.replace(/(<li>(.|\n|\r)*?<\/li>)/g, '<ul>$1</ul>').replace(/<\/li>\s*<ul>/g, '</li>');
+        htmlResult = htmlResult.replace(/<\/ul>\s*<br>/g, '</ul>').replace(/<br>\s*<ul>/g, '<ul>');
+        htmlResult = htmlResult.replace(/\n/g, '<br>');
+
+        itineraryResultDiv.innerHTML = htmlResult;
+    });
+
+    // --- CHATBOT LOGIC ---
+    let chatHistory = [];
+
+    function toggleChat() {
+        chatWidget.classList.toggle('open');
+    }
+
+    function addMessage(text, sender) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `chat-message ${sender}-message`;
+        messageDiv.textContent = text;
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    async function handleSendMessage() {
+        const userInput = chatInput.value.trim();
+        if (userInput === "") return;
+
+        addMessage(userInput, 'user');
+        chatInput.value = '';
+        
+        // Add user message to history
+        chatHistory.push({ role: "user", parts: [{ text: userInput }] });
+
+        // Add typing indicator
+        const typingIndicator = document.createElement('div');
+        typingIndicator.className = 'chat-message bot-message';
+        typingIndicator.innerHTML = '<div class="loader" style="width:20px; height:20px; border-top-color: #9ca3af;"></div>';
+        chatMessages.appendChild(typingIndicator);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        const systemPrompt = `Sen bu Kuzey Kıbrıs seyahat rehberi sitesinin yardımsever asistanısın. Adın Fures. Kullanıcının Kıbrıs'la ilgili sorularını yanıtla. Dost canlısı ve yardımsever ol.`;
+        const fullPrompt = `${systemPrompt}\n\nKullanıcı sorusu: ${userInput}`;
+        
+        const botResponse = await callGemini(fullPrompt, chatHistory.slice(0, -1)); // Pass history without the current question
+        
+        // Remove typing indicator
+        chatMessages.removeChild(typingIndicator);
+        
+        addMessage(botResponse, 'bot');
+        
+        // Add bot response to history
+        chatHistory.push({ role: "model", parts: [{ text: botResponse }] });
+    }
+
+    chatFab.addEventListener('click', toggleChat);
+    chatCloseBtn.addEventListener('click', toggleChat);
+    chatSendBtn.addEventListener('click', handleSendMessage);
+    chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            handleSendMessage();
+        }
+    });
+
+
+    // --- INITIALIZATION ---
+    document.addEventListener('DOMContentLoaded', () => {
+        Object.values(categoryConfig).forEach(config => {
+            dynamicSectionsContainer.appendChild(createSection(config));
+        });
+        populateLocationsSelect();
+
+        // Welcome message for chatbot
+        setTimeout(() => {
+            if (!chatWidget.classList.contains('open')) {
+                toggleChat();
+                addMessage("Hoş geldiniz! Ben Fures, seyahat asistanınız. Kuzey Kıbrıs gezinizle ilgili size nasıl yardımcı olabilirim?", 'bot');
+            }
+        }, 3000);
+    });
+</script>
+
+</body>
+</html>
