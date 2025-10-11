@@ -99,7 +99,7 @@ export function Services() {
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="group relative p-6 rounded-2xl bg-gradient-to-br from-white/5 to-white/0 border border-white/10 hover:border-orange-500/50 transition-all duration-500 hover:transform hover:scale-105 overflow-hidden"
+              className="group surface-card p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_25px_65px_-35px_rgba(255,122,41,0.65)]"
             >
               {/* Video Background */}
               {service.video && (
@@ -114,18 +114,18 @@ export function Services() {
                 </div>
               )}
 
-              <div className="absolute inset-0 bg-gradient-to-br from-orange-500/0 to-purple-600/0 rounded-2xl opacity-0 group-hover:opacity-100 group-hover:from-orange-500/10 group-hover:to-purple-600/10 transition-opacity duration-500"></div>
-              
+              <div className="absolute inset-0 bg-gradient-to-br from-orange-500/0 to-purple-600/0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-hover:from-orange-500/12 group-hover:to-purple-600/12"></div>
+
               <div className="relative z-10">
                 <motion.div
                   whileHover={{ rotate: 6 }}
-                  className={`w-12 h-12 bg-gradient-to-r ${service.gradient} rounded-xl flex items-center justify-center mb-4 shadow-lg glow-gradient`}
+                  className={`w-12 h-12 bg-gradient-to-r ${service.gradient} rounded-2xl flex items-center justify-center mb-6 shadow-lg glow-gradient`}
                 >
                   <service.icon className="h-6 w-6 text-white" />
                 </motion.div>
-                
-                <h3 className="text-lg text-white mb-3 font-medium">{service.title}</h3>
-                <p className="text-sm text-gray-400 leading-relaxed">{service.description}</p>
+
+                <h3 className="text-xl text-white mb-3 font-semibold tracking-tight">{service.title}</h3>
+                <p className="text-sm text-gray-300/80 leading-relaxed">{service.description}</p>
               </div>
             </motion.div>
           ))}

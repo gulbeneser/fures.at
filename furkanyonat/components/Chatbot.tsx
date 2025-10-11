@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { GoogleGenAI, Chat } from "@google/genai";
 
+const GEMINI_KEY = (process.env.API_KEY ||
+  (process.env as Record<string, string | undefined>).apikey ||
+  process.env.GEMINI_API_KEY) as string | undefined;
+
 declare global {
   interface Window {
     SpeechRecognition: any;
@@ -41,14 +45,14 @@ const Chatbot: React.FC<ChatbotProps> = ({ t, language, isPrinting }) => {
     You are representing Furkan Yonat. Make him shine!`;
 
     useEffect(() => {
-        if (!process.env.API_KEY) {
-            console.error("API Key not found in process.env.API_KEY");
+        if (!GEMINI_KEY) {
+            console.error("API key not found. Please ensure the 'apikey' environment variable is configured.");
             setError(t.chatbot.notConfigured);
             return;
         }
 
         try {
-            const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+            const ai = new GoogleGenAI({ apiKey: GEMINI_KEY });
             const newChat = ai.chats.create({
                 model: 'gemini-2.5-flash',
                 config: { systemInstruction },

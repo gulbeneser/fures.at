@@ -1,8 +1,15 @@
 import { GoogleGenAI, Type, Modality } from "@google/genai";
 import { CVData, DesignOptions } from '../types';
 
-// FIX: Initialize GoogleGenAI client
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+const GEMINI_KEY = (process.env.API_KEY ||
+  (process.env as Record<string, string | undefined>).apikey ||
+  process.env.GEMINI_API_KEY) as string | undefined;
+
+if (!GEMINI_KEY) {
+    console.warn("Gemini API anahtarı bulunamadı. 'apikey' ortam değişkenini tanımlayın.");
+}
+
+const ai = GEMINI_KEY ? new GoogleGenAI({ apiKey: GEMINI_KEY }) : null;
 
 const cvDataSchema = {
     type: Type.OBJECT,
@@ -66,6 +73,9 @@ export const detectLanguage = async (text: string): Promise<string> => {
 ---
 ${text}
 ---`;
+    if (!ai) {
+        throw new Error('Gemini API key is missing.');
+    }
     try {
         const response = await ai.models.generateContent({
             model: 'gemini-2.5-flash',
@@ -87,6 +97,9 @@ Text:
 ${text}
 ---
 `;
+    if (!ai) {
+        throw new Error('Gemini API key is missing.');
+    }
     try {
         const response = await ai.models.generateContent({
             model: 'gemini-2.5-flash',
@@ -110,8 +123,12 @@ ${text}
 };
 
 export const extractCVDataFromImage = async (base64Image: string, mimeType: string, language: string): Promise<CVData> => {
+    if (!ai) {
+        throw new Error('Gemini API key is missing.');
+    }
+
     const prompt = `Extract the structured CV data from the provided image. The text in the image is in ${language}. Generate a unique ID for each experience and education entry. If some information is missing, leave the corresponding fields empty.`;
-    
+
     const imagePart = {
         inlineData: {
             data: base64Image,
@@ -148,6 +165,10 @@ Original Text: "${originalText}"
 Language: ${language}
 Rewrite the text, keeping the core meaning but improving the wording, grammar, and impact. Use action verbs and quantifiable results where possible. Only return the enhanced text, without any additional explanations or introductory phrases.`;
 
+    if (!ai) {
+        throw new Error('Gemini API key is missing.');
+    }
+
     try {
         const response = await ai.models.generateContent({
             model: 'gemini-2.5-flash',
@@ -162,13 +183,17 @@ Rewrite the text, keeping the core meaning but improving the wording, grammar, a
 
 export const enhancePhoto = async (base64Data: string, mimeType: string): Promise<{ base64Image: string; mimeType: string; }> => {
     const prompt = "Analyze the provided image. If it contains a person, generate a professional, high-quality headshot of that person suitable for a CV/resume. The background should be neutral (e.g., light gray, off-white, or a subtle office blur). The person should be dressed professionally. If the image is not of a person, or is inappropriate, return an image of a generic, friendly-looking default avatar.";
-    
+
     const imagePart = {
       inlineData: {
         data: base64Data,
         mimeType: mimeType,
       },
     };
+
+    if (!ai) {
+        throw new Error('Gemini API key is missing.');
+    }
 
     try {
         const response = await ai.models.generateContent({
@@ -229,6 +254,9 @@ ${JSON.stringify(cvData, null, 2)}
 
 Generate only the HTML code, starting with \`<!DOCTYPE html>\`. Do not include any explanations or markdown formatting around the code.
 `;
+    if (!ai) {
+        throw new Error('Gemini API key is missing.');
+    }
     try {
         const response = await ai.models.generateContent({
             model: 'gemini-2.5-flash',
@@ -277,6 +305,9 @@ ${companyInfo || "No specific company information provided."}
 8.  The tone should be professional, confident, and enthusiastic.
 9.  Return only the text of the cover letter, without any explanations or headers.
 `;
+    if (!ai) {
+        throw new Error('Gemini API key is missing.');
+    }
     try {
         const response = await ai.models.generateContent({
             model: 'gemini-2.5-flash',
@@ -313,6 +344,9 @@ ${jobDescription}
 7.  The tone should be constructive and helpful, aimed at helping the candidate prepare for an application or interview.
 8.  Return only the analysis text, without any explanations or headers.
 `;
+    if (!ai) {
+        throw new Error('Gemini API key is missing.');
+    }
     try {
         const response = await ai.models.generateContent({
             model: 'gemini-2.5-flash',

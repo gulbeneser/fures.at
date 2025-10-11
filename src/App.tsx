@@ -9,6 +9,7 @@ import { ProjectsPage } from "./pages/ProjectsPage";
 import { TeamPage } from "./pages/TeamPage";
 import { FAQPage } from "./pages/FAQPage";
 import { ContactPage } from "./pages/ContactPage";
+import { ProfileViewer, PROFILE_CONFIG } from "./pages/ProfileViewer";
 
 export default function App() {
   return (
@@ -26,6 +27,9 @@ export default function App() {
               <Route path="/ekip" element={<TeamPage />} />
               <Route path="/sss" element={<FAQPage />} />
               <Route path="/iletisim" element={<ContactPage />} />
+              <Route path="/furkanyonat/*" element={<ProfileViewer profile={PROFILE_CONFIG.furkanyonat} />} />
+              <Route path="/gulbeneser/*" element={<ProfileViewer profile={PROFILE_CONFIG.gulbeneser} />} />
+              <Route path="/kariyer/*" element={<ProfileViewer profile={PROFILE_CONFIG.kariyer} />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </main>

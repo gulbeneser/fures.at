@@ -3,6 +3,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import { translations } from '../data/translations';
 import ChatbotAvatar from './ChatbotAvatar';
 
+const GEMINI_KEY = (process.env.API_KEY ||
+  (process.env as Record<string, string | undefined>).apikey ||
+  process.env.GEMINI_API_KEY) as string | undefined;
+
 const TypingIndicator = () => (
   <div className="flex items-center space-x-1">
     <div className="w-2 h-2 bg-slate-400 rounded-full animate-pulse [animation-delay:-0.3s]"></div>
@@ -20,7 +24,7 @@ const Chatbot = ({ t, language }: { t: any, language: string }) => {
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
 
-  const ai = React.useMemo(() => process.env.API_KEY ? new GoogleGenAI({ apiKey: process.env.API_KEY }) : null, []);
+  const ai = React.useMemo(() => (GEMINI_KEY ? new GoogleGenAI({ apiKey: GEMINI_KEY }) : null), []);
   const chatRef = useRef<Chat | null>(null);
 
   useEffect(() => {
