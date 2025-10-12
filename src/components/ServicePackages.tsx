@@ -86,7 +86,7 @@ export function ServicePackages() {
               } as CSSProperties}
             >
               {pkg.featured && (
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 rounded-full bg-[linear-gradient(135deg,rgba(255,143,84,0.85),rgba(173,110,255,0.85))] px-4 py-1 text-xs font-semibold text-white shadow-lg">
+                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 rounded-full bg-[linear-gradient(135deg,rgba(91,143,255,0.85),rgba(136,90,255,0.85))] px-4 py-1 text-xs font-semibold text-white shadow-lg">
                   Popüler
                 </div>
               )}
@@ -103,7 +103,7 @@ export function ServicePackages() {
                 <p className="text-sm text-gray-300/80 leading-relaxed mb-6">{pkg.description}</p>
 
                 <div className="pt-6 border-t border-white/10">
-                  <p className="text-lg text-white font-semibold">{pkg.price}</p>
+                  <p className="text-sm text-gray-300/90">{pkg.price}</p>
                 </div>
               </div>
             </div>
