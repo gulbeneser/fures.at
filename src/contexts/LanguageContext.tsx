@@ -3,8 +3,8 @@ import { createContext, useContext, useState, ReactNode, useEffect, useCallback 
 export type Language = 'tr' | 'en' | 'ru' | 'de';
 
 export const LANGUAGE_META: Record<Language, { label: string; locale: string; hrefLang: string; direction: 'ltr' | 'rtl' }> = {
-  tr: { label: 'Türkçe', locale: 'tr_TR', hrefLang: 'tr-TR', direction: 'ltr' },
-  en: { label: 'English', locale: 'en_US', hrefLang: 'en-US', direction: 'ltr' },
+  tr: { label: 'Türkçe', locale: 'tr_CY', hrefLang: 'tr-CY', direction: 'ltr' },
+  en: { label: 'English', locale: 'en_CY', hrefLang: 'en-CY', direction: 'ltr' },
   ru: { label: 'Русский', locale: 'ru_RU', hrefLang: 'ru-RU', direction: 'ltr' },
   de: { label: 'Deutsch', locale: 'de_DE', hrefLang: 'de-DE', direction: 'ltr' }
 };
