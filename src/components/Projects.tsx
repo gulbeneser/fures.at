@@ -3,7 +3,7 @@ import { Button } from "./ui/button";
 import { ExternalLink, Cpu, Globe, Hotel, Users, Camera, ChefHat, BarChart3, Briefcase } from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext";
 
-const projects = [
+export const PROJECTS = [
   {
     name: 'Fures Kariyer Koçu',
     description:
@@ -53,7 +53,7 @@ const projects = [
     link: 'https://project-odysseus-720548631405.us-west1.run.app/',
     icon: BarChart3
   }
-];
+] as const;
 
 export function Projects() {
   const { t } = useLanguage();
@@ -73,7 +73,7 @@ export function Projects() {
 
         {/* Projects Grid */}
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {projects.map((project, index) => {
+          {PROJECTS.map((project, index) => {
             const Icon = project.icon;
             return (
               <Card

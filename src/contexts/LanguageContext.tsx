@@ -1,6 +1,16 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode, useEffect, useCallback } from 'react';
 
-type Language = 'tr' | 'en' | 'ru' | 'de';
+export type Language = 'tr' | 'en' | 'ru' | 'de';
+
+export const LANGUAGE_META: Record<Language, { label: string; locale: string; hrefLang: string; direction: 'ltr' | 'rtl' }> = {
+  tr: { label: 'Türkçe', locale: 'tr_TR', hrefLang: 'tr-TR', direction: 'ltr' },
+  en: { label: 'English', locale: 'en_US', hrefLang: 'en-US', direction: 'ltr' },
+  ru: { label: 'Русский', locale: 'ru_RU', hrefLang: 'ru-RU', direction: 'ltr' },
+  de: { label: 'Deutsch', locale: 'de_DE', hrefLang: 'de-DE', direction: 'ltr' }
+};
+
+export const DEFAULT_LANGUAGE: Language = 'tr';
+export const SUPPORTED_LANGUAGES = Object.keys(LANGUAGE_META) as Language[];
 
 interface LanguageContextType {
   language: Language;
@@ -11,13 +21,50 @@ interface LanguageContextType {
 const translations = {
   tr: {
     // Header
+    'nav.home': 'Ana Sayfa',
     'nav.about': 'Hakkımızda',
     'nav.services': 'Hizmetler',
     'nav.projects': 'Projeler',
     'nav.contact': 'İletişim',
     'nav.more': 'Daha Fazla',
     'nav.lets_talk': 'Hadi Konuşalım',
-    
+
+    // SEO
+    'seo.site_name': 'Fures Tech · Kuzey Kıbrıs Dijital Ajansı',
+    'seo.tagline': 'Web tasarım, yapay zekâ otomasyonu, sosyal medya ve büyüme çözümleri',
+    'seo.common.keywords': 'kuzey kıbrıs web tasarım, kıbrıs web tasarım ajansı, kıbrıs dijital ajans, gazimağusa web tasarım, lefkoşa web tasarım, kıbrıs yapay zeka otomasyon, kıbrıs sosyal medya yönetimi, kıbrıs seo ajansı',
+    'seo.organization.description': 'Fures Tech, Gazimağusa merkezli çok dilli web tasarım, yapay zekâ otomasyon ve büyüme ajansıdır. Kuzey Kıbrıs ve çevre pazarlardaki oteller, turizm işletmeleri, e-ticaret markaları ve hizmet şirketleri için uçtan uca dijital çözümler tasarlıyoruz.',
+    'seo.home.title': 'Fures Tech | Kuzey Kıbrıs Web Tasarım, Yapay Zekâ ve Sosyal Medya Ajansı',
+    'seo.home.description': 'Fures Tech, Kuzey Kıbrıs ve Türkiye\'de işletmelere özel web tasarım, yapay zekâ otomasyonları, sosyal medya yönetimi ve veri odaklı büyüme hizmetleri sunar. Çok dilli SEO uyumlu projelerle sizi aramalarda öne çıkarırız.',
+    'seo.home.keywords': 'kuzey kıbrıs dijital ajans, kıbrıs sosyal medya ajansı, kıbrıs yapay zeka ajansı, kıbrıs seo danışmanlığı, gazimağusa reklam ajansı',
+    'seo.about.title': 'Hakkımızda | Fures Tech Dijital Ajansı',
+    'seo.about.description': 'Fures Tech ekibi tasarım, yazılım, yapay zekâ ve büyüme alanlarında deneyimli uzmanlardan oluşur. Kuzey Kıbrıs ve uluslararası projelerde uçtan uca dijital dönüşüm sağlıyoruz.',
+    'seo.about.keywords': 'fures tech ekibi, kıbrıs dijital uzmanları, kuzey kıbrıs teknoloji şirketi',
+    'seo.services.title': 'Hizmetler | Kıbrıs Web Tasarım, Yapay Zekâ Otomasyonu ve Sosyal Medya',
+    'seo.services.description': 'Fures Tech; web tasarım ve geliştirme, yapay zekâ otomasyonları, sosyal medya yönetimi, veri analitiği ve içerik üretimiyle Kıbrıs\'ta işletmenizi büyütür.',
+    'seo.services.keywords': 'kuzey kıbrıs web hizmetleri, kıbrıs otomasyon çözümleri, kıbrıs sosyal medya yönetimi, kıbrıs veri analitiği',
+    'seo.projects.title': 'Projeler | Fures Tech Başarı Hikayeleri',
+    'seo.projects.description': 'Kuzey Kıbrıs ve uluslararası pazarlarda gerçekleştirdiğimiz web tasarım, AI otomasyon ve büyüme projelerini inceleyin.',
+    'seo.projects.keywords': 'kuzey kıbrıs web projeleri, kıbrıs yapay zeka projeleri, kıbrıs dijital dönüşüm referansları',
+    'seo.team.title': 'Ekip | Fures Tech Kurucu ve Uzmanları',
+    'seo.team.description': 'Fures Tech kurucuları ve uzman ekibimizle tanışın. Çok dilli dijital deneyimler tasarlayan ve AI otomasyonları geliştiren profesyoneller.',
+    'seo.team.keywords': 'fures tech kurucu, fures tech takım, kıbrıs teknoloji uzmanları',
+    'seo.faq.title': 'Sıkça Sorulan Sorular | Fures Tech',
+    'seo.faq.description': 'Fures Tech hizmetleri, proje süreleri, destek süreçleri ve veri güvenliği hakkında sıkça sorulan soruların yanıtları.',
+    'seo.faq.keywords': 'kuzey kıbrıs web tasarım soruları, kıbrıs dijital ajans fiyatları, fures tech destek',
+    'seo.contact.title': 'İletişim | Fures Tech Kuzey Kıbrıs Dijital Ajansı',
+    'seo.contact.description': 'Fures Tech ile hemen iletişime geçin. Gazimağusa merkezli ekibimiz web tasarım, AI otomasyon ve sosyal medya projeleriniz için hazır.',
+    'seo.contact.keywords': 'fures tech iletişim, kuzey kıbrıs dijital ajans iletişim, gazimağusa web tasarım iletişim',
+    'seo.profile.furkanyonat.title': 'Furkan Yonat Dijital CV | Fures Tech',
+    'seo.profile.furkanyonat.description': 'Fures Tech kurucu ortağı Furkan Yonat\'ın yapay zekâ tabanlı kariyer sunumu, projeler ve sertifikalarını inceleyin.',
+    'seo.profile.furkanyonat.keywords': 'furkan yonat, fures tech kurucu ortağı, kıbrıs yapay zeka uzmanı',
+    'seo.profile.gulbeneser.title': 'Gülben Eser Portfolyo | Fures Tech',
+    'seo.profile.gulbeneser.description': 'Fures Tech kurucusu Gülben Eser\'in tasarım liderliği, içerik stratejisi ve projelerine göz atın.',
+    'seo.profile.gulbeneser.keywords': 'gülben eser, fures tech kurucusu, kıbrıs kreatif direktör',
+    'seo.profile.kariyer.title': 'Fures Tech Kariyer Asistanı | Yapay Zekâ Destekli İşe Alım',
+    'seo.profile.kariyer.description': 'Fures Tech kariyer platformu yapay zekâ destekli aday değerlendirme simülasyonları ve otomatik iş ilanı üretimi sunar.',
+    'seo.profile.kariyer.keywords': 'fures tech kariyer, kıbrıs işe alım otomasyonu, yapay zeka kariyer asistanı',
+
     // Hero
     'hero.title': 'Dijital Ajans',
     'hero.subtitle': 'Sınırların Ötesinde.',
@@ -102,6 +149,7 @@ const translations = {
     'projects.title': 'Projeler',
     'projects.subtitle': 'Vaka kısa özetleri',
     'projects.visit': 'Tümü için',
+    'projects.visit_project': 'Projeyi İncele',
     'projects.cta': 'Hadi Konuşalım',
     
     // Why Fures
@@ -169,13 +217,50 @@ const translations = {
   },
   en: {
     // Header
+    'nav.home': 'Home',
     'nav.about': 'About',
     'nav.services': 'Services',
     'nav.projects': 'Projects',
     'nav.contact': 'Contact',
     'nav.more': 'More',
     'nav.lets_talk': 'Let\'s Talk',
-    
+
+    // SEO
+    'seo.site_name': 'Fures Tech · North Cyprus Digital Agency',
+    'seo.tagline': 'Web design, AI automation, social media and growth solutions',
+    'seo.common.keywords': 'north cyprus web design, cyprus web design agency, cyprus digital agency, famagusta web design, nicosia web design, cyprus ai automation, cyprus social media management, cyprus seo agency',
+    'seo.organization.description': 'Fures Tech is a Famagusta-based multilingual digital agency delivering web design, AI automation and growth marketing for hotels, tourism companies, e-commerce brands and service businesses in North Cyprus and nearby markets.',
+    'seo.home.title': 'Fures Tech | North Cyprus Web Design, AI Automation & Social Media Agency',
+    'seo.home.description': 'Fures Tech delivers bespoke web design, AI automations, social media management and data-driven growth services for businesses in North Cyprus and Turkey. We build multilingual, SEO-optimised experiences that help you dominate search results.',
+    'seo.home.keywords': 'north cyprus digital agency, cyprus social media agency, cyprus ai agency, cyprus seo consulting, famagusta marketing agency',
+    'seo.about.title': 'About Us | Fures Tech Digital Agency',
+    'seo.about.description': 'Fures Tech combines design, engineering, AI and growth expertise to deliver end-to-end digital transformation for North Cyprus and international brands.',
+    'seo.about.keywords': 'fures tech team, cyprus digital experts, north cyprus technology company',
+    'seo.services.title': 'Services | Cyprus Web Design, AI Automation & Social Media',
+    'seo.services.description': 'Fures Tech supports your growth in Cyprus with web design and development, AI automations, social media management, analytics and multilingual content production.',
+    'seo.services.keywords': 'north cyprus web services, cyprus automation solutions, cyprus social media management, cyprus data analytics',
+    'seo.projects.title': 'Projects | Fures Tech Case Studies',
+    'seo.projects.description': 'Explore the web design, AI automation and growth projects we deliver across North Cyprus and global markets.',
+    'seo.projects.keywords': 'north cyprus web projects, cyprus ai projects, cyprus digital transformation case studies',
+    'seo.team.title': 'Team | Fures Tech Founders & Specialists',
+    'seo.team.description': 'Meet the founders and experts behind Fures Tech – designers and engineers creating multilingual digital experiences and AI automations.',
+    'seo.team.keywords': 'fures tech founders, fures tech team, cyprus technology experts',
+    'seo.faq.title': 'FAQ | Fures Tech',
+    'seo.faq.description': 'Answers to common questions about Fures Tech services, project timelines, support models and data protection.',
+    'seo.faq.keywords': 'north cyprus web design faq, cyprus digital agency pricing, fures tech support',
+    'seo.contact.title': 'Contact | Fures Tech North Cyprus Digital Agency',
+    'seo.contact.description': 'Contact Fures Tech today. Our Famagusta-based team is ready to plan web design, AI automation and social media projects with you.',
+    'seo.contact.keywords': 'fures tech contact, north cyprus digital agency contact, famagusta web design contact',
+    'seo.profile.furkanyonat.title': 'Furkan Yonat Digital CV | Fures Tech',
+    'seo.profile.furkanyonat.description': 'Review the AI-powered career presentation, projects and certifications of Fures Tech co-founder Furkan Yonat.',
+    'seo.profile.furkanyonat.keywords': 'furkan yonat, fures tech co-founder, cyprus ai specialist',
+    'seo.profile.gulbeneser.title': 'Gülben Eser Portfolio | Fures Tech',
+    'seo.profile.gulbeneser.description': 'Discover the design leadership, content strategy and selected projects of Fures Tech founder Gülben Eser.',
+    'seo.profile.gulbeneser.keywords': 'gulben eser, fures tech founder, cyprus creative director',
+    'seo.profile.kariyer.title': 'Fures Tech Career Assistant | AI-Powered Recruitment',
+    'seo.profile.kariyer.description': 'The Fures Tech career platform delivers AI-assisted candidate screening, interview simulations and automated job posting workflows.',
+    'seo.profile.kariyer.keywords': 'fures tech career, cyprus recruitment automation, ai career assistant',
+
     // Hero
     'hero.title': 'Digital Agency',
     'hero.subtitle': 'Beyond Boundaries.',
@@ -260,6 +345,7 @@ const translations = {
     'projects.title': 'Projects',
     'projects.subtitle': 'Case brief summaries',
     'projects.visit': 'View All',
+    'projects.visit_project': 'View Project',
     'projects.cta': 'Let\'s Talk',
     
     // Why Fures
@@ -327,13 +413,50 @@ const translations = {
   },
   ru: {
     // Header
+    'nav.home': 'Главная',
     'nav.about': 'О нас',
     'nav.services': 'Услуги',
     'nav.projects': 'Проекты',
     'nav.contact': 'Контакты',
     'nav.more': 'Больше',
     'nav.lets_talk': 'Давайте поговорим',
-    
+
+    // SEO
+    'seo.site_name': 'Fures Tech · Цифровое агентство Северного Кипра',
+    'seo.tagline': 'Веб-дизайн, автоматизация на базе ИИ, соцсети и рост бизнеса',
+    'seo.common.keywords': 'северный кипр веб-дизайн, кипр цифровое агентство, famagusta веб студия, кипр seo, кипр автоматизация ии, кипр управление соцсетями, северный кипр digital agency',
+    'seo.organization.description': 'Fures Tech — многоязычное цифровое агентство из Фамагусты. Мы создаём веб-сайты, автоматизацию на базе ИИ и стратегии роста для отелей, туристических компаний, e-commerce и сервисных бизнесов на Северном Кипре и соседних рынках.',
+    'seo.home.title': 'Fures Tech | Веб-дизайн и автоматизация ИИ на Северном Кипре',
+    'seo.home.description': 'Fures Tech разрабатывает индивидуальные сайты, автоматизацию на базе ИИ, управление соцсетями и маркетинг на основе данных для компаний на Северном Кипре и в Турции. Многоязычные и SEO-дружественные решения помогают вам выходить в топ выдачи.',
+    'seo.home.keywords': 'северный кипр digital agency, кипр social media agency, кипр автоматизация ии, кипр seo консалтинг, famagusta маркетинговое агентство',
+    'seo.about.title': 'О нас | Цифровое агентство Fures Tech',
+    'seo.about.description': 'Команда Fures Tech сочетает опыт в дизайне, разработке, автоматизации и росте бизнеса, обеспечивая полный цикл цифровой трансформации для брендов Северного Кипра и мира.',
+    'seo.about.keywords': 'команда fures tech, кипр цифровые эксперты, северный кипр технологическая компания',
+    'seo.services.title': 'Услуги | Веб-дизайн, автоматизация ИИ и соцсети на Кипре',
+    'seo.services.description': 'Fures Tech помогает вашему бизнесу расти: веб-разработка, автоматизация процессов, управление соцсетями, аналитика и многоязычный контент.',
+    'seo.services.keywords': 'северный кипр веб услуги, кипр автоматизация процессов, кипр управление соцсетями, кипр аналитика данных',
+    'seo.projects.title': 'Проекты | Кейсы Fures Tech',
+    'seo.projects.description': 'Изучите проекты по веб-дизайну, автоматизации ИИ и росту, реализованные нами на Северном Кипре и на международных рынках.',
+    'seo.projects.keywords': 'северный кипр веб проекты, кипр проекты по ИИ, цифровая трансформация кипр кейсы',
+    'seo.team.title': 'Команда | Основатели и эксперты Fures Tech',
+    'seo.team.description': 'Познакомьтесь с основателями и экспертами Fures Tech — дизайнерами и инженерами, создающими многоязычные цифровые продукты и системы ИИ.',
+    'seo.team.keywords': 'основатели fures tech, команда fures tech, кипр технологические эксперты',
+    'seo.faq.title': 'FAQ | Fures Tech',
+    'seo.faq.description': 'Ответы на популярные вопросы о наших услугах, сроках, поддержке и защите данных.',
+    'seo.faq.keywords': 'северный кипр веб-дизайн вопросы, кипр цифровое агентство цены, fures tech поддержка',
+    'seo.contact.title': 'Контакты | Цифровое агентство Fures Tech на Северном Кипре',
+    'seo.contact.description': 'Свяжитесь с Fures Tech. Команда из Фамагусты готова обсудить веб-дизайн, автоматизацию ИИ и продвижение в соцсетях.',
+    'seo.contact.keywords': 'fures tech контакты, северный кипр digital agency контакты, famagusta веб-дизайн связь',
+    'seo.profile.furkanyonat.title': 'Фуркан Йонат — цифровое резюме | Fures Tech',
+    'seo.profile.furkanyonat.description': 'Изучите цифровое портфолио и проекты сооснователя Fures Tech Фуркана Йоната с акцентом на автоматизацию и ИИ.',
+    'seo.profile.furkanyonat.keywords': 'furkan yonat, fures tech сооснователь, кипр специалист по ИИ',
+    'seo.profile.gulbeneser.title': 'Гюльбен Эсер — портфолио | Fures Tech',
+    'seo.profile.gulbeneser.description': 'Познакомьтесь с опытом Гюльбен Эсер в дизайне, контент-стратегии и управлении проектами в Fures Tech.',
+    'seo.profile.gulbeneser.keywords': 'gülben eser, fures tech основатель, кипр креативный директор',
+    'seo.profile.kariyer.title': 'Карьера Fures Tech | Автоматизированный помощник по найму',
+    'seo.profile.kariyer.description': 'Платформа Fures Tech использует ИИ для оценки кандидатов, симуляции собеседований и автоматического создания вакансий.',
+    'seo.profile.kariyer.keywords': 'fures tech карьера, кипр автоматизация найма, ассистент по найму на базе ИИ',
+
     // Hero
     'hero.title': 'Цифровое Агентство',
     'hero.subtitle': 'За Пределами Границ.',
@@ -418,6 +541,7 @@ const translations = {
     'projects.title': 'Проекты',
     'projects.subtitle': 'Краткие описания кейсов',
     'projects.visit': 'Посмотреть Все',
+    'projects.visit_project': 'Посмотреть проект',
     'projects.cta': 'Давайте Поговорим',
     
     // Why Fures
@@ -485,13 +609,50 @@ const translations = {
   },
   de: {
     // Header
+    'nav.home': 'Startseite',
     'nav.about': 'Über uns',
     'nav.services': 'Dienstleistungen',
     'nav.projects': 'Projekte',
     'nav.contact': 'Kontakt',
     'nav.more': 'Mehr',
     'nav.lets_talk': 'Lass uns reden',
-    
+
+    // SEO
+    'seo.site_name': 'Fures Tech · Digitalagentur Nordzypern',
+    'seo.tagline': 'Webdesign, KI-Automatisierung, Social Media und Wachstumslösungen',
+    'seo.common.keywords': 'nordzypern webdesign, zypern webdesign agentur, zypern digitalagentur, famagusta webdesign, nikosia webdesign, zypern ki-automatisierung, zypern social media betreuung, zypern seo agentur',
+    'seo.organization.description': 'Fures Tech ist eine mehrsprachige Digitalagentur aus Famagusta. Wir entwickeln Webdesign, KI-Automatisierung und Growth-Marketing für Hotels, Tourismusunternehmen, E-Commerce-Marken und Dienstleister in Nordzypern und den umliegenden Märkten.',
+    'seo.home.title': 'Fures Tech | Webdesign, KI-Automatisierung & Social Media in Nordzypern',
+    'seo.home.description': 'Fures Tech liefert maßgeschneiderte Websites, KI-Automatisierungen, Social-Media-Betreuung und datengetriebenes Wachstum für Unternehmen in Nordzypern und der Türkei. Unsere mehrsprachigen, SEO-optimierten Projekte bringen Sie in den Suchergebnissen nach vorn.',
+    'seo.home.keywords': 'nordzypern digitalagentur, zypern social media agentur, zypern ki agentur, zypern seo beratung, famagusta marketing agentur',
+    'seo.about.title': 'Über uns | Fures Tech Digitalagentur',
+    'seo.about.description': 'Das Team von Fures Tech vereint Expertise in Design, Entwicklung, KI und Growth, um für Marken in Nordzypern und weltweit ganzheitliche digitale Transformation zu liefern.',
+    'seo.about.keywords': 'fures tech team, zypern digitale experten, nordzypern technologie unternehmen',
+    'seo.services.title': 'Leistungen | Webdesign, KI-Automatisierung & Social Media auf Zypern',
+    'seo.services.description': 'Fures Tech unterstützt Ihr Wachstum mit Webdesign und Entwicklung, KI-Automatisierung, Social-Media-Management, Analytics und mehrsprachiger Content-Produktion.',
+    'seo.services.keywords': 'nordzypern webdienstleistungen, zypern automatisierungslösungen, zypern social media management, zypern datenanalysen',
+    'seo.projects.title': 'Projekte | Fures Tech Referenzen',
+    'seo.projects.description': 'Entdecken Sie unsere Webdesign-, KI- und Wachstumsprojekte für Kunden in Nordzypern und internationalen Märkten.',
+    'seo.projects.keywords': 'nordzypern web projekte, zypern ki projekte, zypern digitale transformation referenzen',
+    'seo.team.title': 'Team | Fures Tech Gründer & Expert:innen',
+    'seo.team.description': 'Lernen Sie die Gründer:innen und Spezialist:innen von Fures Tech kennen – Designer:innen und Ingenieur:innen für mehrsprachige digitale Experiences und KI-Automatisierung.',
+    'seo.team.keywords': 'fures tech gründer, fures tech team, zypern technologie experten',
+    'seo.faq.title': 'FAQ | Fures Tech',
+    'seo.faq.description': 'Antworten auf häufige Fragen zu unseren Leistungen, Projektlaufzeiten, Support und Datensicherheit.',
+    'seo.faq.keywords': 'nordzypern webdesign fragen, zypern digitalagentur preise, fures tech support',
+    'seo.contact.title': 'Kontakt | Fures Tech Digitalagentur Nordzypern',
+    'seo.contact.description': 'Kontaktieren Sie Fures Tech. Unser Team in Famagusta plant mit Ihnen Webdesign-, KI-Automations- und Social-Media-Projekte.',
+    'seo.contact.keywords': 'fures tech kontakt, nordzypern digitalagentur kontakt, famagusta webdesign kontakt',
+    'seo.profile.furkanyonat.title': 'Furkan Yonat Digitaler Lebenslauf | Fures Tech',
+    'seo.profile.furkanyonat.description': 'Entdecken Sie den KI-gestützten Karriereauftritt, Projekte und Zertifikate von Fures Tech Mitgründer Furkan Yonat.',
+    'seo.profile.furkanyonat.keywords': 'furkan yonat, fures tech mitgründer, zypern ki spezialist',
+    'seo.profile.gulbeneser.title': 'Gülben Eser Portfolio | Fures Tech',
+    'seo.profile.gulbeneser.description': 'Erfahren Sie mehr über die Designführung, Content-Strategie und Projekte der Fures Tech Gründerin Gülben Eser.',
+    'seo.profile.gulbeneser.keywords': 'gulben eser, fures tech gründerin, zypern creative director',
+    'seo.profile.kariyer.title': 'Fures Tech Karriere-Assistent | KI-gestütztes Recruiting',
+    'seo.profile.kariyer.description': 'Die Karriereplattform von Fures Tech bietet KI-gestützte Kandidatenbewertung, Interview-Simulationen und automatisierte Job-Ausschreibungen.',
+    'seo.profile.kariyer.keywords': 'fures tech karriere, zypern recruiting automation, ki karriere assistent',
+
     // Hero
     'hero.title': 'Digitale Agentur',
     'hero.subtitle': 'Jenseits von Grenzen.',
@@ -576,6 +737,7 @@ const translations = {
     'projects.title': 'Projekte',
     'projects.subtitle': 'Kurze Fallzusammenfassungen',
     'projects.visit': 'Alle Anzeigen',
+    'projects.visit_project': 'Projekt ansehen',
     'projects.cta': 'Lass uns reden',
     
     // Why Fures
@@ -643,10 +805,100 @@ const translations = {
   }
 };
 
+const STORAGE_KEY = 'fures.language';
+
+const isLanguage = (value: string | null): value is Language =>
+  value !== null && SUPPORTED_LANGUAGES.includes(value as Language);
+
+const detectInitialLanguage = (): Language => {
+  if (typeof window === 'undefined') {
+    return DEFAULT_LANGUAGE;
+  }
+
+  const urlLang = new URL(window.location.href).searchParams.get('lang');
+  if (isLanguage(urlLang)) {
+    return urlLang;
+  }
+
+  try {
+    const stored = window.localStorage.getItem(STORAGE_KEY);
+    if (isLanguage(stored)) {
+      return stored;
+    }
+  } catch {
+    // ignore storage errors
+  }
+
+  if (typeof navigator !== 'undefined') {
+    const navigatorLanguages = Array.isArray(navigator.languages) ? navigator.languages : [navigator.language];
+    for (const locale of navigatorLanguages) {
+      if (!locale) continue;
+      const shortCode = locale.slice(0, 2).toLowerCase();
+      if (isLanguage(shortCode)) {
+        return shortCode;
+      }
+    }
+  }
+
+  return DEFAULT_LANGUAGE;
+};
+
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguage] = useState<Language>('tr');
+  const [language, setLanguageState] = useState<Language>(detectInitialLanguage);
+
+  const setLanguage = useCallback((lang: Language) => {
+    setLanguageState((current) => (current === lang ? current : lang));
+  }, []);
+
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      const meta = LANGUAGE_META[language];
+      const html = document.documentElement;
+      html.setAttribute('lang', language);
+      html.setAttribute('dir', meta.direction);
+      html.setAttribute('data-language', language);
+    }
+
+    if (typeof window !== 'undefined') {
+      try {
+        window.localStorage.setItem(STORAGE_KEY, language);
+      } catch {
+        // ignore storage errors
+      }
+
+      const url = new URL(window.location.href);
+      if (language === DEFAULT_LANGUAGE) {
+        url.searchParams.delete('lang');
+      } else {
+        url.searchParams.set('lang', language);
+      }
+      window.history.replaceState({}, '', url.toString());
+    }
+  }, [language]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const handlePopState = () => {
+      const urlLang = new URL(window.location.href).searchParams.get('lang');
+      setLanguageState((current) => {
+        if (isLanguage(urlLang) && urlLang !== current) {
+          return urlLang;
+        }
+        if (!isLanguage(urlLang) && current !== DEFAULT_LANGUAGE) {
+          return DEFAULT_LANGUAGE;
+        }
+        return current;
+      });
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   const t = (key: string): string => {
     return translations[language][key as keyof typeof translations.tr] || key;
