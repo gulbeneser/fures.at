@@ -76,12 +76,18 @@ const translations = {
 
     // Hero
     'hero.title': 'Dijital Ajans',
+    'hero.rotating': 'Dijital Ajans|Akıllı Sistem|Yaratıcı Otomasyon|Fures Tech',
     'hero.subtitle': 'Sınırların Ötesinde. Deneyime odaklı.',
     'hero.ai_powered': 'Yapay Zekâ ile Güçlendirilmiş Tasarım, Kod ve Büyüme.',
     'hero.description': 'Markanız için akıllı otomasyon, etkileyici web deneyimleri ve veriyle çalışan pazarlama. Hızlı, ölçülebilir, ölçeklenebilir.',
+    'hero.badge': 'AI-Native Dijital Ajans',
     'hero.cta_discover': 'Daha Fazlasını Keşfet',
     'hero.cta_pricing': 'Fiyatları Gör',
     'hero.cta_talk': 'Hadi Konuşalım',
+    'hero.secondary_cta': 'Projenizi Anlatalım →',
+
+    // Quotes
+    'quotes.items': 'Teknolojiyle değil, zekâyla ölçekleniyoruz.|Fures = Akıllı sistem tasarımı|Estetik ≠ lüks, işlevdir|Yapay zekâ = yaratıcı hız',
     
     // Why Us
     'why_us.title': 'AI-Native yaklaşım. Reel sonuç.',
@@ -291,12 +297,18 @@ const translations = {
 
     // Hero
     'hero.title': 'Digital Agency',
+    'hero.rotating': 'Digital Agency|Intelligent System|Creative Automation|Fures Tech',
     'hero.subtitle': 'Beyond Boundaries. Experience-led.',
     'hero.ai_powered': 'AI-Powered Design, Code & Growth.',
     'hero.description': 'Smart automation, impactful web experiences, and data-driven marketing for your brand. Fast, measurable, scalable.',
+    'hero.badge': 'AI-Native Digital Agency',
     'hero.cta_discover': 'Discover More',
     'hero.cta_pricing': 'See Pricing',
     'hero.cta_talk': 'Let\'s Talk',
+    'hero.secondary_cta': 'Tell Us About Your Project →',
+
+    // Quotes
+    'quotes.items': 'We scale with intelligence, not just technology.|Fures = Intelligent systems design|Aesthetics ≠ luxury, they are function.|AI = creative speed',
     
     // Why Us
     'why_us.title': 'AI-Native approach. Real results.',
@@ -506,12 +518,18 @@ const translations = {
 
     // Hero
     'hero.title': 'Цифровое Агентство',
+    'hero.rotating': 'Цифровое агентство|Умная система|Креативная автоматизация|Fures Tech',
     'hero.subtitle': 'За Пределами Границ.',
     'hero.ai_powered': 'Дизайн, Код и Рост на основе ИИ.',
     'hero.description': 'Умная автоматизация, впечатляющий веб-опыт и маркетинг на основе данных для вашего бренда. Быстро, измеримо, масштабируемо.',
+    'hero.badge': 'Цифровое агентство с ИИ в основе',
     'hero.cta_discover': 'Узнать Больше',
     'hero.cta_pricing': 'Посмотреть Цены',
     'hero.cta_talk': 'Давайте Поговорим',
+    'hero.secondary_cta': 'Рассказать о проекте →',
+
+    // Quotes
+    'quotes.items': 'Мы масштабируемся не технологиями, а интеллектом.|Fures = дизайн умных систем|Эстетика ≠ роскошь, это функция|ИИ = творческая скорость',
     
     // Why Us
     'why_us.title': 'ИИ-нативный подх��д. Реальные результаты.',
@@ -721,12 +739,18 @@ const translations = {
 
     // Hero
     'hero.title': 'Digitale Agentur',
+    'hero.rotating': 'Digitale Agentur|Intelligentes System|Kreative Automatisierung|Fures Tech',
     'hero.subtitle': 'Jenseits von Grenzen.',
     'hero.ai_powered': 'KI-gestütztes Design, Code & Wachstum.',
     'hero.description': 'Intelligente Automatisierung, eindrucksvolle Web-Erlebnisse und datengestütztes Marketing für Ihre Marke. Schnell, messbar, skalierbar.',
+    'hero.badge': 'AI-native Digitalagentur',
     'hero.cta_discover': 'Mehr Erfahren',
     'hero.cta_pricing': 'Preise Ansehen',
     'hero.cta_talk': 'Lass uns reden',
+    'hero.secondary_cta': 'Erzählen Sie uns von Ihrem Projekt →',
+
+    // Quotes
+    'quotes.items': 'Wir skalieren nicht mit Technologie, sondern mit Intelligenz.|Fures = Design intelligenter Systeme|Ästhetik ≠ Luxus, sondern Funktion|KI = kreative Geschwindigkeit',
     
     // Why Us
     'why_us.title': 'KI-nativer Ansatz. Echte Ergebnisse.',
