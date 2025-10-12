@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { useLanguage } from "../contexts/LanguageContext";
 import { Globe, Bot, Share2, BarChart2, Cloud, FileText, Target, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
@@ -91,7 +92,12 @@ export function Services() {
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="group liquid-glass p-8 transition-all duration-500 hover:-translate-y-1"
+              className="group liquid-glass p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_22px_78px_-60px_rgba(10,18,38,0.78)]"
+              style={{
+                '--glass-surface-bg': 'rgba(6, 12, 30, 0.08)',
+                '--glass-surface-border': 'rgba(255, 255, 255, 0.14)',
+                '--glass-highlight-height': '8%',
+              } as CSSProperties}
             >
               {/* Video Background */}
               {service.video && (

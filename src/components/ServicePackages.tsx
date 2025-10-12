@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { useLanguage } from "../contexts/LanguageContext";
 import { Rocket, TrendingUp, Bot, Megaphone, Languages } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -75,9 +76,14 @@ export function ServicePackages() {
           {packages.map((pkg, index) => (
             <div
               key={index}
-              className={`group liquid-glass p-9 transition-all duration-500 hover:-translate-y-1 ${
+              className={`group liquid-glass p-9 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_24px_80px_-60px_rgba(12,18,40,0.8)] ${
                 pkg.featured ? 'lg:col-span-1 lg:row-span-2 is-active' : ''
               }`}
+              style={{
+                '--glass-surface-bg': 'rgba(8, 14, 28, 0.08)',
+                '--glass-surface-border': 'rgba(255, 255, 255, 0.14)',
+                '--glass-highlight-height': '8%',
+              } as CSSProperties}
             >
               {pkg.featured && (
                 <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 rounded-full bg-[linear-gradient(135deg,rgba(255,143,84,0.85),rgba(173,110,255,0.85))] px-4 py-1 text-xs font-semibold text-white shadow-lg">
