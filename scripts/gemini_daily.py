@@ -1,251 +1,139 @@
-#!/usr/bin/env python3
-# pip install -r requirements.txt
-import os, sys, json, time, pathlib, datetime
-from urllib.parse import urlparse
+import os
+import json
+import base64
 import feedparser
-from dateutil import tz
-
+import datetime
+import subprocess
+from pathlib import Path
 from google import genai
 from google.genai import types
 
-from utils import slugify, strip_html
-
-# ---- Zaman/Dizinler ----
-TZ = tz.gettz("Europe/Istanbul")
-NOW = datetime.datetime.now(TZ)
-TODAY = NOW.date()
-
-ROOT = pathlib.Path(__file__).resolve().parents[1]
-CONTENT_BASE = ROOT / "content" / "posts"
-IMAGES_DIR   = ROOT / "static" / "images" / "ai-daily" / f"{TODAY.year:04d}" / f"{TODAY.month:02d}" / f"{TODAY.isoformat()}-ai-digest"
-FEEDS_FILE   = ROOT / "scripts" / "feeds.yml"
-
-PROMPTS = {
-    "tr": ROOT / "prompts" / "post_prompt_tr.md",
-    "en": ROOT / "prompts" / "post_prompt_en.md",
-    "ru": ROOT / "prompts" / "post_prompt_ru.md",
-    "de": ROOT / "prompts" / "post_prompt_de.md",
+# === CONFIG ===
+MODEL_TEXT = "gemini-2.0-flash"
+MODEL_IMAGE = "gemini-2.5-flash-image"
+LANGS = {
+    "tr": "Türkçe",
+    "en": "English",
+    "de": "Deutsch",
+    "ru": "Русский"
 }
+ROOT = Path(__file__).resolve().parent.parent
+BLOG_DIR = ROOT / "blog"
+IMAGES_DIR = ROOT / "blog_images"
+BLOG_DIR.mkdir(exist_ok=True)
+IMAGES_DIR.mkdir(exist_ok=True)
 
-LANG_PATH = {"tr": "tr","en": "en","ru": "ru","de": "de"}
+client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
 
-# — yumuşatılmış eşikler —
-MAX_ITEMS = 80
-COLLECT_WINDOW_DAYS = 3
-IMAGE_COUNT = 3
-
-KEYWORDS = [
-    "artificial intelligence","ai","machine learning","deep learning","large language model",
-    "llm","multimodal","computer vision","speech","rag","agents","robotics","genomics",
-    "yapay zeka","makine öğrenimi","derin öğrenme","çok modlu","görüntü işleme","konuşma","turizm","otomatizasyon",
-    "turkey","türkiye","kktc","cyprus","cyprus tourism"
-]
-
-TEXT_MODEL = "gemini-2.5-flash"
-IMG_MODEL  = "gemini-2.5-flash-image"
-
-def get_api_key():
-    return os.environ.get("GEMINI_API_KEY") or os.environ.get("apikey")
-
-def make_client():
-    key = get_api_key()
-    if not key:
-        print("Missing GEMINI_API_KEY/apikey", file=sys.stderr)
-        sys.exit(1)
-    return genai.Client(api_key=key)
-
-# ---- RSS Toplama ----
-def load_feeds():
-    if not FEEDS_FILE.exists():
-        print("feeds.yml not found", file=sys.stderr)
-        return []
-    return [ln.strip() for ln in FEEDS_FILE.read_text(encoding="utf-8").splitlines()
-            if ln.strip() and not ln.strip().startswith("#")]
-
-def unique(items, key):
-    seen=set(); out=[]
-    for it in items:
-        k=key(it)
-        if k in seen: continue
-        seen.add(k); out.append(it)
-    return out
-
-def is_relevant(title, summary):
-    blob = f"{(title or '').lower()} {(summary or '').lower()}"
-    return any(k.lower() in blob for k in KEYWORDS)
-
-def collect_entries():
-    cutoff = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=COLLECT_WINDOW_DAYS)
-    entries = []
-    for url in load_feeds():
-        try:
-            d = feedparser.parse(url)
-        except Exception:
-            continue
-        for e in d.entries[:50]:
-            link = getattr(e, "link", "")
-            title = strip_html(getattr(e, "title", ""))
-            summary = strip_html(getattr(e, "summary", ""))
-            if not link or not title:
-                continue
-
-            if getattr(e, "published_parsed", None):
-                pub = datetime.datetime(*e.published_parsed[:6], tzinfo=datetime.timezone.utc)
-            elif getattr(e, "updated_parsed", None):
-                pub = datetime.datetime(*e.updated_parsed[:6], tzinfo=datetime.timezone.utc)
-            else:
-                pub = datetime.datetime.now(datetime.timezone.utc)
-
-            if pub < cutoff: 
-                continue
-            if not is_relevant(title, summary): 
-                continue
-
-            entries.append({
-                "title": title,
-                "summary": summary,
-                "link": link,
-                "domain": urlparse(link).netloc,
-                "published": pub.isoformat()
+# === 1. Haberleri Çek ===
+def fetch_ai_news(limit=5):
+    feeds = [
+        "https://news.google.com/rss/search?q=artificial+intelligence&hl=en",
+        "https://news.google.com/rss/search?q=ai+tourism&hl=en",
+        "https://news.google.com/rss/search?q=artificial+intelligence+technology&hl=en",
+    ]
+    articles = []
+    for feed in feeds:
+        parsed = feedparser.parse(feed)
+        for entry in parsed.entries[:limit]:
+            articles.append({
+                "title": entry.title,
+                "link": entry.link,
+                "summary": entry.summary if "summary" in entry else ""
             })
-    entries = unique(entries, key=lambda x: (x["domain"], x["title"].lower()))
-    entries.sort(key=lambda x: x["published"], reverse=True)
-    return entries[:MAX_ITEMS]
+    return articles[:limit]
 
-# ---- Prompt birleştirme (system -> user) ----
-def build_combined_prompt(lang_code, entries):
-    system_prompt = PROMPTS[lang_code].read_text(encoding="utf-8")
-    user_task = f"""
-DATE: {TODAY.isoformat()}
+# === 2. Blog Metni Üret ===
+def generate_multilingual_blog(news_list):
+    summaries = "\n".join([f"- {n['title']} ({n['link']})" for n in news_list])
 
-TASK:
-- Research the following AI items in **English** (validate quickly),
-  then write a **localized daily AI brief** per prompt-language.
-- Focus on items from the **last 24h**, use older items (<=72h) only as context if needed.
-- Include markdown **links** to original sources.
-- If sources are scarce, produce a **Light Mode** brief but still deliver value.
+    prompt = f"""
+    You are an expert AI journalist writing multilingual blog articles.
+    Summarize and creatively expand on the following AI news headlines:
 
-ENTRIES (JSON):
-{json.dumps(entries, ensure_ascii=False)}
-""".strip()
+    {summaries}
 
-    # google-genai 0.2.2 destekli roller: user/model → system yok.
-    # Bu yüzden system prompt'u üstte yönergeler olarak, ardından görev metnini ekliyoruz.
-    return system_prompt + "\n\n---\n\n" + user_task
+    Create 4 short blog articles (400-600 words each) in:
+    - Turkish
+    - English
+    - German
+    - Russian
 
-def llm_markdown_for_lang(client, lang_code, entries):
-    combined = build_combined_prompt(lang_code, entries)
-    contents = [
-        types.Content(
-            role="user",
-            parts=[types.Part.from_text(text=combined)]
+    Each blog should:
+    - Have a title
+    - Be engaging, educational and a bit playful
+    - Mention real references from the links
+    - End with a reflective or inspiring note
+    """
+
+    contents = [types.Content(role="user", parts=[types.Part.from_text(text=prompt)])]
+    resp = client.models.generate_content(model=MODEL_TEXT, contents=contents)
+    return resp.text
+
+# === 3. Görsel Üret ===
+def generate_image(prompt_text):
+    try:
+        response = client.models.generate_image(
+            model=MODEL_IMAGE,
+            prompt=f"Create a futuristic AI-themed illustration: {prompt_text}"
         )
-    ]
-    cfg = types.GenerateContentConfig(
-        max_output_tokens=3000,
-        temperature=0.5
-    )
-    resp = client.models.generate_content(
-        model=TEXT_MODEL,
-        contents=contents,
-        config=cfg,
-    )
-    text = (getattr(resp, "text", None) or "").strip()
-    if not text:
-        raise RuntimeError("Empty response from Gemini.")
-    return text
+        image_base64 = response.image.image_bytes
+        filename = f"ai_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+        img_path = IMAGES_DIR / filename
+        with open(img_path, "wb") as f:
+            f.write(base64.b64decode(image_base64))
+        return filename
+    except Exception as e:
+        print("Image generation failed:", e)
+        return None
 
-# ---- Görsel Üretimi ----
-def generate_images(client, topic_slug, count=3):
-    IMAGES_DIR.mkdir(parents=True, exist_ok=True)
-    prompts = [
-        f"Editorial illustration for a daily AI blog; modern minimal hero; sharp vector; {topic_slug}",
-        f"Concept artwork showing Large Language Models in hospitality/tourism workflows; clean cover; {topic_slug}",
-        f"AI x Travel in Cyprus; itinerary planning assistants; stylish blog image; {topic_slug}"
-    ]
-    paths = []
-    for i in range(count):
-        prompt = prompts[i % len(prompts)]
-        # Bazı SDK sürümleri farklı isimler kullanıyor; önce models.generate_images dene, olmazsa images.generate
-        try:
-            resp = client.models.generate_images(model=IMG_MODEL, prompt=prompt)
-            imgs = getattr(resp, "images", None)
-            if not imgs:
-                raise RuntimeError("no images in response")
-            b = imgs[0].image  # raw bytes
-        except Exception:
-            alt = client.images.generate(model=IMG_MODEL, prompt=prompt)
-            b = alt.generated_images[0].image  # raw bytes
+# === 4. 4 Dilde Dosyaya Yaz ===
+def save_blogs(multilingual_text, image_filename):
+    sections = multilingual_text.split("###")
+    for code, lang in LANGS.items():
+        section = next((s for s in sections if lang in s), None)
+        if not section:
+            continue
+        date_str = datetime.datetime.now().strftime("%Y-%m-%d")
+        slug = f"{date_str}-{code}-ai-news"
+        path = BLOG_DIR / code
+        path.mkdir(exist_ok=True)
 
-        outp = IMAGES_DIR / f"{i+1:02d}.png"
-        outp.write_bytes(b)
-        paths.append("/" + str(outp.relative_to(ROOT)).replace(os.sep, "/"))
-        time.sleep(1.0)
-    return paths
+        html = f"""---
+title: "AI Daily — {lang}"
+date: {date_str}
+image: /blog_images/{image_filename if image_filename else 'default.png'}
+lang: {code}
+---
 
-# ---- Yazma/Enjeksiyon ----
-def write_markdown(md_text, lang, title_fallback="AI Günlük"):
-    import re
-    lang_dir = CONTENT_BASE / LANG_PATH[lang] / f"{TODAY.year:04d}" / f"{TODAY.month:02d}"
-    lang_dir.mkdir(parents=True, exist_ok=True)
+{section.strip()}
+"""
+        with open(path / f"{slug}.md", "w", encoding="utf-8") as f:
+            f.write(html)
+        print(f"✅ Saved blog for {lang} → {slug}.md")
 
-    m = re.search(r"^---\s*(.*?)\s*---", md_text, flags=re.S)
-    if m:
-        fm = m.group(1)
-        t = re.search(r"^title:\s*(.*)$", fm, flags=re.M)
-        title = (t.group(1).strip().strip("\"'") if t else title_fallback)
-    else:
-        title = title_fallback
+# === 5. GitHub Commit ===
+def commit_and_push():
+    subprocess.run(["git", "config", "--global", "user.email", "bot@fures.at"])
+    subprocess.run(["git", "config", "--global", "user.name", "Fures AI Bot"])
+    subprocess.run(["git", "add", "."])
+    subprocess.run(["git", "commit", "-m", "🤖 Daily AI Blog Update [auto]"])
+    subprocess.run(["git", "push"])
+    print("🚀 Blog pushed to GitHub successfully.")
 
-    slug = slugify(title)
-    out_path = lang_dir / f"{TODAY.isoformat()}-{slug}.md"
-    out_path.write_text(md_text.strip() + "\n", encoding="utf-8")
-    return out_path, slug
-
-def inject_cover_image(md_path, cover_image_rel):
-    txt = md_path.read_text(encoding="utf-8")
-    if not txt.strip().startswith("---"):
-        return
-    parts = txt.split("---", 2)
-    if len(parts) < 3:
-        return
-    fm, body = parts[1], parts[2]
-    import re
-    if "cover_image:" in fm:
-        fm = re.sub(r"cover_image:\s*.*", f"cover_image: {cover_image_rel}", fm)
-    else:
-        fm = fm.strip() + f"\ncover_image: {cover_image_rel}\n"
-    md_path.write_text("---\n" + fm + "---" + body, encoding="utf-8")
-
-def append_gallery(md_path, slug, images):
-    body = md_path.read_text(encoding="utf-8")
-    gallery = "\n\n---\n\n## Görsel Galeri\n" + "\n".join([f"![{slug}]({p})" for p in images])
-    md_path.write_text(body.strip() + gallery + "\n", encoding="utf-8")
-
+# === MAIN ===
 def main():
-    client = make_client()
-    entries = collect_entries()
-
-    if len(entries) == 0:
-        print("No entries at all; creating light-mode from empty set.", file=sys.stderr)
-
-    # İlk dil (TR): slug + görseller
-    md_tr = llm_markdown_for_lang(client, "tr", entries)
-    tr_path, tr_slug = write_markdown(md_tr, "tr", "AI Günlük")
-    images = generate_images(client, tr_slug, IMAGE_COUNT)
-    if images:
-        inject_cover_image(tr_path, images[0])
-        append_gallery(tr_path, tr_slug, images)
-
-    # Diğer diller aynı kapakla
-    for lang in ["en", "ru", "de"]:
-        md = llm_markdown_for_lang(client, lang, entries)
-        pth, _ = write_markdown(md, lang, "AI Daily")
-        if images:
-            inject_cover_image(pth, images[0])
-            append_gallery(pth, tr_slug, images)
-
-    print("DONE")
+    print("Fetching latest AI news...")
+    news = fetch_ai_news()
+    print("Generating multilingual content...")
+    blog_text = generate_multilingual_blog(news)
+    print("Generating image...")
+    image = generate_image(news[0]['title'] if news else "AI Innovation 2025")
+    print("Saving blogs...")
+    save_blogs(blog_text, image)
+    print("Committing to GitHub...")
+    commit_and_push()
+    print("✅ All done. Netlify will rebuild automatically.")
 
 if __name__ == "__main__":
     main()
