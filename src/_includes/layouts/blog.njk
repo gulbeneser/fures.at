@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="{{ lang or 'tr' }}">
+<head>
+  <meta charset="utf-8">
+  <title>Fures Blog</title>
+  <meta name="description" content="AI, turizm teknolojileri ve otomasyon üzerine günlük özetler.">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="icon" href="/urunler/assets/logos/logobrowser/favicon.ico">
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="/">Home</a>
+      · <a href="/tr/blog/">TR</a>
+      · <a href="/en/blog/">EN</a>
+      · <a href="/ru/blog/">RU</a>
+      · <a href="/de/blog/">DE</a>
+    </nav>
+  </header>
+  <main>
+    {{ content | safe }}
+  </main>
+</body>
+</html>
