@@ -7,28 +7,28 @@ const projects = [
   {
     name: 'AI-Powered Cyprus Vacation Planner',
     description: 'An intelligent application that creates multilingual, personalized travel plans based on user preferences and weather conditions.',
-    link: 'https://www.fures.at/projects/aboutcyprus',
+    link: '/projeler/aboutcyprus',
     icon: Globe,
     color: 'from-blue-500 to-cyan-500'
   },
   {
     name: 'AI-Powered Serakıncı Product Platform',
     description: 'An automated, multilingual, SEO-driven catalog with AI-generated descriptions and scraping pipelines.',
-    link: 'https://www.fures.at/projects/serakinci',
+    link: '/projeler/serakinci',
     icon: Cpu,
     color: 'from-purple-500 to-pink-500'
   },
   {
     name: 'Hotel & Agency Integration',
     description: 'Integrated 6 hotels with agency operations; optimized processes, reduced costs, and unified data flows.',
-    link: 'https://www.fures.at/projects/hotel',
+    link: '/projeler/hotel',
     icon: Hotel,
     color: 'from-green-500 to-emerald-500'
   },
   {
     name: 'ICALT 2024 Congress Management',
     description: 'Planning and coordination of an international conference in collaboration with Dorana Tourism.',
-    link: 'https://www.fures.at/projects/icalt',
+    link: '/projeler/icalt',
     icon: Users,
     color: 'from-orange-500 to-red-500'
   },

@@ -6,4 +6,6 @@
 /kariyer/*                /kariyer/index.html                  200
 /projects/:project        /projects/:project/index.html        200
 /projects/:project/*      /projects/:project/index.html        200
+/projeler/:project        /projeler/:project/index.html        200
+/projeler/:project/*      /projeler/:project/index.html        200
 /*                        /index.html                          200
