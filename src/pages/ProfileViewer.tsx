@@ -1,6 +1,17 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { useMemo } from "react";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 import { Button } from "../components/ui/button";
+import { useLanguage } from "../contexts/LanguageContext";
+import {
+  useSEO,
+  buildLanguageAlternates,
+  canonicalPathForLanguage,
+  createBreadcrumbSchema,
+  createOrganizationSchema,
+  createPersonSchema,
+  createSoftwareApplicationSchema
+} from "../hooks/useSEO";
 
 export type ProfileSlug = "furkanyonat" | "gulbeneser" | "kariyer";
 
@@ -40,6 +51,79 @@ interface ProfileViewerProps {
 }
 
 export function ProfileViewer({ profile }: ProfileViewerProps) {
+  const { language, t } = useLanguage();
+  const location = useLocation();
+
+  const canonicalPath = useMemo(
+    () => canonicalPathForLanguage(location.pathname, language),
+    [location.pathname, language]
+  );
+
+  const alternates = useMemo(
+    () => buildLanguageAlternates(location.pathname),
+    [location.pathname]
+  );
+
+  const keywords = useMemo(
+    () =>
+      `${t("seo.common.keywords")}, ${t(`seo.profile.${profile.slug}.keywords`)}`
+        .split(",")
+        .map((keyword) => keyword.trim())
+        .filter((keyword) => keyword.length > 0),
+    [language, profile.slug, t]
+  );
+
+  const profileStructuredEntity = useMemo(() => {
+    if (profile.slug === "kariyer") {
+      return createSoftwareApplicationSchema({
+        name: t("seo.profile.kariyer.title"),
+        description: t("seo.profile.kariyer.description"),
+        url: canonicalPath
+      });
+    }
+
+    const nameKey = profile.slug === "furkanyonat" ? "team.furkan.name" : "team.gulben.name";
+    const roleKey = profile.slug === "furkanyonat" ? "team.furkan.role" : "team.gulben.role";
+
+    return createPersonSchema({
+      name: t(nameKey),
+      jobTitle: t(roleKey),
+      description: t(`seo.profile.${profile.slug}.description`),
+      url: canonicalPath
+    });
+  }, [canonicalPath, language, profile.slug, t]);
+
+  const structuredData = useMemo(
+    () => [
+      createOrganizationSchema(t("seo.organization.description")),
+      profileStructuredEntity,
+      createBreadcrumbSchema([
+        { name: t("nav.home"), path: canonicalPathForLanguage("/", language) },
+        { name: t(`seo.profile.${profile.slug}.title`), path: canonicalPath }
+      ])
+    ],
+    [canonicalPath, language, profile.slug, profileStructuredEntity, t]
+  );
+
+  useSEO({
+    title: t(`seo.profile.${profile.slug}.title`),
+    description: t(`seo.profile.${profile.slug}.description`),
+    keywords,
+    canonicalPath,
+    alternates,
+    language,
+    openGraph: {
+      title: t(`seo.profile.${profile.slug}.title`),
+      description: t(`seo.profile.${profile.slug}.description`),
+      siteName: t("seo.site_name")
+    },
+    twitter: {
+      title: t(`seo.profile.${profile.slug}.title`),
+      description: t(`seo.profile.${profile.slug}.description`)
+    },
+    structuredData
+  });
+
   return (
     <section className="pt-28 pb-16 min-h-screen bg-black">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
