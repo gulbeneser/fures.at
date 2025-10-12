@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft, ExternalLink } from "lucide-react";
+import { Button } from "../components/ui/button";
 
 export type ProfileSlug = "furkanyonat" | "gulbeneser" | "kariyer";
 
@@ -42,7 +43,7 @@ export function ProfileViewer({ profile }: ProfileViewerProps) {
   return (
     <section className="pt-28 pb-16 min-h-screen bg-black">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="surface-card p-6 sm:p-8 md:p-10 mb-10">
+        <div className="liquid-glass mb-10 p-6 sm:p-8 md:p-10">
           <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-orange-300/80 mb-3">
@@ -54,27 +55,23 @@ export function ProfileViewer({ profile }: ProfileViewerProps) {
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-3">
-              <Link
-                to="/"
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-white/10 px-4 py-2 text-sm text-gray-200 transition-colors hover:bg-white/10"
-              >
-                <ArrowLeft className="h-4 w-4" />
-                Ana Sayfa
-              </Link>
-              <a
-                href={profile.entryPath}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-orange-500 via-orange-400 to-purple-600 px-4 py-2 text-sm font-medium text-white transition-transform duration-300 hover:scale-105"
-              >
-                Yeni Sekmede Aç
-                <ExternalLink className="h-4 w-4" />
-              </a>
+              <Button asChild variant="outline" size="sm" className="gap-2">
+                <Link to="/">
+                  <ArrowLeft className="h-4 w-4" />
+                  Ana Sayfa
+                </Link>
+              </Button>
+              <Button asChild variant="gradient" size="sm" className="gap-2">
+                <a href={profile.entryPath} target="_blank" rel="noopener noreferrer">
+                  Yeni Sekmede Aç
+                  <ExternalLink className="h-4 w-4" />
+                </a>
+              </Button>
             </div>
           </div>
         </div>
 
-        <div className="surface-card p-2 sm:p-3">
+        <div className="liquid-glass p-2 sm:p-3">
           <iframe
             key={profile.slug}
             src={profile.entryPath}

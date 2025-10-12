@@ -25,7 +25,7 @@ export function Mission() {
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         {/* Icon Badge */}
-        <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-orange-500 to-purple-600 rounded-full mb-8 shadow-2xl shadow-orange-500/25">
+        <div className="liquid-icon mb-8 flex h-20 w-20 items-center justify-center rounded-full">
           <Target className="w-10 h-10 text-white" />
         </div>
 
@@ -48,10 +48,7 @@ export function Mission() {
 
         {/* CTA */}
         <Link to="/iletisim">
-          <Button 
-            size="lg"
-            className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 text-white px-10 py-6 rounded-full transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/50 hover:scale-105 text-lg"
-          >
+          <Button size="lg" variant="gradient" className="text-lg">
             {t('mission.cta')} →
           </Button>
         </Link>

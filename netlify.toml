@@ -33,6 +33,31 @@
   status = 200
 
 [[redirects]]
+  from = "/kariyer.html"
+  to = "/kariyer/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/projects/:project"
+  to = "/projects/:project/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/projects/:project/*"
+  to = "/projects/:project/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/projeler/:project"
+  to = "/projeler/:project/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/projeler/:project/*"
+  to = "/projeler/:project/index.html"
+  status = 200
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
