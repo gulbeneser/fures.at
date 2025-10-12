@@ -30,25 +30,23 @@ PROMPTS = {
 
 LANG_PATH = {"tr": "tr","en": "en","ru": "ru","de": "de"}
 
-# === EŞİKLERİ YUMUŞATTIK ===
+# — yumuşatılmış eşikler —
 MAX_ITEMS = 80
-MIN_UNIQUE_SOURCES = 5        # 12 → 5
-COLLECT_WINDOW_DAYS = 3       # 2 → 3 gün (LLM zaten son 24 saati vurgular)
+MIN_UNIQUE_SOURCES = 5
+COLLECT_WINDOW_DAYS = 3
 IMAGE_COUNT = 3
 
 KEYWORDS = [
-    # EN
     "artificial intelligence","ai","machine learning","deep learning","large language model",
     "llm","multimodal","computer vision","speech","rag","agents","robotics","genomics",
-    # TR
     "yapay zeka","makine öğrenimi","derin öğrenme","çok modlu","görüntü işleme","konuşma","turizm","otomatizasyon",
-    # Bölgesel
     "turkey","türkiye","kktc","cyprus","cyprus tourism"
 ]
 
 TEXT_MODEL = "gemini-2.5-flash"
 IMG_MODEL  = "gemini-2.5-flash-image"
 
+# ---- API KEY ----
 def get_api_key():
     return os.environ.get("GEMINI_API_KEY") or os.environ.get("apikey")
 
@@ -59,6 +57,7 @@ def make_client():
         sys.exit(1)
     return genai.Client(api_key=key)
 
+# ---- RSS Toplama ----
 def load_feeds():
     if not FEEDS_FILE.exists():
         print("feeds.yml not found", file=sys.stderr)
@@ -79,7 +78,6 @@ def is_relevant(title, summary):
     return any(k.lower() in blob for k in KEYWORDS)
 
 def collect_entries():
-    # === ZAMAN PENCERESİ GENİŞLEDİ ===
     cutoff = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=COLLECT_WINDOW_DAYS)
     entries = []
     for url in load_feeds():
@@ -117,6 +115,7 @@ def collect_entries():
     entries.sort(key=lambda x: x["published"], reverse=True)
     return entries[:MAX_ITEMS]
 
+# ---- LLM Çağrıları ----
 def build_user_prompt(entries):
     return f"""
 DATE: {TODAY.isoformat()}
@@ -145,22 +144,25 @@ ENTRIES (JSON):
 """.strip()
 
 def llm_markdown_for_lang(client, lang_code, entries):
+    # ThinkingConfig kaldırıldı → sade config
     system_prompt = PROMPTS[lang_code].read_text(encoding="utf-8")
     contents = [
         types.Content(role="system", parts=[types.Part.from_text(text=system_prompt)]),
         types.Content(role="user",   parts=[types.Part.from_text(text=build_user_prompt(entries))]),
     ]
     cfg = types.GenerateContentConfig(
-        thinking_config=types.ThinkingConfig(thinking_budget=-1),
         max_output_tokens=3000,
         temperature=0.5
     )
-    out = []
-    for ch in client.models.generate_content_stream(model=TEXT_MODEL, contents=contents, config=cfg):
-        if getattr(ch, "text", None):
-            out.append(ch.text)
-    return "".join(out).strip()
+    # Non-stream çağrı (0.2.2 ile uyumlu)
+    resp = client.models.generate_content(
+        model=TEXT_MODEL,
+        contents=contents,
+        config=cfg,
+    )
+    return (getattr(resp, "text", None) or "").strip()
 
+# ---- Görsel Üretimi ----
 def generate_images(client, topic_slug, count=3):
     IMAGES_DIR.mkdir(parents=True, exist_ok=True)
     prompts = [
@@ -171,17 +173,25 @@ def generate_images(client, topic_slug, count=3):
     paths = []
     for i in range(count):
         prompt = prompts[i % len(prompts)]
-        resp = client.models.generate_images(model="gemini-2.5-flash-image", prompt=prompt)
-        if not getattr(resp, "images", None):
-            continue
-        img = resp.images[0]
-        b = img.image
+        # 0.2.2'de models.generate_images mevcuttur; yoksa images.generate'e düşelim.
+        try:
+            resp = client.models.generate_images(model=IMG_MODEL, prompt=prompt)
+            imgs = getattr(resp, "images", None)
+            if not imgs:
+                raise RuntimeError("no images in response")
+            b = imgs[0].image  # raw bytes
+        except Exception:
+            # fallback (bazı sürümlerde):
+            alt = client.images.generate(model=IMG_MODEL, prompt=prompt)
+            b = alt.generated_images[0].image  # raw bytes
+
         outp = IMAGES_DIR / f"{i+1:02d}.png"
         outp.write_bytes(b)
         paths.append("/" + str(outp.relative_to(ROOT)).replace(os.sep, "/"))
         time.sleep(1.0)
     return paths
 
+# ---- Yazma/Enjeksiyon ----
 def write_markdown(md_text, lang, title_fallback="AI Günlük"):
     import re
     lang_dir = CONTENT_BASE / LANG_PATH[lang] / f"{TODAY.year:04d}" / f"{TODAY.month:02d}"
@@ -224,11 +234,10 @@ def main():
     client = make_client()
     entries = collect_entries()
 
-    # === “Light mode” garantisi: az kaynak varsa bile üret ===
     if len(entries) == 0:
         print("No entries at all; creating light-mode from empty set.", file=sys.stderr)
 
-    # İlk dil (TR): slug üretimi için kullanıyoruz
+    # İlk dil (TR): slug + görseller
     md_tr = llm_markdown_for_lang(client, "tr", entries)
     tr_path, tr_slug = write_markdown(md_tr, "tr", "AI Günlük")
     images = generate_images(client, tr_slug, IMAGE_COUNT)
@@ -236,7 +245,7 @@ def main():
         inject_cover_image(tr_path, images[0])
         append_gallery(tr_path, tr_slug, images)
 
-    # Diğer diller
+    # Diğer diller aynı kapakla
     for lang in ["en", "ru", "de"]:
         md = llm_markdown_for_lang(client, lang, entries)
         pth, _ = write_markdown(md, lang, "AI Daily")
