@@ -3,7 +3,6 @@
 import os, sys, json, time, pathlib, datetime
 from urllib.parse import urlparse
 import feedparser
-import yaml
 from dateutil import tz
 
 from google import genai
@@ -32,7 +31,6 @@ LANG_PATH = {"tr": "tr","en": "en","ru": "ru","de": "de"}
 
 # — yumuşatılmış eşikler —
 MAX_ITEMS = 80
-MIN_UNIQUE_SOURCES = 5
 COLLECT_WINDOW_DAYS = 3
 IMAGE_COUNT = 3
 
@@ -46,7 +44,6 @@ KEYWORDS = [
 TEXT_MODEL = "gemini-2.5-flash"
 IMG_MODEL  = "gemini-2.5-flash-image"
 
-# ---- API KEY ----
 def get_api_key():
     return os.environ.get("GEMINI_API_KEY") or os.environ.get("apikey")
 
@@ -115,52 +112,48 @@ def collect_entries():
     entries.sort(key=lambda x: x["published"], reverse=True)
     return entries[:MAX_ITEMS]
 
-# ---- LLM Çağrıları ----
-def build_user_prompt(entries):
-    return f"""
+# ---- Prompt birleştirme (system -> user) ----
+def build_combined_prompt(lang_code, entries):
+    system_prompt = PROMPTS[lang_code].read_text(encoding="utf-8")
+    user_task = f"""
 DATE: {TODAY.isoformat()}
 
 TASK:
 - Research the following AI items in **English** (validate quickly),
   then write a **localized daily AI brief** per prompt-language.
-- Focus on items from the **last 24h**, but use older items (<= 72h) only as context if needed.
+- Focus on items from the **last 24h**, use older items (<=72h) only as context if needed.
 - Include markdown **links** to original sources.
-
-Sections:
-  1) Headlines / Manşetler (3–6)
-  2) Turkey/Northern Cyprus Focus (Türkiye/KKTC Odak)
-  3) Global Radar (papers/tools/models)
-  4) Actionable Tips (business / tourism / developers)
-  5) Quick Notes
-
-Also: add 1–2 short examples (code, prompt, or real use).
-If sources are scarce, produce a **Light Mode** brief (fewer bullets) but still deliver value.
-
-Tone: playful, educational, accurate.
-Output: UTF-8 Markdown with YAML front-matter (as specified in system prompt).
+- If sources are scarce, produce a **Light Mode** brief but still deliver value.
 
 ENTRIES (JSON):
 {json.dumps(entries, ensure_ascii=False)}
 """.strip()
 
+    # google-genai 0.2.2 destekli roller: user/model → system yok.
+    # Bu yüzden system prompt'u üstte yönergeler olarak, ardından görev metnini ekliyoruz.
+    return system_prompt + "\n\n---\n\n" + user_task
+
 def llm_markdown_for_lang(client, lang_code, entries):
-    # ThinkingConfig kaldırıldı → sade config
-    system_prompt = PROMPTS[lang_code].read_text(encoding="utf-8")
+    combined = build_combined_prompt(lang_code, entries)
     contents = [
-        types.Content(role="system", parts=[types.Part.from_text(text=system_prompt)]),
-        types.Content(role="user",   parts=[types.Part.from_text(text=build_user_prompt(entries))]),
+        types.Content(
+            role="user",
+            parts=[types.Part.from_text(text=combined)]
+        )
     ]
     cfg = types.GenerateContentConfig(
         max_output_tokens=3000,
         temperature=0.5
     )
-    # Non-stream çağrı (0.2.2 ile uyumlu)
     resp = client.models.generate_content(
         model=TEXT_MODEL,
         contents=contents,
         config=cfg,
     )
-    return (getattr(resp, "text", None) or "").strip()
+    text = (getattr(resp, "text", None) or "").strip()
+    if not text:
+        raise RuntimeError("Empty response from Gemini.")
+    return text
 
 # ---- Görsel Üretimi ----
 def generate_images(client, topic_slug, count=3):
@@ -173,7 +166,7 @@ def generate_images(client, topic_slug, count=3):
     paths = []
     for i in range(count):
         prompt = prompts[i % len(prompts)]
-        # 0.2.2'de models.generate_images mevcuttur; yoksa images.generate'e düşelim.
+        # Bazı SDK sürümleri farklı isimler kullanıyor; önce models.generate_images dene, olmazsa images.generate
         try:
             resp = client.models.generate_images(model=IMG_MODEL, prompt=prompt)
             imgs = getattr(resp, "images", None)
@@ -181,7 +174,6 @@ def generate_images(client, topic_slug, count=3):
                 raise RuntimeError("no images in response")
             b = imgs[0].image  # raw bytes
         except Exception:
-            # fallback (bazı sürümlerde):
             alt = client.images.generate(model=IMG_MODEL, prompt=prompt)
             b = alt.generated_images[0].image  # raw bytes
 
