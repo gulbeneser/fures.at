@@ -1,4 +1,4 @@
-# .github/workflows/main.yml (veya ilgili dosya adınız)
+# .github/workflows/daily-blog.yml
 
 name: Daily AI Blog (Gemini, 4 Lang)
 
@@ -7,13 +7,15 @@ on:
     - cron: "10 6 * * *"   # 09:10 Europe/Istanbul
   workflow_dispatch: {}
 
+permissions:
+  contents: write
+
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        # Depoya push yapabilmek için tam checkout derinliği gerekir
         with:
           fetch-depth: 0
 
