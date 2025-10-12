@@ -1,4 +1,4 @@
-# scripts/gemini_daily.py -- GÜNCELLENMİŞ VERSİYON
+# scripts/gemini_daily.py -- TÜM GÜNCELLEMELERİ İÇEREN TAM VERSİYON
 
 import os
 import json
@@ -8,6 +8,7 @@ import subprocess
 from pathlib import Path
 import google.generativeai as genai
 from google.generativeai import types
+import requests # Link temizleme için eklendi
 
 # === CONFIG ===
 MODEL_TEXT = "gemini-2.5-flash-preview-09-2025" 
@@ -28,9 +29,8 @@ if not GEMINI_API_KEY:
 
 genai.configure(api_key=GEMINI_API_KEY)
 
-# === 1. Haberleri Çek ===
+# === 1. Haberleri Çek (Link Temizleme Özellikli) ===
 def fetch_ai_news(limit=5):
-    # YENİ EKLENEN KAYNAK: Turizm ve Yapay Zeka
     feeds = [
         "https://news.google.com/rss/search?q=artificial+intelligence+breakthrough&hl=en-US&gl=US&ceid=US:en",
         "https://news.google.com/rss/search?q=AI+in+tourism+industry&hl=en-US&gl=US&ceid=US:en",
@@ -38,27 +38,45 @@ def fetch_ai_news(limit=5):
     ]
     articles = []
     seen_links = set()
-    for feed in feeds:
-        parsed = feedparser.parse(feed)
-        for entry in parsed.entries:
-            if entry.link not in seen_links:
+    
+    with requests.Session() as session:
+        for feed in feeds:
+            print(f"Haber kaynağı işleniyor: {feed}")
+            parsed = feedparser.parse(feed)
+            for entry in parsed.entries:
+                google_news_url = entry.link
+                
+                if google_news_url in seen_links:
+                    continue
+                
+                final_url = google_news_url
+                try:
+                    # Google linkini takip et ve gerçek adresi bul
+                    response = session.head(google_news_url, allow_redirects=True, timeout=5)
+                    final_url = response.url
+                    print(f"  -> Link temizlendi: {final_url}")
+
+                except requests.RequestException as e:
+                    print(f"  -> UYARI: Link çözümlenemedi: {google_news_url}. Hata: {e}")
+                    final_url = google_news_url
+                
                 articles.append({
                     "title": entry.title,
-                    "link": entry.link,
+                    "link": final_url, # Artık temizlenmiş link kullanılıyor
                     "summary": entry.summary if "summary" in entry else ""
                 })
-                seen_links.add(entry.link)
+                seen_links.add(google_news_url)
+
     return articles[:limit]
 
-# === 2. Blog Metni Üret ===
+# === 2. Blog Metni Üret (İlgi Çekici Stil) ===
 def generate_multilingual_blog(news_list):
     summaries = "\n".join([f"- Başlık: {n['title']}\n  Link: {n['link']}" for n in news_list])
 
-    # YENİ VE İYİLEŞTİRİLMİŞ PROMPT
     prompt = f"""
     You are a master storyteller and an expert AI journalist for a creative agency. Your tone is engaging, insightful, and slightly playful. Avoid dry, robotic language.
     
-    Your task is to analyze the following AI news headlines and links, identify the most significant and interesting developments, and weave them into compelling narratives.
+    Your task is to analyze the following AI news headlines and their clean links, identify the most significant and interesting developments, and weave them into compelling narratives.
 
     News sources:
     {summaries}
@@ -76,23 +94,11 @@ def generate_multilingual_blog(news_list):
     """
     
     model = genai.GenerativeModel(MODEL_TEXT)
-    generation_config = genai.types.GenerationConfig(temperature=0.75) # Yaratıcılığı bir tık artırdık
+    generation_config = genai.types.GenerationConfig(temperature=0.75)
     resp = model.generate_content(prompt, generation_config=generation_config)
     return resp.text
 
-# === 4. 4 Dilde Dosyaya Yaz === (Bu fonksiyonda değişiklik yok)
-def _generate_unique_slug(base_slug: str, target_dir: Path) -> str:
-    """Ensure we never overwrite an existing blog file."""
-
-    slug = base_slug
-    counter = 1
-    while (target_dir / f"{slug}.md").exists():
-        slug = f"{base_slug}-{counter}"
-        counter += 1
-
-    return slug
-
-
+# === 4. 4 Dilde Dosyaya Yaz ===
 def save_blogs(multilingual_text, image_filename="default.png"):
     sections = multilingual_text.split("[---BLOG-SEPARATOR---]")
     for code, lang in LANGS.items():
@@ -101,13 +107,10 @@ def save_blogs(multilingual_text, image_filename="default.png"):
             print(f"UYARI: {lang} için bölüm bulunamadı.")
             continue
         section_content = section.replace(f"[{lang}]", "").strip()
-        now = datetime.datetime.now(datetime.timezone.utc)
-        date_str = now.strftime("%Y-%m-%d")
-        slug_timestamp = now.strftime("%Y-%m-%d-%H%M")
-        base_slug = f"{slug_timestamp}-{code}-ai-news"
+        date_str = datetime.datetime.now().strftime("%Y-%m-%d")
+        slug = f"{date_str}-{code}-ai-news"
         path = BLOG_DIR / code
         path.mkdir(exist_ok=True)
-        slug = _generate_unique_slug(base_slug, path)
         html = f"""---
 title: "AI Daily — {lang}"
 date: {date_str}
@@ -121,7 +124,7 @@ lang: {code}
             f.write(html)
         print(f"✅ Blog kaydedildi: {lang} → {slug}.md")
 
-# === 5. GitHub Commit === (Bu fonksiyonda değişiklik yok)
+# === 5. GitHub Commit ===
 def commit_and_push():
     subprocess.run(["git", "config", "user.name", "Fures AI Bot"])
     subprocess.run(["git", "config", "user.email", "bot@fures.at"])
@@ -135,7 +138,7 @@ def commit_and_push():
     subprocess.run(["git", "push"])
     print("🚀 Blog başarıyla GitHub'a gönderildi.")
 
-# === MAIN === (Bu fonksiyonda değişiklik yok)
+# === MAIN ===
 def main():
     print("Fetching latest AI news...")
     news = fetch_ai_news()
