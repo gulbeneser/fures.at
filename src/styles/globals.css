@@ -101,33 +101,6 @@
     box-shadow: 0 0 30px rgba(255, 122, 41, 0.25), 0 0 60px rgba(143, 91, 255, 0.18);
   }
 
-  .surface-card {
-    position: relative;
-    border-radius: 1.75rem;
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    background: linear-gradient(140deg, rgba(20, 16, 29, 0.92), rgba(10, 9, 14, 0.9));
-    box-shadow: 0 25px 45px -30px rgba(0, 0, 0, 0.8);
-    overflow: hidden;
-  }
-
-  .surface-card::before {
-    content: "";
-    position: absolute;
-    inset: -1px;
-    border-radius: inherit;
-    padding: 1px;
-    background: linear-gradient(135deg, rgba(255, 122, 41, 0.4), rgba(143, 91, 255, 0.35));
-    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-    mask-composite: exclude;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-  }
-
-  .surface-card:hover::before {
-    opacity: 1;
-  }
-  
   .text-glow {
     text-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
   }
@@ -177,6 +150,144 @@
   
   .blur-gradient-inward {
     background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.8) 100%);
+  }
+}
+
+@layer components {
+  .liquid-glass {
+    position: relative;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.12),
+        rgba(120, 156, 255, 0.08),
+        rgba(255, 255, 255, 0.05)
+      )
+      rgba(15, 16, 35, 0.35);
+    box-shadow:
+      0 25px 55px -35px rgba(9, 11, 20, 0.85),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(28px) saturate(160%);
+    -webkit-backdrop-filter: blur(28px) saturate(160%);
+    overflow: hidden;
+    isolation: isolate;
+    transition: border-color 0.4s ease, box-shadow 0.4s ease, background 0.4s ease;
+  }
+
+  .liquid-glass::before {
+    content: "";
+    position: absolute;
+    inset: -40% -35% auto;
+    height: 160%;
+    border-radius: inherit;
+    background: radial-gradient(
+      120% 90% at 50% 0%,
+      rgba(255, 255, 255, 0.6),
+      rgba(255, 255, 255, 0) 65%
+    );
+    opacity: 0.45;
+    transform: translate3d(0, 0, 0);
+    transition: opacity 0.45s ease, transform 1s ease;
+  }
+
+  .liquid-glass::after {
+    content: "";
+    position: absolute;
+    inset: auto 18% 8% 18%;
+    height: 28px;
+    border-radius: inherit;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0.05));
+    filter: blur(12px);
+    opacity: 0.75;
+    transition: opacity 0.45s ease;
+  }
+
+  .liquid-glass:hover::before {
+    opacity: 0.7;
+    transform: translate3d(0, -6%, 0);
+  }
+
+  .liquid-glass[data-active="true"],
+  .liquid-glass.is-active {
+    border-color: rgba(255, 255, 255, 0.42);
+    background: linear-gradient(
+        140deg,
+        rgba(255, 255, 255, 0.22),
+        rgba(119, 167, 255, 0.22),
+        rgba(255, 255, 255, 0.08)
+      )
+      rgba(12, 16, 35, 0.6);
+    box-shadow:
+      0 30px 85px -40px rgba(15, 23, 42, 0.95),
+      inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  }
+
+  .liquid-glass[data-active="true"]::before,
+  .liquid-glass.is-active::before {
+    opacity: 0.9;
+    transform: translate3d(0, -10%, 0) scale(1.05);
+  }
+
+  .liquid-pill {
+    border-radius: 9999px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(120, 156, 255, 0.06));
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.55),
+      0 20px 40px -30px rgba(10, 12, 30, 0.85);
+    backdrop-filter: blur(26px) saturate(170%);
+    -webkit-backdrop-filter: blur(26px) saturate(170%);
+    overflow: hidden;
+    position: relative;
+    isolation: isolate;
+    transition: border-color 0.35s ease, transform 0.35s ease;
+  }
+
+  .liquid-pill::before {
+    content: "";
+    position: absolute;
+    inset: -50% -40% auto;
+    height: 170%;
+    border-radius: inherit;
+    background: radial-gradient(120% 90% at 50% 0%, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0) 70%);
+    opacity: 0.35;
+    transition: opacity 0.45s ease, transform 0.6s ease;
+  }
+
+  .liquid-pill::after {
+    content: "";
+    position: absolute;
+    inset: auto 20% 12% 20%;
+    height: 20px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.05));
+    border-radius: 999px;
+    filter: blur(14px);
+    opacity: 0.7;
+    transition: opacity 0.45s ease;
+  }
+
+  .liquid-pill:hover {
+    border-color: rgba(255, 255, 255, 0.38);
+    transform: translateY(-2px);
+  }
+
+  .liquid-pill:hover::before {
+    opacity: 0.6;
+    transform: translate3d(0, -8%, 0);
+  }
+
+  .liquid-pill[data-active="true"],
+  .liquid-pill.is-active {
+    border-color: rgba(255, 255, 255, 0.55);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.6),
+      0 24px 60px -38px rgba(12, 16, 40, 0.95);
+  }
+
+  .liquid-pill[data-active="true"]::before,
+  .liquid-pill.is-active::before {
+    opacity: 0.85;
+    transform: translate3d(0, -12%, 0) scale(1.05);
   }
 }
 

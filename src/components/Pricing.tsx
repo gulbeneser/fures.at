@@ -47,7 +47,7 @@ export function Pricing() {
 
           {/* Features */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-12">
-            <div className="p-6 rounded-2xl bg-gradient-to-br from-white/5 to-white/0 border border-white/10">
+            <div className="liquid-glass p-6 text-white/85">
               <div className="flex items-center justify-center gap-2 mb-2">
                 <Zap className="w-5 h-5 text-orange-400" />
                 <h3 className="text-lg text-white">Modüler</h3>
@@ -55,7 +55,7 @@ export function Pricing() {
               <p className="text-sm text-gray-400">İhtiyaca göre birleştirilebilir</p>
             </div>
 
-            <div className="p-6 rounded-2xl bg-gradient-to-br from-white/5 to-white/0 border border-white/10">
+            <div className="liquid-glass p-6 text-white/85">
               <div className="flex items-center justify-center gap-2 mb-2">
                 <Zap className="w-5 h-5 text-orange-400" />
                 <h3 className="text-lg text-white">Şeffaf</h3>
@@ -63,7 +63,7 @@ export function Pricing() {
               <p className="text-sm text-gray-400">Sabit kapsam + sprint</p>
             </div>
 
-            <div className="p-6 rounded-2xl bg-gradient-to-br from-white/5 to-white/0 border border-white/10">
+            <div className="liquid-glass p-6 text-white/85">
               <div className="flex items-center justify-center gap-2 mb-2">
                 <Zap className="w-5 h-5 text-orange-400" />
                 <h3 className="text-lg text-white">Hızlı</h3>
@@ -75,10 +75,7 @@ export function Pricing() {
           {/* CTA */}
           <div className="flex flex-col items-center gap-4">
             <Link to="/iletisim">
-              <Button 
-                size="lg"
-                className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 text-white px-10 py-6 rounded-full transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/50 hover:scale-105 text-lg"
-              >
+              <Button size="lg" variant="gradient" className="text-lg">
                 {t('pricing.cta')} →
               </Button>
             </Link>

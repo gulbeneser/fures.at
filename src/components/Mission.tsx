@@ -48,10 +48,7 @@ export function Mission() {
 
         {/* CTA */}
         <Link to="/iletisim">
-          <Button 
-            size="lg"
-            className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 text-white px-10 py-6 rounded-full transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/50 hover:scale-105 text-lg"
-          >
+          <Button size="lg" variant="gradient" className="text-lg">
             {t('mission.cta')} →
           </Button>
         </Link>

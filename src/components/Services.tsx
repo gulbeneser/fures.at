@@ -15,42 +15,42 @@ export function Services() {
       title: t('services.web_design'),
       description: t('services.web_design_desc'),
       gradient: 'from-orange-500 to-orange-600',
-      video: 'https://player.vimeo.com/video/1054822414?autoplay=1&loop=1&autopause=0&muted=1&background=1'
+      video: 'https://player.vimeo.com/video/1054822414?autoplay=1&loop=1&autopause=0&muted=1'
     },
     {
       icon: Bot,
       title: t('services.ai_automation'),
       description: t('services.ai_automation_desc'),
       gradient: 'from-purple-500 to-purple-600',
-      video: 'https://player.vimeo.com/video/1054811832?autoplay=1&loop=1&autopause=0&muted=1&background=1'
+      video: 'https://player.vimeo.com/video/1054811832?autoplay=1&loop=1&autopause=0&muted=1'
     },
     {
       icon: Share2,
       title: t('services.social_media'),
       description: t('services.social_media_desc'),
       gradient: 'from-orange-400 to-purple-500',
-      video: 'https://player.vimeo.com/video/1054807979?autoplay=1&loop=1&autopause=0&muted=1&background=1'
+      video: 'https://player.vimeo.com/video/1054807979?autoplay=1&loop=1&autopause=0&muted=1'
     },
     {
       icon: BarChart2,
       title: t('services.data_analytics'),
       description: t('services.data_analytics_desc'),
       gradient: 'from-purple-400 to-orange-500',
-      video: 'https://player.vimeo.com/video/1054819424?autoplay=1&loop=1&autopause=0&muted=1&background=1'
+      video: 'https://player.vimeo.com/video/1054819424?autoplay=1&loop=1&autopause=0&muted=1'
     },
     {
       icon: Cloud,
       title: t('services.cloud_integration'),
       description: t('services.cloud_integration_desc'),
       gradient: 'from-orange-500 to-purple-500',
-      video: 'https://player.vimeo.com/video/1054819061?autoplay=1&loop=1&autopause=0&muted=1&background=1'
+      video: 'https://player.vimeo.com/video/1054819061?autoplay=1&loop=1&autopause=0&muted=1'
     },
     {
       icon: FileText,
       title: t('services.certified_translation'),
       description: t('services.certified_translation_desc'),
       gradient: 'from-purple-500 to-orange-400',
-      video: 'https://player.vimeo.com/video/1054814291?autoplay=1&loop=1&autopause=0&muted=1&background=1'
+      video: 'https://player.vimeo.com/video/1054814291?autoplay=1&loop=1&autopause=0&muted=1'
     },
     {
       icon: Target,
@@ -99,22 +99,22 @@ export function Services() {
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="group surface-card p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_25px_65px_-35px_rgba(255,122,41,0.65)]"
+              className="group liquid-glass p-8 transition-all duration-500 hover:-translate-y-1"
             >
               {/* Video Background */}
               {service.video && (
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-700">
+                <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-700 group-hover:opacity-40">
                   <iframe
-                    src={service.video}
-                    className="w-full h-full object-cover scale-150"
+                    src={`${service.video}&controls=0&background=1`}
+                    className="h-full w-full scale-150 object-cover"
                     frameBorder="0"
-                    allow="autoplay"
+                    allow="autoplay; fullscreen"
                     title={service.title}
                   />
                 </div>
               )}
 
-              <div className="absolute inset-0 bg-gradient-to-br from-orange-500/0 to-purple-600/0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-hover:from-orange-500/12 group-hover:to-purple-600/12"></div>
+              <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-br from-orange-500/0 to-purple-600/0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-hover:from-orange-500/15 group-hover:to-purple-600/10"></div>
 
               <div className="relative z-10">
                 <motion.div

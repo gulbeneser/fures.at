@@ -84,13 +84,12 @@ export function Projects() {
           {projects.map((project, index) => {
             const Icon = project.icon;
             return (
-              <Card 
-                key={index} 
-                className="group relative overflow-hidden bg-gray-900/50 border-gray-800 hover:border-orange-500/50 transition-all duration-500 hover:scale-105"
+              <Card
+                key={index}
+                className="group relative overflow-hidden transition-all duration-500 hover:scale-[1.02]"
               >
-                {/* Gradient Background */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${project.color} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}></div>
-                
+                <div className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${project.color} opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-25`}></div>
+
                 <CardHeader className="relative">
                   <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${project.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
                     <Icon className="h-7 w-7 text-white" />
@@ -107,7 +106,7 @@ export function Projects() {
                   
                   <Button
                     variant="outline"
-                    className="w-full bg-transparent border-gray-700 text-gray-300 hover:bg-orange-500 hover:border-orange-500 hover:text-white transition-all duration-300 group"
+                    className="w-full justify-center text-sm"
                     onClick={() => window.open(project.link, '_blank')}
                   >
                     {t('projects.visit_project')}
@@ -122,27 +121,20 @@ export function Projects() {
         {/* Bottom CTA */}
         <div className="mt-20 text-center">
           <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-purple-600/20 rounded-3xl blur-xl"></div>
-            <div className="relative bg-gray-900/80 backdrop-blur-sm border border-gray-800 rounded-3xl p-12">
+            <div className="absolute inset-0 -z-10 bg-gradient-to-r from-orange-500/15 via-transparent to-purple-600/15 blur-3xl"></div>
+            <div className="liquid-glass relative rounded-[2.5rem] border border-white/15 p-12 text-white">
               <h3 className="text-3xl lg:text-4xl mb-6 bg-gradient-to-r from-orange-400 to-purple-600 bg-clip-text text-transparent">
                 Kendi Projenizi Başlatın
               </h3>
               <p className="text-gray-400 mb-8 max-w-2xl mx-auto text-lg">
-                AI destekli çözümlerle hayalinizdeki projeyi gerçeğe dönüştürmeye hazır mısınız? 
+                AI destekli çözümlerle hayalinizdeki projeyi gerçeğe dönüştürmeye hazır mısınız?
                 Deneyimli ekibimizle birlikte dijital dönüşüm yolculuğunuza başlayın.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button 
-                  size="lg" 
-                  className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 text-white px-8 py-6 text-lg"
-                >
+                <Button size="lg" variant="gradient" className="text-lg">
                   Projemi Başlat
                 </Button>
-                <Button 
-                  variant="outline" 
-                  size="lg" 
-                  className="border-gray-700 text-gray-300 hover:bg-gray-800 px-8 py-6 text-lg"
-                >
+                <Button variant="outline" size="lg" className="text-lg">
                   Daha Fazla Proje Gör
                 </Button>
               </div>

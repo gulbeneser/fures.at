@@ -56,16 +56,14 @@ export function CTA() {
           transition={{ duration: 0.6 }}
           className="mb-16"
         >
-          <div className="relative rounded-3xl overflow-hidden border border-white/10 bg-gradient-to-br from-white/5 to-white/0 backdrop-blur-sm max-w-4xl mx-auto glow-gradient">
-            <div className="aspect-video">
-              <iframe
-                src="https://player.vimeo.com/video/1054771811?autoplay=1&loop=1&autopause=0&muted=1&playsinline=1"
-                className="w-full h-full"
-                frameBorder="0"
-                allow="autoplay; fullscreen; picture-in-picture"
-                title="Contact Fures Tech"
-              />
-            </div>
+          <div className="liquid-glass relative max-w-5xl mx-auto overflow-hidden rounded-[2.5rem] border border-white/15">
+            <iframe
+              src="https://player.vimeo.com/video/1054771811?autoplay=1&loop=1&autopause=0&muted=1&playsinline=1&background=1&controls=0"
+              className="aspect-video w-full"
+              frameBorder="0"
+              allow="autoplay; fullscreen"
+              title="Contact Fures Tech"
+            />
           </div>
         </motion.div>
 
@@ -94,23 +92,16 @@ export function CTA() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-20">
             <a href="mailto:info@fures.at">
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button 
-                  size="lg"
-                  className="group bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 text-white px-10 py-6 rounded-full transition-all duration-300 hover:shadow-2xl glow-gradient text-lg"
-                >
+                <Button size="lg" variant="gradient" className="group text-lg">
                   <Send className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform" />
                   {t('contact.send_message')}
                 </Button>
               </motion.div>
             </a>
-            
+
             <a href="https://calendly.com/fures" target="_blank" rel="noopener noreferrer">
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button 
-                  size="lg"
-                  variant="outline"
-                  className="px-10 py-6 rounded-full text-lg border-white/20 hover:border-orange-500/50 hover:bg-white/5 transition-all duration-300"
-                >
+                <Button size="lg" variant="outline" className="text-lg">
                   {t('contact.schedule_meeting')}
                 </Button>
               </motion.div>
@@ -156,14 +147,14 @@ export function CTA() {
               >
                 <Component
                   {...(item.href && { href: item.href })}
-                  className="group relative p-6 rounded-2xl bg-gradient-to-br from-white/5 to-white/0 border border-white/10 hover:border-orange-500/50 transition-all duration-500 hover:transform hover:scale-105 backdrop-blur-sm block"
+                  className="liquid-glass group relative block overflow-hidden rounded-[1.75rem] border border-white/15 p-6 transition-all duration-500 hover:-translate-y-1"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br from-orange-500/0 to-purple-600/0 rounded-2xl opacity-0 group-hover:opacity-100 group-hover:from-orange-500/10 group-hover:to-purple-600/5 transition-opacity duration-500"></div>
-                  
+                  <div className="pointer-events-none absolute inset-0 rounded-[1.75rem] bg-gradient-to-br from-orange-500/0 to-purple-600/0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-hover:from-orange-500/10 group-hover:to-purple-600/10"></div>
+
                   <div className="relative z-10">
                     <motion.div
                       whileHover={{ rotate: 6 }}
-                      className="w-12 h-12 bg-gradient-to-r from-orange-500 to-purple-600 rounded-xl flex items-center justify-center mb-4 shadow-lg glow-gradient"
+                      className="w-12 h-12 rounded-xl bg-gradient-to-r from-orange-500 to-purple-600 flex items-center justify-center mb-4 shadow-lg"
                     >
                       <item.icon className="h-6 w-6 text-white" />
                     </motion.div>

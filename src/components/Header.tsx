@@ -65,9 +65,9 @@ export function Header() {
   ];
 
   const navItemClasses = (path: string) =>
-    `group relative isolate flex min-w-[82px] flex-col items-center justify-center gap-1 rounded-full px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] transition-all duration-500 ${
+    `liquid-pill group relative flex min-w-[92px] flex-col items-center justify-center gap-1 px-5 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] transition-all duration-500 ${
       isActive(path)
-        ? "text-white"
+        ? "is-active text-white"
         : "text-slate-200/85 hover:text-white"
     }`;
 
@@ -76,13 +76,12 @@ export function Header() {
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex w-full items-center justify-between sm:w-auto sm:flex-none">
           <Link to="/" className="group relative flex items-center">
-            <span className="absolute inset-0 -z-10 rounded-full bg-white/5 blur-md transition duration-300 group-hover:blur-lg" />
-            <span className="absolute inset-0 -z-20 rounded-full bg-[linear-gradient(120deg,rgba(96,165,250,0.35),rgba(192,132,252,0.25),rgba(251,191,36,0.25))] blur-2xl opacity-70" />
-            <span className="relative flex items-center gap-3 rounded-full border border-white/10 bg-black/40 px-4 py-2 backdrop-blur-2xl">
+            <span className="absolute inset-0 -z-20 rounded-full bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.35),rgba(9,9,11,0))] opacity-40 blur-xl transition duration-300 group-hover:opacity-70" />
+            <span className="relative flex items-center rounded-full border border-white/15 bg-black/30 px-4 py-2 backdrop-blur-2xl">
               <img
                 src={logoSrc}
                 alt="Fures"
-                className="h-8 w-auto transition-transform duration-300 group-hover:scale-110"
+                className="h-9 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
               />
             </span>
           </Link>
@@ -94,20 +93,18 @@ export function Header() {
         <div className="order-last sm:order-none sm:flex-1">
           <div className="relative">
             <div className="absolute inset-0 -z-10 rounded-full bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.25),rgba(9,9,11,0))] opacity-70 blur-2xl" />
-            <nav className="relative flex items-center gap-2 overflow-x-auto rounded-full border border-white/10 bg-black/40 px-3 py-2 backdrop-blur-2xl shadow-[0_28px_80px_-40px_rgba(15,23,42,0.95)] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <nav className="liquid-glass flex items-center gap-3 overflow-x-auto rounded-full px-4 py-3 shadow-[0_28px_80px_-45px_rgba(10,12,35,0.95)] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {navItems.map((item) => {
                 const Icon = item.icon;
                 const active = isActive(item.path);
 
                 return (
-                  <Link key={item.path} to={item.path} className={navItemClasses(item.path)}>
-                    <span
-                      className={`absolute inset-0 overflow-hidden rounded-full border transition-all duration-500 ${
-                        active
-                          ? "border-white/30 bg-white/10 shadow-[0_26px_65px_-35px_rgba(15,23,42,0.95)] backdrop-blur-3xl before:absolute before:inset-[-35%] before:-z-10 before:rounded-[120px] before:bg-[radial-gradient(140%_180%_at_50%_25%,rgba(255,255,255,0.78),rgba(255,255,255,0.08)_45%,rgba(8,10,22,0.85))] before:opacity-85 before:blur-[32px] before:content-[''] after:absolute after:inset-x-7 after:top-1 after:h-5 after:rounded-full after:bg-white/55 after:opacity-80 after:blur-lg after:content-['']"
-                          : "border-white/10 bg-white/5 group-hover:border-white/20 group-hover:bg-white/10"
-                      }`}
-                    />
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    className={navItemClasses(item.path)}
+                    data-active={active || undefined}
+                  >
                     <Icon
                       className={`relative z-10 h-5 w-5 transition-all duration-300 ${
                         active
@@ -124,15 +121,17 @@ export function Header() {
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button type="button" className="group relative isolate flex min-w-[82px] flex-col items-center justify-center gap-1 rounded-full px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-200/80 transition-all duration-300 hover:text-white focus-visible:outline-none">
-                    <span className="absolute inset-0 rounded-full border border-white/10 bg-white/5 transition-all duration-300 group-hover:border-white/20 group-hover:bg-white/10" />
+                  <button
+                    type="button"
+                    className="liquid-pill group relative flex min-w-[92px] flex-col items-center justify-center gap-1 px-5 py-2 text-[10px] font-semibold uppercase tracking-[0.24em] text-slate-200/85 transition-all duration-300 hover:text-white focus-visible:outline-none"
+                  >
                     <MoreHorizontal className="relative z-10 h-5 w-5 text-white/80 transition-all duration-300 group-hover:text-white" />
                     <span className="relative z-10 text-[10px] font-semibold uppercase tracking-[0.24em]">
                       {t("nav.more")}
                     </span>
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="mt-3 w-72 rounded-3xl border border-white/10 bg-[#07060b]/95 p-3 backdrop-blur-2xl shadow-[0_30px_90px_-35px_rgba(10,10,20,0.95)]">
+                <DropdownMenuContent className="liquid-glass mt-3 w-72 rounded-3xl border border-white/15 bg-white/5 p-3 text-white">
                   <div className="space-y-2">
                     {moreLinks.map((link) => {
                       const Icon = link.icon;
@@ -146,11 +145,12 @@ export function Header() {
                         >
                           <Link
                             to={link.path}
-                            className={`relative flex items-center justify-between overflow-hidden rounded-2xl px-4 py-3 text-sm transition-all duration-500 ${
+                            className={`liquid-glass relative flex items-center justify-between overflow-hidden rounded-2xl border border-white/15 px-4 py-3 text-sm transition-all duration-500 ${
                               active
-                                ? "border border-white/30 bg-white/12 text-white shadow-[0_24px_60px_-35px_rgba(15,23,42,0.9)] backdrop-blur-3xl before:absolute before:inset-[-40%] before:-z-10 before:rounded-[120px] before:bg-[radial-gradient(140%_180%_at_50%_20%,rgba(255,255,255,0.75),rgba(255,255,255,0.08)_45%,rgba(8,10,22,0.85))] before:opacity-85 before:blur-[32px] before:content-[''] after:absolute after:inset-x-8 after:top-1.5 after:h-4 after:rounded-full after:bg-white/55 after:opacity-80 after:blur-lg after:content-['']"
-                                : "border border-transparent bg-white/5 text-slate-200/85 hover:border-white/25 hover:bg-white/10 hover:text-white"
+                                ? "is-active text-white"
+                                : "text-slate-200/85 hover:text-white"
                             }`}
+                            data-active={active || undefined}
                           >
                             <span className="flex items-center gap-3">
                               <span className="flex size-8 items-center justify-center rounded-full bg-black/40">
@@ -173,10 +173,9 @@ export function Header() {
         <div className="hidden items-center gap-3 sm:flex">
           <LanguageSelector />
           <Link to="/iletisim">
-            <Button className="group relative overflow-hidden rounded-full border border-white/20 bg-[linear-gradient(120deg,rgba(93,123,255,0.85),rgba(146,90,255,0.8),rgba(255,122,73,0.85))] px-6 py-2 text-sm font-semibold uppercase tracking-[0.22em] text-white shadow-[0_30px_60px_-35px_rgba(96,125,255,0.8)] transition duration-300 hover:scale-[1.02]">
+            <Button variant="gradient" size="sm" className="group">
               <span className="relative z-10">{t("nav.lets_talk")}</span>
               <span className="relative z-10">→</span>
-              <span className="absolute inset-0 -z-10 rounded-full bg-white/25 opacity-0 transition duration-300 group-hover:opacity-10" />
             </Button>
           </Link>
         </div>

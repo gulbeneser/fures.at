@@ -24,23 +24,21 @@ export function About() {
       }}></div>
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.1fr_0.9fr] items-center">
           {/* Left Side - Video */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6 }}
-            className="relative rounded-3xl overflow-hidden border border-white/10 bg-gradient-to-br from-white/5 to-white/0 backdrop-blur-sm glow-gradient"
+            className="liquid-glass relative h-[55vh] w-full overflow-hidden rounded-[2.75rem] border border-white/15 lg:h-[70vh]"
           >
-            <div className="aspect-video">
-              <iframe
-                src="https://player.vimeo.com/video/1054772121?autoplay=1&loop=1&autopause=0&muted=1&playsinline=1"
-                className="w-full h-full"
-                frameBorder="0"
-                allow="autoplay; fullscreen; picture-in-picture"
-                title="About Fures Tech"
-              />
-            </div>
+            <iframe
+              src="https://player.vimeo.com/video/1054772121?autoplay=1&loop=1&autopause=0&muted=1&playsinline=1&background=1&controls=0"
+              className="absolute inset-0 h-full w-full"
+              frameBorder="0"
+              allow="autoplay; fullscreen"
+              title="About Fures Tech"
+            />
           </motion.div>
 
           {/* Right Side - Content */}
@@ -63,7 +61,7 @@ export function About() {
             </h2>
 
             {/* Description */}
-            <div className="p-8 rounded-3xl bg-gradient-to-br from-white/5 to-white/0 border border-white/10 backdrop-blur-sm">
+            <div className="liquid-glass rounded-[2.5rem] border border-white/15 p-8 text-left text-white/85">
               <p className="text-lg sm:text-xl text-gray-300 leading-relaxed">
                 {t('why_fures.description')}
               </p>
