@@ -1,27 +1,50 @@
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Button } from "./ui/button";
 import { useLanguage } from "../contexts/LanguageContext";
 import { Sparkles, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 
-const rotatingTexts = [
+const FALLBACK_ROTATING_TEXTS = [
   "Dijital Ajans",
   "Akıllı Sistem",
   "Yaratıcı Otomasyon",
-  "Fures Tech"
+  "Fures Tech",
 ];
 
 export function Hero() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [textIndex, setTextIndex] = useState(0);
 
+  const rotatingTexts = useMemo(() => {
+    const raw = t("hero.rotating");
+    const items = raw
+      .split("|")
+      .map((item) => item.trim())
+      .filter(Boolean);
+
+    if (raw === "hero.rotating" || items.length === 0) {
+      return FALLBACK_ROTATING_TEXTS;
+    }
+
+    return items;
+  }, [t, language]);
+
   useEffect(() => {
+    if (rotatingTexts.length <= 1) {
+      setTextIndex(0);
+      return;
+    }
+
     const interval = setInterval(() => {
       setTextIndex((prev) => (prev + 1) % rotatingTexts.length);
     }, 3000);
     return () => clearInterval(interval);
-  }, []);
+  }, [rotatingTexts]);
+
+  useEffect(() => {
+    setTextIndex(0);
+  }, [rotatingTexts]);
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black pt-16">
@@ -105,7 +128,7 @@ export function Hero() {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-orange-500/10 to-purple-600/10 border border-orange-500/20 mb-8 backdrop-blur-sm glow-gradient"
           >
             <Sparkles className="w-4 h-4 text-orange-400" />
-            <span className="text-sm text-gray-300">AI-Native Digital Agency</span>
+            <span className="text-sm text-gray-300">{t('hero.badge')}</span>
           </motion.div>
 
           {/* Rotating Title with Gradient Flow */}
@@ -172,7 +195,7 @@ export function Hero() {
                   variant="outline"
                   className="text-lg"
                 >
-                  Projenizi Anlatalım →
+                  {t('hero.secondary_cta')}
                 </Button>
               </motion.div>
             </Link>

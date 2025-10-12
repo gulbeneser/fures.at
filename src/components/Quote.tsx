@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLanguage } from "../contexts/LanguageContext";
 
-const quotes = [
+const FALLBACK_QUOTES = [
   "Teknolojiyle değil, zekâyla ölçekleniyoruz.",
   "Fures = Akıllı sistem tasarımı",
   "Estetik ≠ lüks, işlevdir",
@@ -9,14 +10,38 @@ const quotes = [
 ];
 
 export function Quote() {
+  const { t, language } = useLanguage();
   const [currentQuote, setCurrentQuote] = useState(0);
 
+  const quotes = useMemo(() => {
+    const raw = t("quotes.items");
+    const items = raw
+      .split("|")
+      .map((item) => item.trim())
+      .filter(Boolean);
+
+    if (raw === "quotes.items" || items.length === 0) {
+      return FALLBACK_QUOTES;
+    }
+
+    return items;
+  }, [t, language]);
+
   useEffect(() => {
+    if (quotes.length <= 1) {
+      setCurrentQuote(0);
+      return;
+    }
+
     const interval = setInterval(() => {
       setCurrentQuote((prev) => (prev + 1) % quotes.length);
     }, 4000);
     return () => clearInterval(interval);
-  }, []);
+  }, [quotes]);
+
+  useEffect(() => {
+    setCurrentQuote(0);
+  }, [quotes]);
 
   return (
     <section className="py-20 relative overflow-hidden bg-black">
