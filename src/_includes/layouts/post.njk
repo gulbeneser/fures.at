@@ -1,13 +1,47 @@
 <!doctype html>
 <html lang="{{ lang or 'tr' }}">
+{% set site_url = "https://fures.at" %}
+{% set cover = cover_image or image %}
+{% set canonical_url = canonical or (page.url | url) or '/' %}
+{% if canonical_url and not canonical_url.startsWith('http') %}
+  {% set absolute_canonical = site_url + canonical_url %}
+{% else %}
+  {% set absolute_canonical = canonical_url %}
+{% endif %}
+{% if cover %}
+  {% set resolved_cover = cover %}
+  {% if not resolved_cover.startsWith('http') %}
+    {% set resolved_cover = resolved_cover | url %}
+    {% if resolved_cover and not resolved_cover.startsWith('/') %}
+      {% set resolved_cover = '/' + resolved_cover %}
+    {% endif %}
+    {% set absolute_cover = site_url + resolved_cover %}
+  {% else %}
+    {% set absolute_cover = resolved_cover %}
+  {% endif %}
+{% endif %}
+{% set description_text = summary or excerpt or title %}
 <head>
   <meta charset="utf-8">
   <title>{{ title }} – Fures Blog</title>
-  <meta name="description" content="{{ summary or title }}">
+  <meta name="description" content="{{ description_text }}">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  {% if cover_image %}<meta property="og:image" content="{{ cover_image | url }}">{% endif %}
-  <link rel="canonical" href="{{ canonical or page.url | url }}">
+  <link rel="canonical" href="{{ absolute_canonical }}">
   <link rel="icon" href="/urunler/assets/logos/logobrowser/favicon.ico">
+
+  <!-- Open Graph Meta Etiketleri -->
+  <meta property="og:title" content="{{ title }}">
+  <meta property="og:description" content="{{ description_text }}">
+  {% if absolute_cover %}<meta property="og:image" content="{{ absolute_cover }}">{% endif %}
+  <meta property="og:url" content="{{ absolute_canonical }}">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Fures Blog">
+
+  <!-- Twitter Card Etiketleri -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ title }}">
+  <meta name="twitter:description" content="{{ description_text }}">
+  {% if absolute_cover %}<meta name="twitter:image" content="{{ absolute_cover }}">{% endif %}
 </head>
 <body>
   <header>
@@ -24,7 +58,7 @@
     <article>
       <h1>{{ title }}</h1>
       <p><small>{{ date | readableDate }}</small></p>
-      {% if cover_image %}<p><img src="{{ cover_image | url }}" alt=""></p>{% endif %}
+      {% if cover %}<p><img src="{{ absolute_cover or (cover | url) }}" alt="{{ title }}"></p>{% endif %}
       {{ content | safe }}
       {% if tags %}<p><small>Tags: {{ tags }}</small></p>{% endif %}
     </article>
