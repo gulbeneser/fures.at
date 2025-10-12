@@ -66,23 +66,28 @@ export function Header() {
   ];
 
   const navItemClasses = (path: string) =>
-    `liquid-pill group relative flex min-w-[92px] flex-col items-center justify-center gap-1 px-5 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] transition-all duration-500 ${
+    `liquid-pill ios-nav-item group relative flex min-w-[92px] flex-col items-center justify-center gap-1 px-5 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] transition-all duration-500 ${
       isActive(path)
         ? "is-active text-white"
         : "text-slate-200/75 hover:text-white"
     }`;
 
   const navGlassStyle = {
-    "--glass-surface-bg": "rgba(255, 255, 255, 0.12)",
-    "--glass-surface-border": "rgba(255, 255, 255, 0.26)",
-    "--glass-highlight-height": "12%",
+    "--glass-surface-bg": "rgba(6, 12, 30, 0.08)",
+    "--glass-surface-border": "rgba(255, 255, 255, 0.18)",
+    "--glass-surface-highlight": "rgba(255, 255, 255, 0.35)",
+    "--glass-surface-reflection": "rgba(210, 230, 255, 0.22)",
+    "--glass-highlight-height": "9%",
+    "--glass-reflection-height": "42%",
   } as CSSProperties;
 
   const dropdownGlassStyle = {
-    "--glass-surface-bg": "rgba(255, 255, 255, 0.11)",
-    "--glass-surface-border": "rgba(255, 255, 255, 0.22)",
-    "--glass-highlight-height": "11%",
-    "--glass-reflection-height": "44%",
+    "--glass-surface-bg": "rgba(8, 14, 28, 0.12)",
+    "--glass-surface-border": "rgba(255, 255, 255, 0.18)",
+    "--glass-surface-highlight": "rgba(255, 255, 255, 0.32)",
+    "--glass-surface-reflection": "rgba(210, 230, 255, 0.24)",
+    "--glass-highlight-height": "10%",
+    "--glass-reflection-height": "40%",
   } as CSSProperties;
 
   return (
@@ -91,7 +96,7 @@ export function Header() {
         <div className="flex w-full items-center justify-between sm:w-auto sm:flex-none">
           <Link to="/" className="group relative flex items-center">
             <span className="absolute inset-0 -z-20 rounded-full bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.28),rgba(9,9,11,0))] opacity-45 blur-xl transition duration-300 group-hover:opacity-70" />
-            <span className="relative flex items-center rounded-full border border-white/12 bg-black/25 px-4 py-2 backdrop-blur-2xl">
+            <span className="relative flex items-center rounded-full border border-white/10 bg-black/10 px-4 py-2 backdrop-blur-3xl">
               <img
                 src={logoSrc}
                 alt="Fures"
@@ -106,9 +111,9 @@ export function Header() {
 
         <div className="order-last sm:order-none sm:flex-1">
           <div className="group relative">
-            <div className="absolute inset-0 -z-10 rounded-full bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.2),rgba(9,9,11,0))] opacity-65 blur-2xl transition-opacity duration-300 group-hover:opacity-80" />
+            <div className="absolute inset-0 -z-10 rounded-full bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.18),rgba(9,9,11,0))] opacity-50 blur-3xl transition-opacity duration-500 group-hover:opacity-80" />
             <nav
-              className="liquid-glass group flex items-center gap-3 overflow-x-auto rounded-full px-4 py-3 shadow-[0_26px_72px_-46px_rgba(10,12,35,0.85)] transition-all duration-300 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              className="liquid-glass group flex items-center gap-3 overflow-x-auto rounded-full px-4 py-3 backdrop-blur-[42px] backdrop-saturate-[1.65] shadow-[0_32px_90px_-58px_rgba(12,16,40,0.9)] transition-all duration-500 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
               style={navGlassStyle}
             >
               {navItems.map((item) => {
@@ -140,7 +145,7 @@ export function Header() {
                 <DropdownMenuTrigger asChild>
                   <button
                     type="button"
-                    className="liquid-pill group relative flex min-w-[92px] flex-col items-center justify-center gap-1 px-5 py-2 text-[10px] font-semibold uppercase tracking-[0.24em] text-slate-200/75 transition-all duration-300 hover:text-white focus-visible:outline-none"
+                    className="liquid-pill ios-nav-item group relative flex min-w-[92px] flex-col items-center justify-center gap-1 px-5 py-2 text-[10px] font-semibold uppercase tracking-[0.24em] text-slate-200/75 transition-all duration-300 hover:text-white focus-visible:outline-none"
                     style={navGlassStyle}
                   >
                     <MoreHorizontal className="relative z-10 h-5 w-5 text-white/80 transition-all duration-300 group-hover:text-white" />
@@ -150,7 +155,7 @@ export function Header() {
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
-                  className="liquid-glass mt-3 w-72 rounded-3xl p-3 text-white"
+                  className="liquid-glass mt-3 w-72 rounded-3xl p-3 text-white backdrop-blur-[42px] backdrop-saturate-[1.75]"
                   style={dropdownGlassStyle}
                 >
                   <div className="space-y-2">
@@ -166,7 +171,7 @@ export function Header() {
                         >
                           <Link
                             to={link.path}
-                            className={`liquid-glass relative flex items-center justify-between overflow-hidden rounded-2xl px-4 py-3 text-sm transition-all duration-500 ${
+                            className={`liquid-glass ios-nav-menu-item relative flex items-center justify-between overflow-hidden rounded-2xl px-4 py-3 text-sm transition-all duration-500 ${
                               active
                                 ? "is-active text-white"
                                 : "text-slate-200/75 hover:text-white"
