@@ -68,7 +68,7 @@ export function Header() {
     `group relative isolate flex min-w-[82px] flex-col items-center justify-center gap-1 rounded-full px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] transition-all duration-300 ${
       isActive(path)
         ? "text-white"
-        : "text-slate-200/80 hover:text-white"
+        : "text-slate-200/85 hover:text-white"
     }`;
 
   return (
@@ -107,13 +107,15 @@ export function Header() {
                     <span
                       className={`absolute inset-0 rounded-full border transition-all duration-300 ${
                         active
-                          ? "border-white/50 bg-[linear-gradient(135deg,rgba(93,123,255,0.78),rgba(146,90,255,0.75),rgba(255,122,73,0.75))] shadow-[0_22px_45px_-22px_rgba(98,130,255,0.9)]"
+                          ? "border-white/40 bg-white/15 shadow-[0_24px_55px_-35px_rgba(15,23,42,0.95)] backdrop-blur-3xl"
                           : "border-white/10 bg-white/5 group-hover:border-white/20 group-hover:bg-white/10"
                       }`}
                     />
                     <Icon
                       className={`relative z-10 h-5 w-5 transition-all duration-300 ${
-                        active ? "text-white drop-shadow-[0_10px_25px_rgba(94,125,255,0.8)]" : "text-white/80 group-hover:text-white"
+                        active
+                          ? "text-white drop-shadow-[0_8px_18px_rgba(15,23,42,0.35)]"
+                          : "text-white/80 group-hover:text-white"
                       }`}
                     />
                     <span className="relative z-10 text-[10px] font-semibold uppercase tracking-[0.24em]">
@@ -149,8 +151,8 @@ export function Header() {
                             to={link.path}
                             className={`flex items-center justify-between rounded-2xl px-4 py-3 text-sm transition-all duration-300 ${
                               active
-                                ? "bg-[linear-gradient(135deg,rgba(93,123,255,0.78),rgba(146,90,255,0.75),rgba(255,122,73,0.75))] text-white shadow-[0_18px_38px_-20px_rgba(98,130,255,0.9)]"
-                                : "bg-white/5 text-slate-200/85 hover:bg-white/10 hover:text-white"
+                                ? "border border-white/35 bg-white/12 text-white shadow-[0_22px_45px_-35px_rgba(15,23,42,0.9)] backdrop-blur-3xl"
+                                : "border border-transparent bg-white/5 text-slate-200/85 hover:border-white/25 hover:bg-white/10 hover:text-white"
                             }`}
                           >
                             <span className="flex items-center gap-3">
