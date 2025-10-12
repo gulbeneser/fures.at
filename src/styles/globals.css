@@ -32,15 +32,15 @@
   --ring: oklch(0.708 0 0);
   --radius: 0.75rem;
 
-  --glass-blur: 26px;
-  --glass-saturate: 1.8;
-  --glass-bg: rgba(255, 255, 255, 0.1);
-  --glass-border: rgba(255, 255, 255, 0.18);
-  --glass-border-strong: rgba(255, 255, 255, 0.24);
-  --glass-highlight: rgba(255, 255, 255, 0.48);
-  --glass-reflection: rgba(195, 215, 255, 0.3);
-  --glass-noise: rgba(255, 255, 255, 0.015);
-  --glass-shadow: 0 26px 72px -54px rgba(10, 13, 32, 0.82);
+  --glass-blur: 28px;
+  --glass-saturate: 1.9;
+  --glass-bg: rgba(255, 255, 255, 0.025);
+  --glass-border: rgba(255, 255, 255, 0.24);
+  --glass-border-strong: rgba(255, 255, 255, 0.32);
+  --glass-highlight: rgba(255, 255, 255, 0.68);
+  --glass-reflection: rgba(210, 230, 255, 0.32);
+  --glass-noise: rgba(255, 255, 255, 0.012);
+  --glass-shadow: 0 24px 70px -48px rgba(8, 12, 30, 0.8);
   --glass-transition: cubic-bezier(0.22, 0.84, 0.3, 1);
 
   --font-heading: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -210,7 +210,7 @@
     border-radius: var(--glass-radius);
     border: 1px solid var(--glass-surface-border);
     background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03) 60%, transparent 100%),
+      linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.04) 55%, transparent 100%),
       color-mix(in srgb, var(--glass-surface-bg) 100%, transparent);
     backdrop-filter: blur(var(--glass-blur)) saturate(calc(var(--glass-saturate) * var(--glass-saturate-scale)));
     -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(calc(var(--glass-saturate) * var(--glass-saturate-scale)));
