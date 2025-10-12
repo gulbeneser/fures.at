@@ -140,7 +140,10 @@ module.exports = () => {
   const blogDir = path.resolve(__dirname, "..", "..", "blog");
 
   if (!fs.existsSync(blogDir)) {
-    return [];
+    return {
+      all: [],
+      english: [],
+    };
   }
 
   const files = discoverMarkdownFiles(blogDir);
@@ -148,5 +151,11 @@ module.exports = () => {
 
   posts.sort((a, b) => b.timestamp - a.timestamp);
 
-  return posts.slice(0, MAX_ITEMS);
+  const englishPosts = posts.filter((post) => post.lang === "en").slice(0, MAX_ITEMS);
+  const allPosts = posts.slice(0, MAX_ITEMS);
+
+  return {
+    all: allPosts,
+    english: englishPosts,
+  };
 };
