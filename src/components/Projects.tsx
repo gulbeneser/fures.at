@@ -1,9 +1,17 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
-import { ExternalLink, Cpu, Globe, Hotel, Users, Camera, ChefHat, BarChart3 } from "lucide-react";
+import { ExternalLink, Cpu, Globe, Hotel, Users, Camera, ChefHat, BarChart3, Briefcase } from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext";
 
 const projects = [
+  {
+    name: 'Fures Kariyer Koçu',
+    description:
+      'AI destekli kariyer koçunuz: CV hazırlama, ön yazı, mülakat pratiği ve dil geliştirme için uçtan uca destek sunar.',
+    link: '/kariyer.html',
+    icon: Briefcase,
+    color: 'from-rose-500 to-pink-500'
+  },
   {
     name: 'AI-Powered Cyprus Vacation Planner',
     description: 'An intelligent application that creates multilingual, personalized travel plans based on user preferences and weather conditions.',

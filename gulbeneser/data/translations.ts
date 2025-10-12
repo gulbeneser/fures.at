@@ -79,6 +79,12 @@ export const translations = {
       title: 'Yapay Zeka Projelerim',
       visitProject: 'Projeyi Ziyaret Et',
       items: [
+        {
+          name: 'Fures Kariyer Koçu',
+          description:
+            'CV hazırlama, ön yazı, işe uygunluk analizi ve mülakat simülasyonu için uçtan uca destek veren yapay zekâ tabanlı kariyer platformu.',
+          link: '/kariyer.html'
+        },
         { name: 'Yapay Zeka Destekli Kıbrıs Tatil Planlayıcısı', description: 'Kullanıcı tercihlerine ve hava koşullarına göre çok dilli, kişiselleştirilmiş seyahat planları oluşturan akıllı bir uygulama.', link: '/projeler/aboutcyprus' },
         { name: 'Yapay Zeka Destekli Serakıncı Ürün Platformu', description: 'Yapay zeka tarafından oluşturulan açıklamalar ve veri kazıma işlem hatları ile otomatikleştirilmiş, çok dilli, SEO odaklı bir katalog.', link: '/projeler/serakinci' },
         { name: 'Otel ve Acenta Entegrasyonu', description: '6 oteli acenta operasyonlarıyla entegre etti; süreçleri optimize etti, maliyetleri düşürdü ve veri akışlarını birleştirdi.', link: '/projeler/hotel' },
@@ -203,6 +209,12 @@ export const translations = {
       title: 'My AI Projects',
       visitProject: 'Visit Project',
       items: [
+        {
+          name: 'Fures Career Coach',
+          description:
+            'An AI-driven career platform delivering resume building, tailored cover letters, job-fit analysis, and realistic interview simulations.',
+          link: '/kariyer.html'
+        },
         { name: 'AI-Powered Cyprus Vacation Planner', description: 'An intelligent application that creates multilingual, personalized travel plans based on user preferences and weather conditions.', link: '/projeler/aboutcyprus' },
         { name: 'AI-Powered Serakıncı Product Platform', description: 'An automated, multilingual, SEO-driven catalog with AI-generated descriptions and scraping pipelines.', link: '/projeler/serakinci' },
         { name: 'Hotel & Agency Integration', description: 'Integrated 6 hotels with agency operations; optimized processes, reduced costs, and unified data flows.', link: '/projeler/hotel' },
