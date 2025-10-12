@@ -1,14 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-
-const quotes = [
-  "Teknolojiyle değil, zekâyla ölçekleniyoruz.",
-  "Fures = Akıllı sistem tasarımı",
-  "Estetik ≠ lüks, işlevdir",
-  "Yapay zekâ = yaratıcı hız"
-];
+import { useLanguage } from "../contexts/LanguageContext";
 
 export function Quote() {
+  const { t } = useLanguage();
+  const quotes = useMemo(
+    () => [
+      t("quotes.0"),
+      t("quotes.1"),
+      t("quotes.2"),
+      t("quotes.3")
+    ],
+    [t]
+  );
   const [currentQuote, setCurrentQuote] = useState(0);
 
   useEffect(() => {

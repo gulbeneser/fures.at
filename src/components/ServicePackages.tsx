@@ -87,7 +87,7 @@ export function ServicePackages() {
             >
               {pkg.featured && (
                 <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 rounded-full bg-[linear-gradient(135deg,rgba(91,143,255,0.85),rgba(136,90,255,0.85))] px-4 py-1 text-xs font-semibold text-white shadow-lg">
-                  Popüler
+                  {t('packages.featured_label')}
                 </div>
               )}
 
