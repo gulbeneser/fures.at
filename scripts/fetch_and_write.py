@@ -2,7 +2,7 @@
 """Daily AI news fetcher and Markdown writer.
 
 This script collects RSS entries, filters them for AI-related news, sends a
-summary prompt to OpenAI, and writes the resulting Markdown post into the
+summary prompt to Gemini, and writes the resulting Markdown post into the
 Hugo-compatible ``content/posts/YYYY/MM`` directory.
 """
 from __future__ import annotations
@@ -172,35 +172,43 @@ def llm_summarize_markdown(entries: List[Mapping[str, str]], system_prompt: str)
     if not entries:
         raise ValueError("No entries to summarize")
 
-    api_key = os.getenv("OPENAI_API_KEY")
+    api_key = os.getenv("GEMINI_API_KEY")
     if not api_key:
-        raise RuntimeError("OPENAI_API_KEY environment variable is not set")
+        raise RuntimeError("GEMINI_API_KEY environment variable is not set")
 
     user_prompt = build_user_prompt(entries)
     payload = {
-        "model": "gpt-5.1-mini",
-        "messages": [
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt},
+        "system_instruction": {"parts": [{"text": system_prompt}]},
+        "contents": [
+            {
+                "role": "user",
+                "parts": [{"text": user_prompt}],
+            }
         ],
-        "temperature": 0.4,
+        "generationConfig": {
+            "temperature": 0.4,
+            "responseMimeType": "text/markdown",
+        },
     }
 
     resp = requests.post(
-        "https://api.openai.com/v1/chat/completions",
-        headers={
-            "Authorization": f"Bearer {api_key}",
-            "Content-Type": "application/json",
-        },
+        "https://generativelanguage.googleapis.com/v1beta/models/"
+        "gemini-1.5-flash-latest:generateContent",
+        params={"key": api_key},
+        headers={"Content-Type": "application/json"},
         data=json.dumps(payload),
         timeout=120,
     )
     resp.raise_for_status()
     result = resp.json()
     try:
-        return result["choices"][0]["message"]["content"]
+        parts = result["candidates"][0]["content"]["parts"]
+        text = "\n".join(part.get("text", "") for part in parts).strip()
+        if not text:
+            raise KeyError("empty response")
+        return text
     except (KeyError, IndexError) as exc:  # pragma: no cover - defensive
-        raise RuntimeError(f"Unexpected OpenAI response: {result}") from exc
+        raise RuntimeError(f"Unexpected Gemini response: {result}") from exc
 
 
 def write_post(md_text: str) -> str:

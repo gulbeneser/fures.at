@@ -4,7 +4,7 @@ Bu depo, her sabah 09:10 (Europe/Istanbul) saatinde çalışarak AI haberlerini 
 
 ## 1. Gereksinimler
 
-- GitHub Actions tarafında `OPENAI_API_KEY` gizli anahtarı.
+- GitHub Actions tarafında `GEMINI_API_KEY` gizli anahtarı.
 - (Opsiyonel) Netlify Build Hook URL’si – Netlify deposu zaten otomatik tetikleniyorsa zorunlu değildir.
 - Python 3.11 (yerelde test etmek isterseniz).
 
@@ -12,7 +12,7 @@ Bu depo, her sabah 09:10 (Europe/Istanbul) saatinde çalışarak AI haberlerini 
 
 1. GitHub repo ayarlarına gidin: **Settings → Secrets and variables → Actions**.
 2. **New repository secret** diyerek aşağıdaki anahtarı girin:
-   - `OPENAI_API_KEY`: OpenAI API anahtarınız.
+   - `GEMINI_API_KEY`: Google Gemini API anahtarınız.
 3. Netlify tarafında manuel webhook kullanmak isterseniz `NETLIFY_BUILD_HOOK` gizli anahtarını da aynı ekrandan tanımlayın ve workflow’daki ilgili adımı açın.
 
 ## 3. Netlify yapılandırması
@@ -27,7 +27,7 @@ Bu depo, her sabah 09:10 (Europe/Istanbul) saatinde çalışarak AI haberlerini 
 1. Yerelde test etmek için bağımlılıkları yükleyin:
    ```bash
    pip install -r requirements.txt  # Eğer ayrı bir dosya yoksa `pip install feedparser requests`
-   export OPENAI_API_KEY=...        # Yerel ortam değişkeni
+   export GEMINI_API_KEY=...        # Yerel ortam değişkeni
    python scripts/fetch_and_write.py
    ```
 2. Komut sonunda `content/posts/YYYY/MM/` altında yeni bir Markdown dosyası oluştuğunu doğrulayın.
