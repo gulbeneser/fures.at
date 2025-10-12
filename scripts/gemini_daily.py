@@ -1,13 +1,14 @@
 # scripts/gemini_daily.py
 
 import os
-import json
 import feedparser
 import datetime
 import subprocess
 from pathlib import Path
+
 import google.generativeai as genai
 from google.generativeai import types
+import yaml
 
 # === CONFIG ===
 MODEL_TEXT = "gemini-flash-latest"
@@ -85,7 +86,7 @@ def generate_multilingual_blog(news_list):
 
 
 # === 4. 4 Dilde Dosyaya Yaz ===
-def save_blogs(multilingual_text, image_filename="default.png"):
+def save_blogs(multilingual_text, news_list, image_filename="default.png"):
     # Benzersiz ayırıcıya göre böl
     sections = multilingual_text.split("[---BLOG-SEPARATOR---]")
     
@@ -104,11 +105,29 @@ def save_blogs(multilingual_text, image_filename="default.png"):
         path = BLOG_DIR / code
         path.mkdir(exist_ok=True)
 
+        front_matter = {
+            "title": f"AI Daily — {lang}",
+            "date": date_str,
+            "image": f"/blog_images/{image_filename}",
+            "lang": code,
+            "sources": [
+                {
+                    "title": article.get("title", ""),
+                    "url": article.get("link", ""),
+                }
+                for article in news_list
+                if article.get("link")
+            ],
+        }
+
+        yaml_front_matter = yaml.safe_dump(
+            front_matter,
+            sort_keys=False,
+            allow_unicode=True,
+        ).strip()
+
         html = f"""---
-title: "AI Daily — {lang}"
-date: {date_str}
-image: /blog_images/{image_filename}
-lang: {code}
+{yaml_front_matter}
 ---
 
 {section_content}
@@ -150,7 +169,7 @@ def main():
     # image = generate_image(news[0]['title'])
     
     print("Saving blogs...")
-    save_blogs(blog_text) # Görsel parametresi şimdilik kaldırıldı
+    save_blogs(blog_text, news) # Görsel parametresi şimdilik kaldırıldı
     
     print("Committing to GitHub...")
     commit_and_push()

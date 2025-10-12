@@ -25,9 +25,20 @@ const translations = {
     'nav.about': 'Hakkımızda',
     'nav.services': 'Hizmetler',
     'nav.projects': 'Projeler',
+    'nav.blog': 'Blog',
     'nav.contact': 'İletişim',
     'nav.more': 'Daha Fazla',
     'nav.lets_talk': 'Hadi Konuşalım',
+
+    // Blog
+    'blog.title': 'Fures Blogu',
+    'blog.subtitle': 'Yapay zekâ ve dijital dönüşüm üzerine günlük notlar ve seçkiler.',
+    'blog.no_posts': 'Bu dilde henüz blog yazısı bulunmuyor.',
+    'blog.read_more': 'Devamını Oku',
+    'blog.back_to_list': 'Bloga Dön',
+    'blog.not_found': 'Yazı bulunamadı',
+    'blog.not_found_description': 'Aradığınız içerik taşınmış veya kaldırılmış olabilir. Diğer yazılara göz atın.',
+    'blog.sources_heading': 'Kaynaklar',
 
     // SEO
     'seo.site_name': 'Fures Tech · Kuzey Kıbrıs Dijital Ajansı',
@@ -250,9 +261,20 @@ const translations = {
     'nav.about': 'About',
     'nav.services': 'Services',
     'nav.projects': 'Projects',
+    'nav.blog': 'Blog',
     'nav.contact': 'Contact',
     'nav.more': 'More',
     'nav.lets_talk': 'Let\'s Talk',
+
+    // Blog
+    'blog.title': 'Fures Blog',
+    'blog.subtitle': 'Daily AI updates and insights on digital growth.',
+    'blog.no_posts': 'No blog posts are available in this language yet.',
+    'blog.read_more': 'Read More',
+    'blog.back_to_list': 'Back to Blog',
+    'blog.not_found': 'Post not found',
+    'blog.not_found_description': 'The article you are looking for might have been moved or deleted. Explore the latest posts instead.',
+    'blog.sources_heading': 'Sources',
 
     // SEO
     'seo.site_name': 'Fures Tech · North Cyprus Digital Agency',
@@ -475,9 +497,20 @@ const translations = {
     'nav.about': 'О нас',
     'nav.services': 'Услуги',
     'nav.projects': 'Проекты',
+    'nav.blog': 'Блог',
     'nav.contact': 'Контакты',
     'nav.more': 'Больше',
     'nav.lets_talk': 'Давайте поговорим',
+
+    // Blog
+    'blog.title': 'Блог Fures',
+    'blog.subtitle': 'Ежедневные новости об ИИ и заметки о цифровой трансформации.',
+    'blog.no_posts': 'В этой языковой версии пока нет записей.',
+    'blog.read_more': 'Читать дальше',
+    'blog.back_to_list': 'Назад к блогу',
+    'blog.not_found': 'Статья не найдена',
+    'blog.not_found_description': 'Возможно, запись была перемещена или удалена. Посмотрите другие публикации.',
+    'blog.sources_heading': 'Источники',
 
     // SEO
     'seo.site_name': 'Fures Tech · Цифровое агентство Северного Кипра',
@@ -700,9 +733,20 @@ const translations = {
     'nav.about': 'Über uns',
     'nav.services': 'Dienstleistungen',
     'nav.projects': 'Projekte',
+    'nav.blog': 'Blog',
     'nav.contact': 'Kontakt',
     'nav.more': 'Mehr',
     'nav.lets_talk': 'Lass uns reden',
+
+    // Blog
+    'blog.title': 'Fures Blog',
+    'blog.subtitle': 'Tägliche KI-News und Impulse für digitale Transformation.',
+    'blog.no_posts': 'Für diese Sprache sind noch keine Beiträge verfügbar.',
+    'blog.read_more': 'Weiterlesen',
+    'blog.back_to_list': 'Zurück zum Blog',
+    'blog.not_found': 'Beitrag nicht gefunden',
+    'blog.not_found_description': 'Der gewünschte Artikel wurde möglicherweise verschoben oder entfernt. Entdecken Sie unsere weiteren Beiträge.',
+    'blog.sources_heading': 'Quellen',
 
     // SEO
     'seo.site_name': 'Fures Tech · Digitalagentur Nordzypern',

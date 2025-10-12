@@ -14,6 +14,8 @@ import { ProfileViewer, PROFILE_CONFIG } from "./pages/ProfileViewer";
 import { PrivacyPolicyPage } from "./pages/PrivacyPolicyPage";
 import { CookiePolicyPage } from "./pages/CookiePolicyPage";
 import { KvkkDisclosurePage } from "./pages/KvkkDisclosurePage";
+import { BlogListPage } from "./pages/BlogListPage";
+import { BlogPostPage } from "./pages/BlogPostPage";
 import AssistantWidget from "./furesai/components/AssistantWidget";
 import ChatWindow from "./furesai/components/ChatWindow";
 
@@ -41,6 +43,8 @@ export default function App() {
               <Route path="/furkanyonat/*" element={<ProfileViewer profile={PROFILE_CONFIG.furkanyonat} />} />
               <Route path="/gulbeneser/*" element={<ProfileViewer profile={PROFILE_CONFIG.gulbeneser} />} />
               <Route path="/kariyer/*" element={<ProfileViewer profile={PROFILE_CONFIG.kariyer} />} />
+              <Route path="/blog" element={<BlogListPage />} />
+              <Route path="/blog/:slug" element={<BlogPostPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </main>
