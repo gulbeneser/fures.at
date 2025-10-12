@@ -10,7 +10,7 @@ import google.generativeai as genai
 from google.generativeai import types
 
 # === CONFIG ===
-MODEL_TEXT = "gemini-1.5-flash-latest"
+MODEL_TEXT = "gemini-flash-latest"
 LANGS = {
     "tr": "Türkçe",
     "en": "English",
