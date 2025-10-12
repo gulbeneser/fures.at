@@ -1,0 +1,35 @@
+---
+permalink: "rss.xml"
+eleventyExcludeFromCollections: true
+---
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"
+  xmlns:atom="http://www.w3.org/2005/Atom"
+  xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Fures Blog</title>
+    <link>https://fures.at/blog</link>
+    <atom:link href="https://fures.at/rss.xml" rel="self" type="application/rss+xml" />
+    <description>Fures ajansından günlük yapay zekâ, turizm teknolojileri ve otomasyon özetleri.</description>
+    <language>tr</language>
+    {% if blogPosts | length %}
+    <lastBuildDate>{{ blogPosts[0].date | rssDate }}</lastBuildDate>
+    {% endif %}
+    <generator>Eleventy</generator>
+    {% for post in blogPosts %}
+    <item>
+      <title>{{ post.title | escape }}</title>
+      <link>{{ post.url }}</link>
+      <guid isPermaLink="true">{{ post.url }}</guid>
+      <pubDate>{{ post.date | rssDate }}</pubDate>
+      <category>{{ post.lang | upper }}</category>
+      <description>{{ (post.excerpt ~ " — Devamı: " ~ post.url ~ " — Fures: https://fures.at") | escape }}</description>
+      <content:encoded><![CDATA[
+{{ post.content | markdown | safe }}
+<p><strong>Devamını oku:</strong> <a href="{{ post.url }}">{{ post.url }}</a></p>
+<p><strong>Fures'i keşfet:</strong> <a href="https://fures.at">https://fures.at</a></p>
+]]></content:encoded>
+    </item>
+    {% endfor %}
+  </channel>
+</rss>
