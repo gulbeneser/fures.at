@@ -1,8 +1,9 @@
 const { DateTime } = require("luxon");
 
 module.exports = function(eleventyConfig) {
-  // /static → çıktıda aynen kalsın
+  // /static ve Vite çıktısı → üretim çıktısına aynen kopyala
   eleventyConfig.addPassthroughCopy({ "static": "static" });
+  eleventyConfig.addPassthroughCopy({ "dist": "." });
 
   // TR tarih formatı
   const readableDate = (dateObj) => {
