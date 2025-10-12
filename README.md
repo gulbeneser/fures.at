@@ -11,10 +11,11 @@ The automation stores its output inside the [`blog/`](blog) directory. Each supp
 - [`blog/de`](blog/de) – German posts
 - [`blog/ru`](blog/ru) – Russian posts
 
-Every run creates a new markdown file named with the date and language code, for example:
+Every run creates a new markdown file named with the timestamp and language code. The timestamp includes the day and minute so t
+hat multiple runs in the same day never overwrite previous posts. For example:
 
 ```
-blog/en/2025-10-12-en-ai-news.md
+blog/en/2025-10-12-1630-en-ai-news.md
 ```
 
 Each file includes front‑matter that the site can use for titles, publish dates, and the language tag. You can open these markdown files directly on GitHub or clone the repository and read them locally with any markdown viewer.

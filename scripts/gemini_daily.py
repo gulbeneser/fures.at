@@ -81,6 +81,18 @@ def generate_multilingual_blog(news_list):
     return resp.text
 
 # === 4. 4 Dilde Dosyaya Yaz === (Bu fonksiyonda değişiklik yok)
+def _generate_unique_slug(base_slug: str, target_dir: Path) -> str:
+    """Ensure we never overwrite an existing blog file."""
+
+    slug = base_slug
+    counter = 1
+    while (target_dir / f"{slug}.md").exists():
+        slug = f"{base_slug}-{counter}"
+        counter += 1
+
+    return slug
+
+
 def save_blogs(multilingual_text, image_filename="default.png"):
     sections = multilingual_text.split("[---BLOG-SEPARATOR---]")
     for code, lang in LANGS.items():
@@ -89,10 +101,13 @@ def save_blogs(multilingual_text, image_filename="default.png"):
             print(f"UYARI: {lang} için bölüm bulunamadı.")
             continue
         section_content = section.replace(f"[{lang}]", "").strip()
-        date_str = datetime.datetime.now().strftime("%Y-%m-%d")
-        slug = f"{date_str}-{code}-ai-news"
+        now = datetime.datetime.now(datetime.timezone.utc)
+        date_str = now.strftime("%Y-%m-%d")
+        slug_timestamp = now.strftime("%Y-%m-%d-%H%M")
+        base_slug = f"{slug_timestamp}-{code}-ai-news"
         path = BLOG_DIR / code
         path.mkdir(exist_ok=True)
+        slug = _generate_unique_slug(base_slug, path)
         html = f"""---
 title: "AI Daily — {lang}"
 date: {date_str}
