@@ -1,13 +1,8 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger
-} from "./ui/dropdown-menu";
-import { ExternalLink, Cpu, Globe, Hotel, Users, Camera, ChefHat, BarChart3, Briefcase, Mail, Phone, MessageCircle } from "lucide-react";
+import { ExternalLink, Cpu, Globe, Hotel, Users, Camera, ChefHat, BarChart3, Briefcase } from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext";
+import { Link } from "react-router-dom";
 
 export const PROJECTS = [
   {
@@ -69,6 +64,9 @@ export function Projects() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16">
+          <p className="text-sm uppercase tracking-[0.32em] text-orange-400 mb-4">
+            {t('projects.subtitle')}
+          </p>
           <h2 className="text-4xl md:text-5xl lg:text-6xl mb-6 bg-gradient-to-r from-orange-400 to-purple-600 bg-clip-text text-transparent">
             {t('projects.title')}
           </h2>
@@ -105,10 +103,12 @@ export function Projects() {
                   <Button
                     variant="outline"
                     className="w-full justify-center text-sm"
-                    onClick={() => window.open(project.link, '_blank')}
+                    asChild
                   >
-                    {t('projects.visit_project')}
-                    <ExternalLink className="ml-2 h-4 w-4 group-hover:scale-110 transition-transform" />
+                    <a href={project.link} target="_blank" rel="noopener noreferrer">
+                      {t('projects.visit_project')}
+                      <ExternalLink className="ml-2 h-4 w-4 group-hover:scale-110 transition-transform" />
+                    </a>
                   </Button>
                 </CardContent>
               </Card>
@@ -122,70 +122,19 @@ export function Projects() {
             <div className="absolute inset-0 -z-10 bg-gradient-to-r from-orange-500/15 via-transparent to-purple-600/15 blur-3xl"></div>
             <div className="liquid-glass relative rounded-[2.5rem] border border-white/15 p-12 text-white">
               <h3 className="text-3xl lg:text-4xl mb-6 bg-gradient-to-r from-orange-400 to-purple-600 bg-clip-text text-transparent">
-                {t('projects.start.title')}
+                {t('projects.start_heading')}
               </h3>
-              <p className="text-gray-400 mb-8 max-w-2xl mx-auto text-lg">
-                {t('projects.start.description')}
+              <p className="text-gray-400 mb-10 max-w-2xl mx-auto text-lg">
+                {t('projects.start_body')}
               </p>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button size="lg" variant="gradient" className="text-lg">
-                    {t('projects.start.cta')}
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="liquid-glass mt-3 w-[320px] rounded-3xl border border-white/15 bg-black/70 p-3 text-white backdrop-blur-[36px] backdrop-saturate-[1.6]">
-                  {[
-                    {
-                      key: 'email',
-                      label: t('projects.start.email'),
-                      description: t('projects.start.email_desc'),
-                      href: 'mailto:info@fures.at',
-                      icon: Mail,
-                      newTab: false
-                    },
-                    {
-                      key: 'whatsapp',
-                      label: t('projects.start.whatsapp'),
-                      description: t('projects.start.whatsapp_desc'),
-                      href: 'https://wa.me/905488766819?text=Merhaba%20Fures%20Tech%20ekibi%2C%20yeni%20projem%20i%C3%A7in%20ileti%C5%9Fime%20ge%C3%A7mek%20isterim.',
-                      icon: MessageCircle,
-                      newTab: true
-                    },
-                    {
-                      key: 'phone',
-                      label: t('projects.start.phone'),
-                      description: t('projects.start.phone_desc'),
-                      href: 'tel:+905488766819',
-                      icon: Phone,
-                      newTab: false
-                    }
-                  ].map((option) => {
-                    const Icon = option.icon;
-                    return (
-                      <DropdownMenuItem
-                        key={option.key}
-                        className="liquid-glass group mb-2 flex cursor-pointer items-center gap-3 rounded-2xl border border-white/10 bg-white/5 p-3 text-left last:mb-0 transition-colors hover:border-white/30 hover:bg-white/10"
-                        onSelect={(event) => {
-                          event.preventDefault();
-                          if (option.newTab) {
-                            window.open(option.href, '_blank', 'noopener,noreferrer');
-                          } else {
-                            window.location.href = option.href;
-                          }
-                        }}
-                      >
-                        <span className="flex size-10 items-center justify-center rounded-xl border border-white/15 bg-white/10 text-white">
-                          <Icon className="h-5 w-5" />
-                        </span>
-                        <span className="flex flex-col">
-                          <span className="text-sm font-semibold text-white">{option.label}</span>
-                          <span className="text-xs text-gray-300">{option.description}</span>
-                        </span>
-                      </DropdownMenuItem>
-                    );
-                  })}
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+                <Button asChild size="lg" variant="gradient" className="text-lg">
+                  <Link to="/iletisim">{t('projects.start_primary_cta')}</Link>
+                </Button>
+                <Button asChild size="lg" variant="outline" className="text-lg">
+                  <Link to="/projeler">{t('projects.start_secondary_cta')}</Link>
+                </Button>
+              </div>
             </div>
           </div>
         </div>

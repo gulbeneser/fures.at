@@ -162,7 +162,7 @@ const translations = {
     
     // Projects
     'projects.title': 'Projeler',
-    'projects.subtitle': 'Vaka kısa özetleri',
+    'projects.subtitle': 'AI destekli referanslarımız',
     'projects.description': 'Yapay zeka teknolojileriyle geliştirdiğimiz yenilikçi çözümler ve başarı hikayelerimiz.',
     'projects.visit': 'Tümü için',
     'projects.visit_project': 'Projeyi İncele',
@@ -176,6 +176,10 @@ const translations = {
     'projects.start.whatsapp_desc': '+90 548 876 68 19 numarasına mesaj gönderin, 1 iş günü içinde dönüş yapalım.',
     'projects.start.phone': 'Telefonla hemen arayın',
     'projects.start.phone_desc': 'Çalışma saatleri içinde doğrudan ekibimize ulaşın.',
+    'projects.start_heading': 'Projeye birlikte başlayalım',
+    'projects.start_body': 'İletişime geçtiğinizde hedeflerinizi dinleyip uygun çözüm yolunu planlıyoruz. Yapay zekâ destekli ekiplerimiz projenizi fikir aşamasından yayına kadar taşıyor.',
+    'projects.start_primary_cta': 'İletişime geç',
+    'projects.start_secondary_cta': 'Tüm projeleri gör',
     
     // Why Fures
     'why_fures.title': 'Neden Fures Tech?',
@@ -383,7 +387,7 @@ const translations = {
     
     // Projects
     'projects.title': 'Projects',
-    'projects.subtitle': 'Case brief summaries',
+    'projects.subtitle': 'AI-native case snapshots',
     'projects.description': 'AI-powered solutions and success stories we deliver for partners in Cyprus and beyond.',
     'projects.visit': 'View All',
     'projects.visit_project': 'View Project',
@@ -397,6 +401,10 @@ const translations = {
     'projects.start.whatsapp_desc': 'Message us at +90 548 876 68 19 and get a reply within one business day.',
     'projects.start.phone': 'Call us directly',
     'projects.start.phone_desc': 'Reach our team during business hours for immediate support.',
+    'projects.start_heading': 'Ready to kick off your project?',
+    'projects.start_body': 'Tell us about your objectives and we will map the right solution. Our AI-native team supports you from discovery to launch.',
+    'projects.start_primary_cta': 'Talk to our team',
+    'projects.start_secondary_cta': 'Browse all projects',
     
     // Why Fures
     'why_fures.title': 'Why Fures Tech?',
@@ -604,7 +612,7 @@ const translations = {
     
     // Projects
     'projects.title': 'Проекты',
-    'projects.subtitle': 'Краткие описания кейсов',
+    'projects.subtitle': 'Наши кейсы на основе ИИ',
     'projects.description': 'Наши решения на основе искусственного интеллекта и истории успеха клиентов.',
     'projects.visit': 'Посмотреть Все',
     'projects.visit_project': 'Посмотреть проект',
@@ -618,6 +626,10 @@ const translations = {
     'projects.start.whatsapp_desc': 'Напишите на +90 548 876 68 19 — ответим в течение одного рабочего дня.',
     'projects.start.phone': 'Позвоните нам напрямую',
     'projects.start.phone_desc': 'Свяжитесь с командой в рабочие часы и обсудите проект сразу.',
+    'projects.start_heading': 'Готовы начать новый проект?',
+    'projects.start_body': 'Расскажите о целях — мы предложим оптимальное решение. Наша команда, работающая с ИИ, сопровождает проект от идеи до запуска.',
+    'projects.start_primary_cta': 'Связаться с нами',
+    'projects.start_secondary_cta': 'Все проекты',
     
     // Why Fures
     'why_fures.title': 'Почему Fures Tech?',
@@ -825,7 +837,7 @@ const translations = {
     
     // Projects
     'projects.title': 'Projekte',
-    'projects.subtitle': 'Kurze Fallzusammenfassungen',
+    'projects.subtitle': 'Unsere KI-basierten Referenzen',
     'projects.description': 'Unsere KI-gestützten Lösungen und Erfolgsgeschichten aus Zypern und internationalen Märkten.',
     'projects.visit': 'Alle Anzeigen',
     'projects.visit_project': 'Projekt ansehen',
@@ -839,6 +851,10 @@ const translations = {
     'projects.start.whatsapp_desc': 'Schreiben Sie an +90 548 876 68 19 – wir melden uns innerhalb eines Werktags.',
     'projects.start.phone': 'Direkt anrufen',
     'projects.start.phone_desc': 'Erreichen Sie unser Team während der Geschäftszeiten.',
+    'projects.start_heading': 'Bereit für den Projektstart?',
+    'projects.start_body': 'Erzählen Sie uns von Ihren Zielen und wir planen den richtigen Lösungsweg. Unser KI-natives Team begleitet Sie vom Konzept bis zum Go-Live.',
+    'projects.start_primary_cta': 'Kontakt aufnehmen',
+    'projects.start_secondary_cta': 'Alle Projekte ansehen',
     
     // Why Fures
     'why_fures.title': 'Warum Fures Tech?',
