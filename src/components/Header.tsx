@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "./ui/button";
 import {
@@ -71,6 +72,19 @@ export function Header() {
         : "text-slate-200/75 hover:text-white"
     }`;
 
+  const navGlassStyle = {
+    "--glass-surface-bg": "rgba(255, 255, 255, 0.12)",
+    "--glass-surface-border": "rgba(255, 255, 255, 0.26)",
+    "--glass-highlight-height": "12%",
+  } as CSSProperties;
+
+  const dropdownGlassStyle = {
+    "--glass-surface-bg": "rgba(255, 255, 255, 0.11)",
+    "--glass-surface-border": "rgba(255, 255, 255, 0.22)",
+    "--glass-highlight-height": "11%",
+    "--glass-reflection-height": "44%",
+  } as CSSProperties;
+
   return (
     <header className="fixed inset-x-0 top-4 z-50 px-4">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -93,7 +107,10 @@ export function Header() {
         <div className="order-last sm:order-none sm:flex-1">
           <div className="group relative">
             <div className="absolute inset-0 -z-10 rounded-full bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.2),rgba(9,9,11,0))] opacity-65 blur-2xl transition-opacity duration-300 group-hover:opacity-80" />
-            <nav className="liquid-glass group flex items-center gap-3 overflow-x-auto rounded-full px-4 py-3 shadow-[0_26px_72px_-46px_rgba(10,12,35,0.85)] transition-all duration-300 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <nav
+              className="liquid-glass group flex items-center gap-3 overflow-x-auto rounded-full px-4 py-3 shadow-[0_26px_72px_-46px_rgba(10,12,35,0.85)] transition-all duration-300 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              style={navGlassStyle}
+            >
               {navItems.map((item) => {
                 const Icon = item.icon;
                 const active = isActive(item.path);
@@ -124,6 +141,7 @@ export function Header() {
                   <button
                     type="button"
                     className="liquid-pill group relative flex min-w-[92px] flex-col items-center justify-center gap-1 px-5 py-2 text-[10px] font-semibold uppercase tracking-[0.24em] text-slate-200/75 transition-all duration-300 hover:text-white focus-visible:outline-none"
+                    style={navGlassStyle}
                   >
                     <MoreHorizontal className="relative z-10 h-5 w-5 text-white/80 transition-all duration-300 group-hover:text-white" />
                     <span className="relative z-10 text-[10px] font-semibold uppercase tracking-[0.24em]">
@@ -131,7 +149,10 @@ export function Header() {
                     </span>
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="liquid-glass mt-3 w-72 rounded-3xl border border-white/12 bg-white/4 p-3 text-white">
+                <DropdownMenuContent
+                  className="liquid-glass mt-3 w-72 rounded-3xl p-3 text-white"
+                  style={dropdownGlassStyle}
+                >
                   <div className="space-y-2">
                     {moreLinks.map((link) => {
                       const Icon = link.icon;
@@ -145,15 +166,16 @@ export function Header() {
                         >
                           <Link
                             to={link.path}
-                            className={`liquid-glass relative flex items-center justify-between overflow-hidden rounded-2xl border border-white/12 px-4 py-3 text-sm transition-all duration-500 ${
+                            className={`liquid-glass relative flex items-center justify-between overflow-hidden rounded-2xl px-4 py-3 text-sm transition-all duration-500 ${
                               active
                                 ? "is-active text-white"
                                 : "text-slate-200/75 hover:text-white"
                             }`}
                             data-active={active || undefined}
+                            style={dropdownGlassStyle}
                           >
                             <span className="flex items-center gap-3">
-                              <span className="flex size-8 items-center justify-center rounded-full bg-black/40">
+                              <span className="relative flex size-9 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white">
                                 <Icon className="h-4 w-4 text-white" />
                               </span>
                               {link.label}
