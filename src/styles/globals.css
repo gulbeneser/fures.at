@@ -31,7 +31,18 @@
   --font-weight-normal: 400;
   --ring: oklch(0.708 0 0);
   --radius: 0.75rem;
-  
+
+  --glass-blur: 28px;
+  --glass-saturate: 1.65;
+  --glass-bg: rgba(15, 18, 32, 0.24);
+  --glass-border: rgba(255, 255, 255, 0.14);
+  --glass-border-strong: rgba(255, 255, 255, 0.26);
+  --glass-highlight: rgba(255, 255, 255, 0.36);
+  --glass-reflection: rgba(164, 198, 255, 0.18);
+  --glass-noise: rgba(255, 255, 255, 0.018);
+  --glass-shadow: 0 28px 65px -46px rgba(11, 14, 32, 0.82);
+  --glass-transition: cubic-bezier(0.22, 0.84, 0.3, 1);
+
   --font-heading: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
 }
@@ -184,249 +195,195 @@
 }
 
 @layer components {
-  .liquid-glass {
+  .liquid-glass,
+  .liquid-pill,
+  .liquid-icon {
+    --glass-radius: 2.5rem;
+    --glass-saturate-scale: 1;
     position: relative;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    background: linear-gradient(
-        135deg,
-        rgba(255, 255, 255, 0.08),
-        rgba(120, 156, 255, 0.05),
-        rgba(255, 255, 255, 0.03)
-      )
-      rgba(15, 16, 35, 0.28);
-    box-shadow:
-      0 25px 55px -40px rgba(9, 11, 20, 0.75),
-      inset 0 1px 0 rgba(255, 255, 255, 0.12);
-    backdrop-filter: blur(28px) saturate(150%);
-    -webkit-backdrop-filter: blur(28px) saturate(150%);
+    border-radius: var(--glass-radius);
+    border: 1px solid var(--glass-border);
+    background:
+      linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(115, 162, 255, 0.03) 35%, rgba(255, 255, 255, 0))
+      var(--glass-bg);
+    background-blend-mode: screen, normal;
+    backdrop-filter: blur(var(--glass-blur)) saturate(calc(var(--glass-saturate) * var(--glass-saturate-scale)));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(calc(var(--glass-saturate) * var(--glass-saturate-scale)));
+    box-shadow: var(--glass-shadow);
     overflow: hidden;
     isolation: isolate;
-    transition: border-color 0.4s ease, box-shadow 0.4s ease, background 0.4s ease, transform 0.4s ease;
+    will-change: transform, backdrop-filter, box-shadow;
+    transition:
+      border-color 160ms var(--glass-transition),
+      box-shadow 180ms var(--glass-transition),
+      transform 160ms var(--glass-transition),
+      background 220ms var(--glass-transition),
+      filter 160ms var(--glass-transition);
   }
 
-  .liquid-glass::before {
+  .liquid-glass::before,
+  .liquid-glass::after,
+  .liquid-pill::before,
+  .liquid-pill::after,
+  .liquid-icon::before,
+  .liquid-icon::after {
     content: "";
     position: absolute;
-    inset: -40% -35% auto;
-    height: 160%;
+    inset: 0;
     border-radius: inherit;
-    background: radial-gradient(
-      120% 90% at 50% 0%,
-      rgba(255, 255, 255, 0.4),
-      rgba(255, 255, 255, 0) 68%
-    );
+    pointer-events: none;
+    transition: opacity 200ms var(--glass-transition), transform 260ms var(--glass-transition);
+  }
+
+  .liquid-glass::before,
+  .liquid-pill::before,
+  .liquid-icon::before {
+    background:
+      linear-gradient(180deg, color-mix(in srgb, var(--glass-highlight) 95%, transparent) 0%, rgba(255, 255, 255, 0.05) 42%, transparent 58%),
+      radial-gradient(120% 90% at 50% -10%, rgba(255, 255, 255, 0.3), transparent 65%);
+    mix-blend-mode: screen;
+    opacity: 0.5;
+  }
+
+  .liquid-glass::after,
+  .liquid-pill::after,
+  .liquid-icon::after {
+    background:
+      linear-gradient(180deg, transparent 55%, color-mix(in srgb, var(--glass-reflection) 100%, transparent) 95%),
+      radial-gradient(120% 80% at 50% 120%, rgba(117, 155, 255, 0.22), transparent 70%),
+      radial-gradient(var(--glass-noise) 1px, transparent 1.4px);
+    background-repeat: no-repeat, no-repeat, repeat;
+    background-size: 100% 100%, 100% 100%, 4px 4px;
+    background-position: center, center, 0 0;
     opacity: 0.35;
-    transform: translate3d(0, 0, 0);
-    transition: opacity 0.45s ease, transform 1s ease;
   }
 
-  .liquid-glass::after {
-    content: "";
-    position: absolute;
-    inset: auto 18% 10% 18%;
-    height: 26px;
-    border-radius: inherit;
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.02));
-    filter: blur(12px);
-    opacity: 0.55;
-    transition: opacity 0.45s ease;
-  }
-
-  .liquid-glass:hover {
-    border-color: rgba(255, 255, 255, 0.22);
-    background: linear-gradient(
-        135deg,
-        rgba(255, 255, 255, 0.12),
-        rgba(132, 168, 255, 0.08),
-        rgba(255, 255, 255, 0.04)
-      )
-      rgba(12, 16, 35, 0.32);
-    box-shadow:
-      0 30px 70px -42px rgba(12, 16, 40, 0.82),
-      inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  .liquid-glass:hover,
+  .liquid-pill:hover,
+  .liquid-icon:hover {
+    --glass-saturate-scale: 1.1;
+    border-color: var(--glass-border-strong);
+    box-shadow: 0 32px 82px -48px rgba(12, 16, 42, 0.92);
     transform: translateY(-1px);
   }
 
-  .liquid-glass:hover::before {
-    opacity: 0.55;
-    transform: translate3d(0, -6%, 0);
+  .liquid-glass:hover::before,
+  .liquid-pill:hover::before,
+  .liquid-icon:hover::before {
+    opacity: 0.68;
+    transform: translate3d(0, -4%, 0);
+  }
+
+  .liquid-glass:hover::after,
+  .liquid-pill:hover::after,
+  .liquid-icon:hover::after {
+    opacity: 0.48;
+  }
+
+  .liquid-glass:focus-visible,
+  .liquid-pill:focus-visible,
+  .liquid-icon:focus-visible {
+    outline: none;
+    box-shadow:
+      var(--glass-shadow),
+      0 0 0 1px rgba(180, 206, 255, 0.45),
+      0 0 0 8px rgba(114, 164, 255, 0.18);
+  }
+
+  .liquid-glass:focus-visible::after,
+  .liquid-pill:focus-visible::after,
+  .liquid-icon:focus-visible::after {
+    opacity: 0.52;
+    background-image:
+      linear-gradient(180deg, transparent 55%, color-mix(in srgb, var(--glass-reflection) 100%, transparent) 92%),
+      radial-gradient(120% 80% at 50% 120%, rgba(117, 155, 255, 0.26), transparent 72%),
+      conic-gradient(from 120deg at 50% 50%, rgba(120, 200, 255, 0.24), rgba(255, 148, 255, 0.18), rgba(120, 200, 255, 0.24)),
+      radial-gradient(var(--glass-noise) 1px, transparent 1.4px);
+    background-repeat: no-repeat, no-repeat, no-repeat, repeat;
+    background-size: 100% 100%, 100% 100%, 140% 140%, 4px 4px;
+  }
+
+  .liquid-glass:active,
+  .liquid-pill:active,
+  .liquid-icon:active {
+    transform: scale(0.99);
+    box-shadow: 0 20px 46px -34px rgba(9, 12, 28, 0.7);
   }
 
   .liquid-glass[data-active="true"],
-  .liquid-glass.is-active {
-    border-color: rgba(255, 255, 255, 0.3);
-    background: linear-gradient(
-        140deg,
-        rgba(255, 255, 255, 0.16),
-        rgba(119, 167, 255, 0.16),
-        rgba(255, 255, 255, 0.06)
-      )
-      rgba(12, 16, 35, 0.4);
-    box-shadow:
-      0 34px 85px -46px rgba(15, 23, 42, 0.85),
-      inset 0 1px 0 rgba(255, 255, 255, 0.28);
-  }
-
-  .liquid-glass[data-active="true"]::before,
-  .liquid-glass.is-active::before {
-    opacity: 0.7;
-    transform: translate3d(0, -10%, 0) scale(1.05);
-  }
-
-  .liquid-glass[data-active="true"]::after,
-  .liquid-glass.is-active::after {
-    opacity: 0.65;
+  .liquid-glass.is-active,
+  .liquid-pill[data-active="true"],
+  .liquid-pill.is-active,
+  .liquid-icon[data-active="true"],
+  .liquid-icon.is-active {
+    --glass-saturate-scale: 1.12;
+    border-color: var(--glass-border-strong);
+    box-shadow: 0 36px 88px -50px rgba(12, 18, 42, 0.95);
   }
 
   .liquid-pill {
-    border-radius: 9999px;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(120, 156, 255, 0.04));
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.32),
-      0 18px 36px -32px rgba(10, 12, 30, 0.75);
-    backdrop-filter: blur(26px) saturate(150%);
-    -webkit-backdrop-filter: blur(26px) saturate(150%);
-    overflow: hidden;
-    position: relative;
-    isolation: isolate;
-    transition: border-color 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
-  }
-
-  .liquid-pill::before {
-    content: "";
-    position: absolute;
-    inset: -50% -40% auto;
-    height: 170%;
-    border-radius: inherit;
-    background: radial-gradient(120% 90% at 50% 0%, rgba(255, 255, 255, 0.45), rgba(255, 255, 255, 0) 70%);
-    opacity: 0.28;
-    transition: opacity 0.45s ease, transform 0.6s ease;
+    --glass-radius: 9999px;
+    display: inline-flex;
   }
 
   .liquid-pill::after {
-    content: "";
-    position: absolute;
-    inset: auto 20% 12% 20%;
-    height: 18px;
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.02));
-    border-radius: 999px;
-    filter: blur(14px);
-    opacity: 0.5;
-    transition: opacity 0.45s ease;
-  }
-
-  .liquid-pill:hover {
-    border-color: rgba(255, 255, 255, 0.26);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.36),
-      0 22px 48px -36px rgba(12, 16, 40, 0.8);
-    transform: translateY(-2px);
-  }
-
-  .liquid-pill:hover::before {
-    opacity: 0.45;
-    transform: translate3d(0, -8%, 0);
-  }
-
-  .liquid-pill:hover::after {
-    opacity: 0.6;
-  }
-
-  .liquid-pill[data-active="true"],
-  .liquid-pill.is-active {
-    border-color: rgba(255, 255, 255, 0.4);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.38),
-      0 26px 60px -40px rgba(12, 16, 40, 0.85);
+    background:
+      radial-gradient(130% 120% at 50% 68%, rgba(255, 255, 255, 0.12), transparent 74%),
+      linear-gradient(180deg, transparent 55%, color-mix(in srgb, var(--glass-reflection) 100%, transparent) 95%),
+      radial-gradient(120% 80% at 50% 120%, rgba(117, 155, 255, 0.22), transparent 72%),
+      radial-gradient(var(--glass-noise) 1px, transparent 1.4px);
+    background-repeat: no-repeat, no-repeat, no-repeat, repeat;
+    background-size: 100% 100%, 100% 100%, 100% 100%, 4px 4px;
   }
 
   .liquid-pill[data-active="true"]::before,
   .liquid-pill.is-active::before {
-    opacity: 0.65;
-    transform: translate3d(0, -12%, 0) scale(1.05);
+    opacity: 0.72;
+    transform: translate3d(0, -6%, 0) scale(1.02);
   }
 
   .liquid-pill[data-active="true"]::after,
   .liquid-pill.is-active::after {
-    opacity: 0.65;
+    opacity: 0.68;
+    background:
+      radial-gradient(130% 120% at 50% 70%, rgba(255, 255, 255, 0.22), transparent 76%),
+      linear-gradient(180deg, transparent 50%, color-mix(in srgb, var(--glass-reflection) 100%, transparent) 92%),
+      radial-gradient(120% 80% at 50% 120%, rgba(117, 155, 255, 0.28), transparent 75%),
+      radial-gradient(var(--glass-noise) 1px, transparent 1.4px);
+    background-repeat: no-repeat, no-repeat, no-repeat, repeat;
+    background-size: 100% 100%, 100% 100%, 100% 100%, 4px 4px;
   }
 
   .liquid-icon {
-    position: relative;
+    --glass-radius: 1.75rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: 1.75rem;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(120, 156, 255, 0.02)) rgba(12, 16, 35, 0.32);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.24),
-      0 18px 36px -28px rgba(9, 11, 20, 0.75);
-    backdrop-filter: blur(24px) saturate(140%);
-    -webkit-backdrop-filter: blur(24px) saturate(140%);
-    overflow: hidden;
-    isolation: isolate;
-    transition: border-color 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease;
-  }
-
-  .liquid-icon::before {
-    content: "";
-    position: absolute;
-    inset: -40% -35% auto;
-    height: 160%;
-    border-radius: inherit;
-    background: radial-gradient(120% 90% at 50% 0%, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0) 70%);
-    opacity: 0.25;
-    transition: opacity 0.45s ease, transform 0.6s ease;
+    min-width: 3.5rem;
+    min-height: 3.5rem;
   }
 
   .liquid-icon::after {
-    content: "";
-    position: absolute;
-    inset: auto 20% 15% 20%;
-    height: 16px;
-    border-radius: inherit;
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.05));
-    filter: blur(12px);
-    opacity: 0.4;
-    transition: opacity 0.35s ease;
+    background-size: 100% 100%, 100% 100%, 3px 3px;
   }
 
-  .liquid-icon:hover {
-    border-color: rgba(255, 255, 255, 0.3);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.32),
-      0 22px 44px -30px rgba(12, 16, 35, 0.82);
-    transform: translateY(-2px);
-  }
+  @media (prefers-reduced-transparency: reduce) {
+    .liquid-glass,
+    .liquid-pill,
+    .liquid-icon {
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      background: rgba(12, 16, 30, 0.88);
+    }
 
-  .liquid-icon:hover::before {
-    opacity: 0.45;
-    transform: translate3d(0, -10%, 0);
-  }
-
-  .liquid-icon:hover::after {
-    opacity: 0.55;
-  }
-
-  .liquid-icon[data-active="true"],
-  .liquid-icon.is-active {
-    border-color: rgba(255, 255, 255, 0.36);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.36),
-      0 28px 52px -34px rgba(15, 23, 42, 0.8);
-  }
-
-  .liquid-icon[data-active="true"]::before,
-  .liquid-icon.is-active::before {
-    opacity: 0.58;
-    transform: translate3d(0, -12%, 0) scale(1.04);
-  }
-
-  .liquid-icon[data-active="true"]::after,
-  .liquid-icon.is-active::after {
-    opacity: 0.6;
+    .liquid-glass::before,
+    .liquid-glass::after,
+    .liquid-pill::before,
+    .liquid-pill::after,
+    .liquid-icon::before,
+    .liquid-icon::after {
+      opacity: 0;
+    }
   }
 }
 

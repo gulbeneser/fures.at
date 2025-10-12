@@ -59,8 +59,8 @@ export function Header() {
 
   const moreLinks: MoreLink[] = [
     { path: "/sss", label: "SSS", icon: HelpCircle },
-    { path: "/furkanyonat", label: "Furkan Yonat", icon: UserRound, external: true },
     { path: "/gulbeneser", label: "Gülben Eser", icon: Users2, external: true },
+    { path: "/furkanyonat", label: "Furkan Yonat", icon: UserRound, external: true },
     { path: "/kariyer", label: "Kariyer Asistanı", icon: Sparkles, external: true },
   ];
 
