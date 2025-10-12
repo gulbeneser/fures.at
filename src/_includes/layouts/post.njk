@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="{{ lang or 'tr' }}">
+<head>
+  <meta charset="utf-8">
+  <title>{{ title }} – Fures Blog</title>
+  <meta name="description" content="{{ summary or title }}">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  {% if cover_image %}<meta property="og:image" content="{{ cover_image | url }}">{% endif %}
+  <link rel="canonical" href="{{ canonical or page.url | url }}">
+  <link rel="icon" href="/urunler/assets/logos/logobrowser/favicon.ico">
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="/">Home</a>
+      · <a href="/tr/blog/">TR</a>
+      · <a href="/en/blog/">EN</a>
+      · <a href="/ru/blog/">RU</a>
+      · <a href="/de/blog/">DE</a>
+    </nav>
+  </header>
+
+  <main>
+    <article>
+      <h1>{{ title }}</h1>
+      <p><small>{{ date | readableDate }}</small></p>
+      {% if cover_image %}<p><img src="{{ cover_image | url }}" alt=""></p>{% endif %}
+      {{ content | safe }}
+      {% if tags %}<p><small>Tags: {{ tags }}</small></p>{% endif %}
+    </article>
+  </main>
+</body>
+</html>

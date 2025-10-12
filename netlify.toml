@@ -1,6 +1,9 @@
 [build]
   command = "npm run build"
-  publish = "dist"
+  publish = "public"
+
+[build.environment]
+  TZ = "Europe/Istanbul"
 
 [[redirects]]
   from = "/gulbeneser"
