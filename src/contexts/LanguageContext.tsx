@@ -67,9 +67,9 @@ const translations = {
 
     // Hero
     'hero.title': 'Dijital Ajans',
-    'hero.subtitle': 'Sınırların Ötesinde. KKTC (TRNC) odağıyla.',
+    'hero.subtitle': 'Sınırların Ötesinde. Deneyime odaklı.',
     'hero.ai_powered': 'Yapay Zekâ ile Güçlendirilmiş Tasarım, Kod ve Büyüme.',
-    'hero.description': 'KKTC (TRNC) ve bölgedeki markanız için akıllı otomasyon, etkileyici web deneyimleri ve veriyle çalışan pazarlama. Hızlı, ölçülebilir, ölçeklenebilir.',
+    'hero.description': 'Markanız için akıllı otomasyon, etkileyici web deneyimleri ve veriyle çalışan pazarlama. Hızlı, ölçülebilir, ölçeklenebilir.',
     'hero.cta_discover': 'Daha Fazlasını Keşfet',
     'hero.cta_pricing': 'Fiyatları Gör',
     'hero.cta_talk': 'Hadi Konuşalım',
@@ -263,9 +263,9 @@ const translations = {
 
     // Hero
     'hero.title': 'Digital Agency',
-    'hero.subtitle': 'Beyond Boundaries. Built in TRNC.',
+    'hero.subtitle': 'Beyond Boundaries. Experience-led.',
     'hero.ai_powered': 'AI-Powered Design, Code & Growth.',
-    'hero.description': 'Smart automation, impactful web experiences, and data-driven marketing for your brand in North Cyprus (TRNC). Fast, measurable, scalable.',
+    'hero.description': 'Smart automation, impactful web experiences, and data-driven marketing for your brand. Fast, measurable, scalable.',
     'hero.cta_discover': 'Discover More',
     'hero.cta_pricing': 'See Pricing',
     'hero.cta_talk': 'Let\'s Talk',
