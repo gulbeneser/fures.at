@@ -3,6 +3,7 @@
 import os, sys, json, time, pathlib, datetime
 from urllib.parse import urlparse
 import feedparser
+import yaml
 from dateutil import tz
 
 from google import genai
@@ -27,27 +28,27 @@ PROMPTS = {
     "de": ROOT / "prompts" / "post_prompt_de.md",
 }
 
-LANG_PATH = {
-    "tr": "tr",
-    "en": "en",
-    "ru": "ru",
-    "de": "de",
-}
+LANG_PATH = {"tr": "tr","en": "en","ru": "ru","de": "de"}
 
-MAX_ITEMS = 60
-MIN_UNIQUE_SOURCES = 12
+# === EŞİKLERİ YUMUŞATTIK ===
+MAX_ITEMS = 80
+MIN_UNIQUE_SOURCES = 5        # 12 → 5
+COLLECT_WINDOW_DAYS = 3       # 2 → 3 gün (LLM zaten son 24 saati vurgular)
 IMAGE_COUNT = 3
 
 KEYWORDS = [
+    # EN
     "artificial intelligence","ai","machine learning","deep learning","large language model",
-    "llm","multimodal","computer vision","speech","rag","agents","turkey","türkiye","kktc",
-    "hospitality","tourism","travel","automation","marketing","search","genomics","robotics"
+    "llm","multimodal","computer vision","speech","rag","agents","robotics","genomics",
+    # TR
+    "yapay zeka","makine öğrenimi","derin öğrenme","çok modlu","görüntü işleme","konuşma","turizm","otomatizasyon",
+    # Bölgesel
+    "turkey","türkiye","kktc","cyprus","cyprus tourism"
 ]
 
 TEXT_MODEL = "gemini-2.5-flash"
 IMG_MODEL  = "gemini-2.5-flash-image"
 
-# ---- API KEY ----
 def get_api_key():
     return os.environ.get("GEMINI_API_KEY") or os.environ.get("apikey")
 
@@ -58,7 +59,6 @@ def make_client():
         sys.exit(1)
     return genai.Client(api_key=key)
 
-# ---- RSS Toplama ----
 def load_feeds():
     if not FEEDS_FILE.exists():
         print("feeds.yml not found", file=sys.stderr)
@@ -79,18 +79,20 @@ def is_relevant(title, summary):
     return any(k.lower() in blob for k in KEYWORDS)
 
 def collect_entries():
-    cutoff = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=2)
+    # === ZAMAN PENCERESİ GENİŞLEDİ ===
+    cutoff = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=COLLECT_WINDOW_DAYS)
     entries = []
     for url in load_feeds():
         try:
             d = feedparser.parse(url)
         except Exception:
             continue
-        for e in d.entries[:40]:
+        for e in d.entries[:50]:
             link = getattr(e, "link", "")
             title = strip_html(getattr(e, "title", ""))
             summary = strip_html(getattr(e, "summary", ""))
-            if not link or not title: continue
+            if not link or not title:
+                continue
 
             if getattr(e, "published_parsed", None):
                 pub = datetime.datetime(*e.published_parsed[:6], tzinfo=datetime.timezone.utc)
@@ -99,8 +101,10 @@ def collect_entries():
             else:
                 pub = datetime.datetime.now(datetime.timezone.utc)
 
-            if pub < cutoff: continue
-            if not is_relevant(title, summary): continue
+            if pub < cutoff: 
+                continue
+            if not is_relevant(title, summary): 
+                continue
 
             entries.append({
                 "title": title,
@@ -113,7 +117,6 @@ def collect_entries():
     entries.sort(key=lambda x: x["published"], reverse=True)
     return entries[:MAX_ITEMS]
 
-# ---- LLM Çağrıları ----
 def build_user_prompt(entries):
     return f"""
 DATE: {TODAY.isoformat()}
@@ -121,6 +124,7 @@ DATE: {TODAY.isoformat()}
 TASK:
 - Research the following AI items in **English** (validate quickly),
   then write a **localized daily AI brief** per prompt-language.
+- Focus on items from the **last 24h**, but use older items (<= 72h) only as context if needed.
 - Include markdown **links** to original sources.
 
 Sections:
@@ -131,6 +135,8 @@ Sections:
   5) Quick Notes
 
 Also: add 1–2 short examples (code, prompt, or real use).
+If sources are scarce, produce a **Light Mode** brief (fewer bullets) but still deliver value.
+
 Tone: playful, educational, accurate.
 Output: UTF-8 Markdown with YAML front-matter (as specified in system prompt).
 
@@ -155,7 +161,6 @@ def llm_markdown_for_lang(client, lang_code, entries):
             out.append(ch.text)
     return "".join(out).strip()
 
-# ---- Görsel Üretimi ----
 def generate_images(client, topic_slug, count=3):
     IMAGES_DIR.mkdir(parents=True, exist_ok=True)
     prompts = [
@@ -166,7 +171,7 @@ def generate_images(client, topic_slug, count=3):
     paths = []
     for i in range(count):
         prompt = prompts[i % len(prompts)]
-        resp = client.models.generate_images(model=IMG_MODEL, prompt=prompt)
+        resp = client.models.generate_images(model="gemini-2.5-flash-image", prompt=prompt)
         if not getattr(resp, "images", None):
             continue
         img = resp.images[0]
@@ -177,7 +182,6 @@ def generate_images(client, topic_slug, count=3):
         time.sleep(1.0)
     return paths
 
-# ---- Yazma/Enjeksiyon ----
 def write_markdown(md_text, lang, title_fallback="AI Günlük"):
     import re
     lang_dir = CONTENT_BASE / LANG_PATH[lang] / f"{TODAY.year:04d}" / f"{TODAY.month:02d}"
@@ -219,11 +223,12 @@ def append_gallery(md_path, slug, images):
 def main():
     client = make_client()
     entries = collect_entries()
-    if len(entries) < MIN_UNIQUE_SOURCES:
-        print("Not enough entries; skipping.", file=sys.stderr)
-        sys.exit(0)
 
-    # İlk dil (TR) ile slug/görsel konusu
+    # === “Light mode” garantisi: az kaynak varsa bile üret ===
+    if len(entries) == 0:
+        print("No entries at all; creating light-mode from empty set.", file=sys.stderr)
+
+    # İlk dil (TR): slug üretimi için kullanıyoruz
     md_tr = llm_markdown_for_lang(client, "tr", entries)
     tr_path, tr_slug = write_markdown(md_tr, "tr", "AI Günlük")
     images = generate_images(client, tr_slug, IMAGE_COUNT)
@@ -231,7 +236,7 @@ def main():
         inject_cover_image(tr_path, images[0])
         append_gallery(tr_path, tr_slug, images)
 
-    # Diğer diller (EN/RU/DE), aynı kapak/görselleri kullan
+    # Diğer diller
     for lang in ["en", "ru", "de"]:
         md = llm_markdown_for_lang(client, lang, entries)
         pth, _ = write_markdown(md, lang, "AI Daily")
