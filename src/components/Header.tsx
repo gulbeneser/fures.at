@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "./ui/button";
 import {
@@ -40,6 +41,12 @@ export function Header() {
   const { t } = useLanguage();
   const location = useLocation();
   const logoSrc = "/images/fures.png";
+  const navRef = useRef<HTMLElement | null>(null);
+  const activeItemRef = useRef<HTMLElement | null>(null);
+  const moreTriggerRef = useRef<HTMLButtonElement | null>(null);
+  const [highlightBoxStyle, setHighlightBoxStyle] = useState<CSSProperties | null>(
+    null,
+  );
 
   const normalizePath = (path: string) => {
     if (path === "/") {
@@ -65,11 +72,136 @@ export function Header() {
     { path: "/kariyer", label: "Kariyer Asistanı", icon: Sparkles, external: true },
   ];
 
+  const moreMenuActive = moreLinks.some((link) => isActive(link.path));
+
+  const navBaseClasses =
+    "ios-nav-item group relative z-10 flex min-w-[92px] flex-col items-center justify-center gap-1 px-5 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] transition-all duration-500 focus-visible:outline-none";
+
+  const updateHighlightPosition = useCallback(() => {
+    const navEl = navRef.current;
+    if (!navEl) {
+      setHighlightBoxStyle(null);
+      return;
+    }
+
+    const targetEl =
+      activeItemRef.current ?? (moreMenuActive ? moreTriggerRef.current : null);
+
+    if (!targetEl) {
+      setHighlightBoxStyle(null);
+      return;
+    }
+
+    const navRect = navEl.getBoundingClientRect();
+    const targetRect = targetEl.getBoundingClientRect();
+    const paddingX = 14;
+    const paddingY = 8;
+
+    setHighlightBoxStyle({
+      width: `${targetRect.width + paddingX * 2}px`,
+      height: `${targetRect.height + paddingY * 2}px`,
+      transform: `translate3d(${targetRect.left - navRect.left - paddingX}px, ${targetRect.top - navRect.top - paddingY}px, 0)`,
+      opacity: 1,
+    });
+  }, [moreMenuActive]);
+
+  const setActiveItemRef = useCallback(
+    (node: HTMLAnchorElement | null) => {
+      activeItemRef.current = node;
+
+      if (node) {
+        requestAnimationFrame(() => {
+          updateHighlightPosition();
+        });
+      } else {
+        setHighlightBoxStyle(null);
+      }
+    },
+    [updateHighlightPosition],
+  );
+
+  useEffect(() => {
+    updateHighlightPosition();
+  }, [location.pathname, updateHighlightPosition]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      updateHighlightPosition();
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [updateHighlightPosition]);
+
+  useEffect(() => {
+    const navEl = navRef.current;
+    if (!navEl) {
+      return;
+    }
+
+    const handleScroll = () => {
+      updateHighlightPosition();
+    };
+
+    navEl.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      navEl.removeEventListener("scroll", handleScroll);
+    };
+  }, [updateHighlightPosition]);
+
+  useEffect(() => {
+    if (typeof ResizeObserver === "undefined") {
+      return;
+    }
+
+    const navEl = navRef.current;
+    if (!navEl) {
+      return;
+    }
+
+    const observer = new ResizeObserver(() => {
+      updateHighlightPosition();
+    });
+
+    observer.observe(navEl);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [updateHighlightPosition]);
+
+  useEffect(() => {
+    if (typeof ResizeObserver === "undefined") {
+      return;
+    }
+
+    const targetEl =
+      activeItemRef.current ?? (moreMenuActive ? moreTriggerRef.current : null);
+
+    if (!targetEl) {
+      return;
+    }
+
+    const observer = new ResizeObserver(() => {
+      updateHighlightPosition();
+    });
+
+    observer.observe(targetEl);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [location.pathname, moreMenuActive, updateHighlightPosition]);
+
   const navItemClasses = (path: string) =>
-    `liquid-pill ios-nav-item group relative flex min-w-[92px] flex-col items-center justify-center gap-1 px-5 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] transition-all duration-500 ${
+    `${navBaseClasses} ${
       isActive(path)
-        ? "is-active text-white"
-        : "text-slate-200/75 hover:text-white"
+        ? "liquid-pill is-active text-white"
+        : "rounded-full border border-white/10 bg-white/5 text-slate-200/75 hover:border-white/20 hover:bg-white/10 hover:text-white"
     }`;
 
   const navGlassStyle = {
@@ -88,6 +220,15 @@ export function Header() {
     "--glass-surface-reflection": "rgba(210, 230, 255, 0.24)",
     "--glass-highlight-height": "10%",
     "--glass-reflection-height": "40%",
+  } as CSSProperties;
+
+  const highlightGlassStyle = {
+    "--glass-surface-bg": "rgba(12, 20, 42, 0.32)",
+    "--glass-surface-border": "rgba(255, 255, 255, 0.32)",
+    "--glass-surface-highlight": "rgba(255, 255, 255, 0.55)",
+    "--glass-surface-reflection": "rgba(210, 230, 255, 0.36)",
+    "--glass-highlight-height": "16%",
+    "--glass-reflection-height": "58%",
   } as CSSProperties;
 
   return (
@@ -113,10 +254,21 @@ export function Header() {
           <div className="group relative">
             <div className="absolute inset-0 -z-10 rounded-full bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.18),rgba(9,9,11,0))] opacity-50 blur-3xl transition-opacity duration-500 group-hover:opacity-80" />
             <nav
-              className="liquid-glass group flex items-center gap-3 overflow-x-auto rounded-full px-4 py-3 backdrop-blur-[42px] backdrop-saturate-[1.65] shadow-[0_32px_90px_-58px_rgba(12,16,40,0.9)] transition-all duration-500 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              ref={navRef}
+              className="liquid-glass group relative flex items-center gap-3 overflow-x-auto rounded-full px-4 py-3 backdrop-blur-[42px] backdrop-saturate-[1.65] shadow-[0_32px_90px_-58px_rgba(12,16,40,0.9)] transition-all duration-500 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
               style={navGlassStyle}
-            >
-              {navItems.map((item) => {
+              >
+                {highlightBoxStyle && (
+                  <span
+                    aria-hidden="true"
+                    className="glass-spotlight"
+                    style={{
+                      ...highlightGlassStyle,
+                      ...highlightBoxStyle,
+                    }}
+                  />
+                )}
+                {navItems.map((item) => {
                 const Icon = item.icon;
                 const active = isActive(item.path);
 
@@ -126,6 +278,7 @@ export function Header() {
                     to={item.path}
                     className={navItemClasses(item.path)}
                     data-active={active || undefined}
+                    ref={active ? setActiveItemRef : undefined}
                   >
                     <Icon
                       className={`relative z-10 h-5 w-5 transition-all duration-300 ${
@@ -145,10 +298,17 @@ export function Header() {
                 <DropdownMenuTrigger asChild>
                   <button
                     type="button"
-                    className="liquid-pill ios-nav-item group relative flex min-w-[92px] flex-col items-center justify-center gap-1 px-5 py-2 text-[10px] font-semibold uppercase tracking-[0.24em] text-slate-200/75 transition-all duration-300 hover:text-white focus-visible:outline-none"
-                    style={navGlassStyle}
+                    className={`${navBaseClasses} rounded-full border border-white/10 bg-white/5 text-slate-200/75 transition-all duration-300 hover:border-white/20 hover:bg-white/10 hover:text-white focus-visible:outline-none ${moreMenuActive ? "text-white" : ""}`}
+                    data-active={moreMenuActive || undefined}
+                    ref={moreTriggerRef}
                   >
-                    <MoreHorizontal className="relative z-10 h-5 w-5 text-white/80 transition-all duration-300 group-hover:text-white" />
+                    <MoreHorizontal
+                      className={`relative z-10 h-5 w-5 transition-all duration-300 ${
+                        moreMenuActive
+                          ? "text-white drop-shadow-[0_10px_22px_rgba(15,23,42,0.4)]"
+                          : "text-white/80 group-hover:text-white"
+                      }`}
+                    />
                     <span className="relative z-10 text-[10px] font-semibold uppercase tracking-[0.24em]">
                       {t("nav.more")}
                     </span>

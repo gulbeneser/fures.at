@@ -456,6 +456,67 @@
     background-size: 100% 100%, 100% 100%, 3px 3px;
   }
 
+  .glass-spotlight {
+    --spotlight-blur: calc(var(--glass-blur) * 1.2);
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 9999px;
+    border: 1px solid color-mix(in srgb, var(--glass-surface-border) 55%, white 45%);
+    background:
+      linear-gradient(
+        140deg,
+        color-mix(in srgb, var(--glass-surface-bg) 70%, transparent) 0%,
+        color-mix(in srgb, var(--glass-surface-bg) 22%, transparent) 100%
+      ),
+      color-mix(in srgb, rgba(6, 12, 30, 0.84) 8%, transparent);
+    backdrop-filter: blur(var(--spotlight-blur)) saturate(calc(var(--glass-saturate) * 1.28));
+    -webkit-backdrop-filter: blur(var(--spotlight-blur)) saturate(calc(var(--glass-saturate) * 1.28));
+    box-shadow: 0 42px 120px -62px rgba(12, 18, 42, 0.95);
+    opacity: 0;
+    pointer-events: none;
+    isolation: isolate;
+    z-index: 0;
+    transition:
+      transform 320ms var(--glass-transition),
+      width 320ms var(--glass-transition),
+      height 320ms var(--glass-transition),
+      opacity 200ms ease;
+  }
+
+  .glass-spotlight::before,
+  .glass-spotlight::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
+  .glass-spotlight::before {
+    background:
+      radial-gradient(160% 120% at 18% -12%, rgba(255, 255, 255, 0.58), transparent 64%),
+      radial-gradient(150% 120% at 82% -22%, rgba(255, 255, 255, 0.48), transparent 62%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.06));
+    mix-blend-mode: screen;
+    opacity: 0.78;
+  }
+
+  .glass-spotlight::after {
+    background:
+      radial-gradient(140% 140% at 50% 120%, color-mix(in srgb, var(--glass-surface-reflection) 82%, transparent) 0%, transparent 78%),
+      radial-gradient(90% 70% at 50% 18%, rgba(255, 255, 255, 0.38), transparent 62%),
+      radial-gradient(var(--glass-noise) 1px, transparent 1.4px);
+    background-size: 100% 100%, 100% 100%, 4px 4px;
+    opacity: 0.55;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .glass-spotlight {
+      transition: none;
+    }
+  }
+
   @media (prefers-reduced-transparency: reduce) {
     .liquid-glass,
     .liquid-pill,
