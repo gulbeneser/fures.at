@@ -47,6 +47,8 @@ export function Header() {
   const [highlightBoxStyle, setHighlightBoxStyle] = useState<CSSProperties | null>(
     null,
   );
+  const [isNavScrolling, setIsNavScrolling] = useState(false);
+  const scrollTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const normalizePath = (path: string) => {
     if (path === "/") {
@@ -75,7 +77,7 @@ export function Header() {
   const moreMenuActive = moreLinks.some((link) => isActive(link.path));
 
   const navBaseClasses =
-    "ios-nav-item group relative z-10 flex min-w-[92px] flex-col items-center justify-center gap-1 px-5 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] transition-all duration-500 focus-visible:outline-none";
+    "liquid-pill ios-nav-item group relative z-10 flex min-w-[92px] flex-col items-center justify-center gap-1 px-5 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] transition-all duration-500 focus-visible:outline-none";
 
   const updateHighlightPosition = useCallback(() => {
     const navEl = navRef.current;
@@ -143,6 +145,15 @@ export function Header() {
     }
 
     const handleScroll = () => {
+      setIsNavScrolling(true);
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+
+      scrollTimeoutRef.current = setTimeout(() => {
+        setIsNavScrolling(false);
+      }, 180);
+
       updateHighlightPosition();
     };
 
@@ -152,6 +163,14 @@ export function Header() {
       navEl.removeEventListener("scroll", handleScroll);
     };
   }, [updateHighlightPosition]);
+
+  useEffect(() => {
+    return () => {
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     if (typeof ResizeObserver === "undefined") {
@@ -200,8 +219,8 @@ export function Header() {
   const navItemClasses = (path: string) =>
     `${navBaseClasses} ${
       isActive(path)
-        ? "liquid-pill is-active text-white"
-        : "rounded-full border border-white/10 bg-white/5 text-slate-200/75 hover:border-white/20 hover:bg-white/10 hover:text-white"
+        ? "is-active border border-white/35 bg-white/12 text-white"
+        : "border border-white/12 bg-white/6 text-slate-200/75 hover:border-white/22 hover:bg-white/12 hover:text-white"
     }`;
 
   const navGlassStyle = {
@@ -261,7 +280,7 @@ export function Header() {
                 {highlightBoxStyle && (
                   <span
                     aria-hidden="true"
-                    className="glass-spotlight"
+                    className={`glass-spotlight${isNavScrolling ? " glass-spotlight--static" : ""}`}
                     style={{
                       ...highlightGlassStyle,
                       ...highlightBoxStyle,
@@ -298,7 +317,11 @@ export function Header() {
                 <DropdownMenuTrigger asChild>
                   <button
                     type="button"
-                    className={`${navBaseClasses} rounded-full border border-white/10 bg-white/5 text-slate-200/75 transition-all duration-300 hover:border-white/20 hover:bg-white/10 hover:text-white focus-visible:outline-none ${moreMenuActive ? "text-white" : ""}`}
+                    className={`${navBaseClasses} ${
+                      moreMenuActive
+                        ? "is-active border border-white/35 bg-white/12 text-white"
+                        : "border border-white/12 bg-white/6 text-slate-200/75 hover:border-white/22 hover:bg-white/12 hover:text-white"
+                    }`}
                     data-active={moreMenuActive || undefined}
                     ref={moreTriggerRef}
                   >

@@ -151,6 +151,12 @@ const translations = {
     'projects.visit': 'Tümü için',
     'projects.visit_project': 'Projeyi İncele',
     'projects.cta': 'Hadi Konuşalım',
+    'projects.contact_option_title': 'Projeni nasıl başlatmak istersin?',
+    'projects.contact_option_description': 'Ekibimizle iletişime geçmek için tercih ettiğin kanalı seç.',
+    'projects.contact_option_email': 'E-posta gönder',
+    'projects.contact_option_whatsapp': 'WhatsApp üzerinden yaz',
+    'projects.contact_option_phone': 'Telefonla arama yap',
+    'projects.contact_option_close': 'Kapat',
     
     // Why Fures
     'why_fures.title': 'Neden Fures Tech?',
@@ -347,6 +353,12 @@ const translations = {
     'projects.visit': 'View All',
     'projects.visit_project': 'View Project',
     'projects.cta': 'Let\'s Talk',
+    'projects.contact_option_title': 'How would you like to start?',
+    'projects.contact_option_description': 'Choose the channel you prefer to connect with our team.',
+    'projects.contact_option_email': 'Send an email',
+    'projects.contact_option_whatsapp': 'Message on WhatsApp',
+    'projects.contact_option_phone': 'Give us a call',
+    'projects.contact_option_close': 'Close dialog',
     
     // Why Fures
     'why_fures.title': 'Why Fures Tech?',
@@ -543,6 +555,12 @@ const translations = {
     'projects.visit': 'Посмотреть Все',
     'projects.visit_project': 'Посмотреть проект',
     'projects.cta': 'Давайте Поговорим',
+    'projects.contact_option_title': 'Как начать сотрудничество?',
+    'projects.contact_option_description': 'Выберите удобный канал связи с нашей командой.',
+    'projects.contact_option_email': 'Отправить письмо',
+    'projects.contact_option_whatsapp': 'Написать в WhatsApp',
+    'projects.contact_option_phone': 'Позвонить нам',
+    'projects.contact_option_close': 'Закрыть окно',
     
     // Why Fures
     'why_fures.title': 'Почему Fures Tech?',
@@ -739,6 +757,12 @@ const translations = {
     'projects.visit': 'Alle Anzeigen',
     'projects.visit_project': 'Projekt ansehen',
     'projects.cta': 'Lass uns reden',
+    'projects.contact_option_title': 'Wie möchtest du starten?',
+    'projects.contact_option_description': 'Wähle den Kanal, über den du mit unserem Team sprechen möchtest.',
+    'projects.contact_option_email': 'E-Mail senden',
+    'projects.contact_option_whatsapp': 'Per WhatsApp schreiben',
+    'projects.contact_option_phone': 'Anrufen',
+    'projects.contact_option_close': 'Dialog schließen',
     
     // Why Fures
     'why_fures.title': 'Warum Fures Tech?',
