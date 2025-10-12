@@ -65,7 +65,7 @@ export function Header() {
   ];
 
   const navItemClasses = (path: string) =>
-    `group relative isolate flex min-w-[82px] flex-col items-center justify-center gap-1 rounded-full px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] transition-all duration-300 ${
+    `group relative isolate flex min-w-[82px] flex-col items-center justify-center gap-1 rounded-full px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] transition-all duration-500 ${
       isActive(path)
         ? "text-white"
         : "text-slate-200/85 hover:text-white"
@@ -81,12 +81,9 @@ export function Header() {
             <span className="relative flex items-center gap-3 rounded-full border border-white/10 bg-black/40 px-4 py-2 backdrop-blur-2xl">
               <img
                 src={logoSrc}
-                alt="Fures Tech"
+                alt="Fures"
                 className="h-8 w-auto transition-transform duration-300 group-hover:scale-110"
               />
-              <span className="text-sm font-semibold uppercase tracking-[0.22em] text-white/70 sm:inline hidden">
-                Fures
-              </span>
             </span>
           </Link>
           <div className="flex items-center gap-2 sm:hidden">
@@ -105,16 +102,16 @@ export function Header() {
                 return (
                   <Link key={item.path} to={item.path} className={navItemClasses(item.path)}>
                     <span
-                      className={`absolute inset-0 rounded-full border transition-all duration-300 ${
+                      className={`absolute inset-0 overflow-hidden rounded-full border transition-all duration-500 ${
                         active
-                          ? "border-white/40 bg-white/15 shadow-[0_24px_55px_-35px_rgba(15,23,42,0.95)] backdrop-blur-3xl"
+                          ? "border-white/30 bg-white/10 shadow-[0_26px_65px_-35px_rgba(15,23,42,0.95)] backdrop-blur-3xl before:absolute before:inset-[-35%] before:-z-10 before:rounded-[120px] before:bg-[radial-gradient(140%_180%_at_50%_25%,rgba(255,255,255,0.78),rgba(255,255,255,0.08)_45%,rgba(8,10,22,0.85))] before:opacity-85 before:blur-[32px] before:content-[''] after:absolute after:inset-x-7 after:top-1 after:h-5 after:rounded-full after:bg-white/55 after:opacity-80 after:blur-lg after:content-['']"
                           : "border-white/10 bg-white/5 group-hover:border-white/20 group-hover:bg-white/10"
                       }`}
                     />
                     <Icon
                       className={`relative z-10 h-5 w-5 transition-all duration-300 ${
                         active
-                          ? "text-white drop-shadow-[0_8px_18px_rgba(15,23,42,0.35)]"
+                          ? "text-white drop-shadow-[0_10px_22px_rgba(15,23,42,0.4)]"
                           : "text-white/80 group-hover:text-white"
                       }`}
                     />
@@ -149,9 +146,9 @@ export function Header() {
                         >
                           <Link
                             to={link.path}
-                            className={`flex items-center justify-between rounded-2xl px-4 py-3 text-sm transition-all duration-300 ${
+                            className={`relative flex items-center justify-between overflow-hidden rounded-2xl px-4 py-3 text-sm transition-all duration-500 ${
                               active
-                                ? "border border-white/35 bg-white/12 text-white shadow-[0_22px_45px_-35px_rgba(15,23,42,0.9)] backdrop-blur-3xl"
+                                ? "border border-white/30 bg-white/12 text-white shadow-[0_24px_60px_-35px_rgba(15,23,42,0.9)] backdrop-blur-3xl before:absolute before:inset-[-40%] before:-z-10 before:rounded-[120px] before:bg-[radial-gradient(140%_180%_at_50%_20%,rgba(255,255,255,0.75),rgba(255,255,255,0.08)_45%,rgba(8,10,22,0.85))] before:opacity-85 before:blur-[32px] before:content-[''] after:absolute after:inset-x-8 after:top-1.5 after:h-4 after:rounded-full after:bg-white/55 after:opacity-80 after:blur-lg after:content-['']"
                                 : "border border-transparent bg-white/5 text-slate-200/85 hover:border-white/25 hover:bg-white/10 hover:text-white"
                             }`}
                           >
