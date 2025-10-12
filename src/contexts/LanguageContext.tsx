@@ -64,6 +64,15 @@ const translations = {
     'seo.profile.kariyer.title': 'Fures Tech Kariyer Asistanı | Yapay Zekâ Destekli İşe Alım',
     'seo.profile.kariyer.description': 'Fures Tech kariyer platformu yapay zekâ destekli aday değerlendirme simülasyonları ve otomatik iş ilanı üretimi sunar.',
     'seo.profile.kariyer.keywords': 'fures tech kariyer, kıbrıs işe alım otomasyonu, yapay zeka kariyer asistanı',
+    'seo.privacy.title': 'Gizlilik Politikası | Fures Tech',
+    'seo.privacy.description': 'Fures Tech olarak kişisel verilerinizi KVKK ve GDPR standartlarına göre işler, güvenle korur ve şeffaf biçimde yönetiriz.',
+    'seo.privacy.keywords': 'kvkk gizlilik, kıbrıs gizlilik politikası, veri koruma fures tech, kktc veri güvenliği',
+    'seo.cookies.title': 'Çerez Politikası | Fures Tech',
+    'seo.cookies.description': 'Fures Tech web sitesinde kullanılan çerez kategorileri, amaçları ve yönetim seçenekleri hakkında bilgi alın.',
+    'seo.cookies.keywords': 'çerez politikası, cookie policy türkçe, dijital ajans çerezleri, kvkk çerez',
+    'seo.kvkk.title': 'KVKK Aydınlatma Metni | Fures Tech',
+    'seo.kvkk.description': 'Fures Tech veri işleme süreçleri, hukuki sebepler, aktarım ve başvuru yöntemleri hakkında KVKK uyumlu aydınlatma.',
+    'seo.kvkk.keywords': 'kvkk aydınlatma metni, kişisel veri işleme, kktc veri sorumlusu, fures tech kvkk',
 
     // Hero
     'hero.title': 'Dijital Ajans',
@@ -148,9 +157,19 @@ const translations = {
     // Projects
     'projects.title': 'Projeler',
     'projects.subtitle': 'Vaka kısa özetleri',
+    'projects.description': 'Yapay zeka teknolojileriyle geliştirdiğimiz yenilikçi çözümler ve başarı hikayelerimiz.',
     'projects.visit': 'Tümü için',
     'projects.visit_project': 'Projeyi İncele',
     'projects.cta': 'Hadi Konuşalım',
+    'projects.start.title': 'Kendi Projenizi Başlatın',
+    'projects.start.description': 'AI destekli çözümlerle hayalinizdeki projeyi gerçeğe dönüştürmeye hazır mısınız? Deneyimli ekibimizle birlikte dijital dönüşüm yolculuğunuza başlayın.',
+    'projects.start.cta': 'Projemi Başlat',
+    'projects.start.email': 'E-posta ile proje özeti gönder',
+    'projects.start.email_desc': 'info@fures.at adresine proje beklentilerinizi paylaşın.',
+    'projects.start.whatsapp': 'WhatsApp üzerinden hızlıca konuş',
+    'projects.start.whatsapp_desc': '+90 548 876 68 19 numarasına mesaj gönderin, 1 iş günü içinde dönüş yapalım.',
+    'projects.start.phone': 'Telefonla hemen arayın',
+    'projects.start.phone_desc': 'Çalışma saatleri içinde doğrudan ekibimize ulaşın.',
     
     // Why Fures
     'why_fures.title': 'Neden Fures Tech?',
@@ -260,6 +279,15 @@ const translations = {
     'seo.profile.kariyer.title': 'Fures Tech Career Assistant | AI-Powered Recruitment',
     'seo.profile.kariyer.description': 'The Fures Tech career platform delivers AI-assisted candidate screening, interview simulations and automated job posting workflows.',
     'seo.profile.kariyer.keywords': 'fures tech career, cyprus recruitment automation, ai career assistant',
+    'seo.privacy.title': 'Privacy Policy | Fures Tech',
+    'seo.privacy.description': 'Learn how Fures Tech processes and protects personal data in compliance with KVKK and GDPR standards.',
+    'seo.privacy.keywords': 'privacy policy cyprus, kvkk privacy, fures tech data protection, trnc gdpr',
+    'seo.cookies.title': 'Cookie Policy | Fures Tech',
+    'seo.cookies.description': 'Understand the categories of cookies Fures Tech uses, why we use them and how to manage your preferences.',
+    'seo.cookies.keywords': 'cookie policy cyprus, marketing cookies, analytics cookies, fures tech',
+    'seo.kvkk.title': 'KVKK Disclosure | Fures Tech',
+    'seo.kvkk.description': 'Detailed information about Fures Tech data processing purposes, legal bases, transfers and data subject rights.',
+    'seo.kvkk.keywords': 'kvkk information notice, personal data processing cyprus, trnc data controller, fures tech kvkk',
 
     // Hero
     'hero.title': 'Digital Agency',
@@ -344,9 +372,19 @@ const translations = {
     // Projects
     'projects.title': 'Projects',
     'projects.subtitle': 'Case brief summaries',
+    'projects.description': 'AI-powered solutions and success stories we deliver for partners in Cyprus and beyond.',
     'projects.visit': 'View All',
     'projects.visit_project': 'View Project',
     'projects.cta': 'Let\'s Talk',
+    'projects.start.title': 'Launch Your Project',
+    'projects.start.description': 'Ready to turn your idea into reality with AI-driven execution? Our team is here to guide your digital transformation.',
+    'projects.start.cta': 'Start My Project',
+    'projects.start.email': 'Send a project brief via email',
+    'projects.start.email_desc': 'Share your goals with info@fures.at and receive a tailored roadmap.',
+    'projects.start.whatsapp': 'Chat quickly on WhatsApp',
+    'projects.start.whatsapp_desc': 'Message us at +90 548 876 68 19 and get a reply within one business day.',
+    'projects.start.phone': 'Call us directly',
+    'projects.start.phone_desc': 'Reach our team during business hours for immediate support.',
     
     // Why Fures
     'why_fures.title': 'Why Fures Tech?',
@@ -456,6 +494,15 @@ const translations = {
     'seo.profile.kariyer.title': 'Карьера Fures Tech | Автоматизированный помощник по найму',
     'seo.profile.kariyer.description': 'Платформа Fures Tech использует ИИ для оценки кандидатов, симуляции собеседований и автоматического создания вакансий.',
     'seo.profile.kariyer.keywords': 'fures tech карьера, кипр автоматизация найма, ассистент по найму на базе ИИ',
+    'seo.privacy.title': 'Политика конфиденциальности | Fures Tech',
+    'seo.privacy.description': 'Узнайте, как Fures Tech обрабатывает и защищает персональные данные в соответствии с KVKK и GDPR.',
+    'seo.privacy.keywords': 'политика конфиденциальности кипр, kvkk privacy, защита данных fures tech',
+    'seo.cookies.title': 'Политика файлов cookie | Fures Tech',
+    'seo.cookies.description': 'Категории, цели и управление cookie-файлами, которые мы используем на сайте Fures Tech.',
+    'seo.cookies.keywords': 'cookie политика, маркетинговые cookies, аналитические cookies, fures tech',
+    'seo.kvkk.title': 'Уведомление KVKK | Fures Tech',
+    'seo.kvkk.description': 'Подробная информация о целях обработки данных, правовых основаниях, передаче и правах субъектов данных Fures Tech.',
+    'seo.kvkk.keywords': 'kvkk уведомление, обработка персональных данных кипр, оператор данных северный кипр',
 
     // Hero
     'hero.title': 'Цифровое Агентство',
@@ -540,9 +587,19 @@ const translations = {
     // Projects
     'projects.title': 'Проекты',
     'projects.subtitle': 'Краткие описания кейсов',
+    'projects.description': 'Наши решения на основе искусственного интеллекта и истории успеха клиентов.',
     'projects.visit': 'Посмотреть Все',
     'projects.visit_project': 'Посмотреть проект',
     'projects.cta': 'Давайте Поговорим',
+    'projects.start.title': 'Запустите свой проект',
+    'projects.start.description': 'Готовы превратить идею в реальность с помощью ИИ? Команда Fures Tech проведет вас через цифровую трансформацию.',
+    'projects.start.cta': 'Запустить проект',
+    'projects.start.email': 'Отправить бриф на e-mail',
+    'projects.start.email_desc': 'Поделитесь задачами на info@fures.at и получите персональный план.',
+    'projects.start.whatsapp': 'Быстрый диалог в WhatsApp',
+    'projects.start.whatsapp_desc': 'Напишите на +90 548 876 68 19 — ответим в течение одного рабочего дня.',
+    'projects.start.phone': 'Позвоните нам напрямую',
+    'projects.start.phone_desc': 'Свяжитесь с командой в рабочие часы и обсудите проект сразу.',
     
     // Why Fures
     'why_fures.title': 'Почему Fures Tech?',
@@ -652,6 +709,15 @@ const translations = {
     'seo.profile.kariyer.title': 'Fures Tech Karriere-Assistent | KI-gestütztes Recruiting',
     'seo.profile.kariyer.description': 'Die Karriereplattform von Fures Tech bietet KI-gestützte Kandidatenbewertung, Interview-Simulationen und automatisierte Job-Ausschreibungen.',
     'seo.profile.kariyer.keywords': 'fures tech karriere, zypern recruiting automation, ki karriere assistent',
+    'seo.privacy.title': 'Datenschutzerklärung | Fures Tech',
+    'seo.privacy.description': 'Erfahren Sie, wie Fures Tech personenbezogene Daten gemäß KVKK und DSGVO verarbeitet und schützt.',
+    'seo.privacy.keywords': 'datenschutzerklärung zypern, kvkk datenschutz, fures tech data protection',
+    'seo.cookies.title': 'Cookie-Richtlinie | Fures Tech',
+    'seo.cookies.description': 'Welche Cookies wir einsetzen, zu welchen Zwecken und wie Sie Ihre Präferenzen verwalten.',
+    'seo.cookies.keywords': 'cookie richtlinie, marketing cookies, analytics cookies, fures tech',
+    'seo.kvkk.title': 'KVKK-Hinweis | Fures Tech',
+    'seo.kvkk.description': 'Informationen zu Verarbeitungszwecken, Rechtsgrundlagen, Übermittlungen und Betroffenenrechten bei Fures Tech.',
+    'seo.kvkk.keywords': 'kvkk hinweis, personenbezogene daten zypern, datenverantwortlicher trnc',
 
     // Hero
     'hero.title': 'Digitale Agentur',
@@ -736,9 +802,19 @@ const translations = {
     // Projects
     'projects.title': 'Projekte',
     'projects.subtitle': 'Kurze Fallzusammenfassungen',
+    'projects.description': 'Unsere KI-gestützten Lösungen und Erfolgsgeschichten aus Zypern und internationalen Märkten.',
     'projects.visit': 'Alle Anzeigen',
     'projects.visit_project': 'Projekt ansehen',
     'projects.cta': 'Lass uns reden',
+    'projects.start.title': 'Starten Sie Ihr Projekt',
+    'projects.start.description': 'Bereit, Ihre Idee mit KI-gestützter Umsetzung zu realisieren? Unser Team begleitet Ihre digitale Transformation.',
+    'projects.start.cta': 'Projekt starten',
+    'projects.start.email': 'Projektbrief per E-Mail senden',
+    'projects.start.email_desc': 'Teilen Sie Ihre Ziele unter info@fures.at und erhalten Sie einen individuellen Plan.',
+    'projects.start.whatsapp': 'Schnell über WhatsApp sprechen',
+    'projects.start.whatsapp_desc': 'Schreiben Sie an +90 548 876 68 19 – wir melden uns innerhalb eines Werktags.',
+    'projects.start.phone': 'Direkt anrufen',
+    'projects.start.phone_desc': 'Erreichen Sie unser Team während der Geschäftszeiten.',
     
     // Why Fures
     'why_fures.title': 'Warum Fures Tech?',

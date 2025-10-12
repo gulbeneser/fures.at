@@ -47,6 +47,7 @@ export function Header() {
   const [highlightBoxStyle, setHighlightBoxStyle] = useState<CSSProperties | null>(
     null,
   );
+  const [isMobileNav, setIsMobileNav] = useState(false);
 
   const normalizePath = (path: string) => {
     if (path === "/") {
@@ -78,6 +79,11 @@ export function Header() {
     "ios-nav-item group relative z-10 flex min-w-[92px] flex-col items-center justify-center gap-1 px-5 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] transition-all duration-500 focus-visible:outline-none";
 
   const updateHighlightPosition = useCallback(() => {
+    if (isMobileNav) {
+      setHighlightBoxStyle(null);
+      return;
+    }
+
     const navEl = navRef.current;
     if (!navEl) {
       setHighlightBoxStyle(null);
@@ -103,7 +109,7 @@ export function Header() {
       transform: `translate3d(${targetRect.left - navRect.left - paddingX}px, ${targetRect.top - navRect.top - paddingY}px, 0)`,
       opacity: 1,
     });
-  }, [moreMenuActive]);
+  }, [isMobileNav, moreMenuActive]);
 
   const setActiveItemRef = useCallback(
     (node: HTMLAnchorElement | null) => {
@@ -123,6 +129,32 @@ export function Header() {
   useEffect(() => {
     updateHighlightPosition();
   }, [location.pathname, updateHighlightPosition]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const mediaQuery = window.matchMedia("(max-width: 640px)");
+
+    const handleChange = (event: MediaQueryListEvent) => {
+      setIsMobileNav(event.matches);
+    };
+
+    setIsMobileNav(mediaQuery.matches);
+
+    if (typeof mediaQuery.addEventListener === "function") {
+      mediaQuery.addEventListener("change", handleChange);
+      return () => {
+        mediaQuery.removeEventListener("change", handleChange);
+      };
+    }
+
+    mediaQuery.addListener(handleChange);
+    return () => {
+      mediaQuery.removeListener(handleChange);
+    };
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -258,7 +290,7 @@ export function Header() {
               className="liquid-glass group relative flex items-center gap-3 overflow-x-auto rounded-full px-4 py-3 backdrop-blur-[42px] backdrop-saturate-[1.65] shadow-[0_32px_90px_-58px_rgba(12,16,40,0.9)] transition-all duration-500 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
               style={navGlassStyle}
               >
-                {highlightBoxStyle && (
+                {!isMobileNav && highlightBoxStyle && (
                   <span
                     aria-hidden="true"
                     className="glass-spotlight"
