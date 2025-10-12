@@ -79,10 +79,16 @@ export const translations = {
       title: 'Yapay Zeka Projelerim',
       visitProject: 'Projeyi Ziyaret Et',
       items: [
-        { name: 'Yapay Zeka Destekli Kıbrıs Tatil Planlayıcısı', description: 'Kullanıcı tercihlerine ve hava koşullarına göre çok dilli, kişiselleştirilmiş seyahat planları oluşturan akıllı bir uygulama.', link: 'https://www.fures.at/projects/aboutcyprus' },
-        { name: 'Yapay Zeka Destekli Serakıncı Ürün Platformu', description: 'Yapay zeka tarafından oluşturulan açıklamalar ve veri kazıma işlem hatları ile otomatikleştirilmiş, çok dilli, SEO odaklı bir katalog.', link: 'https://www.fures.at/projects/serakinci' },
-        { name: 'Otel ve Acenta Entegrasyonu', description: '6 oteli acenta operasyonlarıyla entegre etti; süreçleri optimize etti, maliyetleri düşürdü ve veri akışlarını birleştirdi.', link: 'https://www.fures.at/projects/hotel' },
-        { name: 'ICALT 2024 Kongre Yönetimi', description: 'Dorana Turizm işbirliğiyle uluslararası bir konferansın planlanması ve koordinasyonu.', link: 'https://www.fures.at/projects/icalt' },
+        {
+          name: 'Fures Kariyer Koçu',
+          description:
+            'CV hazırlama, ön yazı, işe uygunluk analizi ve mülakat simülasyonu için uçtan uca destek veren yapay zekâ tabanlı kariyer platformu.',
+          link: '/kariyer.html'
+        },
+        { name: 'Yapay Zeka Destekli Kıbrıs Tatil Planlayıcısı', description: 'Kullanıcı tercihlerine ve hava koşullarına göre çok dilli, kişiselleştirilmiş seyahat planları oluşturan akıllı bir uygulama.', link: '/projeler/aboutcyprus' },
+        { name: 'Yapay Zeka Destekli Serakıncı Ürün Platformu', description: 'Yapay zeka tarafından oluşturulan açıklamalar ve veri kazıma işlem hatları ile otomatikleştirilmiş, çok dilli, SEO odaklı bir katalog.', link: '/projeler/serakinci' },
+        { name: 'Otel ve Acenta Entegrasyonu', description: '6 oteli acenta operasyonlarıyla entegre etti; süreçleri optimize etti, maliyetleri düşürdü ve veri akışlarını birleştirdi.', link: '/projeler/hotel' },
+        { name: 'ICALT 2024 Kongre Yönetimi', description: 'Dorana Turizm işbirliğiyle uluslararası bir konferansın planlanması ve koordinasyonu.', link: '/projeler/icalt' },
         { name: 'PixShop', description: 'Yapay zeka destekli fotoğraf düzenleme, basitleştirildi. Karmaşık araçlar olmadan metin komutlarıyla rötuş yapın, filtreler uygulayın veya profesyonel düzenlemeler yapın.', link: 'https://pixshop-720548631405.us-west1.run.app/' },
         { name: 'Pantry Chef AI', description: 'Mutfağınızda ne var? Malzemelerinizi girin ve yapay zeka şefimizin sizin için leziz bir şeyler hazırlamasına izin verin.', link: 'https://ai-recipe-generator-720548631405.us-west1.run.app/' },
         { name: 'ODYSSEUS', description: 'Geleceğe Hazır İş Zekası. Başlamak için tanımlı otellerden birini seçin veya kendi web sitenizin içeriğini yapıştırın.', link: 'https://project-odysseus-720548631405.us-west1.run.app/' }
@@ -203,10 +209,16 @@ export const translations = {
       title: 'My AI Projects',
       visitProject: 'Visit Project',
       items: [
-        { name: 'AI-Powered Cyprus Vacation Planner', description: 'An intelligent application that creates multilingual, personalized travel plans based on user preferences and weather conditions.', link: 'https://www.fures.at/projects/aboutcyprus' },
-        { name: 'AI-Powered Serakıncı Product Platform', description: 'An automated, multilingual, SEO-driven catalog with AI-generated descriptions and scraping pipelines.', link: 'https://www.fures.at/projects/serakinci' },
-        { name: 'Hotel & Agency Integration', description: 'Integrated 6 hotels with agency operations; optimized processes, reduced costs, and unified data flows.', link: 'https://www.fures.at/projects/hotel' },
-        { name: 'ICALT 2024 Congress Management', description: 'Planning and coordination of an international conference in collaboration with Dorana Tourism.', link: 'https://www.fures.at/projects/icalt' },
+        {
+          name: 'Fures Career Coach',
+          description:
+            'An AI-driven career platform delivering resume building, tailored cover letters, job-fit analysis, and realistic interview simulations.',
+          link: '/kariyer.html'
+        },
+        { name: 'AI-Powered Cyprus Vacation Planner', description: 'An intelligent application that creates multilingual, personalized travel plans based on user preferences and weather conditions.', link: '/projeler/aboutcyprus' },
+        { name: 'AI-Powered Serakıncı Product Platform', description: 'An automated, multilingual, SEO-driven catalog with AI-generated descriptions and scraping pipelines.', link: '/projeler/serakinci' },
+        { name: 'Hotel & Agency Integration', description: 'Integrated 6 hotels with agency operations; optimized processes, reduced costs, and unified data flows.', link: '/projeler/hotel' },
+        { name: 'ICALT 2024 Congress Management', description: 'Planning and coordination of an international conference in collaboration with Dorana Tourism.', link: '/projeler/icalt' },
         { name: 'PixShop', description: 'AI-powered photo editing, simplified. Retouch photos, apply creative filters, or make professional adjustments with simple text instructions. No complex tools required.', link: 'https://pixshop-720548631405.us-west1.run.app/' },
         { name: 'Pantry Chef AI', description: 'What\'s in your pantry? Enter your ingredients and let our AI chef whip up something delicious for you.', link: 'https://ai-recipe-generator-720548631405.us-west1.run.app/' },
         { name: 'ODYSSEUS', description: 'Future-Ready Business Intelligence. To get started, select one of the defined hotels below or paste the content of your own website.', link: 'https://project-odysseus-720548631405.us-west1.run.app/' }
@@ -327,10 +339,10 @@ export const translations = {
       title: 'Meine KI-Projekte',
       visitProject: 'Projekt besuchen',
       items: [
-        { name: 'KI-gestützter Zypern-Urlaubsplaner', description: 'Eine intelligente Anwendung, die mehrsprachige, personalisierte Reisepläne basierend auf Benutzerpräferenzen und Wetterbedingungen erstellt.', link: 'https://www.fures.at/projects/aboutcyprus' },
-        { name: 'KI-gestützte Serakıncı-Produktplattform', description: 'Ein automatisierter, mehrsprachiger, SEO-gesteuerter Katalog mit KI-generierten Beschreibungen und Scraping-Pipelines.', link: 'https://www.fures.at/projects/serakinci' },
-        { name: 'Hotel- und Agenturintegration', description: 'Integration von 6 Hotels in die Agenturabläufe; optimierte Prozesse, reduzierte Kosten und vereinheitlichte Datenflüsse.', link: 'https://www.fures.at/projects/hotel' },
-        { name: 'ICALT 2024 Kongressmanagement', description: 'Planung und Koordination einer internationalen Konferenz in Zusammenarbeit mit Dorana Tourism.', link: 'https://www.fures.at/projects/icalt' },
+        { name: 'KI-gestützter Zypern-Urlaubsplaner', description: 'Eine intelligente Anwendung, die mehrsprachige, personalisierte Reisepläne basierend auf Benutzerpräferenzen und Wetterbedingungen erstellt.', link: '/projeler/aboutcyprus' },
+        { name: 'KI-gestützte Serakıncı-Produktplattform', description: 'Ein automatisierter, mehrsprachiger, SEO-gesteuerter Katalog mit KI-generierten Beschreibungen und Scraping-Pipelines.', link: '/projeler/serakinci' },
+        { name: 'Hotel- und Agenturintegration', description: 'Integration von 6 Hotels in die Agenturabläufe; optimierte Prozesse, reduzierte Kosten und vereinheitlichte Datenflüsse.', link: '/projeler/hotel' },
+        { name: 'ICALT 2024 Kongressmanagement', description: 'Planung und Koordination einer internationalen Konferenz in Zusammenarbeit mit Dorana Tourism.', link: '/projeler/icalt' },
         { name: 'PixShop', description: 'KI-gestützte Fotobearbeitung, vereinfacht. Retuschieren Sie Fotos, wenden Sie kreative Filter an oder nehmen Sie professionelle Anpassungen mit einfachen Textanweisungen vor.', link: 'https://pixshop-720548631405.us-west1.run.app/' },
         { name: 'Pantry Chef AI', description: 'Was ist in Ihrer Speisekammer? Geben Sie Ihre Zutaten ein und lassen Sie unseren KI-Koch etwas Leckeres für Sie zaubern.', link: 'https://ai-recipe-generator-720548631405.us-west1.run.app/' },
         { name: 'ODYSSEUS', description: 'Zukunftsfähige Business Intelligence. Wählen Sie eines der vordefinierten Hotels aus oder fügen Sie den Inhalt Ihrer eigenen Website ein.', link: 'https://project-odysseus-720548631405.us-west1.run.app/' }
@@ -451,10 +463,10 @@ export const translations = {
       title: 'Mis Proyectos de IA',
       visitProject: 'Visitar Proyecto',
       items: [
-        { name: 'Planificador de Vacaciones en Chipre con IA', description: 'Una aplicación inteligente que crea planes de viaje multilingües y personalizados basados en las preferencias del usuario y las condiciones climáticas.', link: 'https://www.fures.at/projects/aboutcyprus' },
-        { name: 'Plataforma de Productos Serakıncı con IA', description: 'Un catálogo automatizado, multilingüe y orientado a SEO con descripciones generadas por IA y pipelines de scraping.', link: 'https://www.fures.at/projects/serakinci' },
-        { name: 'Integración de Hotel y Agencia', description: 'Integró 6 hoteles con las operaciones de la agencia; optimizó procesos, redujo costos y unificó los flujos de datos.', link: 'https://www.fures.at/projects/hotel' },
-        { name: 'Gestión del Congreso ICALT 2024', description: 'Planificación y coordinación de una conferencia internacional en colaboración con Dorana Tourism.', link: 'https://www.fures.at/projects/icalt' },
+        { name: 'Planificador de Vacaciones en Chipre con IA', description: 'Una aplicación inteligente que crea planes de viaje multilingües y personalizados basados en las preferencias del usuario y las condiciones climáticas.', link: '/projeler/aboutcyprus' },
+        { name: 'Plataforma de Productos Serakıncı con IA', description: 'Un catálogo automatizado, multilingüe y orientado a SEO con descripciones generadas por IA y pipelines de scraping.', link: '/projeler/serakinci' },
+        { name: 'Integración de Hotel y Agencia', description: 'Integró 6 hoteles con las operaciones de la agencia; optimizó procesos, redujo costos y unificó los flujos de datos.', link: '/projeler/hotel' },
+        { name: 'Gestión del Congreso ICALT 2024', description: 'Planificación y coordinación de una conferencia internacional en colaboración con Dorana Tourism.', link: '/projeler/icalt' },
         { name: 'PixShop', description: 'Edición de fotos con IA, simplificada. Retoca fotos, aplica filtros creativos o realiza ajustes profesionales con simples instrucciones de texto.', link: 'https://pixshop-720548631405.us-west1.run.app/' },
         { name: 'Pantry Chef AI', description: '¿Qué tienes en tu despensa? Introduce tus ingredientes y deja que nuestro chef de IA prepare algo delicioso para ti.', link: 'https://ai-recipe-generator-720548631405.us-west1.run.app/' },
         { name: 'ODYSSEUS', description: 'Inteligencia de Negocios Lista para el Futuro. Para empezar, selecciona uno de los hoteles definidos o pega el contenido de tu propio sitio web.', link: 'https://project-odysseus-720548631405.us-west1.run.app/' }
@@ -575,10 +587,10 @@ export const translations = {
       title: 'Mes Projets d\'IA',
       visitProject: 'Visiter le Projet',
       items: [
-        { name: 'Planificateur de Vacances à Chypre Alimenté par l\'IA', description: 'Une application intelligente qui crée des plans de voyage multilingues et personnalisés en fonction des préférences de l\'utilisateur et des conditions météorologiques.', link: 'https://www.fures.at/projects/aboutcyprus' },
-        { name: 'Plateforme de Produits Serakıncı Alimentée par l\'IA', description: 'Un catalogue automatisé, multilingue et axé sur le SEO avec des descriptions générées par l\'IA et des pipelines de scraping.', link: 'https://www.fures.at/projects/serakinci' },
-        { name: 'Intégration Hôtel & Agence', description: 'A intégré 6 hôtels aux opérations de l\'agence ; a optimisé les processus, réduit les coûts et unifié les flux de données.', link: 'https://www.fures.at/projects/hotel' },
-        { name: 'Gestion du Congrès ICALT 2024', description: 'Planification et coordination d\'une conférence internationale en collaboration avec Dorana Tourisme.', link: 'https://www.fures.at/projects/icalt' },
+        { name: 'Planificateur de Vacances à Chypre Alimenté par l\'IA', description: 'Une application intelligente qui crée des plans de voyage multilingues et personnalisés en fonction des préférences de l\'utilisateur et des conditions météorologiques.', link: '/projeler/aboutcyprus' },
+        { name: 'Plateforme de Produits Serakıncı Alimentée par l\'IA', description: 'Un catalogue automatisé, multilingue et axé sur le SEO avec des descriptions générées par l\'IA et des pipelines de scraping.', link: '/projeler/serakinci' },
+        { name: 'Intégration Hôtel & Agence', description: 'A intégré 6 hôtels aux opérations de l\'agence ; a optimisé les processus, réduit les coûts et unifié les flux de données.', link: '/projeler/hotel' },
+        { name: 'Gestion du Congrès ICALT 2024', description: 'Planification et coordination d\'une conférence internationale en collaboration avec Dorana Tourisme.', link: '/projeler/icalt' },
         { name: 'PixShop', description: 'Édition de photos assistée par IA, simplifiée. Retouchez des photos, appliquez des filtres créatifs ou effectuez des ajustements professionnels avec de simples instructions textuelles.', link: 'https://pixshop-720548631405.us-west1.run.app/' },
         { name: 'Pantry Chef AI', description: 'Qu\'y a-t-il dans votre garde-manger ? Entrez vos ingrédients et laissez notre chef IA vous concocter quelque chose de délicieux.', link: 'https://ai-recipe-generator-720548631405.us-west1.run.app/' },
         { name: 'ODYSSEUS', description: 'Intelligence d\'Affaires Prête pour l\'Avenir. Pour commencer, sélectionnez l\'un des hôtels définis ou collez le contenu de votre propre site web.', link: 'https://project-odysseus-720548631405.us-west1.run.app/' }
@@ -699,10 +711,10 @@ export const translations = {
       title: 'Мои проекты ИИ',
       visitProject: 'Посетить проект',
       items: [
-          { name: 'Планировщик отдыха на Кипре на базе ИИ', description: 'Интеллектуальное приложение, создающее многоязычные, персонализированные планы поездок на основе предпочтений пользователя и погодных условий.', link: 'https://www.fures.at/projects/aboutcyprus' },
-          { name: 'Продуктовая платформа Serakıncı на базе ИИ', description: 'Автоматизированный, многоязычный, SEO-ориентированный каталог с описаниями, сгенерированными ИИ, и конвейерами скрапинга.', link: 'https://www.fures.at/projects/serakinci' },
-          { name: 'Интеграция отелей и агентства', description: 'Интегрировал 6 отелей с операциями агентства; оптимизировал процессы, сократил расходы и унифицировал потоки данных.', link: 'https://www.fures.at/projects/hotel' },
-          { name: 'Управление конгрессом ICALT 2024', description: 'Планирование и координация международной конференции в сотрудничестве с Dorana Tourism.', link: 'https://www.fures.at/projects/icalt' },
+          { name: 'Планировщик отдыха на Кипре на базе ИИ', description: 'Интеллектуальное приложение, создающее многоязычные, персонализированные планы поездок на основе предпочтений пользователя и погодных условий.', link: '/projeler/aboutcyprus' },
+          { name: 'Продуктовая платформа Serakıncı на базе ИИ', description: 'Автоматизированный, многоязычный, SEO-ориентированный каталог с описаниями, сгенерированными ИИ, и конвейерами скрапинга.', link: '/projeler/serakinci' },
+          { name: 'Интеграция отелей и агентства', description: 'Интегрировал 6 отелей с операциями агентства; оптимизировал процессы, сократил расходы и унифицировал потоки данных.', link: '/projeler/hotel' },
+          { name: 'Управление конгрессом ICALT 2024', description: 'Планирование и координация международной конференции в сотрудничестве с Dorana Tourism.', link: '/projeler/icalt' },
           { name: 'PixShop', description: 'Редактирование фотографий с помощью ИИ, упрощенно. Ретушируйте фото, применяйте креативные фильтры или вносите профессиональные правки с помощью простых текстовых команд.', link: 'https://pixshop-720548631405.us-west1.run.app/' },
           { name: 'Pantry Chef AI', description: 'Что у вас в кладовке? Введите ингредиенты, и наш ИИ-шеф приготовит для вас что-нибудь вкусное.', link: 'https://ai-recipe-generator-720548631405.us-west1.run.app/' },
           { name: 'ODYSSEUS', description: 'Бизнес-аналитика, готовая к будущему. Для начала выберите один из определенных отелей или вставьте контент вашего собственного веб-сайта.', link: 'https://project-odysseus-720548631405.us-west1.run.app/' }
