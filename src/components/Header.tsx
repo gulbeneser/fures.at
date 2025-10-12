@@ -68,7 +68,7 @@ export function Header() {
     `liquid-pill group relative flex min-w-[92px] flex-col items-center justify-center gap-1 px-5 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] transition-all duration-500 ${
       isActive(path)
         ? "is-active text-white"
-        : "text-slate-200/85 hover:text-white"
+        : "text-slate-200/75 hover:text-white"
     }`;
 
   return (
@@ -76,12 +76,12 @@ export function Header() {
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex w-full items-center justify-between sm:w-auto sm:flex-none">
           <Link to="/" className="group relative flex items-center">
-            <span className="absolute inset-0 -z-20 rounded-full bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.35),rgba(9,9,11,0))] opacity-40 blur-xl transition duration-300 group-hover:opacity-70" />
-            <span className="relative flex items-center rounded-full border border-white/15 bg-black/30 px-4 py-2 backdrop-blur-2xl">
+            <span className="absolute inset-0 -z-20 rounded-full bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.28),rgba(9,9,11,0))] opacity-45 blur-xl transition duration-300 group-hover:opacity-70" />
+            <span className="relative flex items-center rounded-full border border-white/12 bg-black/25 px-4 py-2 backdrop-blur-2xl">
               <img
                 src={logoSrc}
                 alt="Fures"
-                className="h-9 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                className="h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
               />
             </span>
           </Link>
@@ -91,9 +91,9 @@ export function Header() {
         </div>
 
         <div className="order-last sm:order-none sm:flex-1">
-          <div className="relative">
-            <div className="absolute inset-0 -z-10 rounded-full bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.25),rgba(9,9,11,0))] opacity-70 blur-2xl" />
-            <nav className="liquid-glass flex items-center gap-3 overflow-x-auto rounded-full px-4 py-3 shadow-[0_28px_80px_-45px_rgba(10,12,35,0.95)] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="group relative">
+            <div className="absolute inset-0 -z-10 rounded-full bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.2),rgba(9,9,11,0))] opacity-65 blur-2xl transition-opacity duration-300 group-hover:opacity-80" />
+            <nav className="liquid-glass group flex items-center gap-3 overflow-x-auto rounded-full px-4 py-3 shadow-[0_26px_72px_-46px_rgba(10,12,35,0.85)] transition-all duration-300 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {navItems.map((item) => {
                 const Icon = item.icon;
                 const active = isActive(item.path);
@@ -123,7 +123,7 @@ export function Header() {
                 <DropdownMenuTrigger asChild>
                   <button
                     type="button"
-                    className="liquid-pill group relative flex min-w-[92px] flex-col items-center justify-center gap-1 px-5 py-2 text-[10px] font-semibold uppercase tracking-[0.24em] text-slate-200/85 transition-all duration-300 hover:text-white focus-visible:outline-none"
+                    className="liquid-pill group relative flex min-w-[92px] flex-col items-center justify-center gap-1 px-5 py-2 text-[10px] font-semibold uppercase tracking-[0.24em] text-slate-200/75 transition-all duration-300 hover:text-white focus-visible:outline-none"
                   >
                     <MoreHorizontal className="relative z-10 h-5 w-5 text-white/80 transition-all duration-300 group-hover:text-white" />
                     <span className="relative z-10 text-[10px] font-semibold uppercase tracking-[0.24em]">
@@ -131,7 +131,7 @@ export function Header() {
                     </span>
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="liquid-glass mt-3 w-72 rounded-3xl border border-white/15 bg-white/5 p-3 text-white">
+                <DropdownMenuContent className="liquid-glass mt-3 w-72 rounded-3xl border border-white/12 bg-white/4 p-3 text-white">
                   <div className="space-y-2">
                     {moreLinks.map((link) => {
                       const Icon = link.icon;
@@ -145,10 +145,10 @@ export function Header() {
                         >
                           <Link
                             to={link.path}
-                            className={`liquid-glass relative flex items-center justify-between overflow-hidden rounded-2xl border border-white/15 px-4 py-3 text-sm transition-all duration-500 ${
+                            className={`liquid-glass relative flex items-center justify-between overflow-hidden rounded-2xl border border-white/12 px-4 py-3 text-sm transition-all duration-500 ${
                               active
                                 ? "is-active text-white"
-                                : "text-slate-200/85 hover:text-white"
+                                : "text-slate-200/75 hover:text-white"
                             }`}
                             data-active={active || undefined}
                           >

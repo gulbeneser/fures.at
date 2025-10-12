@@ -35,14 +35,14 @@ export function LanguageSelector() {
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="end"
-        className="liquid-glass mt-2 w-48 rounded-2xl border border-white/15 bg-white/5 p-1 text-white"
+        className="liquid-glass mt-2 w-48 rounded-2xl border border-white/12 bg-white/4 p-1 text-white"
       >
         {languages.map((lang) => (
           <DropdownMenuItem
             key={lang.code}
             onClick={() => setLanguage(lang.code as any)}
-            className={`liquid-glass flex cursor-pointer items-center gap-2 rounded-xl border border-white/10 px-3 py-2 text-sm transition-all duration-200 ${
-              language === lang.code ? 'is-active text-white' : 'text-slate-200/85 hover:text-white'
+            className={`liquid-glass flex cursor-pointer items-center gap-2 rounded-xl border border-white/12 px-3 py-2 text-sm transition-all duration-200 ${
+              language === lang.code ? 'is-active text-white' : 'text-slate-200/75 hover:text-white'
             }`}
             data-active={language === lang.code || undefined}
           >
