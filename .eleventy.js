@@ -1,4 +1,5 @@
 const { DateTime } = require("luxon");
+const markdownIt = require("markdown-it");
 
 module.exports = function(eleventyConfig) {
   // /static ve Vite çıktısı → üretim çıktısına aynen kopyala
@@ -14,8 +15,33 @@ module.exports = function(eleventyConfig) {
     }
   };
 
+  const rssDate = (dateObj) => {
+    if (!dateObj) {
+      return "";
+    }
+
+    try {
+      return DateTime.fromISO(dateObj, { zone: "utc" }).toUTC().toHTTP();
+    } catch {
+      try {
+        return DateTime.fromJSDate(new Date(dateObj)).toUTC().toHTTP();
+      } catch {
+        return dateObj;
+      }
+    }
+  };
+
+  const markdownRenderer = markdownIt({ html: true, linkify: true, typographer: true });
+  eleventyConfig.setLibrary("md", markdownRenderer);
+
+  const markdownFilter = (content) => (content ? markdownRenderer.render(String(content)) : "");
+
   eleventyConfig.addFilter("readableDate", readableDate);
   eleventyConfig.addNunjucksFilter("readableDate", readableDate);
+  eleventyConfig.addFilter("rssDate", rssDate);
+  eleventyConfig.addNunjucksFilter("rssDate", rssDate);
+  eleventyConfig.addFilter("markdown", markdownFilter);
+  eleventyConfig.addNunjucksFilter("markdown", markdownFilter);
 
   // Koleksiyonlar (dil bazlı)
   eleventyConfig.addCollection("posts", (c) =>
