@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
@@ -10,8 +11,12 @@ import { TeamPage } from "./pages/TeamPage";
 import { FAQPage } from "./pages/FAQPage";
 import { ContactPage } from "./pages/ContactPage";
 import { ProfileViewer, PROFILE_CONFIG } from "./pages/ProfileViewer";
+import AssistantWidget from "./furesai/components/AssistantWidget";
+import ChatWindow from "./furesai/components/ChatWindow";
 
 export default function App() {
+  const [isChatOpen, setIsChatOpen] = useState(false);
+
   return (
     <LanguageProvider>
       <Router>
@@ -34,6 +39,8 @@ export default function App() {
             </Routes>
           </main>
           <Footer />
+          <AssistantWidget isChatOpen={isChatOpen} setIsChatOpen={setIsChatOpen} />
+          {isChatOpen && <ChatWindow closeChat={() => setIsChatOpen(false)} />}
         </div>
       </Router>
     </LanguageProvider>
