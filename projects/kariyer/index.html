@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Fures Kariyer Koçu</title>
+    <meta
+      name="description"
+      content="Fures Kariyer Koçu, CV hazırlama, ön yazı, işe uygunluk analizi ve mülakat simülasyonu için yapay zeka destekli kariyer asistanınızdır."
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        background: radial-gradient(circle at top, rgba(255, 115, 179, 0.2), rgba(17, 17, 17, 0.95));
+        color: #f7f7f7;
+        line-height: 1.6;
+      }
+      header {
+        padding: 5rem 1.5rem 3rem;
+        text-align: center;
+      }
+      header h1 {
+        font-size: clamp(2.5rem, 5vw, 3.5rem);
+        margin-bottom: 0.75rem;
+      }
+      header p {
+        max-width: 720px;
+        margin: 0 auto 1.5rem;
+        font-size: 1.1rem;
+        color: rgba(247, 247, 247, 0.85);
+      }
+      .cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.9rem 1.5rem;
+        border-radius: 9999px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: linear-gradient(135deg, rgba(255, 120, 180, 0.35), rgba(255, 162, 105, 0.35));
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      .cta:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 16px 35px rgba(255, 120, 180, 0.25);
+      }
+      main {
+        padding: 0 1.5rem 5rem;
+        max-width: 1080px;
+        margin: 0 auto;
+      }
+      section {
+        background: rgba(12, 12, 16, 0.82);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 24px;
+        padding: 2.75rem 2.25rem;
+        margin-bottom: 2.5rem;
+        backdrop-filter: blur(14px);
+        box-shadow: 0 24px 50px rgba(0, 0, 0, 0.35);
+      }
+      h2 {
+        font-size: clamp(1.8rem, 4vw, 2.4rem);
+        margin-top: 0;
+        margin-bottom: 1rem;
+      }
+      h3 {
+        font-size: clamp(1.3rem, 3vw, 1.7rem);
+        margin-bottom: 0.8rem;
+        color: #ff96be;
+      }
+      p {
+        margin-bottom: 1.1rem;
+        color: rgba(247, 247, 247, 0.88);
+      }
+      ul {
+        padding-left: 1.25rem;
+        margin-bottom: 1.2rem;
+      }
+      li {
+        margin-bottom: 0.6rem;
+      }
+      .feature-grid {
+        display: grid;
+        gap: 1.5rem;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      }
+      .feature-card {
+        padding: 1.5rem;
+        border-radius: 20px;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+        border: 1px solid rgba(255, 255, 255, 0.06);
+      }
+      footer {
+        text-align: center;
+        padding: 2rem 1rem 3rem;
+        font-size: 0.95rem;
+        color: rgba(247, 247, 247, 0.6);
+      }
+      @media (max-width: 640px) {
+        section {
+          padding: 2rem 1.5rem;
+        }
+        header {
+          padding-top: 4rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Fures Kariyer Koçu</h1>
+      <p>
+        Fures olarak geliştirdiğimiz yapay zeka tabanlı kariyer koçu, CV'nizden mülakatınıza kadar her adımda yanınızda. Karmaşık
+        ve zaman alıcı süreçleri, hızlı ve kişiselleştirilmiş bir kariyer deneyimine dönüştürüyoruz.
+      </p>
+      <a class="cta" href="/kariyer.html">Platformu Ziyaret Et</a>
+    </header>
+
+    <main>
+      <section>
+        <h2>Fures Kariyer Koçu Hakkında</h2>
+        <p>
+          Bu platform, iş arama sürecinin her aşamasında profesyonellere A'dan Z'ye destek olmak için tasarlanmış, yapay zeka
+          destekli kişisel kariyer asistanınızdır. Modern kariyer yolculuğunun gerektirdiği tüm araçları tek çatı altında
+          toplar ve ihtiyaçlarınıza göre adapte olur.
+        </p>
+      </section>
+
+      <section>
+        <h2>Fures Kariyer Koçu Neler Sunuyor?</h2>
+        <div class="feature-grid">
+          <div class="feature-card">
+            <h3>Akıllı CV Oluşturma ve Veri Çıkarma</h3>
+            <p>
+              Mevcut CV'nizi PDF, HTML veya görsel formatında yükleyin ya da metni doğrudan yapıştırın. Gelişmiş yapay zekâ
+              saniyeler içinde bilgilerinizi yapılandırılmış, düzenlemeye hazır bir formata dönüştürür.
+            </p>
+          </div>
+          <div class="feature-card">
+            <h3>Yapay Zeka ile Mükemmelleştirme</h3>
+            <ul>
+              <li>Metin güçlendirme ile özet ve iş tanımlarınızı tek tıkla etkileyici hale getirin.</li>
+              <li>Profesyonel vesikalık aracımızla fotoğraflarınızı kurumsal standartlara taşıyın.</li>
+            </ul>
+          </div>
+          <div class="feature-card">
+            <h3>Kişiye Özel Başvuru Araçları</h3>
+            <ul>
+              <li>Ön yazı asistanı ile rolünüze uygun, ikna edici ön yazılar oluşturun.</li>
+              <li>İşe uygunluk analiziyle güçlü yönlerinizi, gelişim alanlarınızı ve kritik anahtar kelimeleri görün.</li>
+            </ul>
+          </div>
+          <div class="feature-card">
+            <h3>Gerçekçi Mülakat Simülatörü</h3>
+            <p>
+              Sesli ve gerçek zamanlı yapay zekâ mülakat simülatörü, CV'nize ve iş tanımına göre size özel sorular sorar ve
+              profesyonel geri bildirim sunar.
+            </p>
+          </div>
+          <div class="feature-card">
+            <h3>Profesyonel Dil Pratiği</h3>
+            <p>
+              Global kariyer hedefleriniz için yabancı dil pratiği yapın. Yapay zeka dil koçumuzla sesli sohbet ederek
+              kelime dağarcığınızı geliştirirken anında geri bildirim alın.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Proje Vizyonumuz</h2>
+        <p>
+          Fures Kariyer Koçu, en güncel yapay zekâ teknolojilerini kullanarak iş arayanların karşılaştığı zorluklara modern ve
+          etkili çözümler getirme vizyonuyla geliştirildi. Herkesin profesyonel potansiyelini en iyi şekilde sergilemesine yardımcı
+          olmak için tasarladık.
+        </p>
+        <p>
+          Platformumuz, kariyer hedeflerinize ulaşmanızı hızlandıracak entegre araçlarla donatılmıştır. Siz hayalinizdeki role
+          odaklanırken, Fures Kariyer Koçu gerisini üstlenir.
+        </p>
+      </section>
+    </main>
+
+    <footer>
+      © <span id="year"></span> Fures. Tüm hakları saklıdır.
+    </footer>
+
+    <script>
+      document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+  </body>
+</html>
