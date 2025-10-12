@@ -1,19 +1,21 @@
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Button } from "./ui/button";
 import { useLanguage } from "../contexts/LanguageContext";
 import { Sparkles, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 
-const rotatingTexts = [
-  "Dijital Ajans",
-  "Akıllı Sistem",
-  "Yaratıcı Otomasyon",
-  "Fures Tech"
-];
-
 export function Hero() {
   const { t } = useLanguage();
+  const rotatingTexts = useMemo(
+    () => [
+      t("hero.rotating_1"),
+      t("hero.rotating_2"),
+      t("hero.rotating_3"),
+      t("hero.rotating_4")
+    ],
+    [t]
+  );
   const [textIndex, setTextIndex] = useState(0);
 
   useEffect(() => {
@@ -105,7 +107,7 @@ export function Hero() {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-orange-500/10 to-purple-600/10 border border-orange-500/20 mb-8 backdrop-blur-sm glow-gradient"
           >
             <Sparkles className="w-4 h-4 text-orange-400" />
-            <span className="text-sm text-gray-300">AI-Native Digital Agency</span>
+            <span className="text-sm text-gray-300">{t("hero.badge")}</span>
           </motion.div>
 
           {/* Rotating Title with Gradient Flow */}
@@ -172,7 +174,7 @@ export function Hero() {
                   variant="outline"
                   className="text-lg"
                 >
-                  Projenizi Anlatalım →
+                  {t('hero.cta_talk')} →
                 </Button>
               </motion.div>
             </Link>

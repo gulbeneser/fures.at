@@ -67,12 +67,23 @@ const translations = {
 
     // Hero
     'hero.title': 'Dijital Ajans',
+    'hero.rotating_1': 'Dijital Ajans',
+    'hero.rotating_2': 'Akıllı Sistem',
+    'hero.rotating_3': 'Yaratıcı Otomasyon',
+    'hero.rotating_4': 'Fures Tech',
     'hero.subtitle': 'Sınırların Ötesinde.',
+    'hero.badge': 'AI-Native Dijital Ajans',
     'hero.ai_powered': 'Yapay Zekâ ile Güçlendirilmiş Tasarım, Kod ve Büyüme.',
     'hero.description': 'Markanız için akıllı otomasyon, etkileyici web deneyimleri ve veriyle çalışan pazarlama. Hızlı, ölçülebilir, ölçeklenebilir.',
     'hero.cta_discover': 'Daha Fazlasını Keşfet',
     'hero.cta_pricing': 'Fiyatları Gör',
     'hero.cta_talk': 'Hadi Konuşalım',
+
+    // Quotes
+    'quotes.0': 'Teknolojiyle değil, zekâyla ölçekleniyoruz.',
+    'quotes.1': 'Fures = Akıllı sistem tasarımı',
+    'quotes.2': 'Estetik ≠ lüks, işlevdir',
+    'quotes.3': 'Yapay zekâ = yaratıcı hız',
     
     // Why Us
     'why_us.title': 'AI-Native yaklaşım. Reel sonuç.',
@@ -144,13 +155,19 @@ const translations = {
     'packages.translation_subtitle': 'Yeminli/sertifikalı çeviri',
     'packages.translation_desc': 'Yeminli/sertifikalı çeviri, teknik/akademik kalite güvencesi',
     'packages.translation_price': 'Dil ve kapsam için iletişime geçin',
+    'packages.featured_label': 'Popüler',
     
     // Projects
     'projects.title': 'Projeler',
     'projects.subtitle': 'Vaka kısa özetleri',
+    'projects.description': 'Yapay zekâ teknolojileriyle geliştirdiğimiz yenilikçi çözümler ve başarı hikayelerimiz.',
     'projects.visit': 'Tümü için',
     'projects.visit_project': 'Projeyi İncele',
     'projects.cta': 'Hadi Konuşalım',
+    'projects.bottom_title': 'Kendi Projenizi Başlatın',
+    'projects.bottom_description': 'AI destekli çözümlerle hayalinizdeki projeyi gerçeğe dönüştürmeye hazır mısınız? Deneyimli ekibimizle birlikte dijital dönüşüm yolculuğunuza başlayın.',
+    'projects.bottom_primary': 'Projemi Başlat',
+    'projects.bottom_secondary': 'Daha Fazla Proje Gör',
     
     // Why Fures
     'why_fures.title': 'Neden Fures Tech?',
@@ -263,12 +280,23 @@ const translations = {
 
     // Hero
     'hero.title': 'Digital Agency',
+    'hero.rotating_1': 'Digital Agency',
+    'hero.rotating_2': 'Smart Systems',
+    'hero.rotating_3': 'Creative Automation',
+    'hero.rotating_4': 'Fures Tech',
     'hero.subtitle': 'Beyond Boundaries.',
+    'hero.badge': 'AI-Native Digital Agency',
     'hero.ai_powered': 'AI-Powered Design, Code & Growth.',
     'hero.description': 'Smart automation, impactful web experiences, and data-driven marketing for your brand. Fast, measurable, scalable.',
     'hero.cta_discover': 'Discover More',
     'hero.cta_pricing': 'See Pricing',
     'hero.cta_talk': 'Let\'s Talk',
+
+    // Quotes
+    'quotes.0': 'We scale with intelligence, not just technology.',
+    'quotes.1': 'Fures = Smart system design',
+    'quotes.2': 'Aesthetics ≠ luxury, it\'s function.',
+    'quotes.3': 'AI = creative speed',
     
     // Why Us
     'why_us.title': 'AI-Native approach. Real results.',
@@ -340,13 +368,19 @@ const translations = {
     'packages.translation_subtitle': 'Sworn/certified translation',
     'packages.translation_desc': 'Sworn/certified translation, technical/academic quality assurance',
     'packages.translation_price': 'Contact us to discuss languages & scope',
+    'packages.featured_label': 'Popular',
     
     // Projects
     'projects.title': 'Projects',
     'projects.subtitle': 'Case brief summaries',
+    'projects.description': 'Innovative solutions and success stories we build with AI technologies.',
     'projects.visit': 'View All',
     'projects.visit_project': 'View Project',
     'projects.cta': 'Let\'s Talk',
+    'projects.bottom_title': 'Launch Your Project',
+    'projects.bottom_description': 'Ready to transform your vision with AI-powered solutions? Start your digital transformation journey with our experienced team.',
+    'projects.bottom_primary': 'Start My Project',
+    'projects.bottom_secondary': 'See More Projects',
     
     // Why Fures
     'why_fures.title': 'Why Fures Tech?',
@@ -459,12 +493,23 @@ const translations = {
 
     // Hero
     'hero.title': 'Цифровое Агентство',
+    'hero.rotating_1': 'Цифровое Агентство',
+    'hero.rotating_2': 'Умные Системы',
+    'hero.rotating_3': 'Креативная Автоматизация',
+    'hero.rotating_4': 'Fures Tech',
     'hero.subtitle': 'За Пределами Границ.',
+    'hero.badge': 'AI-Native Цифровое Агентство',
     'hero.ai_powered': 'Дизайн, Код и Рост на основе ИИ.',
     'hero.description': 'Умная автоматизация, впечатляющий веб-опыт и маркетинг на основе данных для вашего бренда. Быстро, измеримо, масштабируемо.',
     'hero.cta_discover': 'Узнать Больше',
     'hero.cta_pricing': 'Посмотреть Цены',
     'hero.cta_talk': 'Давайте Поговорим',
+
+    // Quotes
+    'quotes.0': 'Мы масштабируемся не технологиями, а интеллектом.',
+    'quotes.1': 'Fures = дизайн умных систем',
+    'quotes.2': 'Эстетика ≠ роскошь, это функция.',
+    'quotes.3': 'ИИ = креативная скорость',
     
     // Why Us
     'why_us.title': 'ИИ-нативный подх��д. Реальные результаты.',
@@ -536,13 +581,19 @@ const translations = {
     'packages.translation_subtitle': 'Присяжный/сертифицированный перевод',
     'packages.translation_desc': 'Присяжный/сертифицированный перевод, техническое/академическое обеспечение качества',
     'packages.translation_price': 'Свяжитесь с нами для деталей и языков',
-    
+    'packages.featured_label': 'Популярно',
+
     // Projects
     'projects.title': 'Проекты',
     'projects.subtitle': 'Краткие описания кейсов',
+    'projects.description': 'Инновационные решения и истории успеха, которые мы создаем с помощью технологий искусственного интеллекта.',
     'projects.visit': 'Посмотреть Все',
     'projects.visit_project': 'Посмотреть проект',
     'projects.cta': 'Давайте Поговорим',
+    'projects.bottom_title': 'Запустите Свой Проект',
+    'projects.bottom_description': 'Готовы воплотить идею с помощью решений на базе ИИ? Начните цифровую трансформацию вместе с нашей опытной командой.',
+    'projects.bottom_primary': 'Запустить Проект',
+    'projects.bottom_secondary': 'Больше Проектов',
     
     // Why Fures
     'why_fures.title': 'Почему Fures Tech?',
@@ -655,12 +706,23 @@ const translations = {
 
     // Hero
     'hero.title': 'Digitale Agentur',
+    'hero.rotating_1': 'Digitale Agentur',
+    'hero.rotating_2': 'Intelligente Systeme',
+    'hero.rotating_3': 'Kreative Automatisierung',
+    'hero.rotating_4': 'Fures Tech',
     'hero.subtitle': 'Jenseits von Grenzen.',
+    'hero.badge': 'AI-native Digitalagentur',
     'hero.ai_powered': 'KI-gestütztes Design, Code & Wachstum.',
     'hero.description': 'Intelligente Automatisierung, eindrucksvolle Web-Erlebnisse und datengestütztes Marketing für Ihre Marke. Schnell, messbar, skalierbar.',
     'hero.cta_discover': 'Mehr Erfahren',
     'hero.cta_pricing': 'Preise Ansehen',
     'hero.cta_talk': 'Lass uns reden',
+
+    // Quotes
+    'quotes.0': 'Wir skalieren mit Intelligenz, nicht nur mit Technologie.',
+    'quotes.1': 'Fures = Design intelligenter Systeme',
+    'quotes.2': 'Ästhetik ≠ Luxus, sie ist Funktion.',
+    'quotes.3': 'KI = kreative Geschwindigkeit',
     
     // Why Us
     'why_us.title': 'KI-nativer Ansatz. Echte Ergebnisse.',
@@ -732,13 +794,19 @@ const translations = {
     'packages.translation_subtitle': 'Beglaubigte/zertifizierte Übersetzung',
     'packages.translation_desc': 'Beglaubigte/zertifizierte Übersetzung, technische/akademische Qualitätssicherung',
     'packages.translation_price': 'Kontakt für Sprachen & Umfang aufnehmen',
-    
+    'packages.featured_label': 'Beliebt',
+
     // Projects
     'projects.title': 'Projekte',
     'projects.subtitle': 'Kurze Fallzusammenfassungen',
+    'projects.description': 'Innovative Lösungen und Erfolgsgeschichten, die wir mit KI-Technologien entwickeln.',
     'projects.visit': 'Alle Anzeigen',
     'projects.visit_project': 'Projekt ansehen',
     'projects.cta': 'Lass uns reden',
+    'projects.bottom_title': 'Starten Sie Ihr Projekt',
+    'projects.bottom_description': 'Bereit, Ihre Vision mit KI-gestützten Lösungen zu realisieren? Beginnen Sie Ihre digitale Transformation mit unserem erfahrenen Team.',
+    'projects.bottom_primary': 'Projekt starten',
+    'projects.bottom_secondary': 'Weitere Projekte ansehen',
     
     // Why Fures
     'why_fures.title': 'Warum Fures Tech?',

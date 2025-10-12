@@ -67,7 +67,7 @@ export function Projects() {
             {t('projects.title')}
           </h2>
           <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-            Yapay zeka teknolojileriyle geliştirdiğimiz yenilikçi çözümler ve başarı hikayelerimiz.
+            {t('projects.description')}
           </p>
         </div>
 
@@ -116,18 +116,17 @@ export function Projects() {
             <div className="absolute inset-0 -z-10 bg-gradient-to-r from-orange-500/15 via-transparent to-purple-600/15 blur-3xl"></div>
             <div className="liquid-glass relative rounded-[2.5rem] border border-white/15 p-12 text-white">
               <h3 className="text-3xl lg:text-4xl mb-6 bg-gradient-to-r from-orange-400 to-purple-600 bg-clip-text text-transparent">
-                Kendi Projenizi Başlatın
+                {t('projects.bottom_title')}
               </h3>
               <p className="text-gray-400 mb-8 max-w-2xl mx-auto text-lg">
-                AI destekli çözümlerle hayalinizdeki projeyi gerçeğe dönüştürmeye hazır mısınız?
-                Deneyimli ekibimizle birlikte dijital dönüşüm yolculuğunuza başlayın.
+                {t('projects.bottom_description')}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button size="lg" variant="gradient" className="text-lg">
-                  Projemi Başlat
+                  {t('projects.bottom_primary')}
                 </Button>
                 <Button variant="outline" size="lg" className="text-lg">
-                  Daha Fazla Proje Gör
+                  {t('projects.bottom_secondary')}
                 </Button>
               </div>
             </div>
