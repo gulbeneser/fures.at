@@ -3,6 +3,7 @@ permalink: "rss.xml"
 eleventyExcludeFromCollections: true
 ---
 <?xml version="1.0" encoding="UTF-8"?>
+{% set englishPosts = blogPosts | selectattr("lang", "equalto", "en") | list %}
 <rss version="2.0"
   xmlns:atom="http://www.w3.org/2005/Atom"
   xmlns:content="http://purl.org/rss/1.0/modules/content/">
@@ -10,13 +11,13 @@ eleventyExcludeFromCollections: true
     <title>Fures Blog</title>
     <link>https://fures.at/blog</link>
     <atom:link href="https://fures.at/rss.xml" rel="self" type="application/rss+xml" />
-    <description>Fures ajansından günlük yapay zekâ, turizm teknolojileri ve otomasyon özetleri.</description>
-    <language>tr</language>
-    {% if blogPosts | length %}
-    <lastBuildDate>{{ blogPosts[0].date | rssDate }}</lastBuildDate>
+    <description>Daily artificial intelligence, tourism technology, and automation roundups from Fures.</description>
+    <language>en</language>
+    {% if englishPosts | length %}
+    <lastBuildDate>{{ englishPosts[0].date | rssDate }}</lastBuildDate>
     {% endif %}
     <generator>Eleventy</generator>
-    {% for post in blogPosts %}
+    {% for post in englishPosts %}
     <item>
       <title>{{ post.title | escape }}</title>
       <link>{{ post.url }}</link>
