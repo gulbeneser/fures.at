@@ -1,6 +1,5 @@
-# requirements.txt
-
 google-generativeai
 feedparser
 PyYAML
 python-dateutil
+requests
