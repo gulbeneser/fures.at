@@ -1,4 +1,4 @@
-# scripts/gemini_daily.py -- TÜM GÜNCELLEMELERİ İÇEREN TAM VERSİYON
+# scripts/gemini_daily.py -- HASHTAG VE FORMATLAMA İSTEKLERİNİ İÇEREN NİHAİ VERSİYON
 
 import os
 import json
@@ -8,7 +8,7 @@ import subprocess
 from pathlib import Path
 import google.generativeai as genai
 from google.generativeai import types
-import requests # Link temizleme için eklendi
+import requests # Link temizleme için
 
 # === CONFIG ===
 MODEL_TEXT = "gemini-2.5-flash-preview-09-2025" 
@@ -45,52 +45,50 @@ def fetch_ai_news(limit=5):
             parsed = feedparser.parse(feed)
             for entry in parsed.entries:
                 google_news_url = entry.link
-                
                 if google_news_url in seen_links:
                     continue
                 
                 final_url = google_news_url
                 try:
-                    # Google linkini takip et ve gerçek adresi bul
                     response = session.head(google_news_url, allow_redirects=True, timeout=5)
                     final_url = response.url
                     print(f"  -> Link temizlendi: {final_url}")
-
                 except requests.RequestException as e:
                     print(f"  -> UYARI: Link çözümlenemedi: {google_news_url}. Hata: {e}")
                     final_url = google_news_url
                 
                 articles.append({
                     "title": entry.title,
-                    "link": final_url, # Artık temizlenmiş link kullanılıyor
+                    "link": final_url,
                     "summary": entry.summary if "summary" in entry else ""
                 })
                 seen_links.add(google_news_url)
-
     return articles[:limit]
 
-# === 2. Blog Metni Üret (İlgi Çekici Stil) ===
+# === 2. Blog Metni Üret (Hashtag ve Formatlama Özellikli) ===
 def generate_multilingual_blog(news_list):
     summaries = "\n".join([f"- Başlık: {n['title']}\n  Link: {n['link']}" for n in news_list])
 
+    # YENİ VE NİHAİ PROMPT
     prompt = f"""
     You are a master storyteller and an expert AI journalist for a creative agency. Your tone is engaging, insightful, and slightly playful. Avoid dry, robotic language.
     
-    Your task is to analyze the following AI news headlines and their clean links, identify the most significant and interesting developments, and weave them into compelling narratives.
+    Your task is to analyze the following AI news headlines and their clean links, identify the most significant developments, and weave them into compelling narratives.
 
     News sources:
     {summaries}
 
     Create 4 blog articles (400-600 words each) in Turkish, English, German, and Russian.
-    Each blog post must start with its language name in brackets (e.g., [Türkçe], [English], etc.).
+    Each blog post must start with its language name in brackets (e.g., [Türkçe]).
     Each blog should have a title starting with '###'.
     Separate each complete blog post with the exact separator: [---BLOG-SEPARATOR---]
 
-    CRITICAL INSTRUCTIONS FOR STYLE AND CONTENT:
-    1.  **Captivating Storytelling:** Don't just list facts. Start with a hook that grabs the reader's attention. Explain WHY this news matters to businesses, creatives, or everyday people.
-    2.  **Focus on "Wow" Factor:** Prioritize the news that is genuinely surprising, groundbreaking, or has huge future implications. If there is news about AI in tourism, make sure to feature it prominently.
-    3.  **Add a Human Touch:** End with a reflective or inspiring note. Ask a thought-provoking question.
-    4.  **Sources Section:** At the very end of EACH blog post, you MUST include a "Kaynaklar" (in Turkish), "Sources" (in English), "Quellen" (in German), and "Источники" (in Russian) section. In this section, list ALL of the original article links provided above.
+    CRITICAL INSTRUCTIONS FOR STYLE, FORMATTING, AND CONTENT:
+    1.  **Readable Formatting:** Ensure the text is highly readable by using clear paragraphs with proper spacing (blank lines between paragraphs). This is crucial for social media sharing.
+    2.  **Captivating Storytelling:** Don't just list facts. Start with a hook that grabs the reader's attention. Explain WHY this news matters to businesses, creatives, or everyday people.
+    3.  **Focus on "Wow" Factor:** Prioritize news that is genuinely surprising or has huge future implications. If there is news about AI in tourism, feature it prominently.
+    4.  **Hashtag Generation:** At the end of EACH blog post, just before the "Sources" section, include a single line with 5-7 relevant hashtags in the language of the article (e.g., #YapayZeka #Teknoloji for Turkish).
+    5.  **Sources Section:** At the very end of EACH blog post, you MUST include a "Kaynaklar" (in Turkish), "Sources" (in English), "Quellen" (in German), and "Источники" (in Russian) section, listing ALL original article links.
     """
     
     model = genai.GenerativeModel(MODEL_TEXT)
