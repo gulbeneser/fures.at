@@ -14,6 +14,12 @@ export function Footer() {
     { title: t('nav.contact'), href: "/iletisim" }
   ];
 
+  const legalLinks = [
+    { title: t('footer.privacy'), href: "/gizlilik-politikasi" },
+    { title: t('footer.cookies'), href: "/cerez-politikasi" },
+    { title: t('footer.kvkk'), href: "/kvkk-aydinlatma-metni" }
+  ];
+
   return (
     <footer className="relative bg-black border-t border-white/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -57,15 +63,15 @@ export function Footer() {
 
           {/* Legal Links */}
           <div className="flex gap-6 text-sm">
-            <a href="#" className="text-gray-400 hover:text-orange-400 transition-colors">
-              {t('footer.privacy')}
-            </a>
-            <a href="#" className="text-gray-400 hover:text-orange-400 transition-colors">
-              {t('footer.cookies')}
-            </a>
-            <a href="#" className="text-gray-400 hover:text-orange-400 transition-colors">
-              {t('footer.kvkk')}
-            </a>
+            {legalLinks.map((link) => (
+              <Link
+                key={link.href}
+                to={link.href}
+                className="text-gray-400 hover:text-orange-400 transition-colors"
+              >
+                {link.title}
+              </Link>
+            ))}
           </div>
         </div>
       </div>

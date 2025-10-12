@@ -11,6 +11,9 @@ import { TeamPage } from "./pages/TeamPage";
 import { FAQPage } from "./pages/FAQPage";
 import { ContactPage } from "./pages/ContactPage";
 import { ProfileViewer, PROFILE_CONFIG } from "./pages/ProfileViewer";
+import { PrivacyPolicyPage } from "./pages/PrivacyPolicyPage";
+import { CookiePolicyPage } from "./pages/CookiePolicyPage";
+import { KvkkDisclosurePage } from "./pages/KvkkDisclosurePage";
 import AssistantWidget from "./furesai/components/AssistantWidget";
 import ChatWindow from "./furesai/components/ChatWindow";
 
@@ -32,6 +35,9 @@ export default function App() {
               <Route path="/ekip/*" element={<TeamPage />} />
               <Route path="/sss/*" element={<FAQPage />} />
               <Route path="/iletisim/*" element={<ContactPage />} />
+              <Route path="/gizlilik-politikasi" element={<PrivacyPolicyPage />} />
+              <Route path="/cerez-politikasi" element={<CookiePolicyPage />} />
+              <Route path="/kvkk-aydinlatma-metni" element={<KvkkDisclosurePage />} />
               <Route path="/furkanyonat/*" element={<ProfileViewer profile={PROFILE_CONFIG.furkanyonat} />} />
               <Route path="/gulbeneser/*" element={<ProfileViewer profile={PROFILE_CONFIG.gulbeneser} />} />
               <Route path="/kariyer/*" element={<ProfileViewer profile={PROFILE_CONFIG.kariyer} />} />
