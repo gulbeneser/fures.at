@@ -1,0 +1,7 @@
+{
+  "name": "Fures Tech AI Assistant",
+  "description": "An advanced AI assistant for the Fures Tech website to engage with potential customers, providing information about services through text and voice chat.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
