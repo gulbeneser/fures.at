@@ -1,6 +1,21 @@
+import { useId, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
-import { ExternalLink, Cpu, Globe, Hotel, Users, Camera, ChefHat, BarChart3, Briefcase } from "lucide-react";
+import {
+  ExternalLink,
+  Cpu,
+  Globe,
+  Hotel,
+  Users,
+  Camera,
+  ChefHat,
+  BarChart3,
+  Briefcase,
+  Mail,
+  MessageCircle,
+  Phone,
+  X,
+} from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext";
 
 export const PROJECTS = [
@@ -57,6 +72,34 @@ export const PROJECTS = [
 
 export function Projects() {
   const { t } = useLanguage();
+  const [showContactOptions, setShowContactOptions] = useState(false);
+  const dialogTitleId = useId();
+
+  const contactOptions = [
+    {
+      href: "mailto:info@fures.at",
+      icon: Mail,
+      title: t("projects.contact_option_email"),
+      description: "info@fures.at",
+      external: false,
+    },
+    {
+      href: "https://wa.me/905488766819",
+      icon: MessageCircle,
+      title: t("projects.contact_option_whatsapp"),
+      description: "+90 (548) 876 68 19",
+      external: true,
+    },
+    {
+      href: "tel:+905488766819",
+      icon: Phone,
+      title: t("projects.contact_option_phone"),
+      description: "+90 (548) 876 68 19",
+      external: false,
+    },
+  ] as const;
+
+  const closeContactOptions = () => setShowContactOptions(false);
 
   return (
     <section id="projeler" className="py-20 lg:py-32">
@@ -123,17 +166,74 @@ export function Projects() {
                 Deneyimli ekibimizle birlikte dijital dönüşüm yolculuğunuza başlayın.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" variant="gradient" className="text-lg">
+                <Button
+                  size="lg"
+                  variant="gradient"
+                  className="text-lg"
+                  onClick={() => setShowContactOptions(true)}
+                >
                   Projemi Başlat
-                </Button>
-                <Button variant="outline" size="lg" className="text-lg">
-                  Daha Fazla Proje Gör
                 </Button>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      {showContactOptions && (
+        <div
+          className="fixed inset-0 z-[70] flex items-center justify-center bg-black/70 px-4 py-8"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby={dialogTitleId}
+          onClick={closeContactOptions}
+        >
+          <div
+            className="liquid-glass relative w-full max-w-xl rounded-[2.5rem] border border-white/15 p-8 text-white shadow-[0_45px_140px_-60px_rgba(10,14,38,0.85)]"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              className="absolute right-4 top-4 rounded-full p-2 text-white/60 transition hover:text-white"
+              onClick={closeContactOptions}
+              aria-label={t("projects.contact_option_close")}
+            >
+              <X className="h-5 w-5" />
+            </button>
+            <div className="mb-6 flex flex-col gap-3 text-center">
+              <h4 id={dialogTitleId} className="text-2xl font-semibold">
+                {t("projects.contact_option_title")}
+              </h4>
+              <p className="text-base text-white/70">
+                {t("projects.contact_option_description")}
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              {contactOptions.map(({ href, icon: Icon, title, description, external }) => (
+                <a
+                  key={href}
+                  href={href}
+                  onClick={closeContactOptions}
+                  {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                  className="liquid-glass group relative flex items-center justify-between gap-4 overflow-hidden rounded-[1.75rem] border border-white/15 px-5 py-4 transition-all duration-300 hover:-translate-y-1"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="liquid-icon flex h-12 w-12 items-center justify-center rounded-2xl">
+                      <Icon className="h-5 w-5 text-white" />
+                    </div>
+                    <div className="text-left">
+                      <p className="text-lg font-medium text-white">{title}</p>
+                      <p className="text-sm text-white/70">{description}</p>
+                    </div>
+                  </div>
+                  <ExternalLink className="h-5 w-5 text-white/60 transition group-hover:translate-x-1 group-hover:text-white" />
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

@@ -56,15 +56,20 @@ export function FAQ() {
         {/* Accordion */}
         <Accordion type="single" collapsible className="space-y-4">
           {faqs.map((faq, index) => (
-            <AccordionItem 
-              key={index} 
+            <AccordionItem
+              key={index}
               value={`item-${index}`}
-              className="border border-white/10 rounded-2xl px-6 bg-gradient-to-br from-white/5 to-white/0 hover:border-orange-500/50 transition-colors"
+              className="liquid-glass group overflow-hidden rounded-[1.75rem] border-none border-[1px] border-white/15 px-3 transition-all duration-500 data-[state=open]:border-orange-500/45"
             >
-              <AccordionTrigger className="text-lg text-white hover:text-orange-400 transition-colors py-6">
-                {faq.question}
+              <AccordionTrigger className="flex w-full items-center justify-between gap-4 px-4 py-5 text-left text-lg text-white transition-colors duration-300 group-data-[state=open]:text-orange-300">
+                <span className="flex items-center gap-4">
+                  <span className="liquid-icon flex h-12 w-12 items-center justify-center rounded-2xl text-base font-semibold text-white/80">
+                    {(index + 1).toString().padStart(2, '0')}
+                  </span>
+                  <span>{faq.question}</span>
+                </span>
               </AccordionTrigger>
-              <AccordionContent className="text-gray-400 leading-relaxed pb-6">
+              <AccordionContent className="px-4 pb-5 text-base text-gray-300/85 leading-relaxed">
                 {faq.answer}
               </AccordionContent>
             </AccordionItem>

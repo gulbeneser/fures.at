@@ -484,6 +484,15 @@
       opacity 200ms ease;
   }
 
+  .glass-spotlight--static {
+    transition: none !important;
+  }
+
+  .glass-spotlight--static::before,
+  .glass-spotlight--static::after {
+    transition: none !important;
+  }
+
   .glass-spotlight::before,
   .glass-spotlight::after {
     content: "";

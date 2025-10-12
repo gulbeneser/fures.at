@@ -35,6 +35,11 @@ export function Team() {
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-20">
+          <div className="mb-4 inline-flex items-center justify-center">
+            <span className="liquid-pill border border-white/15 px-5 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-white/70">
+              {t('team.badge')}
+            </span>
+          </div>
           <h2 className="text-4xl sm:text-5xl lg:text-6xl mb-6">
             <span className="bg-gradient-to-r from-white via-gray-100 to-white bg-clip-text text-transparent">
               {t('team.title')}
@@ -54,10 +59,9 @@ export function Team() {
               }}
             >
               {/* Card */}
-              <div className="relative p-8 lg:p-10 rounded-3xl bg-gradient-to-br from-white/5 to-white/0 border border-white/10 hover:border-orange-500/50 transition-all duration-500 hover:transform hover:scale-[1.02] backdrop-blur-sm">
-                {/* Glow Effect */}
-                <div className="absolute inset-0 bg-gradient-to-br from-orange-500/0 via-purple-600/0 to-orange-500/0 rounded-3xl opacity-0 group-hover:opacity-100 group-hover:from-orange-500/10 group-hover:via-purple-600/5 group-hover:to-orange-500/10 transition-opacity duration-500 blur-xl"></div>
-                
+              <div className="liquid-glass relative overflow-hidden rounded-[2.25rem] border border-white/15 p-8 lg:p-10 transition-all duration-500 hover:-translate-y-1">
+                <div className="pointer-events-none absolute inset-0 rounded-[2.25rem] bg-gradient-to-br from-orange-500/0 via-purple-600/0 to-orange-500/0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-hover:from-orange-500/12 group-hover:via-purple-600/6 group-hover:to-orange-500/12"></div>
+
                 <div className="relative z-10">
                   {/* Image */}
                   <div className="mb-6 relative">
@@ -78,21 +82,21 @@ export function Team() {
                     </h3>
                     
                     {/* Role */}
-                    <p className="text-orange-400 mb-4 tracking-wide">
+                    <p className="text-orange-300 mb-4 tracking-wide">
                       {member.role}
                     </p>
                     
                     {/* Description */}
-                    <p className="text-gray-300 leading-relaxed mb-6 text-sm lg:text-base">
+                    <p className="text-gray-300/85 leading-relaxed mb-6 text-sm lg:text-base">
                       {member.description}
                     </p>
                     
                     {/* Portfolio Link */}
-                    <a 
+                    <a
                       href={`https://${member.portfolio}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-orange-400 transition-colors group/link"
+                      className="inline-flex items-center gap-2 text-sm text-gray-300 hover:text-orange-300 transition-colors group/link"
                     >
                       <span className="border-b border-gray-600 group-hover/link:border-orange-400 transition-colors">
                         CV & Portfolio
