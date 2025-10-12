@@ -12,8 +12,7 @@ export function ServicePackages() {
       name: t('packages.launch_web'),
       subtitle: t('packages.launch_web_subtitle'),
       description: t('packages.launch_web_desc'),
-      price: t('packages.launch_web_price'),
-      gradient: 'from-orange-500 to-orange-600'
+      price: t('packages.launch_web_price')
     },
     {
       icon: TrendingUp,
@@ -21,7 +20,6 @@ export function ServicePackages() {
       subtitle: t('packages.growth_web_subtitle'),
       description: t('packages.growth_web_desc'),
       price: t('packages.growth_web_price'),
-      gradient: 'from-purple-500 to-purple-600',
       featured: true
     },
     {
@@ -29,24 +27,21 @@ export function ServicePackages() {
       name: t('packages.ai_automation'),
       subtitle: t('packages.ai_automation_subtitle'),
       description: t('packages.ai_automation_desc'),
-      price: t('packages.ai_automation_price'),
-      gradient: 'from-orange-400 to-purple-500'
+      price: t('packages.ai_automation_price')
     },
     {
       icon: Megaphone,
       name: t('packages.social_media_pro'),
       subtitle: t('packages.social_media_pro_subtitle'),
       description: t('packages.social_media_pro_desc'),
-      price: t('packages.social_media_pro_price'),
-      gradient: 'from-purple-400 to-orange-500'
+      price: t('packages.social_media_pro_price')
     },
     {
       icon: Languages,
       name: t('packages.translation'),
       subtitle: t('packages.translation_subtitle'),
       description: t('packages.translation_desc'),
-      price: t('packages.translation_price'),
-      gradient: 'from-orange-500 to-purple-500'
+      price: t('packages.translation_price')
     }
   ];
 
@@ -80,20 +75,20 @@ export function ServicePackages() {
           {packages.map((pkg, index) => (
             <div
               key={index}
-              className={`group surface-card p-9 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_25px_65px_-30px_rgba(255,122,41,0.6)] ${
-                pkg.featured ? 'lg:col-span-1 lg:row-span-2 ring-1 ring-orange-400/30' : ''
+              className={`group liquid-glass p-9 transition-all duration-500 hover:-translate-y-1 ${
+                pkg.featured ? 'lg:col-span-1 lg:row-span-2 is-active' : ''
               }`}
             >
               {pkg.featured && (
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-orange-500 via-orange-400 to-purple-600 rounded-full text-xs font-semibold text-white shadow-lg">
+                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 rounded-full bg-[linear-gradient(135deg,rgba(255,143,84,0.85),rgba(173,110,255,0.85))] px-4 py-1 text-xs font-semibold text-white shadow-lg">
                   Popüler
                 </div>
               )}
 
-              <div className="absolute inset-0 bg-gradient-to-br from-orange-500/0 to-purple-600/0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-hover:from-orange-500/12 group-hover:to-purple-600/8"></div>
+              <div className="pointer-events-none absolute inset-0 rounded-[2rem] bg-gradient-to-br from-orange-500/0 to-purple-600/0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-hover:from-orange-500/15 group-hover:to-purple-600/10"></div>
 
               <div className="relative z-10">
-                <div className={`w-14 h-14 bg-gradient-to-r ${pkg.gradient} rounded-2xl flex items-center justify-center mb-6 group-hover:-rotate-3 transition-transform duration-300 shadow-lg`}>
+                <div className="liquid-icon mb-6 flex h-14 w-14 items-center justify-center rounded-2xl group-hover:-rotate-3 transition-transform duration-300">
                   <pkg.icon className="h-7 w-7 text-white" />
                 </div>
 
@@ -112,10 +107,7 @@ export function ServicePackages() {
         {/* CTA */}
         <div className="text-center">
           <Link to="/iletisim">
-            <Button 
-              size="lg"
-              className="bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 text-white px-10 py-6 rounded-full transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/50 hover:scale-105 text-lg"
-            >
+            <Button size="lg" variant="gradient" className="text-lg">
               {t('pricing.cta')} →
             </Button>
           </Link>
