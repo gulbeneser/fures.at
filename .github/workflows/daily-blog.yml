@@ -1,0 +1,42 @@
+name: Daily AI Blog (Gemini, 4 Lang)
+
+on:
+  schedule:
+    # 06:10 UTC = 09:10 Europe/Istanbul
+    - cron: "10 6 * * *"
+  workflow_dispatch: {}
+
+jobs:
+  build-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Generate daily posts (TR/EN/RU/DE) with images
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          apikey: ${{ secrets.apikey }}
+        run: |
+          python scripts/gemini_daily.py
+
+      - name: Commit & Push (if changes)
+        run: |
+          git config user.name "fures-bot"
+          git config user.email "bot@fures.at"
+          if [ -n "$(git status --porcelain)" ]; then
+            git add -A
+            git commit -m "chore(blog): gemini daily $(date -u +'%Y-%m-%d') [tr/en/ru/de]"
+            git push
+          else
+            echo "No changes to commit"
