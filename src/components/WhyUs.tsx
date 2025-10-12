@@ -8,26 +8,22 @@ export function WhyUs() {
     {
       icon: Zap,
       title: t('why_us.operational'),
-      description: t('why_us.operational_desc'),
-      gradient: 'from-orange-500 to-orange-600'
+      description: t('why_us.operational_desc')
     },
     {
       icon: Palette,
       title: t('why_us.design_engineering'),
-      description: t('why_us.design_engineering_desc'),
-      gradient: 'from-purple-500 to-purple-600'
+      description: t('why_us.design_engineering_desc')
     },
     {
       icon: BarChart3,
       title: t('why_us.data_driven'),
-      description: t('why_us.data_driven_desc'),
-      gradient: 'from-orange-400 to-purple-500'
+      description: t('why_us.data_driven_desc')
     },
     {
       icon: Building2,
       title: t('why_us.industry_depth'),
-      description: t('why_us.industry_depth_desc'),
-      gradient: 'from-purple-400 to-orange-500'
+      description: t('why_us.industry_depth_desc')
     }
   ];
 
@@ -73,12 +69,12 @@ export function WhyUs() {
           {features.map((feature, index) => (
             <div
               key={index}
-              className="group surface-card p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_25px_65px_-35px_rgba(255,122,41,0.55)]"
+              className="group liquid-glass p-8 transition-all duration-500 hover:-translate-y-1"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-orange-500/0 to-purple-600/0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-hover:from-orange-500/12 group-hover:to-purple-600/10"></div>
+              <div className="pointer-events-none absolute inset-0 rounded-[2rem] bg-gradient-to-br from-orange-500/0 to-purple-600/0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-hover:from-orange-500/12 group-hover:to-purple-600/10"></div>
 
               <div className="relative z-10">
-                <div className={`w-14 h-14 bg-gradient-to-r ${feature.gradient} rounded-2xl flex items-center justify-center mb-6 group-hover:-rotate-3 transition-transform duration-300 shadow-lg`}>
+                <div className="liquid-icon mb-6 flex h-14 w-14 items-center justify-center rounded-2xl group-hover:-rotate-3 transition-transform duration-300">
                   <feature.icon className="h-7 w-7 text-white" />
                 </div>
 
@@ -101,7 +97,7 @@ export function WhyUs() {
             {benefits.map((benefit, index) => (
               <div
                 key={index}
-                className="surface-card p-8"
+                className="liquid-glass p-8"
               >
                 <div className="flex items-start gap-4">
                   <div className="flex-shrink-0">

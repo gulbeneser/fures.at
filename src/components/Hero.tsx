@@ -154,9 +154,10 @@ export function Hero() {
           >
             <Link to="/hizmetler">
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button 
+                <Button
                   size="lg"
-                  className="group bg-gradient-to-r from-orange-500 to-purple-600 hover:from-orange-600 hover:to-purple-700 text-white px-10 py-6 rounded-full transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/50 text-lg glow-gradient"
+                  variant="gradient"
+                  className="group text-lg"
                 >
                   {t('hero.cta_discover')}
                   <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -166,10 +167,10 @@ export function Hero() {
 
             <Link to="/iletisim">
               <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button 
+                <Button
                   size="lg"
                   variant="outline"
-                  className="px-10 py-6 rounded-full text-lg border-white/20 hover:border-orange-500/50 hover:bg-white/5 backdrop-blur-sm transition-all duration-300"
+                  className="text-lg"
                 >
                   Projenizi Anlatalım →
                 </Button>
