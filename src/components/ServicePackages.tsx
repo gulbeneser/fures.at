@@ -12,8 +12,7 @@ export function ServicePackages() {
       name: t('packages.launch_web'),
       subtitle: t('packages.launch_web_subtitle'),
       description: t('packages.launch_web_desc'),
-      price: t('packages.launch_web_price'),
-      gradient: 'from-orange-500 to-orange-600'
+      price: t('packages.launch_web_price')
     },
     {
       icon: TrendingUp,
@@ -21,7 +20,6 @@ export function ServicePackages() {
       subtitle: t('packages.growth_web_subtitle'),
       description: t('packages.growth_web_desc'),
       price: t('packages.growth_web_price'),
-      gradient: 'from-purple-500 to-purple-600',
       featured: true
     },
     {
@@ -29,24 +27,21 @@ export function ServicePackages() {
       name: t('packages.ai_automation'),
       subtitle: t('packages.ai_automation_subtitle'),
       description: t('packages.ai_automation_desc'),
-      price: t('packages.ai_automation_price'),
-      gradient: 'from-orange-400 to-purple-500'
+      price: t('packages.ai_automation_price')
     },
     {
       icon: Megaphone,
       name: t('packages.social_media_pro'),
       subtitle: t('packages.social_media_pro_subtitle'),
       description: t('packages.social_media_pro_desc'),
-      price: t('packages.social_media_pro_price'),
-      gradient: 'from-purple-400 to-orange-500'
+      price: t('packages.social_media_pro_price')
     },
     {
       icon: Languages,
       name: t('packages.translation'),
       subtitle: t('packages.translation_subtitle'),
       description: t('packages.translation_desc'),
-      price: t('packages.translation_price'),
-      gradient: 'from-orange-500 to-purple-500'
+      price: t('packages.translation_price')
     }
   ];
 
@@ -93,7 +88,7 @@ export function ServicePackages() {
               <div className="pointer-events-none absolute inset-0 rounded-[2rem] bg-gradient-to-br from-orange-500/0 to-purple-600/0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 group-hover:from-orange-500/15 group-hover:to-purple-600/10"></div>
 
               <div className="relative z-10">
-                <div className={`w-14 h-14 bg-gradient-to-r ${pkg.gradient} rounded-2xl flex items-center justify-center mb-6 group-hover:-rotate-3 transition-transform duration-300 shadow-lg`}>
+                <div className="liquid-icon mb-6 flex h-14 w-14 items-center justify-center rounded-2xl group-hover:-rotate-3 transition-transform duration-300">
                   <pkg.icon className="h-7 w-7 text-white" />
                 </div>
 

@@ -14,56 +14,48 @@ export function Services() {
       icon: Globe,
       title: t('services.web_design'),
       description: t('services.web_design_desc'),
-      gradient: 'from-orange-500 to-orange-600',
       video: 'https://player.vimeo.com/video/1054822414?autoplay=1&loop=1&autopause=0&muted=1'
     },
     {
       icon: Bot,
       title: t('services.ai_automation'),
       description: t('services.ai_automation_desc'),
-      gradient: 'from-purple-500 to-purple-600',
       video: 'https://player.vimeo.com/video/1054811832?autoplay=1&loop=1&autopause=0&muted=1'
     },
     {
       icon: Share2,
       title: t('services.social_media'),
       description: t('services.social_media_desc'),
-      gradient: 'from-orange-400 to-purple-500',
       video: 'https://player.vimeo.com/video/1054807979?autoplay=1&loop=1&autopause=0&muted=1'
     },
     {
       icon: BarChart2,
       title: t('services.data_analytics'),
       description: t('services.data_analytics_desc'),
-      gradient: 'from-purple-400 to-orange-500',
       video: 'https://player.vimeo.com/video/1054819424?autoplay=1&loop=1&autopause=0&muted=1'
     },
     {
       icon: Cloud,
       title: t('services.cloud_integration'),
       description: t('services.cloud_integration_desc'),
-      gradient: 'from-orange-500 to-purple-500',
       video: 'https://player.vimeo.com/video/1054819061?autoplay=1&loop=1&autopause=0&muted=1'
     },
     {
       icon: FileText,
       title: t('services.certified_translation'),
       description: t('services.certified_translation_desc'),
-      gradient: 'from-purple-500 to-orange-400',
       video: 'https://player.vimeo.com/video/1054814291?autoplay=1&loop=1&autopause=0&muted=1'
     },
     {
       icon: Target,
       title: t('services.ad_targeting'),
       description: t('services.ad_targeting_desc'),
-      gradient: 'from-orange-400 to-orange-600',
       video: null
     },
     {
       icon: Sparkles,
       title: t('services.ai_content'),
       description: t('services.ai_content_desc'),
-      gradient: 'from-purple-600 to-purple-400',
       video: null
     }
   ];
@@ -119,7 +111,7 @@ export function Services() {
               <div className="relative z-10">
                 <motion.div
                   whileHover={{ rotate: 6 }}
-                  className={`w-12 h-12 bg-gradient-to-r ${service.gradient} rounded-2xl flex items-center justify-center mb-6 shadow-lg glow-gradient`}
+                  className="liquid-icon mb-6 flex h-12 w-12 items-center justify-center rounded-2xl"
                 >
                   <service.icon className="h-6 w-6 text-white" />
                 </motion.div>

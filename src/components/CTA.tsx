@@ -154,7 +154,7 @@ export function CTA() {
                   <div className="relative z-10">
                     <motion.div
                       whileHover={{ rotate: 6 }}
-                      className="w-12 h-12 rounded-xl bg-gradient-to-r from-orange-500 to-purple-600 flex items-center justify-center mb-4 shadow-lg"
+                      className="liquid-icon mb-4 flex h-12 w-12 items-center justify-center rounded-xl"
                     >
                       <item.icon className="h-6 w-6 text-white" />
                     </motion.div>

@@ -9,57 +9,49 @@ const projects = [
     description:
       'AI destekli kariyer koçunuz: CV hazırlama, ön yazı, mülakat pratiği ve dil geliştirme için uçtan uca destek sunar.',
     link: '/kariyer.html',
-    icon: Briefcase,
-    color: 'from-rose-500 to-pink-500'
+    icon: Briefcase
   },
   {
     name: 'AI-Powered Cyprus Vacation Planner',
     description: 'An intelligent application that creates multilingual, personalized travel plans based on user preferences and weather conditions.',
     link: '/projeler/aboutcyprus',
-    icon: Globe,
-    color: 'from-blue-500 to-cyan-500'
+    icon: Globe
   },
   {
     name: 'AI-Powered Serakıncı Product Platform',
     description: 'An automated, multilingual, SEO-driven catalog with AI-generated descriptions and scraping pipelines.',
     link: '/projeler/serakinci',
-    icon: Cpu,
-    color: 'from-purple-500 to-pink-500'
+    icon: Cpu
   },
   {
     name: 'Hotel & Agency Integration',
     description: 'Integrated 6 hotels with agency operations; optimized processes, reduced costs, and unified data flows.',
     link: '/projeler/hotel',
-    icon: Hotel,
-    color: 'from-green-500 to-emerald-500'
+    icon: Hotel
   },
   {
     name: 'ICALT 2024 Congress Management',
     description: 'Planning and coordination of an international conference in collaboration with Dorana Tourism.',
     link: '/projeler/icalt',
-    icon: Users,
-    color: 'from-orange-500 to-red-500'
+    icon: Users
   },
   {
     name: 'PixShop',
     description: 'AI-powered photo editing, simplified. Retouch photos, apply creative filters, or make professional adjustments with simple text instructions. No complex tools required.',
     link: 'https://pixshop-720548631405.us-west1.run.app/',
-    icon: Camera,
-    color: 'from-violet-500 to-purple-500'
+    icon: Camera
   },
   {
     name: 'Pantry Chef AI',
     description: 'What\'s in your pantry? Enter your ingredients and let our AI chef whip up something delicious for you.',
     link: 'https://ai-recipe-generator-720548631405.us-west1.run.app/',
-    icon: ChefHat,
-    color: 'from-yellow-500 to-orange-500'
+    icon: ChefHat
   },
   {
     name: 'ODYSSEUS',
     description: 'Future-Ready Business Intelligence. To get started, select one of the defined hotels below or paste the content of your own website.',
     link: 'https://project-odysseus-720548631405.us-west1.run.app/',
-    icon: BarChart3,
-    color: 'from-indigo-500 to-blue-500'
+    icon: BarChart3
   }
 ];
 
@@ -88,10 +80,10 @@ export function Projects() {
                 key={index}
                 className="group relative overflow-hidden transition-all duration-500 hover:scale-[1.02]"
               >
-                <div className={`pointer-events-none absolute inset-0 bg-gradient-to-br ${project.color} opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-25`}></div>
+                <div className="pointer-events-none absolute inset-0 rounded-[2rem] bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.22),transparent_70%)] opacity-0 transition-opacity duration-500 group-hover:opacity-80"></div>
 
                 <CardHeader className="relative">
-                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${project.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                  <div className="liquid-icon mb-4 flex h-14 w-14 items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-105">
                     <Icon className="h-7 w-7 text-white" />
                   </div>
                   <CardTitle className="text-xl text-white group-hover:text-orange-400 transition-colors line-clamp-2">
