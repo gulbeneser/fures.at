@@ -1,8 +1,10 @@
+import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { DateTime } from "luxon";
 import { LANGUAGE_META, useLanguage } from "../contexts/LanguageContext";
 import { getPostsByLanguage } from "../utils/blog";
+import { renderMarkdown } from "../utils/markdown";
 
 function formatDate(dateIso: string, language: keyof typeof LANGUAGE_META) {
   const locale = LANGUAGE_META[language].locale.replace("_", "-");
@@ -18,6 +20,10 @@ function formatDate(dateIso: string, language: keyof typeof LANGUAGE_META) {
 export function BlogListPage() {
   const { language, t } = useLanguage();
   const posts = getPostsByLanguage(language);
+  const renderedPosts = useMemo(
+    () => posts.map((post) => ({ ...post, html: renderMarkdown(post.content) })),
+    [posts],
+  );
 
   return (
     <section className="relative min-h-screen bg-black py-32 text-white">
@@ -35,31 +41,53 @@ export function BlogListPage() {
           </p>
         </header>
 
-        {posts.length === 0 ? (
+        {renderedPosts.length === 0 ? (
           <div className="rounded-3xl border border-white/10 bg-white/5 p-12 text-center text-slate-300">
             {t("blog.no_posts")}
           </div>
         ) : (
-          <div className="grid gap-8 sm:grid-cols-2">
-            {posts.map((post) => (
+          <div className="space-y-10">
+            {renderedPosts.map((post) => (
               <article
                 key={post.slug}
-                className="group relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/10 via-white/5 to-transparent p-8 backdrop-blur-xl transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_24px_65px_-45px_rgba(255,122,41,0.7)]"
+                className="group relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-white/10 via-white/5 to-transparent p-10 backdrop-blur-xl transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_28px_72px_-42px_rgba(255,122,41,0.75)]"
               >
-                <div className="flex items-center justify-between text-xs uppercase tracking-[0.35em] text-orange-300/80">
+                <div className="flex flex-wrap items-center justify-between gap-3 text-xs uppercase tracking-[0.35em] text-orange-300/80">
                   <span>{formatDate(post.date, language)}</span>
-                  <span>{post.lang.toUpperCase()}</span>
+                  <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1 text-[0.7rem] tracking-[0.4em] text-white/80">
+                    {post.lang.toUpperCase()}
+                  </span>
                 </div>
 
-                <h2 className="mt-6 text-2xl font-semibold text-white transition-colors duration-300 group-hover:text-orange-300">
-                  <Link to={`/blog/${post.slug}`}>{post.title}</Link>
-                </h2>
+                <div className="mt-6 flex flex-col gap-6">
+                  <h2 className="text-3xl font-semibold text-white transition-colors duration-300 group-hover:text-orange-300">
+                    <Link to={`/blog/${post.slug}`}>{post.title}</Link>
+                  </h2>
 
-                <p className="mt-4 line-clamp-4 text-sm leading-6 text-slate-300">
-                  {post.excerpt}
-                </p>
+                  {post.image && (
+                    <Link to={`/blog/${post.slug}`} className="block overflow-hidden rounded-3xl">
+                      <img
+                        src={post.image}
+                        alt={post.title}
+                        className="h-auto w-full rounded-3xl border border-white/10 object-cover object-center shadow-[0_24px_60px_-38px_rgba(255,122,41,0.5)] transition-transform duration-500 group-hover:scale-[1.02]"
+                        loading="lazy"
+                      />
+                    </Link>
+                  )}
 
-                <div className="mt-8 flex items-center justify-between">
+                  <div className="space-y-5">
+                    {post.excerpt && (
+                      <p className="text-base leading-7 text-slate-300">{post.excerpt}</p>
+                    )}
+
+                    <div
+                      className="blog-content"
+                      dangerouslySetInnerHTML={{ __html: post.html }}
+                    />
+                  </div>
+                </div>
+
+                <div className="mt-10 flex flex-wrap items-center justify-between gap-4">
                   <Link
                     to={`/blog/${post.slug}`}
                     className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/10 px-5 py-2 text-sm font-medium tracking-[0.25em] text-white transition-colors duration-300 hover:border-orange-400/80 hover:bg-orange-500/10 hover:text-orange-200"
@@ -67,14 +95,10 @@ export function BlogListPage() {
                     {t("blog.read_more")}
                     <ArrowRight className="h-4 w-4" />
                   </Link>
-                  {post.image && (
-                    <img
-                      src={post.image}
-                      alt=""
-                      className="h-12 w-12 rounded-full border border-white/10 object-cover object-center"
-                      loading="lazy"
-                    />
-                  )}
+
+                  <span className="text-xs uppercase tracking-[0.4em] text-slate-400">
+                    /blog/{post.slug}
+                  </span>
                 </div>
               </article>
             ))}

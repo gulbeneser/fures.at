@@ -2,14 +2,9 @@ import { useEffect, useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { DateTime } from "luxon";
-import { marked } from "marked";
 import { LANGUAGE_META, useLanguage } from "../contexts/LanguageContext";
 import { getBlogPostBySlug } from "../utils/blog";
-
-marked.setOptions({
-  breaks: true,
-  gfm: true,
-});
+import { renderMarkdown } from "../utils/markdown";
 
 function formatDate(dateIso: string, language: keyof typeof LANGUAGE_META) {
   const locale = LANGUAGE_META[language].locale.replace("_", "-");
@@ -38,7 +33,7 @@ export function BlogPostPage() {
       return "";
     }
 
-    return marked.parse(post.content);
+    return renderMarkdown(post.content);
   }, [post]);
 
   if (!post) {
@@ -84,15 +79,16 @@ export function BlogPostPage() {
             <span className="rounded-full border border-white/10 bg-white/10 px-4 py-1 uppercase tracking-[0.4em] text-white/80">
               {post.lang.toUpperCase()}
             </span>
-            {post.image && (
-              <img
-                src={post.image}
-                alt=""
-                className="h-12 w-12 rounded-full border border-white/10 object-cover object-center"
-              />
-            )}
           </div>
         </header>
+
+        {post.image && (
+          <img
+            src={post.image}
+            alt={post.title}
+            className="mt-12 h-auto w-full rounded-3xl border border-white/10 object-cover object-center shadow-[0_28px_68px_-42px_rgba(255,122,41,0.55)]"
+          />
+        )}
 
         <div
           className="blog-content mt-12"

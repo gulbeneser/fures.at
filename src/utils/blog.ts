@@ -1,4 +1,4 @@
-import matter from "gray-matter";
+import { parse as parseYaml } from "yaml";
 import { SUPPORTED_LANGUAGES } from "../contexts/LanguageContext";
 import type { Language } from "../contexts/LanguageContext";
 
@@ -12,6 +12,13 @@ export interface BlogPost {
   content: string;
   sourcePath: string;
 }
+
+interface FrontMatterResult {
+  data: Record<string, unknown>;
+  content: string;
+}
+
+const FRONT_MATTER_REGEX = /^---\s*[\r\n]+([\s\S]*?)\r?\n---\s*[\r\n]*/;
 
 const markdownModules = import.meta.glob<string>("../../blog/**/*.md", {
   eager: true,
@@ -28,7 +35,7 @@ for (const [path, rawContent] of Object.entries(markdownModules)) {
     continue;
   }
 
-  const { data, content } = matter(rawContent ?? "");
+  const { data, content } = parseFrontMatter(rawContent ?? "");
 
   const langValue = typeof data.lang === "string" ? (data.lang.toLowerCase() as Language) : undefined;
   const lang: Language = langValue && SUPPORTED_LANGUAGES.includes(langValue)
@@ -104,4 +111,33 @@ export function getPostsByLanguage(language: Language) {
 
 export function getBlogPostBySlug(slug: string) {
   return postsBySlug.get(slug);
+}
+
+function parseFrontMatter(raw: string): FrontMatterResult {
+  const match = raw.match(FRONT_MATTER_REGEX);
+
+  if (!match) {
+    return { data: {}, content: raw };
+  }
+
+  const frontMatter = match[1];
+  const content = raw.slice(match[0].length).replace(/^\s+/, "");
+  let parsedData: Record<string, unknown> = {};
+
+  try {
+    const yamlResult = parseYaml(frontMatter.trim());
+
+    if (yamlResult && typeof yamlResult === "object") {
+      parsedData = yamlResult as Record<string, unknown>;
+    }
+  } catch (error) {
+    if (import.meta.env.DEV) {
+      console.warn("Failed to parse front matter for", { raw: frontMatter, error });
+    }
+  }
+
+  return {
+    data: parsedData,
+    content,
+  };
 }
