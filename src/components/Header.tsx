@@ -13,6 +13,7 @@ import {
   ExternalLink,
   Sparkles,
   UserRound,
+  Newspaper,
 } from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext";
 import { LanguageSelector } from "./LanguageSelector";
@@ -56,24 +57,45 @@ export function Header() {
     return path.replace(/\/+$/, "");
   };
 
-  const isActive = (path: string) => normalizePath(location.pathname) === normalizePath(path);
+  const isActive = (path: string) => {
+    const current = normalizePath(location.pathname);
+    const target = normalizePath(path);
+
+    if (target === "/") {
+      return current === "/";
+    }
+
+    return current === target || current.startsWith(`${target}/`);
+  };
 
   const navItems: NavItem[] = [
     { path: "/hakkimizda", label: t("nav.about"), icon: Info },
     { path: "/hizmetler", label: t("nav.services"), icon: Briefcase },
     { path: "/projeler", label: t("nav.projects"), icon: Rocket },
+    { path: "/blog", label: t("nav.blog"), icon: Newspaper },
     { path: "/ekip", label: "Ekip", icon: Users2 },
     { path: "/iletisim", label: t("nav.contact"), icon: MessageCircle },
   ];
 
+  const navItemPaths = new Set(navItems.map((item) => normalizePath(item.path)));
+
   const moreLinks: MoreLink[] = [
+    { path: "/blog", label: t("nav.blog"), icon: Newspaper },
     { path: "/sss", label: "SSS", icon: HelpCircle },
     { path: "/gulbeneser", label: "Gülben Eser", icon: Users2, external: true },
     { path: "/furkanyonat", label: "Furkan Yonat", icon: UserRound, external: true },
     { path: "/kariyer", label: "Kariyer Asistanı", icon: Sparkles, external: true },
   ];
 
-  const moreMenuActive = moreLinks.some((link) => isActive(link.path));
+  const moreMenuActive = moreLinks.some((link) => {
+    const linkPath = normalizePath(link.path);
+
+    if (navItemPaths.has(linkPath)) {
+      return false;
+    }
+
+    return isActive(link.path);
+  });
 
   const navBaseClasses =
     "ios-nav-item group relative z-10 flex min-w-[92px] flex-col items-center justify-center gap-1 px-5 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] transition-all duration-500 focus-visible:outline-none";
