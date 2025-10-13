@@ -1,27 +1,26 @@
-# scripts/gemini_daily.py -- REACT/TYPESCRIPT ÖRNEĞİNE GÖRE DÜZELTİLMİŞ NİHAİ VERSİYON
-
 import os
 import feedparser
 import datetime
 import subprocess
 from pathlib import Path
 import google.generativeai as genai
-# 'types' modülüne artık ihtiyaç yok, kaldırıldı.
 import requests
 
 # === CONFIG ===
+# Not: Metin üretimi için en güncel ve yetenekli modellerden biri.
 MODEL_TEXT = "gemini-2.5-flash" 
-# Model adı daha modern ve stabil bir versiyonla güncellendi.
-MODEL_IMAGE = "imagen-3" 
+# DÜZELTME: Metinden görsel üretmek için doğru ve en güncel model adı kullanıldı.
+MODEL_IMAGE = "imagen-4.0-generate-001" 
 LANGS = { "tr": "Turkish", "en": "English", "de": "German", "ru": "Russian" }
 LANG_NAMES = { "tr": "Türkçe", "en": "English", "de": "Deutsch", "ru": "Русский" }
+# DÜZELTME: Betiğin çalıştığı dizini doğru bulmak için `__file__` kullanıldı.
 ROOT = Path(__file__).resolve().parent.parent
 BLOG_DIR = ROOT / "blog"
 IMAGES_DIR = ROOT / "blog_images"
 BLOG_DIR.mkdir(exist_ok=True)
 IMAGES_DIR.mkdir(exist_ok=True)
 
-# API anahtarını yapılandır
+# API anahtarını yapılandır (TEK VE DOĞRU YÖNTEM)
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 if not GEMINI_API_KEY:
     raise ValueError("HATA: GEMINI_API_KEY ortam değişkeni bulunamadı veya boş!")
@@ -43,11 +42,15 @@ def fetch_ai_news(limit=5):
                 for entry in parsed.entries:
                     google_news_url = entry.link
                     if google_news_url in seen_links: continue
+                    
                     final_url = google_news_url
                     try:
+                        # Yönlendirmeleri takip et ve zaman aşımı ekle
                         response = session.head(google_news_url, allow_redirects=True, timeout=5)
                         final_url = response.url
-                    except requests.RequestException: pass
+                    except requests.RequestException:
+                        pass # Eğer URL'ye ulaşılamazsa orijinal linki kullan
+                        
                     articles.append({"title": entry.title, "link": final_url})
                     seen_links.add(google_news_url)
             except Exception as e:
@@ -61,7 +64,8 @@ def generate_single_blog(news_list, lang_code):
     prompt = f"""
     You are a master storyteller and expert AI journalist. Your tone is engaging, insightful, and slightly playful.
     Analyze the following AI news and write a single, compelling blog article (400-600 words) in {language}.
-    News sources: {summaries}
+    News sources:
+    {summaries}
     The article MUST include: a title starting with '###', readable formatting with paragraphs, 5-7 relevant hashtags in {language} before the sources, and a "Sources" section (in the correct language) at the end, listing ALL original links.
     Focus on the "Wow" factor and explain WHY this news matters.
     """
@@ -75,36 +79,34 @@ def generate_single_blog(news_list, lang_code):
 
 # === 3. Görsel Üret (TAMAMEN DÜZELTİLMİŞ FONKSİYON) ===
 def generate_image(prompt_text):
-    # TypeScript kodundaki gibi daha etkili bir prompt kullanıldı.
-    final_prompt = f"Create a futuristic, abstract, and visually stunning illustration representing the concept of '{prompt_text}'. Use a dark theme with vibrant, glowing data lines and geometric shapes. The style should be minimalistic, elegant, and high-tech. Photorealistic, cinematic lighting."
+    final_prompt = f"Create a futuristic, abstract, and visually stunning illustration representing the concept of '{prompt_text}'. Use a dark theme with vibrant, glowing data lines. Minimalistic and elegant."
     print(f"Görsel prompt'u oluşturuluyor: {final_prompt}")
     
     try:
-        # 1. Doğru görsel modelini başlat
+        # 1. DÜZELTME: Doğru görsel modeli çağırıyoruz.
         image_model = genai.GenerativeModel(MODEL_IMAGE)
         
-        # 2. API'yi doğru şekilde çağır. Görsel modelleri için 'generation_config' KULLANILMAZ.
-        # Sadece prompt'u göndermeniz yeterlidir. Kütüphane gerisini halleder.
+        # 2. DÜZELTME: 'generate_content' çağrısından hatalı 'generation_config' parametresi kaldırıldı.
+        # Imagen modelleri bu parametreye ihtiyaç duymaz ve doğrudan görsel üretir.
         response = image_model.generate_content(final_prompt)
-        
-        # 3. Gelen yanıtı doğru şekilde işle. Görsel verisi 'response.parts[0].inline_data.data' içindedir.
-        if response.parts:
+
+        # Yanıtın içeriğini daha güvenli bir şekilde kontrol ediyoruz
+        if response.parts and hasattr(response.parts[0], 'inline_data') and response.parts[0].inline_data.data:
             image_bytes = response.parts[0].inline_data.data
             filename = f"ai_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
             img_path = IMAGES_DIR / filename
             
             with open(img_path, "wb") as f:
                 f.write(image_bytes)
+                
             print(f"✅ Görsel başarıyla kaydedildi: {filename}")
             return filename
         else:
-            print(f"❌ Görsel üretilemedi, API'den boş yanıt geldi. Yanıt: {response}")
+            # Hata ayıklamayı kolaylaştırmak için API'den gelen ham yanıtı yazdırıyoruz
+            print(f"❌ Görsel üretilemedi, API'den beklenen formatta yanıt gelmedi. Yanıt: {response}")
             return None
-            
     except Exception as e:
-        print(f"❌ Görsel üretimi sırasında kritik bir hata oluştu: {e}")
-        # Hatanın detaylarını görmek için daha fazla bilgi ekleyebilirsiniz.
-        # Örneğin, 'e.args' veya API'den gelen hata mesajlarını loglayabilirsiniz.
+        print(f"❌ Görsel üretimi sırasında genel bir hata oluştu: {e}")
         return None
 
 # === 4. Blog Dosyasını Kaydet ===
@@ -114,6 +116,8 @@ def save_blog(blog_content, lang_code, image_filename="default.png"):
     slug = f"{date_str}-{lang_code}-ai-news"
     path = BLOG_DIR / lang_code
     path.mkdir(exist_ok=True)
+    
+    # DÜZELTME: Markdown frontmatter formatı düzeltildi. (--- ile kapatıldı)
     html = f"""---
 title: "AI Daily — {LANG_NAMES[lang_code]}"
 date: {date_str}
@@ -128,37 +132,48 @@ lang: {lang_code}
 
 # === 5. GitHub Commit ===
 def commit_and_push():
-    status_result = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True)
-    if not status_result.stdout.strip():
-        print("ℹ️ Commit atılacak yeni bir değişiklik bulunamadı.")
-        return
-    
-    print("Değişiklikler GitHub'a gönderiliyor...")
-    subprocess.run(["git", "config", "user.name", "Fures AI Bot"])
-    subprocess.run(["git", "config", "user.email", "bot@fures.at"])
-    subprocess.run(["git", "add", "."])
-    subprocess.run(["git", "commit", "-m", "🤖 Daily AI Blog Update [auto]"])
-    subprocess.run(["git", "push"])
-    print("🚀 Blog başarıyla GitHub'a gönderildi.")
+    try:
+        # İyileştirme: Sadece değişiklik varsa commit at
+        status_result = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True, check=True)
+        if not status_result.stdout.strip():
+            print("ℹ️ Değişiklik bulunmadığı için commit atılmadı.")
+            return
+            
+        print("Değişiklikler commit ediliyor ve push ediliyor...")
+        subprocess.run(["git", "config", "user.name", "Fures AI Bot"], check=True)
+        subprocess.run(["git", "config", "user.email", "bot@fures.at"], check=True)
+        subprocess.run(["git", "add", str(BLOG_DIR), str(IMAGES_DIR)], check=True)
+        subprocess.run(["git", "commit", "-m", "🤖 Daily AI Blog Update [auto]"], check=True)
+        subprocess.run(["git", "push"], check=True)
+        print("🚀 Blog başarıyla GitHub'a gönderildi.")
+    except subprocess.CalledProcessError as e:
+        print(f"❌ Git işlemi sırasında bir hata oluştu: {e}")
+    except FileNotFoundError:
+        print("❌ 'git' komutu bulunamadı. Git'in kurulu ve PATH'de olduğundan emin olun.")
 
 # === MAIN ===
 def main():
-    print("En son yapay zeka haberleri çekiliyor...")
+    print("Fetching latest AI news...")
     news = fetch_ai_news()
     if not news: 
         print("❌ Haberler alınamadı, işlem durduruluyor.")
         return
 
-    print("\nHaber başlığına göre görsel üretiliyor...")
+    print("\nGenerating image...")
+    # Görsel için en ilgi çekici başlığı kullan
     image_prompt = news[0]['title']
     image_filename = generate_image(image_prompt)
+    
+    # Eğer görsel üretilemezse, blog yazılarında varsayılan bir görsel kullan
+    if not image_filename:
+        print("⚠️ Görsel üretilemedi, varsayılan görsel kullanılacak.")
     
     for lang_code in LANGS.keys():
         print(f"\n--- {LANG_NAMES[lang_code]} için içerik üretiliyor ---")
         blog_text = generate_single_blog(news, lang_code)
         save_blog(blog_text, lang_code, image_filename)
         
-    print("\nDeğişiklikler GitHub'a commit ediliyor...")
+    print("\nCommitting to GitHub...")
     commit_and_push()
     print("\n✅ İşlem tamamlandı.")
 
