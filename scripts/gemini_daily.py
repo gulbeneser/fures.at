@@ -1,18 +1,16 @@
-# scripts/gemini_daily.py -- IMAGEN MODELİ İLE GÖRSEL ÜRETİMİ DÜZELTİLMİŞ NİHAİ VERSİYON
-
 import os
 import feedparser
 import datetime
 import subprocess
 from pathlib import Path
 import google.generativeai as genai
-from google.genai import types # types'ı config için kullanacağız
+from google.generativeai import types
 import requests
-import base64 # Görsel verisini işlemek için eklendi
+import base64
 
 # === CONFIG ===
-MODEL_TEXT = "gemini-flash-latest" 
-MODEL_IMAGE = "imagen-4.0-generate-001" # DOĞRU GÖRSEL MODELİ
+MODEL_TEXT = "gemini-2.5-flash" 
+MODEL_IMAGE = "imagen-4.0-generate-001"
 LANGS = { "tr": "Turkish", "en": "English", "de": "German", "ru": "Russian" }
 LANG_NAMES = { "tr": "Türkçe", "en": "English", "de": "Deutsch", "ru": "Русский" }
 ROOT = Path(__file__).resolve().parent.parent
@@ -25,7 +23,7 @@ IMAGES_DIR.mkdir(exist_ok=True)
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 if not GEMINI_API_KEY:
     raise ValueError("HATA: GEMINI_API_KEY ortam değişkeni bulunamadı veya boş!")
-client = genai.Client(api_key=GEMINI_API_KEY) # Imagen için Client objesi gerekiyor
+client = genai.Client(api_key=GEMINI_API_KEY)
 
 # === 1. Haberleri Çek ===
 def fetch_ai_news(limit=5):
@@ -78,7 +76,7 @@ def generate_single_blog(news_list, lang_code):
         print(f"❌ {language} dilinde içerik üretilirken hata oluştu: {e}")
         return None
 
-# === 3. Görsel Üret (IMAGEN ile DÜZELTİLDİ) ===
+# === 3. Görsel Üret (IMAGEN ile) ===
 def generate_image(prompt_text):
     final_prompt = f"Create a futuristic, abstract, and visually stunning illustration representing the concept of '{prompt_text}'. Use a dark theme with vibrant, glowing data lines. Minimalistic and elegant."
     print(f"Görsel prompt'u oluşturuluyor: {final_prompt}")
@@ -87,15 +85,12 @@ def generate_image(prompt_text):
             model=MODEL_IMAGE,
             prompt=final_prompt,
             config=types.GenerateImagesConfig(
-                number_of_images=1, # Sadece 1 görsel yeterli
+                number_of_images=1,
             )
         )
-        
         if response.generated_images:
-            # Yanıt bir Base64 string'i içerir
             image_base64 = response.generated_images[0].image_b64
             image_bytes = base64.b64decode(image_base64)
-            
             filename = f"ai_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
             img_path = IMAGES_DIR / filename
             with open(img_path, "wb") as f:
@@ -140,7 +135,7 @@ def commit_and_push():
     subprocess.run(["git", "push"])
     print("🚀 Blog başarıyla GitHub'a gönderildi.")
 
-# === MAIN (Görsel Üretimi Aktif) ===
+# === MAIN ===
 def main():
     print("Fetching latest AI news...")
     news = fetch_ai_news()
