@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useCallback } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { DateTime } from "luxon";
@@ -21,6 +21,16 @@ export function BlogPostPage() {
   const { slug } = useParams();
   const post = slug ? getBlogPostBySlug(slug) : undefined;
   const { language, setLanguage, t } = useLanguage();
+    const handleImageError = useCallback((event: React.SyntheticEvent<HTMLImageElement>) => {
+    const fallbackSrc = "/blog_images/default.png";
+
+    if (event.currentTarget.src.endsWith(fallbackSrc)) {
+      return;
+    }
+
+    event.currentTarget.onerror = null;
+    event.currentTarget.src = fallbackSrc;
+  }, []);
 
   useEffect(() => {
     if (post && language !== post.lang) {
@@ -87,6 +97,7 @@ export function BlogPostPage() {
             src={post.image}
             alt={post.title}
             className="mt-12 h-auto w-full rounded-3xl border border-white/10 object-cover object-center shadow-[0_28px_68px_-42px_rgba(255,122,41,0.55)]"
+            onError={handleImageError}
           />
         )}
 
