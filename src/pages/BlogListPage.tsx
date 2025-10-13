@@ -24,7 +24,16 @@ export function BlogListPage() {
     () => posts.map((post) => ({ ...post, html: renderMarkdown(post.content) })),
     [posts],
   );
+  const handleImageError = useCallback((event: React.SyntheticEvent<HTMLImageElement>) => {
+    const fallbackSrc = "/blog_images/default.png";
 
+    if (event.currentTarget.src.endsWith(fallbackSrc)) {
+      return;
+    }
+
+    event.currentTarget.onerror = null;
+    event.currentTarget.src = fallbackSrc;
+  }, []);
   return (
     <section className="relative min-h-screen bg-black py-32 text-white">
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,rgba(255,122,41,0.18),transparent_55%),radial-gradient(circle_at_bottom,rgba(143,91,255,0.14),transparent_60%)]" />
