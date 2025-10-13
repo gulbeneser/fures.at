@@ -14,7 +14,7 @@ from google.generativeai import types # Gemini config kullanmak için
 
 # Vertex AI/GCP kütüphaneleri (2. deneme için gerekli)
 import vertexai
-# from vertexai.vision_models import ImageGenerationModel # Bu import, generate_image_vertexai içinde yapılacak
+# from vertexai.vision_models import ImageGenerationModel # İhtiyaç duyulursa generate_image_vertexai içinde import edilecek
 
 
 # === CONFIG ===
@@ -46,6 +46,7 @@ GCP_LOCATION = os.environ.get("GCP_LOCATION", "us-central1")
 VERTEX_ENABLED = False
 if GCP_PROJECT_ID:
     try:
+        # Vertex AI'ı Başlat (403 hatasını çözmek için izinler ve faturalandırma gereklidir)
         vertexai.init(project=GCP_PROJECT_ID, location=GCP_LOCATION)
         VERTEX_ENABLED = True
         print(f"✅ Vertex AI (2. Görsel Denemesi), '{GCP_PROJECT_ID}' projesi için '{GCP_LOCATION}' bölgesinde başlatıldı.")
@@ -54,7 +55,7 @@ if GCP_PROJECT_ID:
         print("ℹ️ Vertex AI ile görsel üretimi bu çalıştırmada atlanacak (2. Deneme).")
 
 
-# === 1. Haberleri Çek (Değişmedi) ===
+# === 1. Haberleri Çek ===
 def fetch_ai_news(limit=5):
     feeds = [
         "https://news.google.com/rss/search?q=artificial+intelligence+breakthrough&hl=en-US&gl=US&ceid=US:en",
@@ -81,9 +82,8 @@ def fetch_ai_news(limit=5):
                 print(f"Uyarı: RSS akışı okunurken bir hata oluştu {feed}: {e}")
     return articles[:limit]
 
-# === 2. Blog Metni Üret (Değişmedi) ===
+# === 2. Tek Bir Dilde Blog Metni Üret ===
 def generate_single_blog(news_list, lang_code):
-    # ... (Mevcut metin üretim kodunuz) ...
     language = LANGS[lang_code]
     summaries = "\n".join([f"- Title: {n['title']}\n  Link: {n['link']}" for n in news_list])
     prompt = f"""
@@ -106,10 +106,10 @@ def generate_image_gemini(final_prompt):
     print("\n[1. Deneme: Gemini API ile Görsel Üretiliyor...]")
     try:
         model_name = "gemini-2.5-flash-image"
-        client = genai.Client()
+        # Düzeltme: Doğrudan yapılandırılmış model üzerinden çağrı yapıldı
+        model = genai.GenerativeModel(model_name) 
 
-        response = client.models.generate_content(
-            model=model_name,
+        response = model.generate_content(
             contents=[final_prompt],
             config=types.GenerateContentConfig(
                 image_config=types.ImageConfig(
@@ -188,10 +188,10 @@ def generate_image(prompt_text):
 
     return None
 
-# === Diğer Fonksiyonlar (Değişmedi) ===
+# === 4. Blog Dosyasını Kaydet ===
 def save_blog(blog_content, lang_code, image_filename="default.png"):
-    # ... (Mevcut kodunuz) ...
     if not blog_content: return
+    # Dosya adında çakışmayı önlemek için saat bilgisini ekliyoruz
     date_time_str = datetime.datetime.now().strftime("%Y-%m-%d-%H%M") 
     slug = f"{date_time_str}-{lang_code}-ai-news"
     path = BLOG_DIR / lang_code
@@ -208,8 +208,8 @@ lang: {lang_code}
         f.write(html)
     print(f"✅ Blog kaydedildi: {LANG_NAMES[lang_code]} → {slug}.md")
 
+# === 5. GitHub Commit ===
 def commit_and_push():
-    # ... (Mevcut kodunuz) ...
     try:
         current_time_str = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         
@@ -220,7 +220,8 @@ def commit_and_push():
             
         print("Değişiklikler commit ediliyor ve push ediliyor...")
         subprocess.run(["git", "config", "user.name", "Fures AI Bot"], check=True)
-        subprocess.run(["git", "config", "user.email", "bot@fures.at"], check_true)
+        # Hata Düzeltildi: check_true -> check=True
+        subprocess.run(["git", "config", "user.email", "bot@fures.at"], check=True) 
         subprocess.run(["git", "add", "."], check=True)
         subprocess.run(["git", "commit", "-m", f"🤖 Daily AI Blog Update [auto] ({current_time_str})"], check=True)
         subprocess.run(["git", "push"], check=True)
@@ -228,7 +229,7 @@ def commit_and_push():
     except (subprocess.CalledProcessError, FileNotFoundError) as e:
         print(f"❌ Git işlemi sırasında bir hata oluştu: {e}")
 
-# === MAIN (Değişmedi) ===
+# === MAIN ===
 def main():
     print("Fetching latest AI news...")
     news = fetch_ai_news()
