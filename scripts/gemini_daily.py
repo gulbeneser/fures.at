@@ -14,7 +14,7 @@ from vertexai.vision_models import ImageGenerationModel
 
 # === CONFIG ===
 # Metin üretimi için güncel bir model
-MODEL_TEXT = "gemini-1.5-flash-latest"
+MODEL_TEXT = "gemini-2.5-flash"
 LANGS = { "tr": "Turkish", "en": "English", "de": "German", "ru": "Russian" }
 LANG_NAMES = { "tr": "Türkçe", "en": "English", "de": "Deutsch", "ru": "Русский" }
 ROOT = Path(__file__).resolve().parent.parent
