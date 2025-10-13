@@ -1,3 +1,5 @@
+# scripts/gemini_daily.py -- CLIENT SINIFI KALDIRILMIŞ, TAMAMEN MODERN YAPIYA GEÇİLMİŞ NİHAİ VERSİYON
+
 import os
 import feedparser
 import datetime
@@ -9,8 +11,8 @@ import requests
 import base64
 
 # === CONFIG ===
-MODEL_TEXT = "gemini-2.5-flash" 
-MODEL_IMAGE = "imagen-4.0-generate-001"
+MODEL_TEXT = "gemini-1.5-flash-latest" 
+MODEL_IMAGE = "imagen-3.0-generate-002" # Bu model adı daha stabil olabilir, dokümantasyona göre seçildi
 LANGS = { "tr": "Turkish", "en": "English", "de": "German", "ru": "Russian" }
 LANG_NAMES = { "tr": "Türkçe", "en": "English", "de": "Deutsch", "ru": "Русский" }
 ROOT = Path(__file__).resolve().parent.parent
@@ -19,12 +21,11 @@ IMAGES_DIR = ROOT / "blog_images"
 BLOG_DIR.mkdir(exist_ok=True)
 IMAGES_DIR.mkdir(exist_ok=True)
 
-# API anahtarını yapılandır
+# API anahtarını yapılandır (TEK VE DOĞRU YÖNTEM)
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 if not GEMINI_API_KEY:
     raise ValueError("HATA: GEMINI_API_KEY ortam değişkeni bulunamadı veya boş!")
 genai.configure(api_key=GEMINI_API_KEY)
-client = genai.Client()
 
 # === 1. Haberleri Çek ===
 def fetch_ai_news(limit=5):
@@ -57,16 +58,8 @@ def generate_single_blog(news_list, lang_code):
     prompt = f"""
     You are a master storyteller and expert AI journalist. Your tone is engaging, insightful, and slightly playful.
     Analyze the following AI news and write a single, compelling blog article (400-600 words) in {language}.
-    
-    News sources:
-    {summaries}
-
-    The article MUST include:
-    1. A title starting with '###'.
-    2. Readable formatting with clear paragraphs.
-    3. A line with 5-7 relevant hashtags in {language} before the sources.
-    4. A "Sources" section (in the correct language) at the very end, listing ALL original links.
-    
+    News sources: {summaries}
+    The article MUST include: a title starting with '###', readable formatting with paragraphs, 5-7 relevant hashtags in {language} before the sources, and a "Sources" section (in the correct language) at the end, listing ALL original links.
     Focus on the "Wow" factor and explain WHY this news matters.
     """
     model = genai.GenerativeModel(MODEL_TEXT)
@@ -77,21 +70,19 @@ def generate_single_blog(news_list, lang_code):
         print(f"❌ {language} dilinde içerik üretilirken hata oluştu: {e}")
         return None
 
-# === 3. Görsel Üret (IMAGEN ile) ===
+# === 3. Görsel Üret (Modern Yöntemle Düzeltildi) ===
 def generate_image(prompt_text):
     final_prompt = f"Create a futuristic, abstract, and visually stunning illustration representing the concept of '{prompt_text}'. Use a dark theme with vibrant, glowing data lines. Minimalistic and elegant."
     print(f"Görsel prompt'u oluşturuluyor: {final_prompt}")
     try:
-        response = client.models.generate_images(
-            model=MODEL_IMAGE,
-            prompt=final_prompt,
-            config=types.GenerateImagesConfig(
-                number_of_images=1,
-            )
+        # Görsel üretimi için de GenerativeModel kullanılır
+        image_model = genai.GenerativeModel(MODEL_IMAGE)
+        response = image_model.generate_content(
+            final_prompt,
+            generation_config={"response_mime_type": "image/png"}
         )
-        if response.generated_images:
-            image_base64 = response.generated_images[0].image_b64
-            image_bytes = base64.b64decode(image_base64)
+        if response.parts:
+            image_bytes = response.parts[0].inline_data.data
             filename = f"ai_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
             img_path = IMAGES_DIR / filename
             with open(img_path, "wb") as f:
@@ -118,7 +109,6 @@ date: {date_str}
 image: /blog_images/{image_filename if image_filename else 'default.png'}
 lang: {lang_code}
 ---
-
 {blog_content.strip()}
 """
     with open(path / f"{slug}.md", "w", encoding="utf-8") as f:
