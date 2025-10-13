@@ -6,15 +6,15 @@ from pathlib import Path
 import requests
 import base64
 from io import BytesIO
-from PIL import Image
+from PIL import Image # Pillow kütüphanesi gerekli!
 
-# Metin ve GÖRSEL üretimi için Gemini API kütüphanesi
+# Metin ve Görsel üretimi için Gemini API kütüphanesi
 import google.generativeai as genai
-from google.generativeai import types # config kullanmak için
+from google.generativeai import types # Gemini config kullanmak için
 
-# Vertex AI/GCP ile ilgili modüllere artık GEREK YOK!
-# import vertexai
-# from vertexai.vision_models import ImageGenerationModel
+# Vertex AI/GCP kütüphaneleri (2. deneme için gerekli)
+import vertexai
+# from vertexai.vision_models import ImageGenerationModel # Bu import, generate_image_vertexai içinde yapılacak
 
 
 # === CONFIG ===
@@ -30,21 +30,31 @@ IMAGES_DIR.mkdir(exist_ok=True)
 
 # === API & ORTAM YAPILANDIRMASI ===
 
-# 1. Gemini API Anahtarı (Metin ve Görsel üretimi için)
+# 1. Gemini API Anahtarı (Metin ve 1. Görsel denemesi için)
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 if not GEMINI_API_KEY:
-    raise ValueError("HATA: GEMINI_API_KEY ortam değişkeni bulunamadı veya boş!")
+    raise ValueError("HATA: GEMINI_API_KEY ortam değişkeni bulunamadı veya boş! Metin üretimi yapılamaz.")
 genai.configure(api_key=GEMINI_API_KEY)
+print("✅ Gemini API (Metin ve 1. Görsel Denemesi) yapılandırıldı.")
 
 
-# Vertex AI Kullanılabilirlik Bayrağı KALDIRILDI, artık sadece GEMINI API kullanılıyor.
-# Sadece bilgilendirme için tutulabilir:
-IMAGE_GEN_ENABLED = True 
+# 2. Google Cloud Proje Bilgileri (2. Görsel denemesi için)
+GCP_PROJECT_ID = os.environ.get("GCP_PROJECT_ID")
+GCP_LOCATION = os.environ.get("GCP_LOCATION", "us-central1") 
 
-# GCP projesi kontrolü KALDIRILDI. Görsel üretimi artık bu anahtara bağlı.
-print("✅ Gemini API, metin ve görsel üretimi için yapılandırıldı.")
+# Vertex AI kullanılabilirlik bayrağı.
+VERTEX_ENABLED = False
+if GCP_PROJECT_ID:
+    try:
+        vertexai.init(project=GCP_PROJECT_ID, location=GCP_LOCATION)
+        VERTEX_ENABLED = True
+        print(f"✅ Vertex AI (2. Görsel Denemesi), '{GCP_PROJECT_ID}' projesi için '{GCP_LOCATION}' bölgesinde başlatıldı.")
+    except Exception as e:
+        print(f"❌ Vertex AI başlatılamadı. Hata: {e}")
+        print("ℹ️ Vertex AI ile görsel üretimi bu çalıştırmada atlanacak (2. Deneme).")
 
-# === 1. Haberleri Çek ===
+
+# === 1. Haberleri Çek (Değişmedi) ===
 def fetch_ai_news(limit=5):
     feeds = [
         "https://news.google.com/rss/search?q=artificial+intelligence+breakthrough&hl=en-US&gl=US&ceid=US:en",
@@ -71,8 +81,9 @@ def fetch_ai_news(limit=5):
                 print(f"Uyarı: RSS akışı okunurken bir hata oluştu {feed}: {e}")
     return articles[:limit]
 
-# === 2. Tek Bir Dilde Blog Metni Üret ===
+# === 2. Blog Metni Üret (Değişmedi) ===
 def generate_single_blog(news_list, lang_code):
+    # ... (Mevcut metin üretim kodunuz) ...
     language = LANGS[lang_code]
     summaries = "\n".join([f"- Title: {n['title']}\n  Link: {n['link']}" for n in news_list])
     prompt = f"""
@@ -90,43 +101,29 @@ def generate_single_blog(news_list, lang_code):
         print(f"❌ {language} dilinde içerik üretilirken hata oluştu: {e}")
         return None
 
-# === 3. Görsel Üret (GEMINI API İLE GÜNCELLENMİŞ FONKSİYON) ===
-def generate_image(prompt_text):
-    if not IMAGE_GEN_ENABLED:
-        print("ℹ️ Görsel üretimi devre dışı.")
-        return None
-
-    # Daha estetik bir görsel için prompt formatı korunuyor
-    final_prompt = f"Create a futuristic, abstract, and visually stunning illustration representing the concept of '{prompt_text}'. Use a dark theme with vibrant, glowing data lines and geometric shapes. The style should be minimalistic, elegant, and high-tech. Photorealistic, cinematic lighting."
-    print(f"Görsel prompt'u oluşturuluyor: {final_prompt}")
-
+# === GÖRSEL ÜRETİMİ - 1. DENEME (GEMINI API) ===
+def generate_image_gemini(final_prompt):
+    print("\n[1. Deneme: Gemini API ile Görsel Üretiliyor...]")
     try:
         model_name = "gemini-2.5-flash-image"
         client = genai.Client()
 
-        print(f"{model_name} modeli ile görsel üretiliyor...")
-
-        # Gemini API generate_content çağrısı
         response = client.models.generate_content(
             model=model_name,
             contents=[final_prompt],
             config=types.GenerateContentConfig(
                 image_config=types.ImageConfig(
-                    aspect_ratio="16:9", # Blog için geniş ekran formatı
+                    aspect_ratio="16:9",
                 ),
-                response_modalities=['Image'] # Sadece görsel çıktı iste
+                response_modalities=['Image']
             )
         )
         
-        # Yanıttan base64 kodlu görsel verisini al
-        # Cevabın ilk adayın ilk parçası (part) olmasını bekliyoruz
         image_part = response.candidates[0].content.parts[0].inline_data
         
         if image_part is None:
-            print("❌ Görsel üretildi ancak görsel verisi alınamadı (inline_data boş).")
-            return None
+            raise Exception("Görsel üretildi ancak inline_data boş.")
 
-        # Base64 verisini çöz ve görsel olarak aç
         image_data = base64.b64decode(image_part.data)
         image = Image.open(BytesIO(image_data))
         
@@ -135,18 +132,66 @@ def generate_image(prompt_text):
         img_path = str(IMAGES_DIR / filename)
         image.save(img_path, format='PNG') 
 
-        print(f"✅ Görsel başarıyla kaydedildi: {img_path}")
+        print(f"✅ [1. Deneme BAŞARILI] Görsel başarıyla kaydedildi (Gemini API): {img_path}")
         return filename
     except Exception as e:
-        # Hata mesajı artık 403 değil, API'nin kendisinden gelecektir.
-        print(f"❌ Görsel üretimi sırasında Gemini API hatası oluştu: {e}")
-        print("ℹ️ Lütfen GEMINI_API_KEY'nizin geçerli olduğundan ve Gemini API kullanım kotanızın dolmadığından emin olun.")
+        print(f"❌ [1. Deneme BAŞARISIZ] Gemini API hatası: {e}")
         return None
 
-# === 4. Blog Dosyasını Kaydet ===
+
+# === GÖRSEL ÜRETİMİ - 2. DENEME (VERTEX AI IMAGEN) ===
+def generate_image_vertexai(final_prompt):
+    if not VERTEX_ENABLED:
+        return None
+        
+    print("\n[2. Deneme: Vertex AI (Imagen) ile Görsel Üretiliyor...]")
+    try:
+        # Import buraya taşındı, aksi halde modül yüklenemezse hata fırlatır
+        from vertexai.vision_models import ImageGenerationModel 
+        
+        # Vertex AI'daki Imagen modelini kullanıyoruz.
+        model = ImageGenerationModel.from_pretrained("imagegeneration@006")
+
+        response = model.generate_images(
+            prompt=final_prompt,
+            number_of_images=1,
+            aspect_ratio="16:9"
+        )
+
+        image = response[0]
+
+        filename = f"ai_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+        img_path = str(IMAGES_DIR / filename)
+        image.save(location=img_path, include_generation_parameters=False)
+
+        print(f"✅ [2. Deneme BAŞARILI] Görsel başarıyla kaydedildi (Vertex AI): {img_path}")
+        return filename
+    except Exception as e:
+        print(f"❌ [2. Deneme BAŞARISIZ] Vertex AI hatası: {e}")
+        print("ℹ️ Lütfen GCP izinlerinizi (403 hatası için) ve faturalandırmanızı kontrol edin.")
+        return None
+
+# === 3. Ana Görsel Üretim Fonksiyonu (Çoklu Deneme) ===
+def generate_image(prompt_text):
+    
+    final_prompt = f"Create a futuristic, abstract, and visually stunning illustration representing the concept of '{prompt_text}'. Use a dark theme with vibrant, glowing data lines and geometric shapes. The style should be minimalistic, elegant, and high-tech. Photorealistic, cinematic lighting."
+    
+    # 1. Deneme: Gemini API
+    image_filename = generate_image_gemini(final_prompt)
+    if image_filename:
+        return image_filename
+        
+    # 2. Deneme: Vertex AI
+    image_filename = generate_image_vertexai(final_prompt)
+    if image_filename:
+        return image_filename
+
+    return None
+
+# === Diğer Fonksiyonlar (Değişmedi) ===
 def save_blog(blog_content, lang_code, image_filename="default.png"):
+    # ... (Mevcut kodunuz) ...
     if not blog_content: return
-    # Dosya adında çakışmayı önlemek için saat bilgisini ekliyoruz
     date_time_str = datetime.datetime.now().strftime("%Y-%m-%d-%H%M") 
     slug = f"{date_time_str}-{lang_code}-ai-news"
     path = BLOG_DIR / lang_code
@@ -163,10 +208,9 @@ lang: {lang_code}
         f.write(html)
     print(f"✅ Blog kaydedildi: {LANG_NAMES[lang_code]} → {slug}.md")
 
-# === 5. GitHub Commit ===
 def commit_and_push():
+    # ... (Mevcut kodunuz) ...
     try:
-        # Commit mesajına yeni bir tarih-saat bilgisi ekleniyor (çakışmayı önlemek için)
         current_time_str = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         
         status_result = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True, check=True)
@@ -176,7 +220,7 @@ def commit_and_push():
             
         print("Değişiklikler commit ediliyor ve push ediliyor...")
         subprocess.run(["git", "config", "user.name", "Fures AI Bot"], check=True)
-        subprocess.run(["git", "config", "user.email", "bot@fures.at"], check=True)
+        subprocess.run(["git", "config", "user.email", "bot@fures.at"], check_true)
         subprocess.run(["git", "add", "."], check=True)
         subprocess.run(["git", "commit", "-m", f"🤖 Daily AI Blog Update [auto] ({current_time_str})"], check=True)
         subprocess.run(["git", "push"], check=True)
@@ -184,7 +228,7 @@ def commit_and_push():
     except (subprocess.CalledProcessError, FileNotFoundError) as e:
         print(f"❌ Git işlemi sırasında bir hata oluştu: {e}")
 
-# === MAIN ===
+# === MAIN (Değişmedi) ===
 def main():
     print("Fetching latest AI news...")
     news = fetch_ai_news()
@@ -193,8 +237,7 @@ def main():
         return
 
     print("\nGenerating image...")
-    # İlk haber başlığı görsel için prompt olarak kullanılıyor
-    image_prompt = news[0]['title'] 
+    image_prompt = news[0]['title']
     image_filename = generate_image(image_prompt)
     
     if not image_filename:
