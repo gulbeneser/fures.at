@@ -23,7 +23,8 @@ IMAGES_DIR.mkdir(exist_ok=True)
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 if not GEMINI_API_KEY:
     raise ValueError("HATA: GEMINI_API_KEY ortam değişkeni bulunamadı veya boş!")
-client = genai.Client(api_key=GEMINI_API_KEY)
+genai.configure(api_key=GEMINI_API_KEY)
+client = genai.Client()
 
 # === 1. Haberleri Çek ===
 def fetch_ai_news(limit=5):
