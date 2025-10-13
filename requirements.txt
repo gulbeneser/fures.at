@@ -4,3 +4,4 @@ PyYAML
 python-dateutil
 requests
 google-cloud-aiplatform
+Pillow
