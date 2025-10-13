@@ -5,7 +5,7 @@ import feedparser
 import datetime
 import subprocess
 from pathlib import Path
-import google.genai as genai
+import google.generativeai as genai
 from google.genai import types # types'ı config için kullanacağız
 import requests
 import base64 # Görsel verisini işlemek için eklendi
