@@ -1,7 +1,10 @@
+/gulbeneser/assets/*      /gulbeneser/assets/:splat            200
 /gulbeneser               /gulbeneser/index.html               200
 /gulbeneser/*             /gulbeneser/index.html               200
+/furkanyonat/assets/*     /furkanyonat/assets/:splat           200
 /furkanyonat              /furkanyonat/index.html              200
 /furkanyonat/*            /furkanyonat/index.html              200
+/kariyer/assets/*         /kariyer/assets/:splat               200
 /kariyer                  /kariyer/index.html                  200
 /kariyer/*                /kariyer/index.html                  200
 /kariyer.html             /kariyer/index.html                  200
