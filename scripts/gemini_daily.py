@@ -11,7 +11,7 @@ import requests
 import base64
 
 # === CONFIG ===
-MODEL_TEXT = "gemini-1.5-flash-latest" 
+MODEL_TEXT = "gemini-2.5-flash" 
 MODEL_IMAGE = "imagen-3.0-generate-002" # Bu model adı daha stabil olabilir, dokümantasyona göre seçildi
 LANGS = { "tr": "Turkish", "en": "English", "de": "German", "ru": "Russian" }
 LANG_NAMES = { "tr": "Türkçe", "en": "English", "de": "Deutsch", "ru": "Русский" }
