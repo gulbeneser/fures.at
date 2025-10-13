@@ -211,7 +211,7 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ closeChat }) => {
   }, []);
 
   return (
-    <div className="fixed bottom-28 right-8 w-full max-w-lg h-[70vh] max-h-[700px] bg-gray-800 rounded-2xl shadow-2xl flex flex-col text-white overflow-hidden z-40">
+    <div className="fixed inset-x-4 bottom-24 h-[60vh] max-h-[650px] bg-gray-800 rounded-2xl shadow-2xl flex flex-col text-white overflow-hidden z-40 sm:inset-x-auto sm:bottom-28 sm:right-8 sm:w-full sm:max-w-lg sm:h-[70vh] sm:max-h-[700px]">
       <header className="p-4 bg-gray-900 border-b border-gray-700 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <FuresAIIcon className="w-10 h-10" />
