@@ -4,13 +4,18 @@ import datetime
 import subprocess
 from pathlib import Path
 import requests
+import base64
+from io import BytesIO
+from PIL import Image
 
-# Metin üretimi için Gemini API kütüphanesi
+# Metin ve GÖRSEL üretimi için Gemini API kütüphanesi
 import google.generativeai as genai
+from google.generativeai import types # config kullanmak için
 
-# DÜZELTME: Görsel üretimi için Vertex AI kütüphanesi eklendi
-import vertexai
-from vertexai.vision_models import ImageGenerationModel
+# Vertex AI/GCP ile ilgili modüllere artık GEREK YOK!
+# import vertexai
+# from vertexai.vision_models import ImageGenerationModel
+
 
 # === CONFIG ===
 # Metin üretimi için güncel bir model
@@ -25,33 +30,19 @@ IMAGES_DIR.mkdir(exist_ok=True)
 
 # === API & ORTAM YAPILANDIRMASI ===
 
-# 1. Gemini API Anahtarı (Metin üretimi için)
+# 1. Gemini API Anahtarı (Metin ve Görsel üretimi için)
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 if not GEMINI_API_KEY:
     raise ValueError("HATA: GEMINI_API_KEY ortam değişkeni bulunamadı veya boş!")
 genai.configure(api_key=GEMINI_API_KEY)
 
-# 2. Google Cloud Proje Bilgileri (Görsel üretimi için)
-GCP_PROJECT_ID = os.environ.get("GCP_PROJECT_ID")
-GCP_LOCATION = os.environ.get("GCP_LOCATION", "us-central1") # Örn: "europe-west1"
 
-# Vertex AI kullanılabilirlik bayrağı.
-VERTEX_ENABLED = True
+# Vertex AI Kullanılabilirlik Bayrağı KALDIRILDI, artık sadece GEMINI API kullanılıyor.
+# Sadece bilgilendirme için tutulabilir:
+IMAGE_GEN_ENABLED = True 
 
-if not GCP_PROJECT_ID:
-    print("⚠️ GCP_PROJECT_ID ortam değişkeni bulunamadı. Görsel üretimi atlanacak ve varsayılan görsel kullanılacak.")
-    VERTEX_ENABLED = False
-else:
-    # Vertex AI'ı Başlat
-    # Bu kodun çalışması için ortamınızda `gcloud auth application-default login` ile yetkilendirme yapılmış olmalıdır.
-    try:
-        vertexai.init(project=GCP_PROJECT_ID, location=GCP_LOCATION)
-        print(f"✅ Vertex AI, '{GCP_PROJECT_ID}' projesi için '{GCP_LOCATION}' bölgesinde başlatıldı.")
-    except Exception as e:
-        print(f"❌ Vertex AI başlatılamadı. Google Cloud yetkilendirmenizi kontrol edin. Hata: {e}")
-        print("ℹ️ Görsel üretimi bu çalıştırmada atlanacak.")
-        VERTEX_ENABLED = False
-
+# GCP projesi kontrolü KALDIRILDI. Görsel üretimi artık bu anahtara bağlı.
+print("✅ Gemini API, metin ve görsel üretimi için yapılandırıldı.")
 
 # === 1. Haberleri Çek ===
 def fetch_ai_news(limit=5):
@@ -99,52 +90,70 @@ def generate_single_blog(news_list, lang_code):
         print(f"❌ {language} dilinde içerik üretilirken hata oluştu: {e}")
         return None
 
-# === 3. Görsel Üret (VERTEX AI İLE DÜZELTİLMİŞ FONKSİYON) ===
+# === 3. Görsel Üret (GEMINI API İLE GÜNCELLENMİŞ FONKSİYON) ===
 def generate_image(prompt_text):
-    if not VERTEX_ENABLED:
-        print("ℹ️ Vertex AI aktif değil. Görsel üretimi atlanıyor.")
+    if not IMAGE_GEN_ENABLED:
+        print("ℹ️ Görsel üretimi devre dışı.")
         return None
 
+    # Daha estetik bir görsel için prompt formatı korunuyor
     final_prompt = f"Create a futuristic, abstract, and visually stunning illustration representing the concept of '{prompt_text}'. Use a dark theme with vibrant, glowing data lines and geometric shapes. The style should be minimalistic, elegant, and high-tech. Photorealistic, cinematic lighting."
     print(f"Görsel prompt'u oluşturuluyor: {final_prompt}")
 
     try:
-        # Vertex AI'daki Imagen modelini kullanıyoruz. 'imagegeneration@006' stabil bir versiyondur.
-        model = ImageGenerationModel.from_pretrained("imagegeneration@006")
+        model_name = "gemini-2.5-flash-image"
+        client = genai.Client()
 
-        print("Imagen modeli ile görsel üretiliyor...")
-        response = model.generate_images(
-            prompt=final_prompt,
-            number_of_images=1,
-            aspect_ratio="16:9"
+        print(f"{model_name} modeli ile görsel üretiliyor...")
+
+        # Gemini API generate_content çağrısı
+        response = client.models.generate_content(
+            model=model_name,
+            contents=[final_prompt],
+            config=types.GenerateContentConfig(
+                image_config=types.ImageConfig(
+                    aspect_ratio="16:9", # Blog için geniş ekran formatı
+                ),
+                response_modalities=['Image'] # Sadece görsel çıktı iste
+            )
         )
+        
+        # Yanıttan base64 kodlu görsel verisini al
+        # Cevabın ilk adayın ilk parçası (part) olmasını bekliyoruz
+        image_part = response.candidates[0].content.parts[0].inline_data
+        
+        if image_part is None:
+            print("❌ Görsel üretildi ancak görsel verisi alınamadı (inline_data boş).")
+            return None
 
-        image = response[0] # Yanıt listesindeki ilk görseli al
-
+        # Base64 verisini çöz ve görsel olarak aç
+        image_data = base64.b64decode(image_part.data)
+        image = Image.open(BytesIO(image_data))
+        
+        # Görseli kaydet
         filename = f"ai_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
-        img_path = str(IMAGES_DIR / filename) # path objesini string'e çevir
-        image.save(location=img_path, include_generation_parameters=False)
+        img_path = str(IMAGES_DIR / filename)
+        image.save(img_path, format='PNG') 
 
         print(f"✅ Görsel başarıyla kaydedildi: {img_path}")
         return filename
     except Exception as e:
-        print(f"❌ Görsel üretimi sırasında Vertex AI hatası oluştu: {e}")
-        print("ℹ️ Lütfen GCP projenizin aktif olduğundan, Vertex AI API'nin etkinleştirildiğinden ve yetkilendirmenizin doğru olduğundan emin olun.")
+        # Hata mesajı artık 403 değil, API'nin kendisinden gelecektir.
+        print(f"❌ Görsel üretimi sırasında Gemini API hatası oluştu: {e}")
+        print("ℹ️ Lütfen GEMINI_API_KEY'nizin geçerli olduğundan ve Gemini API kullanım kotanızın dolmadığından emin olun.")
         return None
 
 # === 4. Blog Dosyasını Kaydet ===
 def save_blog(blog_content, lang_code, image_filename="default.png"):
-    if not blog_content:
-        return
-
-    now = datetime.datetime.now()
-    time_slug = now.strftime("%H%M")
-    slug = f"{now.strftime('%Y-%m-%d')}-{time_slug}-{lang_code}-ai-news"
+    if not blog_content: return
+    # Dosya adında çakışmayı önlemek için saat bilgisini ekliyoruz
+    date_time_str = datetime.datetime.now().strftime("%Y-%m-%d-%H%M") 
+    slug = f"{date_time_str}-{lang_code}-ai-news"
     path = BLOG_DIR / lang_code
     path.mkdir(exist_ok=True)
     html = f"""---
 title: "AI Daily — {LANG_NAMES[lang_code]}"
-date: {now.isoformat(timespec="seconds")}
+date: {date_time_str}
 image: /blog_images/{image_filename if image_filename else 'default.png'}
 lang: {lang_code}
 ---
@@ -157,15 +166,19 @@ lang: {lang_code}
 # === 5. GitHub Commit ===
 def commit_and_push():
     try:
+        # Commit mesajına yeni bir tarih-saat bilgisi ekleniyor (çakışmayı önlemek için)
+        current_time_str = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        
         status_result = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True, check=True)
         if not status_result.stdout.strip():
             print("ℹ️ Değişiklik bulunmadığı için commit atılmadı.")
             return
+            
         print("Değişiklikler commit ediliyor ve push ediliyor...")
         subprocess.run(["git", "config", "user.name", "Fures AI Bot"], check=True)
         subprocess.run(["git", "config", "user.email", "bot@fures.at"], check=True)
         subprocess.run(["git", "add", "."], check=True)
-        subprocess.run(["git", "commit", "-m", "🤖 Daily AI Blog Update [auto]"], check=True)
+        subprocess.run(["git", "commit", "-m", f"🤖 Daily AI Blog Update [auto] ({current_time_str})"], check=True)
         subprocess.run(["git", "push"], check=True)
         print("🚀 Blog başarıyla GitHub'a gönderildi.")
     except (subprocess.CalledProcessError, FileNotFoundError) as e:
@@ -180,7 +193,8 @@ def main():
         return
 
     print("\nGenerating image...")
-    image_prompt = news[0]['title']
+    # İlk haber başlığı görsel için prompt olarak kullanılıyor
+    image_prompt = news[0]['title'] 
     image_filename = generate_image(image_prompt)
     
     if not image_filename:
