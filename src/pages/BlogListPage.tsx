@@ -80,6 +80,7 @@ export function BlogListPage() {
                         alt={post.title}
                         className="h-auto w-full rounded-3xl border border-white/10 object-cover object-center shadow-[0_24px_60px_-38px_rgba(255,122,41,0.5)] transition-transform duration-500 group-hover:scale-[1.02]"
                         loading="lazy"
+                        onError={handleImageError}
                       />
                     </Link>
                   )}
