@@ -9,4 +9,5 @@
 /projects/:project/*      /projects/:project/index.html        200
 /projeler/:project        /projeler/:project/index.html        200
 /projeler/:project/*      /projeler/:project/index.html        200
+/blog_images/*            /blog_images/:splat                  200
 /*                        /index.html                          200
