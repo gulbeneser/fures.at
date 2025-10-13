@@ -10,7 +10,7 @@ import requests
 
 # === CONFIG ===
 MODEL_TEXT = "gemini-2.5-flash" 
-MODEL_IMAGE = "imagen-3" # En yeni ve stabil model adıyla güncellendi
+MODEL_IMAGE = "gemini-2.5-flash-image" # En yeni ve stabil model adıyla güncellendi
 LANGS = { "tr": "Turkish", "en": "English", "de": "German", "ru": "Russian" }
 LANG_NAMES = { "tr": "Türkçe", "en": "English", "de": "Deutsch", "ru": "Русский" }
 ROOT = Path(__file__).resolve().parent.parent
