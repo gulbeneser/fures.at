@@ -110,28 +110,41 @@ def generate_single_blog(news_list, lang_code):
 def generate_image_gemini(final_prompt):
     print("\n[1. Deneme: Gemini API ile Görsel Üretiliyor...]")
     try:
-        model_name = "gemini-2.5-flash-image" # Modeli doğru şekilde tanımla (Emin ol ki bu model görsel üretebiliyor)
-        model = genai.GenerativeModel(model_name) 
+        # Doğrudan görsel üretim modeli kimliği (varsa) veya multimodal model
+        # `gemini-pro-vision` multimodal bir modeldir, ancak doğrudan Text-to-Image için
+        # spesifik bir model adı gerekebilir veya API'nin default davranışı olabilir.
+        # Eğer bu kısım hata verirse, `generate_content` çağrısını daha basit düşünmek gerekebilir.
+        model = genai.GenerativeModel("gemini-pro-vision") # Multimodal model denemesi
 
+        # Görsel parametreleri (en boy oranı) doğrudan `generate_content` içinde verilmez.
+        # Ya modelin doğrudan Text-to-Image arayüzü vardır (ki bu genellikle ayrı bir modeldir)
+        # Ya da prompt içinde belirtilir, ya da varsayılan değerlerle üretilir.
+        # Buradaki ImageConfig hatası, bunun generate_content'e bu şekilde geçirilmediğini gösterir.
+        # Bu yüzden en basit çağrı şeklini deniyoruz ve en boy oranını prompt'a bırakıyoruz.
         response = model.generate_content(
-            contents=[final_prompt],
-            generation_config=types.GenerationConfig( # BURADA DÜZELTME YAPILDI: generation_config
-                image_config=types.ImageConfig(
-                    aspect_ratio="16:9",
-                ),
-                response_mime_type='image/png' # BURADA DÜZELTME YAPILDI: görsel yanıt beklediğini belirt
-            )
+            contents=[final_prompt] # Sadece metin prompt'u gönderiyoruz
         )
         
-        # Yanıt tipini kontrol et ve doğru şekilde eriş
-        if response.images: # Eğer model doğrudan Image objesi dönerse
-            image = response.images[0] # Doğrudan görsel nesnesine eriş (PIL.Image objesi beklenir)
-        elif response.candidates and response.candidates[0].content.parts and response.candidates[0].content.parts[0].inline_data:
-            # Alternatif olarak, eğer base64 encoded bir görsel dönerse (eski veya farklı versiyonlar için)
-            image_part = response.candidates[0].content.parts[0].inline_data
-            image_data = base64.b64decode(image_part.data)
-            image = Image.open(BytesIO(image_data))
+        # Yanıtı kontrol et ve doğru şekilde görsel verisine eriş
+        # Gemini API'nin multimodal yanıtları farklı formatlarda olabilir.
+        # Eğer doğrudan bir Image objesi dönerse (ideal):
+        if hasattr(response, 'images') and response.images:
+            image = response.images[0]
+        # Eğer base64 kodlu veri içeren partlar dönerse:
+        elif response.candidates and response.candidates[0].content.parts:
+            image_part_found = None
+            for part in response.candidates[0].content.parts:
+                if hasattr(part, 'inline_data') and part.inline_data:
+                    image_part_found = part.inline_data
+                    break
+            
+            if image_part_found:
+                image_data = base64.b64decode(image_part_found.data)
+                image = Image.open(BytesIO(image_data))
+            else:
+                raise Exception("Görsel üretildi ancak yanıt parts içinde inline_data içermiyor.")
         else:
+            print(f"DEBUG: Gemini API yanıtı beklenenden farklı formatta veya boş: {response}")
             raise Exception("Görsel üretildi ancak yanıt boş veya görsel içermiyor.")
         
         # Görseli kaydet
@@ -143,6 +156,8 @@ def generate_image_gemini(final_prompt):
         return filename
     except Exception as e:
         print(f"❌ [1. Deneme BAŞARISIZ] Gemini API hatası: {e}")
+        print("ℹ️ Gemini API ile doğrudan Text-to-Image yetenekleri için model adı ve çağrı yöntemi değişmiş olabilir.")
+        print("   Alternatif olarak, prompt'a en boy oranını belirtmek (örneğin 'generate a 16:9 image...') denenebilir.")
         return None
 
 
@@ -158,14 +173,12 @@ def generate_image_vertexai(final_prompt):
         from vertexai.vision_models import ImageGenerationModel 
         
         # Vertex AI'daki Imagen modelini kullanıyoruz.
-        # "imagegeneration@006" modeli, en son önerilen stabil model olabilir.
-        # Gerekirse https://cloud.google.com/vertex-ai/docs/generative-ai/model-reference/image-generation adresinden kontrol et.
         model = ImageGenerationModel.from_pretrained("imagegeneration@006")
 
         response = model.generate_images(
             prompt=final_prompt,
             number_of_images=1,
-            aspect_ratio="16:9"
+            aspect_ratio="16:9" # Imagen için bu parametre geçerlidir
         )
         
         # Vertex AI yanıtında resim listesi döner
@@ -186,7 +199,7 @@ def generate_image_vertexai(final_prompt):
         print(f"❌ [2. Deneme BAŞARISIZ] Vertex AI hatası: {e}")
         print("ℹ️ Lütfen GCP izinlerinizi (403 hatası için) ve faturalandırmanızı kontrol edin.")
         print("   - Vertex AI API'sinin etkin olduğundan emin olun.")
-        print("   - Kullandığınız hizmet hesabının 'Vertex AI Kullanıcısı' veya benzeri izinlere sahip olduğundan emin olun.")
+        print("   - Kullandığınız hizmet hesabının 'Vertex AI Kullanıcısı' ve 'Depolama Nesnesi Yöneticisi' izinlerine sahip olduğundan emin olun.")
         print("   - Projenizin faturalandırmasının etkin olduğundan emin olun.")
         return None
 
@@ -194,7 +207,8 @@ def generate_image_vertexai(final_prompt):
 def generate_image(prompt_text):
     
     # Görsel üretim için daha zengin bir prompt oluştur
-    final_prompt = f"Create a futuristic, abstract, and visually stunning illustration representing the concept of '{prompt_text}'. Use a dark theme with vibrant, glowing data lines and geometric shapes. The style should be minimalistic, elegant, and high-tech. Photorealistic, cinematic lighting."
+    # Prompt içine en boy oranını eklemek, bazı modeller için faydalı olabilir.
+    final_prompt = f"Create a futuristic, abstract, and visually stunning 16:9 illustration representing the concept of '{prompt_text}'. Use a dark theme with vibrant, glowing data lines and geometric shapes. The style should be minimalistic, elegant, and high-tech. Photorealistic, cinematic lighting."
     
     # 1. Deneme: Gemini API
     image_filename = generate_image_gemini(final_prompt)
