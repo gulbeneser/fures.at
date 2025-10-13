@@ -1,4 +1,4 @@
-# scripts/gemini_daily.py -- HASHTAG VE FORMATLAMA İSTEKLERİNİ İÇEREN NİHAİ VERSİYON
+# scripts/gemini_daily.py -- GÖRSEL ÜRETİMİ AKTİF EDİLMİŞ NİHAİ VERSİYON
 
 import os
 import json
@@ -12,6 +12,8 @@ import requests # Link temizleme için
 
 # === CONFIG ===
 MODEL_TEXT = "gemini-2.5-flash-preview-09-2025" 
+# NOT: Görsel model adları sık değişebilir. Hata alınırsa güncel model adı Google AI Studio'dan kontrol edilmelidir.
+MODEL_IMAGE = "gemini-1.5-flash-image-preview-0827" 
 LANGS = {
     "tr": "Türkçe",
     "en": "English",
@@ -20,7 +22,9 @@ LANGS = {
 }
 ROOT = Path(__file__).resolve().parent.parent
 BLOG_DIR = ROOT / "blog"
+IMAGES_DIR = ROOT / "blog_images" # Görsel klasörü
 BLOG_DIR.mkdir(exist_ok=True)
+IMAGES_DIR.mkdir(exist_ok=True) # Görsel klasörünü oluştur
 
 # API anahtarının varlığını en başta kontrol et
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
@@ -69,7 +73,6 @@ def fetch_ai_news(limit=5):
 def generate_multilingual_blog(news_list):
     summaries = "\n".join([f"- Başlık: {n['title']}\n  Link: {n['link']}" for n in news_list])
 
-    # YENİ VE NİHAİ PROMPT
     prompt = f"""
     You are a master storyteller and an expert AI journalist for a creative agency. Your tone is engaging, insightful, and slightly playful. Avoid dry, robotic language.
     
@@ -84,8 +87,8 @@ def generate_multilingual_blog(news_list):
     Separate each complete blog post with the exact separator: [---BLOG-SEPARATOR---]
 
     CRITICAL INSTRUCTIONS FOR STYLE, FORMATTING, AND CONTENT:
-    1.  **Readable Formatting:** Ensure the text is highly readable by using clear paragraphs with proper spacing (blank lines between paragraphs). This is crucial for social media sharing.
-    2.  **Captivating Storytelling:** Don't just list facts. Start with a hook that grabs the reader's attention. Explain WHY this news matters to businesses, creatives, or everyday people.
+    1.  **Readable Formatting:** Ensure the text is highly readable by using clear paragraphs with proper spacing (blank lines between paragraphs).
+    2.  **Captivating Storytelling:** Start with a hook that grabs the reader's attention. Explain WHY this news matters to businesses, creatives, or everyday people.
     3.  **Focus on "Wow" Factor:** Prioritize news that is genuinely surprising or has huge future implications. If there is news about AI in tourism, feature it prominently.
     4.  **Hashtag Generation:** At the end of EACH blog post, just before the "Sources" section, include a single line with 5-7 relevant hashtags in the language of the article (e.g., #YapayZeka #Teknoloji for Turkish).
     5.  **Sources Section:** At the very end of EACH blog post, you MUST include a "Kaynaklar" (in Turkish), "Sources" (in English), "Quellen" (in German), and "Источники" (in Russian) section, listing ALL original article links.
@@ -96,8 +99,38 @@ def generate_multilingual_blog(news_list):
     resp = model.generate_content(prompt, generation_config=generation_config)
     return resp.text
 
+# === 3. Görsel Üret ===
+def generate_image(prompt_text):
+    print(f"Görsel prompt'u oluşturuluyor: {prompt_text}")
+    try:
+        model = genai.GenerativeModel(MODEL_IMAGE)
+        response = model.generate_content(
+            f"Create a futuristic, abstract, and visually stunning illustration representing the concept of '{prompt_text}'. Use a dark theme with vibrant, glowing data lines. Minimalistic and elegant.",
+            generation_config={"response_mime_type": "image/png"}
+        )
+        
+        if response.parts:
+            image_bytes = response.parts[0].inline_data.data
+            filename = f"ai_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+            img_path = IMAGES_DIR / filename
+            with open(img_path, "wb") as f:
+                f.write(image_bytes)
+            print(f"✅ Görsel başarıyla kaydedildi: {filename}")
+            return filename
+        else:
+            print("❌ Görsel üretilemedi, API'den boş yanıt geldi.")
+            return None
+    except Exception as e:
+        print(f"❌ Görsel üretimi sırasında hata oluştu: {e}")
+        return None
+
 # === 4. 4 Dilde Dosyaya Yaz ===
-def save_blogs(multilingual_text, image_filename="default.png"):
+def save_blogs(multilingual_text, image_filename=None):
+    # Eğer görsel üretilemediyse, varsayılan bir görsel kullan
+    if not image_filename:
+        image_filename = "default.png"
+        print("UYARI: Görsel üretilemediği için varsayılan görsel (default.png) kullanılacak.")
+
     sections = multilingual_text.split("[---BLOG-SEPARATOR---]")
     for code, lang in LANGS.items():
         section = next((s for s in sections if f"[{lang}]" in s), None)
@@ -136,19 +169,29 @@ def commit_and_push():
     subprocess.run(["git", "push"])
     print("🚀 Blog başarıyla GitHub'a gönderildi.")
 
-# === MAIN ===
+# === MAIN (Görsel Üretimi Aktif) ===
 def main():
     print("Fetching latest AI news...")
     news = fetch_ai_news()
     if not news:
         print("Hiç haber bulunamadı. İşlem durduruluyor.")
         return
+    
     print("Generating multilingual content...")
     blog_text = generate_multilingual_blog(news)
+
+    print("Generating image...")
+    # Görsel için en önemli haberin başlığını kullan
+    image_prompt = news[0]['title'] if news else "AI Innovation 2025"
+    image_filename = generate_image(image_prompt)
+
     print("Saving blogs...")
-    save_blogs(blog_text)
+    # save_blogs fonksiyonuna üretilen görselin adını gönder
+    save_blogs(blog_text, image_filename)
+
     print("Committing to GitHub...")
     commit_and_push()
+    
     print("✅ İşlem tamamlandı.")
 
 if __name__ == "__main__":
