@@ -34,18 +34,23 @@ genai.configure(api_key=GEMINI_API_KEY)
 # 2. Google Cloud Proje Bilgileri (Görsel üretimi için)
 GCP_PROJECT_ID = os.environ.get("GCP_PROJECT_ID")
 GCP_LOCATION = os.environ.get("GCP_LOCATION", "us-central1") # Örn: "europe-west1"
-if not GCP_PROJECT_ID:
-    raise ValueError("HATA: GCP_PROJECT_ID ortam değişkeni bulunamadı veya boş! Görsel üretimi için gereklidir.")
 
-# Vertex AI'ı Başlat
-# Bu kodun çalışması için ortamınızda `gcloud auth application-default login` ile yetkilendirme yapılmış olmalıdır.
-try:
-    vertexai.init(project=GCP_PROJECT_ID, location=GCP_LOCATION)
-    print(f"✅ Vertex AI, '{GCP_PROJECT_ID}' projesi için '{GCP_LOCATION}' bölgesinde başlatıldı.")
-except Exception as e:
-    print(f"❌ Vertex AI başlatılamadı. Google Cloud yetkilendirmenizi kontrol edin. Hata: {e}")
-    # Vertex AI başlatılamazsa programdan çıkabiliriz.
-    exit(1)
+# Vertex AI kullanılabilirlik bayrağı.
+VERTEX_ENABLED = True
+
+if not GCP_PROJECT_ID:
+    print("⚠️ GCP_PROJECT_ID ortam değişkeni bulunamadı. Görsel üretimi atlanacak ve varsayılan görsel kullanılacak.")
+    VERTEX_ENABLED = False
+else:
+    # Vertex AI'ı Başlat
+    # Bu kodun çalışması için ortamınızda `gcloud auth application-default login` ile yetkilendirme yapılmış olmalıdır.
+    try:
+        vertexai.init(project=GCP_PROJECT_ID, location=GCP_LOCATION)
+        print(f"✅ Vertex AI, '{GCP_PROJECT_ID}' projesi için '{GCP_LOCATION}' bölgesinde başlatıldı.")
+    except Exception as e:
+        print(f"❌ Vertex AI başlatılamadı. Google Cloud yetkilendirmenizi kontrol edin. Hata: {e}")
+        print("ℹ️ Görsel üretimi bu çalıştırmada atlanacak.")
+        VERTEX_ENABLED = False
 
 
 # === 1. Haberleri Çek ===
@@ -96,6 +101,10 @@ def generate_single_blog(news_list, lang_code):
 
 # === 3. Görsel Üret (VERTEX AI İLE DÜZELTİLMİŞ FONKSİYON) ===
 def generate_image(prompt_text):
+    if not VERTEX_ENABLED:
+        print("ℹ️ Vertex AI aktif değil. Görsel üretimi atlanıyor.")
+        return None
+
     final_prompt = f"Create a futuristic, abstract, and visually stunning illustration representing the concept of '{prompt_text}'. Use a dark theme with vibrant, glowing data lines and geometric shapes. The style should be minimalistic, elegant, and high-tech. Photorealistic, cinematic lighting."
     print(f"Görsel prompt'u oluşturuluyor: {final_prompt}")
 
