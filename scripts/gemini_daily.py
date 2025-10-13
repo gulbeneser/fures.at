@@ -1,3 +1,4 @@
+# scripts/gemini_daily.py -- REACT/TYPESCRIPT ÖRNEĞİNE GÖRE DÜZELTİLMİŞ NİHAİ VERSİYON
 
 import os
 import feedparser
@@ -5,12 +6,13 @@ import datetime
 import subprocess
 from pathlib import Path
 import google.generativeai as genai
-from google.generativeai import types
+# 'types' modülüne artık ihtiyaç yok, kaldırıldı.
 import requests
 
 # === CONFIG ===
-MODEL_TEXT = "gemini-2.5-flash" 
-MODEL_IMAGE = "gemini-2.5-flash-image" # En yeni ve stabil model adıyla güncellendi
+MODEL_TEXT = "gemini-1.5-flash" 
+# Model adı daha modern ve stabil bir versiyonla güncellendi.
+MODEL_IMAGE = "imagen-3" 
 LANGS = { "tr": "Turkish", "en": "English", "de": "German", "ru": "Russian" }
 LANG_NAMES = { "tr": "Türkçe", "en": "English", "de": "Deutsch", "ru": "Русский" }
 ROOT = Path(__file__).resolve().parent.parent
@@ -19,7 +21,7 @@ IMAGES_DIR = ROOT / "blog_images"
 BLOG_DIR.mkdir(exist_ok=True)
 IMAGES_DIR.mkdir(exist_ok=True)
 
-# API anahtarını yapılandır (TEK VE DOĞRU YÖNTEM)
+# API anahtarını yapılandır
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 if not GEMINI_API_KEY:
     raise ValueError("HATA: GEMINI_API_KEY ortam değişkeni bulunamadı veya boş!")
@@ -71,35 +73,39 @@ def generate_single_blog(news_list, lang_code):
         print(f"❌ {language} dilinde içerik üretilirken hata oluştu: {e}")
         return None
 
-# === 3. Görsel Üret (DÜZELTİLMİŞ FONKSİYON) ===
+# === 3. Görsel Üret (TAMAMEN DÜZELTİLMİŞ FONKSİYON) ===
 def generate_image(prompt_text):
-    final_prompt = f"Create a futuristic, abstract, and visually stunning illustration representing the concept of '{prompt_text}'. Use a dark theme with vibrant, glowing data lines. Minimalistic and elegant."
+    # TypeScript kodundaki gibi daha etkili bir prompt kullanıldı.
+    final_prompt = f"Create a futuristic, abstract, and visually stunning illustration representing the concept of '{prompt_text}'. Use a dark theme with vibrant, glowing data lines and geometric shapes. The style should be minimalistic, elegant, and high-tech. Photorealistic, cinematic lighting."
     print(f"Görsel prompt'u oluşturuluyor: {final_prompt}")
+    
     try:
+        # 1. Doğru görsel modelini başlat
         image_model = genai.GenerativeModel(MODEL_IMAGE)
         
-        # HATA BURADAYDI: Görsel modelleri için 'generation_config' ile MIME türü belirtilmez.
-        # Bu hatalı parametre kaldırıldı. Model adı zaten görsel üreteceğini belirtir.
+        # 2. API'yi doğru şekilde çağır. Görsel modelleri için 'generation_config' KULLANILMAZ.
+        # Sadece prompt'u göndermeniz yeterlidir. Kütüphane gerisini halleder.
         response = image_model.generate_content(final_prompt)
-
-        # Yanıtın içeriğini daha güvenli bir şekilde kontrol edelim
-        if response.parts and hasattr(response.parts[0], 'inline_data') and response.parts[0].inline_data.data:
+        
+        # 3. Gelen yanıtı doğru şekilde işle. Görsel verisi 'response.parts[0].inline_data.data' içindedir.
+        if response.parts:
             image_bytes = response.parts[0].inline_data.data
             filename = f"ai_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
             img_path = IMAGES_DIR / filename
+            
             with open(img_path, "wb") as f:
                 f.write(image_bytes)
             print(f"✅ Görsel başarıyla kaydedildi: {filename}")
             return filename
         else:
-            # API'den gelen yanıtın yapısını loglayarak hata ayıklamayı kolaylaştırabiliriz
-            print(f"❌ Görsel üretilemedi, API'den beklenen formatta yanıt gelmedi. Yanıt: {response}")
+            print(f"❌ Görsel üretilemedi, API'den boş yanıt geldi. Yanıt: {response}")
             return None
+            
     except Exception as e:
-        # Hata mesajını daha detaylı loglayalım
-        print(f"❌ Görsel üretimi sırasında genel bir hata oluştu: {e}")
+        print(f"❌ Görsel üretimi sırasında kritik bir hata oluştu: {e}")
+        # Hatanın detaylarını görmek için daha fazla bilgi ekleyebilirsiniz.
+        # Örneğin, 'e.args' veya API'den gelen hata mesajlarını loglayabilirsiniz.
         return None
-
 
 # === 4. Blog Dosyasını Kaydet ===
 def save_blog(blog_content, lang_code, image_filename="default.png"):
@@ -122,13 +128,12 @@ lang: {lang_code}
 
 # === 5. GitHub Commit ===
 def commit_and_push():
-    # Sadece değişiklik varsa işlem yap
     status_result = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True)
     if not status_result.stdout.strip():
-        print("ℹ️ Değişiklik bulunmadığı için commit atılmadı.")
+        print("ℹ️ Commit atılacak yeni bir değişiklik bulunamadı.")
         return
-        
-    print("Değişiklikler commit ediliyor ve push ediliyor...")
+    
+    print("Değişiklikler GitHub'a gönderiliyor...")
     subprocess.run(["git", "config", "user.name", "Fures AI Bot"])
     subprocess.run(["git", "config", "user.email", "bot@fures.at"])
     subprocess.run(["git", "add", "."])
@@ -138,13 +143,13 @@ def commit_and_push():
 
 # === MAIN ===
 def main():
-    print("Fetching latest AI news...")
+    print("En son yapay zeka haberleri çekiliyor...")
     news = fetch_ai_news()
     if not news: 
         print("❌ Haberler alınamadı, işlem durduruluyor.")
         return
 
-    print("\nGenerating image...")
+    print("\nHaber başlığına göre görsel üretiliyor...")
     image_prompt = news[0]['title']
     image_filename = generate_image(image_prompt)
     
@@ -153,7 +158,7 @@ def main():
         blog_text = generate_single_blog(news, lang_code)
         save_blog(blog_text, lang_code, image_filename)
         
-    print("\nCommitting to GitHub...")
+    print("\nDeğişiklikler GitHub'a commit ediliyor...")
     commit_and_push()
     print("\n✅ İşlem tamamlandı.")
 
