@@ -10,7 +10,7 @@ import google.generativeai as genai
 import requests
 
 # === CONFIG ===
-MODEL_TEXT = "gemini-1.5-flash" 
+MODEL_TEXT = "gemini-2.5-flash" 
 # Model adı daha modern ve stabil bir versiyonla güncellendi.
 MODEL_IMAGE = "imagen-3" 
 LANGS = { "tr": "Turkish", "en": "English", "de": "German", "ru": "Russian" }
