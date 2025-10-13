@@ -6,6 +6,11 @@
   TZ = "Europe/Istanbul"
 
 [[redirects]]
+  from = "/gulbeneser/assets/*"
+  to = "/gulbeneser/assets/:splat"
+  status = 200
+
+[[redirects]]
   from = "/gulbeneser"
   to = "/gulbeneser/index.html"
   status = 200
@@ -21,6 +26,11 @@
   status = 200
 
 [[redirects]]
+  from = "/furkanyonat/assets/*"
+  to = "/furkanyonat/assets/:splat"
+  status = 200
+
+[[redirects]]
   from = "/furkanyonat/*"
   to = "/furkanyonat/index.html"
   status = 200
@@ -28,6 +38,11 @@
 [[redirects]]
   from = "/kariyer"
   to = "/kariyer/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/kariyer/assets/*"
+  to = "/kariyer/assets/:splat"
   status = 200
 
 [[redirects]]
