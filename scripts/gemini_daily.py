@@ -53,6 +53,8 @@ if GCP_PROJECT_ID:
     except Exception as e:
         print(f"❌ Vertex AI başlatılamadı. Hata: {e}")
         print("ℹ️ Vertex AI ile görsel üretimi bu çalıştırmada atlanacak (2. Deneme).")
+else:
+    print("ℹ️ GCP_PROJECT_ID ortam değişkeni bulunamadığından Vertex AI (2. Görsel Denemesi) atlanacak.")
 
 
 # === 1. Haberleri Çek ===
@@ -73,9 +75,12 @@ def fetch_ai_news(limit=5):
                     if google_news_url in seen_links: continue
                     final_url = google_news_url
                     try:
+                        # Google News linklerinin doğrudan hedef siteye yönlendirmesi için
                         response = session.head(google_news_url, allow_redirects=True, timeout=5)
                         final_url = response.url
-                    except requests.RequestException: pass
+                    except requests.RequestException:
+                        # Eğer head isteği başarısız olursa orijinal linki kullanmaya devam et
+                        pass
                     articles.append({"title": entry.title, "link": final_url})
                     seen_links.add(google_news_url)
             except Exception as e:
@@ -105,27 +110,29 @@ def generate_single_blog(news_list, lang_code):
 def generate_image_gemini(final_prompt):
     print("\n[1. Deneme: Gemini API ile Görsel Üretiliyor...]")
     try:
-        model_name = "gemini-2.5-flash-image"
-        # Düzeltme: Doğrudan yapılandırılmış model üzerinden çağrı yapıldı
+        model_name = "gemini-2.5-flash-image" # Modeli doğru şekilde tanımla (Emin ol ki bu model görsel üretebiliyor)
         model = genai.GenerativeModel(model_name) 
 
         response = model.generate_content(
             contents=[final_prompt],
-            config=types.GenerateContentConfig(
+            generation_config=types.GenerationConfig( # BURADA DÜZELTME YAPILDI: generation_config
                 image_config=types.ImageConfig(
                     aspect_ratio="16:9",
                 ),
-                response_modalities=['Image']
+                response_mime_type='image/png' # BURADA DÜZELTME YAPILDI: görsel yanıt beklediğini belirt
             )
         )
         
-        image_part = response.candidates[0].content.parts[0].inline_data
-        
-        if image_part is None:
-            raise Exception("Görsel üretildi ancak inline_data boş.")
-
-        image_data = base64.b64decode(image_part.data)
-        image = Image.open(BytesIO(image_data))
+        # Yanıt tipini kontrol et ve doğru şekilde eriş
+        if response.images: # Eğer model doğrudan Image objesi dönerse
+            image = response.images[0] # Doğrudan görsel nesnesine eriş (PIL.Image objesi beklenir)
+        elif response.candidates and response.candidates[0].content.parts and response.candidates[0].content.parts[0].inline_data:
+            # Alternatif olarak, eğer base64 encoded bir görsel dönerse (eski veya farklı versiyonlar için)
+            image_part = response.candidates[0].content.parts[0].inline_data
+            image_data = base64.b64decode(image_part.data)
+            image = Image.open(BytesIO(image_data))
+        else:
+            raise Exception("Görsel üretildi ancak yanıt boş veya görsel içermiyor.")
         
         # Görseli kaydet
         filename = f"ai_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
@@ -142,6 +149,7 @@ def generate_image_gemini(final_prompt):
 # === GÖRSEL ÜRETİMİ - 2. DENEME (VERTEX AI IMAGEN) ===
 def generate_image_vertexai(final_prompt):
     if not VERTEX_ENABLED:
+        print("ℹ️ Vertex AI etkinleştirilmediği için 2. Deneme atlanıyor.")
         return None
         
     print("\n[2. Deneme: Vertex AI (Imagen) ile Görsel Üretiliyor...]")
@@ -150,6 +158,8 @@ def generate_image_vertexai(final_prompt):
         from vertexai.vision_models import ImageGenerationModel 
         
         # Vertex AI'daki Imagen modelini kullanıyoruz.
+        # "imagegeneration@006" modeli, en son önerilen stabil model olabilir.
+        # Gerekirse https://cloud.google.com/vertex-ai/docs/generative-ai/model-reference/image-generation adresinden kontrol et.
         model = ImageGenerationModel.from_pretrained("imagegeneration@006")
 
         response = model.generate_images(
@@ -157,23 +167,33 @@ def generate_image_vertexai(final_prompt):
             number_of_images=1,
             aspect_ratio="16:9"
         )
+        
+        # Vertex AI yanıtında resim listesi döner
+        if response.images:
+            image = response.images[0]
 
-        image = response[0]
+            filename = f"ai_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+            img_path = str(IMAGES_DIR / filename)
+            # Vertex AI Image objesini kaydederken location parametresi kullanılır
+            image.save(location=img_path, include_generation_parameters=False)
 
-        filename = f"ai_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
-        img_path = str(IMAGES_DIR / filename)
-        image.save(location=img_path, include_generation_parameters=False)
-
-        print(f"✅ [2. Deneme BAŞARILI] Görsel başarıyla kaydedildi (Vertex AI): {img_path}")
-        return filename
+            print(f"✅ [2. Deneme BAŞARILI] Görsel başarıyla kaydedildi (Vertex AI): {img_path}")
+            return filename
+        else:
+            raise Exception("Vertex AI'dan görsel yanıtı alınamadı.")
+            
     except Exception as e:
         print(f"❌ [2. Deneme BAŞARISIZ] Vertex AI hatası: {e}")
         print("ℹ️ Lütfen GCP izinlerinizi (403 hatası için) ve faturalandırmanızı kontrol edin.")
+        print("   - Vertex AI API'sinin etkin olduğundan emin olun.")
+        print("   - Kullandığınız hizmet hesabının 'Vertex AI Kullanıcısı' veya benzeri izinlere sahip olduğundan emin olun.")
+        print("   - Projenizin faturalandırmasının etkin olduğundan emin olun.")
         return None
 
 # === 3. Ana Görsel Üretim Fonksiyonu (Çoklu Deneme) ===
 def generate_image(prompt_text):
     
+    # Görsel üretim için daha zengin bir prompt oluştur
     final_prompt = f"Create a futuristic, abstract, and visually stunning illustration representing the concept of '{prompt_text}'. Use a dark theme with vibrant, glowing data lines and geometric shapes. The style should be minimalistic, elegant, and high-tech. Photorealistic, cinematic lighting."
     
     # 1. Deneme: Gemini API
@@ -181,11 +201,12 @@ def generate_image(prompt_text):
     if image_filename:
         return image_filename
         
-    # 2. Deneme: Vertex AI
+    # 2. Deneme: Vertex AI (Sadece VERTEX_ENABLED ise denenir)
     image_filename = generate_image_vertexai(final_prompt)
     if image_filename:
         return image_filename
 
+    print("❌ Hiçbir görsel üretim denemesi başarılı olamadı.")
     return None
 
 # === 4. Blog Dosyasını Kaydet ===
@@ -196,10 +217,14 @@ def save_blog(blog_content, lang_code, image_filename="default.png"):
     slug = f"{date_time_str}-{lang_code}-ai-news"
     path = BLOG_DIR / lang_code
     path.mkdir(exist_ok=True)
+    
+    # Görsel yolu, sitenin kök dizinine göre ayarlanmalı
+    image_path_for_blog = f"/blog_images/{image_filename if image_filename else 'default.png'}"
+
     html = f"""---
 title: "AI Daily — {LANG_NAMES[lang_code]}"
 date: {date_time_str}
-image: /blog_images/{image_filename if image_filename else 'default.png'}
+image: {image_path_for_blog}
 lang: {lang_code}
 ---
 {blog_content.strip()}
@@ -220,7 +245,6 @@ def commit_and_push():
             
         print("Değişiklikler commit ediliyor ve push ediliyor...")
         subprocess.run(["git", "config", "user.name", "Fures AI Bot"], check=True)
-        # Hata Düzeltildi: check_true -> check=True
         subprocess.run(["git", "config", "user.email", "bot@fures.at"], check=True) 
         subprocess.run(["git", "add", "."], check=True)
         subprocess.run(["git", "commit", "-m", f"🤖 Daily AI Blog Update [auto] ({current_time_str})"], check=True)
@@ -238,12 +262,14 @@ def main():
         return
 
     print("\nGenerating image...")
-    image_prompt = news[0]['title']
+    # İlk haberin başlığını görsel için prompt olarak kullan
+    image_prompt = news[0]['title'] if news else "AI breakthroughs and future technology" # Haber yoksa yedek prompt
     image_filename = generate_image(image_prompt)
     
     if not image_filename:
-        print("⚠️ Görsel üretilemedi, varsayılan görsel kullanılacak.")
-    
+        print("⚠️ Görsel üretilemedi, varsayılan görsel kullanılacak: default.png")
+        image_filename = "default.png" # Varsayılan görseli kullanmaya zorla
+
     for lang_code in LANGS.keys():
         print(f"\n--- {LANG_NAMES[lang_code]} için içerik üretiliyor ---")
         blog_text = generate_single_blog(news, lang_code)
