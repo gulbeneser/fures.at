@@ -3,3 +3,4 @@ feedparser
 PyYAML
 python-dateutil
 requests
+google-cloud-aiplatform
