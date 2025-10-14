@@ -1,11 +1,30 @@
 import { GoogleGenAI, Chat } from "@google/genai";
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { translations } from '../data/translations';
 import ChatbotAvatar from './ChatbotAvatar';
 
-const GEMINI_KEY = (process.env.API_KEY ||
-  (process.env as Record<string, string | undefined>).apikey ||
-  process.env.GEMINI_API_KEY) as string | undefined;
+const getGeminiKey = (): string | undefined => {
+  const env =
+    typeof import.meta !== 'undefined' && (import.meta as unknown as { env?: Record<string, string | undefined> }).env
+      ? (import.meta as unknown as { env: Record<string, string | undefined> }).env
+      : undefined;
+
+  const maybeKey = env?.VITE_GEMINI_API_KEY || env?.VITE_API_KEY || env?.VITE_GEMINI_KEY;
+
+  if (maybeKey && maybeKey.trim().length > 0) {
+    return maybeKey;
+  }
+
+  if (typeof window !== 'undefined') {
+    const globalKey =
+      (window as Record<string, unknown> & { __GEMINI_API_KEY?: string }).__GEMINI_API_KEY;
+    if (globalKey && globalKey.trim().length > 0) {
+      return globalKey;
+    }
+  }
+
+  return undefined;
+};
 
 const TypingIndicator = () => (
   <div className="flex items-center space-x-1">
@@ -21,19 +40,59 @@ const Chatbot = ({ t, language }: { t: any, language: string }) => {
   const [userInput, setUserInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isListening, setIsListening] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [geminiKey, setGeminiKey] = useState<string | undefined>(() => getGeminiKey());
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
 
-  const ai = React.useMemo(() => (GEMINI_KEY ? new GoogleGenAI({ apiKey: GEMINI_KEY }) : null), []);
+  const ai = useMemo(() => {
+    if (!geminiKey) {
+      return null;
+    }
+    try {
+      return new GoogleGenAI({ apiKey: geminiKey });
+    } catch (err) {
+      console.error('Failed to create Gemini client', err);
+      return null;
+    }
+  }, [geminiKey]);
   const chatRef = useRef<Chat | null>(null);
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || geminiKey) {
+      return;
+    }
+
+    const maybeKey = getGeminiKey();
+    if (maybeKey) {
+      setGeminiKey(maybeKey);
+      return;
+    }
+
+    const intervalId = window.setInterval(() => {
+      const nextKey = getGeminiKey();
+      if (nextKey) {
+        setGeminiKey(nextKey);
+        window.clearInterval(intervalId);
+      }
+    }, 500);
+
+    return () => {
+      window.clearInterval(intervalId);
+    };
+  }, [geminiKey]);
 
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
   }, [history, isLoading]);
-  
+
   useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
     if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
       const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
       recognitionRef.current = new SpeechRecognition();
@@ -58,7 +117,26 @@ const Chatbot = ({ t, language }: { t: any, language: string }) => {
     }
   }, [language, t.chatbot.voiceErrorNotAllowed]);
 
+  useEffect(() => {
+    if (!ai) {
+      const fallbackMessage = t.chatbot?.notConfigured || 'The AI assistant is currently unavailable.';
+      setError(fallbackMessage);
+      setHistory(prev => {
+        if (prev.length === 1 && prev[0].role === 'model' && prev[0].parts === fallbackMessage) {
+          return prev;
+        }
+        return [{ role: 'model', parts: fallbackMessage }];
+      });
+    } else {
+      setError(null);
+    }
+    if (!ai) {
+      chatRef.current = null;
+    }
+  }, [ai, t.chatbot.notConfigured]);
+
   const handleToggleListening = () => {
+    if (error) return;
     if (isListening) {
       recognitionRef.current?.stop();
     } else {
@@ -71,8 +149,7 @@ const Chatbot = ({ t, language }: { t: any, language: string }) => {
     const currentInput = userInput;
     if (!currentInput.trim()) return;
 
-    if (!ai) {
-      setHistory(prev => [...prev, { role: 'model', parts: t.chatbot.notConfigured }]);
+    if (!ai || error) {
       return;
     }
 
@@ -93,8 +170,7 @@ const Chatbot = ({ t, language }: { t: any, language: string }) => {
           education: Object.values(tEN.education).filter(e => typeof e === 'object' && 'degree' in e),
           certificates: tEN.certificates.items,
         });
-        chatRef.current = ai.chats.create({ 
-// FIX: Updated the model name from 'gemini-flash-lite-latest' to the recommended 'gemini-2.5-flash'.
+        chatRef.current = ai.chats.create({
           model: 'gemini-2.5-flash',
           config: {
             systemInstruction: `You are Gülben Eser's enthusiastic and supportive career assistant. Your goal is to highlight her strengths and potential to recruiters and contacts. When answering questions, strictly use the provided CV data: ${cvData}. However, don't just state facts. Interpret her experience positively, praise her accomplishments, and add complimentary remarks about her skills and drive. Be professional, but also confident and proud of her abilities. Always answer in the language of the user's question.`,
@@ -118,6 +194,7 @@ const Chatbot = ({ t, language }: { t: any, language: string }) => {
     } catch (error) {
       console.error("Error sending message to Gemini:", error);
       setHistory(prev => [...prev, { role: 'model', parts: "Sorry, I'm having trouble connecting right now." }]);
+      chatRef.current = null;
     } finally {
       setIsLoading(false);
     }
@@ -142,6 +219,10 @@ const Chatbot = ({ t, language }: { t: any, language: string }) => {
           <div className="p-4 bg-blue-950/90 text-white rounded-t-2xl flex items-center space-x-3">
             <ChatbotAvatar size="w-8 h-8" />
             <h3 className="font-bold text-lg">{t.chatbot.title}</h3>
+            <div className="ml-auto flex items-center space-x-2 text-xs">
+              <span className={`inline-block h-2 w-2 rounded-full ${error ? 'bg-red-400' : 'bg-emerald-400'}`}></span>
+              <span>{error ? (t.chatbot?.offlineLabel || t.chatbot?.notConfigured || 'Offline') : (t.chatbot?.onlineLabel || 'Online')}</span>
+            </div>
           </div>
           <div ref={chatContainerRef} className="flex-1 p-4 space-y-4 overflow-y-auto">
             {history.length === 0 && <p className="text-sm text-slate-500">{t.chatbot.greeting}</p>}
@@ -164,29 +245,34 @@ const Chatbot = ({ t, language }: { t: any, language: string }) => {
           </div>
           <div className="p-2 border-t border-slate-200">
             <div className="flex space-x-2 items-center">
-              <input 
-                type="text" 
+              <input
+                type="text"
                 value={userInput}
                 onChange={(e) => setUserInput(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && !isLoading && handleSendMessage()}
-                placeholder={t.chatbot.placeholder} 
+                placeholder={t.chatbot.placeholder}
                 className="flex-1 px-4 py-2 text-sm border border-slate-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-800 bg-white"
-                disabled={isLoading}
+                disabled={isLoading || !!error}
               />
               {recognitionRef.current && (
-                <button 
-                  onClick={handleToggleListening} 
-                  disabled={isLoading} 
-                  className={`p-2 rounded-full transition-colors duration-200 ${isListening ? 'bg-red-500 text-white animate-pulse' : 'bg-slate-200 text-slate-600 hover:bg-slate-300'}`}
+                <button
+                  onClick={handleToggleListening}
+                  disabled={isLoading || !!error}
+                  className={`p-2 rounded-full transition-colors duration-200 ${isListening ? 'bg-red-500 text-white animate-pulse' : 'bg-slate-200 text-slate-600 hover:bg-slate-300'} ${error ? 'opacity-50 cursor-not-allowed hover:bg-slate-200' : ''}`}
                   aria-label={isListening ? t.chatbot.voiceStop : t.chatbot.voiceStart}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm5 3V4a1 1 0 10-2 0v3a1 1 0 102 0zM5 8a1 1 0 000 2h1a1 1 0 001-1v-1a1 1 0 00-1-1H5zm9 0a1 1 0 00-1-1h-1a1 1 0 00-1 1v1a1 1 0 001 1h1a1 1 0 001-1V8zM10 18a5 5 0 005-5h-1a4 4 0 01-8 0H5a5 5 0 005 5z" /></svg>
                 </button>
               )}
-              <button onClick={() => handleSendMessage()} disabled={isLoading || !userInput.trim()} className="bg-blue-800 text-white p-2 rounded-full hover:bg-blue-950 disabled:bg-slate-400 disabled:cursor-not-allowed transition-colors duration-200 flex-shrink-0">
+              <button onClick={() => handleSendMessage()} disabled={isLoading || !userInput.trim() || !!error} className="bg-blue-800 text-white p-2 rounded-full hover:bg-blue-950 disabled:bg-slate-400 disabled:cursor-not-allowed transition-colors duration-200 flex-shrink-0">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" /></svg>
               </button>
             </div>
+            {error && (
+              <p className="mt-3 text-xs text-red-600 bg-red-50 border border-red-200 rounded-xl px-3 py-2">
+                {error}
+              </p>
+            )}
           </div>
         </div>
       )}
