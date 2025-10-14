@@ -181,14 +181,15 @@ def generate_image(prompt_text):
 # === 4. Blog Dosyasını Kaydet ===
 def save_blog(blog_content, lang_code, image_filename="default.png"):
     if not blog_content: return
-    date_time_str = datetime.datetime.now().strftime("%Y-%m-%d-%H%M") 
-    slug = f"{date_time_str}-{lang_code}-ai-news"
+    now = datetime.datetime.now(datetime.timezone.utc)
+    date_time_slug = now.strftime("%Y-%m-%d-%H%M")
+    slug = f"{date_time_slug}-{lang_code}-ai-news"
     path = BLOG_DIR / lang_code
     path.mkdir(exist_ok=True)
     image_path_for_blog = f"/blog_images/{image_filename if image_filename else 'default.png'}"
     html = f"""---
 title: "AI Daily — {LANG_NAMES[lang_code]}"
-date: {date_time_str}
+date: {now.isoformat()}
 image: {image_path_for_blog}
 lang: {lang_code}
 ---
