@@ -1,10 +1,29 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
 import { translations } from '../../data/translations';
 
-const GEMINI_KEY = (process.env.API_KEY ||
-  (process.env as Record<string, string | undefined>).apikey ||
-  process.env.GEMINI_API_KEY) as string | undefined;
+const getGeminiKey = (): string | undefined => {
+  const env =
+    typeof import.meta !== 'undefined' && (import.meta as unknown as { env?: Record<string, string | undefined> }).env
+      ? (import.meta as unknown as { env: Record<string, string | undefined> }).env
+      : undefined;
+
+  const maybeKey = env?.VITE_GEMINI_API_KEY || env?.VITE_API_KEY || env?.VITE_GEMINI_KEY;
+
+  if (maybeKey && maybeKey.trim().length > 0) {
+    return maybeKey;
+  }
+
+  if (typeof window !== 'undefined') {
+    const globalKey =
+      (window as Record<string, unknown> & { __GEMINI_API_KEY?: string }).__GEMINI_API_KEY;
+    if (globalKey && globalKey.trim().length > 0) {
+      return globalKey;
+    }
+  }
+
+  return undefined;
+};
 
 const CoverLetterModal = ({ onClose, t }: { onClose: () => void, t: any }) => {
     const [companyName, setCompanyName] = useState('');
@@ -12,11 +31,55 @@ const CoverLetterModal = ({ onClose, t }: { onClose: () => void, t: any }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [generatedLetter, setGeneratedLetter] = useState('');
     const [copySuccess, setCopySuccess] = useState('');
+    const [error, setError] = useState<string | null>(null);
 
-    const ai = useMemo(() => (GEMINI_KEY ? new GoogleGenAI({ apiKey: GEMINI_KEY }) : null), []);
+    const [geminiKey, setGeminiKey] = useState<string | undefined>(() => getGeminiKey());
+    const ai = useMemo(() => {
+        if (!geminiKey) {
+            return null;
+        }
+        try {
+            return new GoogleGenAI({ apiKey: geminiKey });
+        } catch (err) {
+            console.error('Failed to create Gemini client', err);
+            return null;
+        }
+    }, [geminiKey]);
+
+    useEffect(() => {
+        if (typeof window === 'undefined' || geminiKey) {
+            return;
+        }
+
+        const maybeKey = getGeminiKey();
+        if (maybeKey) {
+            setGeminiKey(maybeKey);
+            return;
+        }
+
+        const intervalId = window.setInterval(() => {
+            const nextKey = getGeminiKey();
+            if (nextKey) {
+                setGeminiKey(nextKey);
+                window.clearInterval(intervalId);
+            }
+        }, 500);
+
+        return () => {
+            window.clearInterval(intervalId);
+        };
+    }, [geminiKey]);
+
+    useEffect(() => {
+        if (!geminiKey) {
+            setError(t.coverLetterGenerator?.notConfigured || t.chatbot?.notConfigured || 'The AI assistant is currently unavailable.');
+        } else {
+            setError(null);
+        }
+    }, [geminiKey, t.chatbot?.notConfigured, t.coverLetterGenerator?.notConfigured]);
 
     const handleGenerate = async () => {
-        if (!companyName.trim() || !jobTitle.trim() || !ai) return;
+        if (!companyName.trim() || !jobTitle.trim() || !ai || error) return;
 
         setIsLoading(true);
         setGeneratedLetter('');
@@ -42,7 +105,6 @@ const CoverLetterModal = ({ onClose, t }: { onClose: () => void, t: any }) => {
             `;
 
             const response: GenerateContentResponse = await ai.models.generateContent({
-// FIX: Updated the model name from 'gemini-flash-lite-latest' to the recommended 'gemini-2.5-flash'.
               model: 'gemini-2.5-flash',
               contents: prompt,
             });
@@ -75,19 +137,24 @@ const CoverLetterModal = ({ onClose, t }: { onClose: () => void, t: any }) => {
                 </button>
                 <h3 className="text-xl font-bold text-slate-800">{t.coverLetterGenerator.modalTitle}</h3>
                 <p className="text-sm text-slate-500 mt-1">{t.coverLetterGenerator.modalDescription}</p>
+                {error && (
+                    <div className="mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+                        {error}
+                    </div>
+                )}
                 
                 {!generatedLetter && (
                     <div className="mt-6 space-y-4">
                         <div>
                             <label htmlFor="companyName" className="block text-sm font-medium text-slate-700">{t.coverLetterGenerator.companyLabel}</label>
-                            <input type="text" id="companyName" value={companyName} onChange={(e) => setCompanyName(e.target.value)} className="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm" placeholder="e.g., Google" />
+                            <input type="text" id="companyName" value={companyName} onChange={(e) => setCompanyName(e.target.value)} className="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm disabled:bg-slate-100" placeholder="e.g., Google" disabled={!!error} />
                         </div>
                         <div>
                             <label htmlFor="jobTitle" className="block text-sm font-medium text-slate-700">{t.coverLetterGenerator.jobTitleLabel}</label>
-                            <input type="text" id="jobTitle" value={jobTitle} onChange={(e) => setJobTitle(e.target.value)} className="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm" placeholder="e.g., Frontend Developer" />
+                            <input type="text" id="jobTitle" value={jobTitle} onChange={(e) => setJobTitle(e.target.value)} className="mt-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md shadow-sm placeholder-slate-400 focus:outline-none focus:ring-pink-500 focus:border-pink-500 sm:text-sm disabled:bg-slate-100" placeholder="e.g., Frontend Developer" disabled={!!error} />
                         </div>
                         <div className="pt-2">
-                             <button onClick={handleGenerate} disabled={isLoading || !companyName.trim() || !jobTitle.trim()} className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-800 hover:bg-blue-950 disabled:bg-slate-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+                             <button onClick={handleGenerate} disabled={isLoading || !companyName.trim() || !jobTitle.trim() || !!error} className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-800 hover:bg-blue-950 disabled:bg-slate-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
                                 {isLoading ? t.coverLetterGenerator.generatingText : t.coverLetterGenerator.generateButton}
                             </button>
                         </div>
