@@ -4,21 +4,23 @@ import datetime
 import subprocess
 from pathlib import Path
 import requests
-import base64
 from io import BytesIO
-from PIL import Image # Pillow kütüphanesi gerekli!
+from PIL import Image  # Pillow gerekli!
 
-# Metin ve Görsel üretimi için Gemini API kütüphanesi
+# Metin üretimi için Gemini API
 import google.generativeai as genai
 
-# Vertex AI/GCP kütüphaneleri (2. deneme için gerekli)
-import vertexai
+# Vertex AI opsiyonel (yedek)
+try:
+    import vertexai
+except ImportError:
+    vertexai = None
 
 # === CONFIG ===
 MODEL_TEXT = "gemini-2.5-pro"
-MODEL_IMAGE = "gemini-2.5-flash-image" 
-LANGS = { "tr": "Turkish", "en": "English", "de": "German", "ru": "Russian" }
-LANG_NAMES = { "tr": "Türkçe", "en": "English", "de": "Deutsch", "ru": "Русский" }
+LANGS = {"tr": "Turkish", "en": "English", "de": "German", "ru": "Russian"}
+LANG_NAMES = {"tr": "Türkçe", "en": "English", "de": "Deutsch", "ru": "Русский"}
+
 ROOT = Path(__file__).resolve().parent.parent
 BLOG_DIR = ROOT / "blog"
 IMAGES_DIR = ROOT / "blog_images"
@@ -27,28 +29,30 @@ IMAGES_DIR.mkdir(exist_ok=True)
 
 # === API & ORTAM YAPILANDIRMASI ===
 
-# 1. Gemini API Anahtarı
+# 1) Gemini API Anahtarı (Metin üretimi için)
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 if not GEMINI_API_KEY:
     raise ValueError("HATA: GEMINI_API_KEY ortam değişkeni bulunamadı veya boş!")
 genai.configure(api_key=GEMINI_API_KEY)
-print("✅ Gemini API yapılandırıldı.")
+print("✅ Gemini (metin için) yapılandırıldı.")
 
-# 2. Google Cloud Proje Bilgileri (Vertex AI yedeği için)
+# 2) Fal.ai ve Stability AI anahtarları (Görsel üretimi için)
+FAL_KEY = os.environ.get("FAL_KEY")  # Zorunlu (birincil)
+STABILITY_API_KEY = os.environ.get("STABILITY_API_KEY")  # Opsiyonel (yedek)
+
+# 3) Vertex AI (opsiyonel yedek)
 GCP_PROJECT_ID = os.environ.get("GCP_PROJECT_ID")
-GCP_LOCATION = os.environ.get("GCP_LOCATION", "us-central1") 
-
+GCP_LOCATION = os.environ.get("GCP_LOCATION", "us-central1")
 VERTEX_ENABLED = False
-if GCP_PROJECT_ID:
+if GCP_PROJECT_ID and vertexai is not None:
     try:
         vertexai.init(project=GCP_PROJECT_ID, location=GCP_LOCATION)
         VERTEX_ENABLED = True
-        print(f"✅ Vertex AI (Yedek Sistem), '{GCP_PROJECT_ID}' projesi için '{GCP_LOCATION}' bölgesinde başlatıldı.")
+        print(f"✅ Vertex AI (Yedek) hazır: {GCP_PROJECT_ID}/{GCP_LOCATION}")
     except Exception as e:
-        print(f"❌ Vertex AI başlatılamadı. Hata: {e}")
-        print("ℹ️ Vertex AI ile görsel üretimi (Yedek Sistem) bu çalıştırmada atlanacak.")
+        print(f"ℹ️ Vertex AI başlatılamadı: {e}")
 else:
-    print("ℹ️ GCP_PROJECT_ID bulunamadığından Vertex AI (Yedek Sistem) atlanacak.")
+    print("ℹ️ Vertex AI opsiyonel; paket veya proje bilgisi yoksa atlanacak.")
 
 # === 1. Haberleri Çek ===
 def fetch_ai_news(limit=5):
@@ -65,7 +69,8 @@ def fetch_ai_news(limit=5):
                 parsed = feedparser.parse(feed)
                 for entry in parsed.entries:
                     google_news_url = entry.link
-                    if google_news_url in seen_links: continue
+                    if google_news_url in seen_links:
+                        continue
                     final_url = google_news_url
                     try:
                         response = session.head(google_news_url, allow_redirects=True, timeout=5)
@@ -75,7 +80,7 @@ def fetch_ai_news(limit=5):
                     articles.append({"title": entry.title, "link": final_url})
                     seen_links.add(google_news_url)
             except Exception as e:
-                print(f"Uyarı: RSS akışı okunurken bir hata oluştu {feed}: {e}")
+                print(f"Uyarı: RSS akışı okunurken hata oluştu {feed}: {e}")
     return articles[:limit]
 
 # === 2. Blog Metni Üret ===
@@ -98,60 +103,111 @@ def generate_single_blog(news_list, lang_code):
         resp = model.generate_content(prompt)
         return resp.text
     except Exception as e:
-        print(f"❌ {language} dilinde içerik üretilirken hata oluştu: {e}")
+        print(f"❌ {language} dilinde içerik üretilirken hata: {e}")
         return None
 
-# === GÖRSEL ÜRETİMİ - 1. DENEME (GEMINI 2.5 FLASH IMAGE - STANDART YÖNTEM) ===
-def generate_image_gemini(final_prompt):
-    print(f"\n[1. Deneme: '{MODEL_IMAGE}' ile Görsel Üretiliyor...]")
+# === GÖRSEL ÜRETİMİ: Fal.ai (Birincil) ===
+def generate_image_fal_flux(final_prompt):
+    print("\n[ Fal.ai Flux Schnell ] Görsel üretiliyor...")
     try:
-        model = genai.GenerativeModel(MODEL_IMAGE)
-        # Yanıtın tamamını tek seferde al (Non-Streaming)
-        response = model.generate_content(final_prompt)
-        
-        # Yanıtı işle
-        image_part = response.candidates[0].content.parts[0]
-        if 'inline_data' not in image_part:
-            raise ValueError("API yanıtında beklenen görsel verisi (inline_data) bulunamadı.")
+        if not FAL_KEY:
+            raise ValueError("FAL_KEY ortam değişkeni yok.")
 
-        image_data = image_part.inline_data
-        image_bytes = base64.b64decode(image_data.data)
-        image = Image.open(BytesIO(image_bytes))
+        headers = {
+            "Authorization": f"Key {FAL_KEY}",
+            "Content-Type": "application/json",
+        }
+        payload = {
+            "prompt": final_prompt,
+            "num_images": 1,
+            "aspect_ratio": "16:9",
+            "output_format": "png",
+        }
 
-        # Görseli kaydet
-        filename = f"ai_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+        resp = requests.post(
+            "https://fal.run/fal-ai/flux/schnell",
+            headers=headers,
+            json=payload,
+            timeout=120,
+        )
+        resp.raise_for_status()
+        data = resp.json()
+        images = data.get("images") or (data.get("result", {}) or {}).get("images") or []
+        if not images:
+            raise ValueError(f"Fal.ai boş yanıt: {data}")
+
+        img_url = images[0].get("url") if isinstance(images[0], dict) else images[0]
+        if not img_url:
+            raise ValueError(f"Görsel URL bulunamadı: {images[0]}")
+        img_resp = requests.get(img_url, timeout=120)
+        img_resp.raise_for_status()
+
+        image = Image.open(BytesIO(img_resp.content))
+        filename = f"ai_{datetime.datetime.utcnow().strftime('%Y%m%d_%H%M%S')}.png"
         img_path = str(IMAGES_DIR / filename)
-        image.save(img_path, format='PNG') 
+        image.save(img_path, format="PNG")
 
-        print(f"✅ [1. Deneme BAŞARILI] Görsel başarıyla kaydedildi: {img_path}")
+        print(f"✅ [ Fal.ai BAŞARILI ] {img_path}")
         return filename
     except Exception as e:
-        print(f"❌ [1. Deneme BAŞARISIZ] Gemini API hatası: {e}")
+        print(f"❌ [ Fal.ai BAŞARISIZ ] {e}")
         return None
 
-# === GÖRSEL ÜRETİMİ - 2. DENEME (VERTEX AI IMAGEN - YEDEK) ===
+# === GÖRSEL ÜRETİMİ: Stability AI (Yedek) ===
+def generate_image_stability(final_prompt):
+    print("\n[ Stability AI ] Görsel üretiliyor...")
+    try:
+        if not STABILITY_API_KEY:
+            print("ℹ️ STABILITY_API_KEY yok, Stability adımı atlanıyor.")
+            return None
+
+        endpoint = "https://api.stability.ai/v2beta/stable-image/generate/ultra"
+        headers = {
+            "Authorization": f"Bearer {STABILITY_API_KEY}",
+            "Accept": "image/png",
+        }
+        files = {
+            "prompt": (None, final_prompt),
+            "aspect_ratio": (None, "16:9"),
+            "output_format": (None, "png"),
+        }
+
+        r = requests.post(endpoint, headers=headers, files=files, timeout=180)
+        if r.status_code != 200:
+            raise ValueError(f"HTTP {r.status_code}: {r.text[:500]}")
+
+        filename = f"ai_{datetime.datetime.utcnow().strftime('%Y%m%d_%H%M%S')}.png"
+        img_path = str(IMAGES_DIR / filename)
+        with open(img_path, "wb") as f:
+            f.write(r.content)
+
+        print(f"✅ [ Stability BAŞARILI ] {img_path}")
+        return filename
+    except Exception as e:
+        print(f"❌ [ Stability BAŞARISIZ ] {e}")
+        return None
+
+# === GÖRSEL ÜRETİMİ: Vertex AI (Opsiyonel Yedek) ===
 def generate_image_vertexai(final_prompt):
     if not VERTEX_ENABLED:
-        print("ℹ️ Vertex AI etkinleştirilmediği için 2. Deneme (Yedek) atlanıyor.")
+        print("ℹ️ Vertex AI devre dışı, atlanıyor.")
         return None
-        
-    print("\n[2. Deneme (Yedek): Vertex AI (Imagen) ile Görsel Üretiliyor...]")
     try:
-        from vertexai.vision_models import ImageGenerationModel 
+        from vertexai.vision_models import ImageGenerationModel
+        print("\n[ Vertex AI Imagen ] Görsel üretiliyor...")
         model = ImageGenerationModel.from_pretrained("imagegeneration@006")
         response = model.generate_images(prompt=final_prompt, number_of_images=1, aspect_ratio="16:9")
-        
         if response.images:
             image = response.images[0]
-            filename = f"ai_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+            filename = f"ai_{datetime.datetime.utcnow().strftime('%Y%m%d_%H%M%S')}.png"
             img_path = str(IMAGES_DIR / filename)
             image.save(location=img_path, include_generation_parameters=False)
-            print(f"✅ [2. Deneme BAŞARILI] Görsel başarıyla kaydedildi (Vertex AI): {img_path}")
+            print(f"✅ [ Vertex BAŞARILI ] {img_path}")
             return filename
         else:
-            raise Exception("Vertex AI'dan görsel yanıtı alınamadı.")
+            raise RuntimeError("Vertex AI'dan görsel yanıt alınamadı.")
     except Exception as e:
-        print(f"❌ [2. Deneme BAŞARISIZ] Vertex AI hatası: {e}")
+        print(f"❌ [ Vertex BAŞARISIZ ] {e}")
         return None
 
 # === 3. Ana Görsel Üretim Fonksiyonu ===
@@ -163,33 +219,37 @@ def generate_image(prompt_text):
     **Palette:** A dark, high-tech theme with electric blue, magenta, and subtle gold highlights.
     **Lighting:** Photorealistic, cinematic lighting with strong volumetric rays.
     """
-    
-    # 1. Deneme: Ana yöntem
-    image_filename = generate_image_gemini(final_prompt)
+
+    # 1) Fal.ai
+    image_filename = generate_image_fal_flux(final_prompt)
     if image_filename:
         return image_filename
-        
-    # 2. Deneme: Yedek yöntem
-    print("ℹ️ Ana görsel üretimi başarısız oldu, yedek sisteme geçiliyor.")
+
+    # 2) Stability AI
+    image_filename = generate_image_stability(final_prompt)
+    if image_filename:
+        return image_filename
+
+    # 3) Vertex AI (opsiyonel)
     image_filename = generate_image_vertexai(final_prompt)
     if image_filename:
         return image_filename
 
-    print("❌ Tüm görsel üretim denemeleri başarısız oldu.")
+    print("❌ Tüm görsel üretim denemeleri başarısız.")
     return None
 
 # === 4. Blog Dosyasını Kaydet ===
 def save_blog(blog_content, lang_code, image_filename="default.png"):
-    if not blog_content: return
-    now = datetime.datetime.now(datetime.timezone.utc)
-    date_time_slug = now.strftime("%Y-%m-%d-%H%M")
-    slug = f"{date_time_slug}-{lang_code}-ai-news"
+    if not blog_content:
+        return
+    date_time_str = datetime.datetime.utcnow().strftime("%Y-%m-%d-%H%M")  # UTC
+    slug = f"{date_time_str}-{lang_code}-ai-news"
     path = BLOG_DIR / lang_code
     path.mkdir(exist_ok=True)
     image_path_for_blog = f"/blog_images/{image_filename if image_filename else 'default.png'}"
     html = f"""---
 title: "AI Daily — {LANG_NAMES[lang_code]}"
-date: {now.isoformat()}
+date: {date_time_str}
 image: {image_path_for_blog}
 lang: {lang_code}
 ---
@@ -202,16 +262,16 @@ lang: {lang_code}
 # === 5. GitHub Commit ===
 def commit_and_push():
     try:
-        current_time_str = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        current_time_str = datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")  # UTC
         status_result = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True, check=True)
         if not status_result.stdout.strip():
             print("ℹ️ Değişiklik bulunmadığı için commit atılmadı.")
             return
         print("Değişiklikler commit ediliyor ve push ediliyor...")
         subprocess.run(["git", "config", "user.name", "Fures AI Bot"], check=True)
-        subprocess.run(["git", "config", "user.email", "bot@fures.at"], check=True) 
+        subprocess.run(["git", "config", "user.email", "bot@fures.at"], check=True)
         subprocess.run(["git", "add", "."], check=True)
-        subprocess.run(["git", "commit", "-m", f"🤖 Daily AI Blog Update [auto] ({current_time_str})"], check=True)
+        subprocess.run(["git", "commit", "-m", f"🤖 Daily AI Blog Update [auto] ({current_time_str} UTC)"], check=True)
         subprocess.run(["git", "push"], check=True)
         print("🚀 Blog başarıyla GitHub'a gönderildi.")
     except (subprocess.CalledProcessError, FileNotFoundError) as e:
@@ -221,14 +281,14 @@ def commit_and_push():
 def main():
     print("Fetching latest AI news...")
     news = fetch_ai_news()
-    if not news: 
+    if not news:
         print("❌ Haberler alınamadı, işlem durduruluyor.")
         return
 
     print("\nGenerating image...")
     image_prompt = news[0]['title'] if news else "AI breakthroughs and future technology"
     image_filename = generate_image(image_prompt)
-    
+
     if not image_filename:
         print("⚠️ Görsel üretilemedi, varsayılan görsel kullanılacak: default.png")
         image_filename = "default.png"
