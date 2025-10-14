@@ -1,9 +1,30 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { GoogleGenAI, Chat } from "@google/genai";
 
-const GEMINI_KEY = (process.env.API_KEY ||
-  (process.env as Record<string, string | undefined>).apikey ||
-  process.env.GEMINI_API_KEY) as string | undefined;
+const getGeminiKey = (): string | undefined => {
+  const env =
+    typeof import.meta !== 'undefined' && (import.meta as unknown as { env?: Record<string, string | undefined> }).env
+      ? (import.meta as unknown as { env: Record<string, string | undefined> }).env
+      : undefined;
+
+  const maybeKey = env?.VITE_GEMINI_API_KEY || env?.VITE_API_KEY || env?.VITE_GEMINI_KEY;
+
+  if (maybeKey && maybeKey.trim().length > 0) {
+    return maybeKey;
+  }
+
+  if (typeof window !== 'undefined') {
+    const globalKey =
+      (window as Record<string, unknown> & { __GEMINI_API_KEY?: string }).__GEMINI_API_KEY;
+    if (globalKey && globalKey.trim().length > 0) {
+      return globalKey;
+    }
+  }
+
+  return undefined;
+};
+
+const GEMINI_KEY = getGeminiKey();
 
 declare global {
   interface Window {
@@ -47,7 +68,9 @@ const Chatbot: React.FC<ChatbotProps> = ({ t, language, isPrinting }) => {
     useEffect(() => {
         if (!GEMINI_KEY) {
             console.error("API key not found. Please ensure the 'apikey' environment variable is configured.");
-            setError(t.chatbot.notConfigured);
+            const fallbackMessage = t.chatbot?.notConfigured || 'The AI assistant is currently unavailable.';
+            setError(fallbackMessage);
+            setMessages((prev) => (prev.length ? prev : [{ text: fallbackMessage, sender: 'bot' }]));
             return;
         }
 
@@ -58,14 +81,17 @@ const Chatbot: React.FC<ChatbotProps> = ({ t, language, isPrinting }) => {
                 config: { systemInstruction },
             });
             chatRef.current = newChat;
-            
+
             const cvContext = JSON.stringify(t);
             newChat.sendMessage({ message: `Here is the CV context to use for all subsequent answers: ${cvContext}` });
 
             setMessages([{ text: t.chatbot.greeting, sender: 'bot' }]);
+            setError(null);
         } catch (e) {
             console.error("Error initializing chat:", e);
-            setError("Failed to initialize the AI assistant.");
+            const fallbackMessage = t.chatbot?.notConfigured || 'The AI assistant is currently unavailable.';
+            setError(fallbackMessage);
+            setMessages((prev) => (prev.length ? prev : [{ text: fallbackMessage, sender: 'bot' }]));
         }
     }, [language, t, systemInstruction]);
 
@@ -107,7 +133,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ t, language, isPrinting }) => {
     const handleSendMessage = async (e: React.FormEvent | Event, messageOverride?: string) => {
         e.preventDefault();
         const messageText = messageOverride || input;
-        if (!messageText.trim() || isLoading || !chatRef.current) return;
+        if (!messageText.trim() || isLoading || !chatRef.current || error) return;
 
         const userMessage = { text: messageText, sender: 'user' as const };
         setMessages(prev => [...prev, userMessage]);
@@ -185,8 +211,8 @@ const Chatbot: React.FC<ChatbotProps> = ({ t, language, isPrinting }) => {
                     <div>
                         <h3 className="font-bold text-primary-text">{t.chatbot.title}</h3>
                         <div className="flex items-center space-x-2">
-                            <span className="h-2 w-2 rounded-full bg-green-400"></span>
-                            <p className="text-xs text-secondary-text">Online</p>
+                            <span className={`h-2 w-2 rounded-full ${error ? 'bg-red-400' : 'bg-green-400'}`}></span>
+                            <p className="text-xs text-secondary-text">{error ? (t.chatbot?.offlineLabel || t.chatbot?.notConfigured || 'Offline') : 'Online'}</p>
                         </div>
                     </div>
                 </header>
@@ -223,17 +249,22 @@ const Chatbot: React.FC<ChatbotProps> = ({ t, language, isPrinting }) => {
                             onChange={(e) => setInput(e.target.value)}
                             placeholder={isListening ? "Listening..." : t.chatbot.placeholder}
                             className="w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded-lg text-primary-text focus:outline-none focus:ring-2 focus:ring-accent-color/50"
-                            disabled={isLoading}
+                            disabled={isLoading || !!error}
                         />
                         {recognitionRef.current && (
-                            <button type="button" onClick={toggleListening} className={`p-2 rounded-lg transition-colors ${isListening ? 'bg-red-500 text-white animate-pulse' : 'bg-slate-700 text-secondary-text hover:bg-slate-600'}`} aria-label={isListening ? t.chatbot.voiceStop : t.chatbot.voiceStart}>
+                            <button type="button" onClick={toggleListening} className={`p-2 rounded-lg transition-colors ${isListening ? 'bg-red-500 text-white animate-pulse' : 'bg-slate-700 text-secondary-text hover:bg-slate-600'} ${error ? 'opacity-50 cursor-not-allowed hover:bg-slate-700' : ''}`} aria-label={isListening ? t.chatbot.voiceStop : t.chatbot.voiceStart} disabled={!!error}>
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93V17a1 1 0 11-2 0v-2.07A5 5 0 015 10V8a1 1 0 012 0v2a3 3 0 006 0V8a1 1 0 012 0v2a5 5 0 01-5 4.93z" clipRule="evenodd" /></svg>
                             </button>
                         )}
-                        <button type="submit" className="bg-accent-color text-white p-2 rounded-lg disabled:bg-slate-600 disabled:cursor-not-allowed transition-colors" disabled={isLoading || !input.trim()}>
+                        <button type="submit" className="bg-accent-color text-white p-2 rounded-lg disabled:bg-slate-600 disabled:cursor-not-allowed transition-colors" disabled={isLoading || !input.trim() || !!error}>
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" /></svg>
                         </button>
                     </div>
+                    {error && (
+                        <p className="mt-3 text-sm text-red-400 bg-red-950/40 border border-red-500/30 rounded-lg px-3 py-2">
+                            {error}
+                        </p>
+                    )}
                 </form>
             </div>
         </>
