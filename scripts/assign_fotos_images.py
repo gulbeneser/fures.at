@@ -1,11 +1,12 @@
 """Assign images from `/fotos` to all existing blog posts."""
 from __future__ import annotations
 
-import json
+
 import re
 from pathlib import Path
 
-from image_rotation import NoImagesAvailableError, get_available_images, STATE_PATH
+from image_rotation import ImageRotator, NoImagesAvailableError
+
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 BLOG_DIR = ROOT_DIR / "blog"
@@ -21,10 +22,12 @@ def update_image_line(lines: list[str], new_image_path: str) -> list[str]:
     raise ValueError("Ön bilgilendirme bloğunda 'image' satırı bulunamadı.")
 
 
-def process_language(lang_dir: Path, images: list[str]) -> int:
+
+def process_language(lang_dir: Path, rotator: ImageRotator) -> int:
     files = sorted(lang_dir.glob("*.md"))
-    for idx, file_path in enumerate(files):
-        image_filename = images[idx % len(images)]
+    for file_path in files:
+        image_filename = rotator.next_for_language(lang_dir.name)
+
         image_url = f"/fotos/{image_filename}"
         content = file_path.read_text(encoding="utf-8").splitlines(keepends=True)
         updated = update_image_line(content, image_url)
@@ -33,23 +36,19 @@ def process_language(lang_dir: Path, images: list[str]) -> int:
 
 
 def main() -> None:
-    images = get_available_images()
-    if not images:
-        raise NoImagesAvailableError("Görsel bulunamadı, işlem durduruldu.")
 
-    language_counts: dict[str, int] = {}
+    try:
+        rotator = ImageRotator()
+    except NoImagesAvailableError as exc:
+        raise SystemExit(str(exc)) from exc
+
     for lang_dir in sorted(BLOG_DIR.iterdir()):
         if not lang_dir.is_dir():
             continue
-        lang_code = lang_dir.name
-        count = process_language(lang_dir, images)
-        language_counts[lang_code] = count
-        print(f"{lang_code}: {count} yazı güncellendi.")
+        count = process_language(lang_dir, rotator)
+        print(f"{lang_dir.name}: {count} yazı güncellendi.")
 
-    STATE_PATH.write_text(
-        json.dumps(language_counts, indent=2, ensure_ascii=False) + "\n",
-        encoding="utf-8",
-    )
+
     print("Görsel atamaları tamamlandı.")
 
 
