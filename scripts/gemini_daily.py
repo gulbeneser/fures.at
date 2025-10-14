@@ -19,7 +19,7 @@ import vertexai
 
 # === CONFIG ===
 # Metin üretimi için güncel bir model
-MODEL_TEXT = "gemini-2.5-flash"
+MODEL_TEXT = "gemini-2.5-pro"
 LANGS = { "tr": "Turkish", "en": "English", "de": "German", "ru": "Russian" }
 LANG_NAMES = { "tr": "Türkçe", "en": "English", "de": "Deutsch", "ru": "Русский" }
 ROOT = Path(__file__).resolve().parent.parent
