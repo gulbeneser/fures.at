@@ -2,21 +2,27 @@
 
 This module centralises the logic that selects images for blog posts so the
 same behaviour can be reused by both content generation scripts and one-off
+
 maintenance utilities. Image selection happens in a language-specific,
 randomised round that keeps cycling through the available assets without
 repeating the most recently used file.
+,
 """
 from __future__ import annotations
 
 import json
+
 import random
 from pathlib import Path
 from typing import Any, Dict, List
 
+
 ROOT_DIR = Path(__file__).resolve().parent.parent
 IMAGES_DIR = ROOT_DIR / "fotos"
 STATE_PATH = Path(__file__).resolve().parent / "image_rotation_state.json"
+
 STATE_VERSION = 1
+
 ALLOWED_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp"}
 
 
@@ -38,6 +44,7 @@ def get_available_images() -> List[str]:
         for file in IMAGES_DIR.iterdir()
         if file.is_file() and file.suffix.lower() in ALLOWED_EXTENSIONS
     )
+
 
 
 def _empty_state() -> Dict[str, Any]:
@@ -74,6 +81,7 @@ def _normalise_state(raw_state: object) -> Dict[str, Any]:
 
 
 def _load_state(path: Path) -> Dict[str, Any]:
+
     if not path.exists():
         return {}
     try:
@@ -83,12 +91,14 @@ def _load_state(path: Path) -> Dict[str, Any]:
         return {}
 
 
+
 def _save_state(path: Path, state: Dict[str, Any]) -> None:
-    path.write_text(json.dumps(state, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
 class ImageRotator:
+
     """Random-but-fair image selector with per-language cycles."""
+
 
     def __init__(self, state_path: Path | None = None):
         self.state_path = state_path or STATE_PATH
@@ -97,6 +107,7 @@ class ImageRotator:
             raise NoImagesAvailableError(
                 "`/fotos` klasöründe kullanılabilir görsel bulunamadı."
             )
+
 
         raw_state = _load_state(self.state_path)
         self.state = _normalise_state(raw_state)
@@ -164,4 +175,5 @@ class ImageRotator:
         """Reset all rotation counters and histories."""
 
         self.state = _empty_state()
+=======
         _save_state(self.state_path, self.state)

@@ -1,10 +1,12 @@
 """Assign images from `/fotos` to all existing blog posts."""
 from __future__ import annotations
 
+
 import re
 from pathlib import Path
 
 from image_rotation import ImageRotator, NoImagesAvailableError
+
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 BLOG_DIR = ROOT_DIR / "blog"
@@ -20,10 +22,12 @@ def update_image_line(lines: list[str], new_image_path: str) -> list[str]:
     raise ValueError("Ön bilgilendirme bloğunda 'image' satırı bulunamadı.")
 
 
+
 def process_language(lang_dir: Path, rotator: ImageRotator) -> int:
     files = sorted(lang_dir.glob("*.md"))
     for file_path in files:
         image_filename = rotator.next_for_language(lang_dir.name)
+
         image_url = f"/fotos/{image_filename}"
         content = file_path.read_text(encoding="utf-8").splitlines(keepends=True)
         updated = update_image_line(content, image_url)
@@ -32,6 +36,7 @@ def process_language(lang_dir: Path, rotator: ImageRotator) -> int:
 
 
 def main() -> None:
+
     try:
         rotator = ImageRotator()
     except NoImagesAvailableError as exc:
@@ -42,6 +47,7 @@ def main() -> None:
             continue
         count = process_language(lang_dir, rotator)
         print(f"{lang_dir.name}: {count} yazı güncellendi.")
+
 
     print("Görsel atamaları tamamlandı.")
 
