@@ -10,7 +10,6 @@ from PIL import Image # Pillow kütüphanesi gerekli!
 
 # Metin ve Görsel üretimi için Gemini API kütüphanesi
 import google.generativeai as genai
-from google.generativeai import types # Gemini config kullanmak için
 
 # Vertex AI/GCP kütüphaneleri (2. deneme için gerekli)
 import vertexai
@@ -18,7 +17,7 @@ import vertexai
 
 
 # === CONFIG ===
-# Metin üretimi için güncel bir model
+# Metin üretimi için güncel ve daha güçlü model (İSTEĞİNİZ ÜZERİNE GÜNCELLENDİ)
 MODEL_TEXT = "gemini-2.5-pro"
 LANGS = { "tr": "Turkish", "en": "English", "de": "German", "ru": "Russian" }
 LANG_NAMES = { "tr": "Türkçe", "en": "English", "de": "Deutsch", "ru": "Русский" }
@@ -46,7 +45,7 @@ GCP_LOCATION = os.environ.get("GCP_LOCATION", "us-central1")
 VERTEX_ENABLED = False
 if GCP_PROJECT_ID:
     try:
-        # Vertex AI'ı Başlat (403 hatasını çözmek için izinler ve faturalandırma gereklidir)
+        # Vertex AI'ı Başlat
         vertexai.init(project=GCP_PROJECT_ID, location=GCP_LOCATION)
         VERTEX_ENABLED = True
         print(f"✅ Vertex AI (2. Görsel Denemesi), '{GCP_PROJECT_ID}' projesi için '{GCP_LOCATION}' bölgesinde başlatıldı.")
@@ -75,11 +74,9 @@ def fetch_ai_news(limit=5):
                     if google_news_url in seen_links: continue
                     final_url = google_news_url
                     try:
-                        # Google News linklerinin doğrudan hedef siteye yönlendirmesi için
                         response = session.head(google_news_url, allow_redirects=True, timeout=5)
                         final_url = response.url
                     except requests.RequestException:
-                        # Eğer head isteği başarısız olursa orijinal linki kullanmaya devam et
                         pass
                     articles.append({"title": entry.title, "link": final_url})
                     seen_links.add(google_news_url)
@@ -91,12 +88,31 @@ def fetch_ai_news(limit=5):
 def generate_single_blog(news_list, lang_code):
     language = LANGS[lang_code]
     summaries = "\n".join([f"- Title: {n['title']}\n  Link: {n['link']}" for n in news_list])
+    
+    # --- İYİLEŞTİRİLMİŞ PROMPT ---
     prompt = f"""
-    You are a master storyteller and expert AI journalist. Your tone is engaging, insightful, and slightly playful.
-    Analyze the following AI news and write a single, compelling blog article (400-600 words) in {language}.
-    News sources: {summaries}
-    The article MUST include: a title starting with '###', readable formatting with paragraphs, 5-7 relevant hashtags in {language} before the sources, and a "Sources" section (in the correct language) at the end, listing ALL original links.
-    Focus on the "Wow" factor and explain WHY this news matters.
+    Persona: You are a master storyteller and expert AI journalist for a popular tech blog.
+    Tone: Your tone is engaging, insightful, and slightly playful. Make complex topics easily understandable.
+
+    Target Audience: Write for a tech-savvy audience that is interested in AI but may not be an expert. Avoid overly technical jargon.
+
+    Task: Analyze the following AI news and synthesize them into a single, compelling blog article (400-600 words) in {language}. Do not just list the news; weave them into a coherent narrative that tells a story about the current state of AI.
+
+    News Sources:
+    {summaries}
+
+    Output Structure & Rules:
+    1.  **Title:** Start the entire output with a catchy title, prefixed with '###'.
+    2.  **Introduction:** Begin with a strong hook that grabs the reader's attention.
+    3.  **Body:** Discuss the key developments. Instead of a simple summary, focus on the "Wow" factor. Explain the broader implications and WHY this news matters to our audience.
+    4.  **Conclusion:** End with a forward-looking statement or a thought-provoking question about the future of AI.
+    5.  **Hashtags:** Before the sources, include a line with 5-7 relevant hashtags in {language}.
+    6.  **Sources:** Conclude with a "Sources" section (in the correct language), listing ALL original links.
+
+    Negative Constraints:
+    - Do NOT use clichés like "In a world where...".
+    - Do NOT simply copy sentences from the source titles.
+    - Do NOT be overly formal or academic.
     """
     model = genai.GenerativeModel(MODEL_TEXT)
     try:
@@ -110,54 +126,36 @@ def generate_single_blog(news_list, lang_code):
 def generate_image_gemini(final_prompt):
     print("\n[1. Deneme: Gemini API ile Görsel Üretiliyor...]")
     try:
-        # Doğrudan görsel üretim modeli kimliği (varsa) veya multimodal model
-        # `gemini-pro-vision` multimodal bir modeldir, ancak doğrudan Text-to-Image için
-        # spesifik bir model adı gerekebilir veya API'nin default davranışı olabilir.
-        # Eğer bu kısım hata verirse, `generate_content` çağrısını daha basit düşünmek gerekebilir.
-        model = genai.GenerativeModel("gemini-pro-vision") # Multimodal model denemesi
+        # ÖNEMLİ NOT: 'gemini-pro-vision' bir multimodal anlama modelidir, yani görsel ve metinleri
+        # analiz eder, sıfırdan görsel ÜRETMEZ. Bu denemenin başarısız olması beklenir.
+        # Görsel üretimi için Google'ın Imagen model ailesini hedefleyen bir Gemini API
+        # endpoint'i kullanılmalıdır. Bu kod, bu API'nin gelecekteki olası entegrasyonu için
+        # bir yer tutucu olarak düşünülebilir. Şimdilik bu adım atlanıp Vertex AI'a geçilecektir.
+        model = genai.GenerativeModel("gemini-pro-vision") # Bu model görsel üretmez, bu deneme başarısız olacaktır.
 
-        # Görsel parametreleri (en boy oranı) doğrudan `generate_content` içinde verilmez.
-        # Ya modelin doğrudan Text-to-Image arayüzü vardır (ki bu genellikle ayrı bir modeldir)
-        # Ya da prompt içinde belirtilir, ya da varsayılan değerlerle üretilir.
-        # Buradaki ImageConfig hatası, bunun generate_content'e bu şekilde geçirilmediğini gösterir.
-        # Bu yüzden en basit çağrı şeklini deniyoruz ve en boy oranını prompt'a bırakıyoruz.
-        response = model.generate_content(
-            contents=[final_prompt] # Sadece metin prompt'u gönderiyoruz
-        )
+        response = model.generate_content(contents=[final_prompt])
         
-        # Yanıtı kontrol et ve doğru şekilde görsel verisine eriş
-        # Gemini API'nin multimodal yanıtları farklı formatlarda olabilir.
-        # Eğer doğrudan bir Image objesi dönerse (ideal):
-        if hasattr(response, 'images') and response.images:
-            image = response.images[0]
-        # Eğer base64 kodlu veri içeren partlar dönerse:
-        elif response.candidates and response.candidates[0].content.parts:
+        # Yanıtı işle (Bu kısım teoriktir ve muhtemelen çalışmayacaktır)
+        if response.candidates and response.candidates[0].content.parts:
             image_part_found = None
             for part in response.candidates[0].content.parts:
                 if hasattr(part, 'inline_data') and part.inline_data:
                     image_part_found = part.inline_data
                     break
-            
             if image_part_found:
                 image_data = base64.b64decode(image_part_found.data)
                 image = Image.open(BytesIO(image_data))
-            else:
-                raise Exception("Görsel üretildi ancak yanıt parts içinde inline_data içermiyor.")
-        else:
-            print(f"DEBUG: Gemini API yanıtı beklenenden farklı formatta veya boş: {response}")
-            raise Exception("Görsel üretildi ancak yanıt boş veya görsel içermiyor.")
-        
-        # Görseli kaydet
-        filename = f"ai_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
-        img_path = str(IMAGES_DIR / filename)
-        image.save(img_path, format='PNG') 
+                filename = f"ai_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+                img_path = str(IMAGES_DIR / filename)
+                image.save(img_path, format='PNG') 
+                print(f"✅ [1. Deneme BAŞARILI] Görsel başarıyla kaydedildi (Gemini API): {img_path}")
+                return filename
+        raise Exception("Görsel üretildi ancak yanıt boş veya görsel içermiyor.")
 
-        print(f"✅ [1. Deneme BAŞARILI] Görsel başarıyla kaydedildi (Gemini API): {img_path}")
-        return filename
     except Exception as e:
         print(f"❌ [1. Deneme BAŞARISIZ] Gemini API hatası: {e}")
-        print("ℹ️ Gemini API ile doğrudan Text-to-Image yetenekleri için model adı ve çağrı yöntemi değişmiş olabilir.")
-        print("   Alternatif olarak, prompt'a en boy oranını belirtmek (örneğin 'generate a 16:9 image...') denenebilir.")
+        print("ℹ️ Bu beklenen bir durumdur. 'gemini-pro-vision' görsel üretimi için tasarlanmamıştır.")
+        print("   Şimdi 2. denemeye (Vertex AI) geçiliyor...")
         return None
 
 
@@ -169,27 +167,21 @@ def generate_image_vertexai(final_prompt):
         
     print("\n[2. Deneme: Vertex AI (Imagen) ile Görsel Üretiliyor...]")
     try:
-        # Import buraya taşındı, aksi halde modül yüklenemezse hata fırlatır
         from vertexai.vision_models import ImageGenerationModel 
         
-        # Vertex AI'daki Imagen modelini kullanıyoruz.
         model = ImageGenerationModel.from_pretrained("imagegeneration@006")
 
         response = model.generate_images(
             prompt=final_prompt,
             number_of_images=1,
-            aspect_ratio="16:9" # Imagen için bu parametre geçerlidir
+            aspect_ratio="16:9"
         )
         
-        # Vertex AI yanıtında resim listesi döner
         if response.images:
             image = response.images[0]
-
             filename = f"ai_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
             img_path = str(IMAGES_DIR / filename)
-            # Vertex AI Image objesini kaydederken location parametresi kullanılır
             image.save(location=img_path, include_generation_parameters=False)
-
             print(f"✅ [2. Deneme BAŞARILI] Görsel başarıyla kaydedildi (Vertex AI): {img_path}")
             return filename
         else:
@@ -197,25 +189,33 @@ def generate_image_vertexai(final_prompt):
             
     except Exception as e:
         print(f"❌ [2. Deneme BAŞARISIZ] Vertex AI hatası: {e}")
-        print("ℹ️ Lütfen GCP izinlerinizi (403 hatası için) ve faturalandırmanızı kontrol edin.")
-        print("   - Vertex AI API'sinin etkin olduğundan emin olun.")
-        print("   - Kullandığınız hizmet hesabının 'Vertex AI Kullanıcısı' ve 'Depolama Nesnesi Yöneticisi' izinlerine sahip olduğundan emin olun.")
-        print("   - Projenizin faturalandırmasının etkin olduğundan emin olun.")
+        print("ℹ️ Lütfen GCP izinlerinizi, faturalandırmanızı ve Vertex AI API'nin etkin olduğunu kontrol edin.")
         return None
 
 # === 3. Ana Görsel Üretim Fonksiyonu (Çoklu Deneme) ===
 def generate_image(prompt_text):
     
-    # Görsel üretim için daha zengin bir prompt oluştur
-    # Prompt içine en boy oranını eklemek, bazı modeller için faydalı olabilir.
-    final_prompt = f"Create a futuristic, abstract, and visually stunning 16:9 illustration representing the concept of '{prompt_text}'. Use a dark theme with vibrant, glowing data lines and geometric shapes. The style should be minimalistic, elegant, and high-tech. Photorealistic, cinematic lighting."
+    # --- İYİLEŞTİRİLMİŞ GÖRSEL PROMPT'U ---
+    final_prompt = f"""
+    A visually stunning 16:9 digital art illustration.
+
+    **Subject:** An abstract representation of '{prompt_text}'. A central, glowing neural network core pulses with energy, sending vibrant data streams outwards through intricate geometric patterns.
+
+    **Style:** A fusion of cyberpunk aesthetic and minimalistic elegance. Inspired by the art of Syd Mead and the visual language of the movie 'Tron'.
+
+    **Environment & Palette:** A dark, high-tech theme. The background is a deep cosmic void. The main colors are electric blue, magenta, and subtle gold highlights against the dark backdrop.
+
+    **Lighting:** Photorealistic, cinematic lighting. Strong volumetric light rays emanate from the glowing elements, creating a sense of depth and drama.
     
-    # 1. Deneme: Gemini API
+    **Negative Prompts:** avoid text, avoid human figures, blurry, noisy, cluttered, ugly.
+    """
+    
+    # 1. Deneme: Gemini API (Başarısız olması bekleniyor)
     image_filename = generate_image_gemini(final_prompt)
     if image_filename:
         return image_filename
         
-    # 2. Deneme: Vertex AI (Sadece VERTEX_ENABLED ise denenir)
+    # 2. Deneme: Vertex AI (Asıl çalışan yöntem)
     image_filename = generate_image_vertexai(final_prompt)
     if image_filename:
         return image_filename
@@ -226,13 +226,11 @@ def generate_image(prompt_text):
 # === 4. Blog Dosyasını Kaydet ===
 def save_blog(blog_content, lang_code, image_filename="default.png"):
     if not blog_content: return
-    # Dosya adında çakışmayı önlemek için saat bilgisini ekliyoruz
     date_time_str = datetime.datetime.now().strftime("%Y-%m-%d-%H%M") 
     slug = f"{date_time_str}-{lang_code}-ai-news"
     path = BLOG_DIR / lang_code
     path.mkdir(exist_ok=True)
     
-    # Görsel yolu, sitenin kök dizinine göre ayarlanmalı
     image_path_for_blog = f"/blog_images/{image_filename if image_filename else 'default.png'}"
 
     html = f"""---
@@ -276,13 +274,12 @@ def main():
         return
 
     print("\nGenerating image...")
-    # İlk haberin başlığını görsel için prompt olarak kullan
-    image_prompt = news[0]['title'] if news else "AI breakthroughs and future technology" # Haber yoksa yedek prompt
+    image_prompt = news[0]['title'] if news else "AI breakthroughs and future technology"
     image_filename = generate_image(image_prompt)
     
     if not image_filename:
         print("⚠️ Görsel üretilemedi, varsayılan görsel kullanılacak: default.png")
-        image_filename = "default.png" # Varsayılan görseli kullanmaya zorla
+        image_filename = "default.png"
 
     for lang_code in LANGS.keys():
         print(f"\n--- {LANG_NAMES[lang_code]} için içerik üretiliyor ---")
