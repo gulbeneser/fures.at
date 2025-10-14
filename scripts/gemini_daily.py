@@ -21,6 +21,7 @@ MODEL_TEXT = "gemini-2.5-pro"
 LANGS = {"tr": "Turkish", "en": "English", "de": "German", "ru": "Russian"}
 LANG_NAMES = {"tr": "Türkçe", "en": "English", "de": "Deutsch", "ru": "Русский"}
 
+# Bu dosya scripts/ altında, repo kökü parent.parent
 ROOT = Path(__file__).resolve().parent.parent
 BLOG_DIR = ROOT / "blog"
 IMAGES_DIR = ROOT / "blog_images"
@@ -37,7 +38,7 @@ genai.configure(api_key=GEMINI_API_KEY)
 print("✅ Gemini (metin için) yapılandırıldı.")
 
 # 2) Fal.ai ve Stability AI anahtarları (Görsel üretimi için)
-FAL_KEY = os.environ.get("secrets.FAL_KEY")  # Zorunlu (birincil)
+FAL_KEY = os.environ.get("FAL_KEY")  # ZORUNLU (birincil görsel üretici)
 STABILITY_API_KEY = os.environ.get("STABILITY_API_KEY")  # Opsiyonel (yedek)
 
 # 3) Vertex AI (opsiyonel yedek)
