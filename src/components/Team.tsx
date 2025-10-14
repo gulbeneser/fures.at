@@ -1,4 +1,4 @@
-import { ExternalLink } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext";
 
 export function Team() {
@@ -9,14 +9,14 @@ export function Team() {
       name: t('team.gulben.name'),
       role: t('team.gulben.role'),
       description: t('team.gulben.description'),
-      portfolio: "fures.at/gulbeneser",
+      portfolio: "/gulbeneser",
       image: "/images/team-gulben.svg"
     },
     {
       name: t('team.furkan.name'),
       role: t('team.furkan.role'),
       description: t('team.furkan.description'),
-      portfolio: "fures.at/furkanyonat",
+      portfolio: "/furkanyonat",
       image: "/images/team-furkan.svg"
     }
   ];
@@ -88,16 +88,14 @@ export function Team() {
                     </p>
                     
                     {/* Portfolio Link */}
-                    <a 
-                      href={`https://${member.portfolio}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <a
+                      href={member.portfolio}
                       className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-orange-400 transition-colors group/link"
                     >
                       <span className="border-b border-gray-600 group-hover/link:border-orange-400 transition-colors">
                         CV & Portfolio
                       </span>
-                      <ExternalLink className="w-4 h-4 transform group-hover/link:translate-x-1 group-hover/link:-translate-y-1 transition-transform" />
+                      <ArrowRight className="w-4 h-4 transform group-hover/link:translate-x-1 group-hover/link:-translate-y-1 transition-transform" />
                     </a>
                   </div>
                 </div>
