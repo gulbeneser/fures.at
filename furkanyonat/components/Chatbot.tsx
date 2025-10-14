@@ -1,10 +1,32 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { GoogleGenAI, Chat } from "@google/genai";
 
+const resolveGeminiApiKey = (): string => {
+    if (typeof window === 'undefined') {
+        return '';
+    }
+
+    const runtimeKey = window.__FURKAN_GEMINI_API_KEY__;
+    if (runtimeKey && typeof runtimeKey === 'string' && runtimeKey.trim()) {
+        return runtimeKey.trim();
+    }
+
+    const env = import.meta.env as Record<string, string | undefined>;
+    return (
+        env.VITE_GEMINI_API_KEY ||
+        env.VITE_API_KEY ||
+        env.API_KEY ||
+        env.GEMINI_API_KEY ||
+        env.apikey ||
+        ''
+    );
+};
+
 declare global {
   interface Window {
     SpeechRecognition: any;
     webkitSpeechRecognition: any;
+    __FURKAN_GEMINI_API_KEY__?: string | null;
   }
 }
 
@@ -21,6 +43,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ t, language, isPrinting }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [isListening, setIsListening] = useState(false);
+    const [apiKey] = useState<string>(() => resolveGeminiApiKey());
     
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const chatRef = useRef<Chat | null>(null);
@@ -41,29 +64,50 @@ const Chatbot: React.FC<ChatbotProps> = ({ t, language, isPrinting }) => {
     You are representing Furkan Yonat. Make him shine!`;
 
     useEffect(() => {
-        if (!process.env.API_KEY) {
-            console.error("API Key not found in process.env.API_KEY");
+        if (!apiKey) {
+            console.warn("Gemini API key not provided. Chatbot will remain disabled.");
             setError(t.chatbot.notConfigured);
             return;
         }
 
-        try {
-            const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-            const newChat = ai.chats.create({
-                model: 'gemini-2.5-flash',
-                config: { systemInstruction },
-            });
-            chatRef.current = newChat;
-            
-            const cvContext = JSON.stringify(t);
-            newChat.sendMessage({ message: `Here is the CV context to use for all subsequent answers: ${cvContext}` });
+        let isCancelled = false;
 
-            setMessages([{ text: t.chatbot.greeting, sender: 'bot' }]);
-        } catch (e) {
-            console.error("Error initializing chat:", e);
-            setError("Failed to initialize the AI assistant.");
-        }
-    }, [language, t, systemInstruction]);
+        const initialiseChat = async () => {
+            try {
+                const ai = new GoogleGenAI({ apiKey });
+                const newChat = await ai.chats.create({
+                    model: 'gemini-2.5-flash',
+                    config: { systemInstruction },
+                });
+
+                if (isCancelled) {
+                    return;
+                }
+
+                chatRef.current = newChat;
+
+                const cvContext = JSON.stringify(t);
+                await newChat.sendMessage({ message: `Here is the CV context to use for all subsequent answers: ${cvContext}` });
+
+                if (!isCancelled) {
+                    setMessages([{ text: t.chatbot.greeting, sender: 'bot' }]);
+                    setError(null);
+                }
+            } catch (e) {
+                console.error("Error initializing chat:", e);
+                if (!isCancelled) {
+                    setError(t.chatbot.unavailable ?? "Failed to initialise the AI assistant.");
+                }
+            }
+        };
+
+        initialiseChat();
+
+        return () => {
+            isCancelled = true;
+            chatRef.current = null;
+        };
+    }, [apiKey, language, t, systemInstruction]);
 
     useEffect(() => {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -178,6 +222,11 @@ const Chatbot: React.FC<ChatbotProps> = ({ t, language, isPrinting }) => {
                 </header>
                 <div className="flex-1 p-4 overflow-y-auto">
                     <div className="space-y-4">
+                        {error && (
+                            <div className="rounded-xl px-4 py-3 bg-black/20 text-sm text-primary-text border border-card-border">
+                                {error}
+                            </div>
+                        )}
                         {messages.map((msg, index) => (
                             <div key={index} className={`flex items-end gap-2 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
                                 {msg.sender === 'bot' && <BotAvatar />}
@@ -209,14 +258,18 @@ const Chatbot: React.FC<ChatbotProps> = ({ t, language, isPrinting }) => {
                             onChange={(e) => setInput(e.target.value)}
                             placeholder={isListening ? "Listening..." : t.chatbot.placeholder}
                             className="w-full px-4 py-2 bg-black/20 border border-card-border rounded-lg text-primary-text focus:outline-none focus:ring-2 focus:ring-blue-400/50"
-                            disabled={isLoading}
+                            disabled={isLoading || !!error || !chatRef.current}
                         />
                         {recognitionRef.current && (
                             <button type="button" onClick={toggleListening} className={`p-2.5 rounded-lg transition-colors ${isListening ? 'bg-red-500 text-white animate-pulse' : 'bg-black/20 text-secondary-text hover:text-primary-text'}`} aria-label={isListening ? t.chatbot.voiceStop : t.chatbot.voiceStart}>
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M7 4a3 3 0 016 0v4a3 3 0 11-6 0V4zm4 10.93V17a1 1 0 11-2 0v-2.07A5 5 0 015 10V8a1 1 0 012 0v2a3 3 0 006 0V8a1 1 0 012 0v2a5 5 0 01-5 4.93z" clipRule="evenodd" /></svg>
                             </button>
                         )}
-                        <button type="submit" className="bg-[var(--accent-gradient)] text-white p-2.5 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-opacity" disabled={isLoading || !input.trim()}>
+                        <button
+                            type="submit"
+                            className="bg-[var(--accent-gradient)] text-white p-2.5 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
+                            disabled={isLoading || !input.trim() || !!error || !chatRef.current}
+                        >
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" /></svg>
                         </button>
                     </div>
