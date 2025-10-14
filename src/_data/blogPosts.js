@@ -8,6 +8,69 @@ const SUPPORTED_LANGS = new Set(["tr", "en", "de", "ru"]);
 const SITE_URL = "https://fures.at";
 const BLOG_URL = `${SITE_URL}/blog`;
 const MAX_ITEMS = 50;
+const REPO_ROOT = path.resolve(__dirname, "..", "..");
+
+const IMAGE_MIME_TYPES = new Map([
+  [".jpg", "image/jpeg"],
+  [".jpeg", "image/jpeg"],
+  [".png", "image/png"],
+  [".webp", "image/webp"],
+]);
+
+function buildAbsoluteImageUrl(imagePath) {
+  if (typeof imagePath !== "string" || imagePath.trim().length === 0) {
+    return undefined;
+  }
+
+  const trimmed = imagePath.trim();
+
+  if (/^https?:\/\//i.test(trimmed)) {
+    return trimmed;
+  }
+
+  if (trimmed.startsWith("/")) {
+    return `${SITE_URL}${trimmed}`;
+  }
+
+  return `${SITE_URL}/${trimmed}`;
+}
+
+function inferMimeType(imagePath) {
+  if (typeof imagePath !== "string") {
+    return undefined;
+  }
+
+  const extension = path.extname(imagePath).toLowerCase();
+  return IMAGE_MIME_TYPES.get(extension);
+}
+
+function resolveImageOnDisk(imagePath) {
+  if (typeof imagePath !== "string" || imagePath.trim().length === 0) {
+    return undefined;
+  }
+
+  if (/^https?:\/\//i.test(imagePath)) {
+    return undefined;
+  }
+
+  const relativePath = imagePath.startsWith("/") ? imagePath.slice(1) : imagePath;
+  const diskPath = path.resolve(REPO_ROOT, relativePath);
+
+  if (!diskPath.startsWith(REPO_ROOT)) {
+    return undefined;
+  }
+
+  if (!fs.existsSync(diskPath)) {
+    return undefined;
+  }
+
+  const stats = fs.statSync(diskPath);
+  if (!stats.isFile()) {
+    return undefined;
+  }
+
+  return { size: stats.size };
+}
 
 function parseFrontMatter(raw) {
   const match = raw.match(FRONT_MATTER_REGEX);
@@ -123,6 +186,13 @@ function parsePost(filePath) {
   const excerpt = buildExcerpt(data.excerpt, content);
   const dateTime = normaliseDate(data.date, stats.mtime);
 
+  const image = typeof data.image === "string" && data.image.trim().length > 0
+    ? data.image.trim()
+    : undefined;
+  const imageAbsolute = image ? buildAbsoluteImageUrl(image) : undefined;
+  const imageMime = image ? inferMimeType(image) : undefined;
+  const imageStats = image ? resolveImageOnDisk(image) : undefined;
+
   return {
     slug,
     title,
@@ -132,7 +202,10 @@ function parsePost(filePath) {
     date: dateTime.toISO(),
     timestamp: dateTime.toMillis(),
     url: `${BLOG_URL}/${slug}`,
-    image: typeof data.image === "string" ? data.image : undefined,
+    image,
+    imageAbsolute,
+    imageMime,
+    imageSize: imageStats?.size,
   };
 }
 

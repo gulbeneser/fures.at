@@ -7,6 +7,8 @@ import requests
 from io import BytesIO
 from PIL import Image  # Pillow gerekli!
 
+from image_rotation import ImageRotator, NoImagesAvailableError
+
 # Metin üretimi için Gemini API
 import google.generativeai as genai
 
@@ -240,14 +242,22 @@ def generate_image(prompt_text):
     return None
 
 # === 4. Blog Dosyasını Kaydet ===
-def save_blog(blog_content, lang_code, image_filename="default.png"):
+def resolve_image_path(image_filename: str | None) -> str:
+    if not image_filename:
+        return "/blog_images/default.png"
+    if image_filename.startswith("/"):
+        return image_filename
+    return f"/fotos/{image_filename}"
+
+
+def save_blog(blog_content, lang_code, image_filename=None):
     if not blog_content:
         return
     date_time_str = datetime.datetime.utcnow().strftime("%Y-%m-%d-%H%M")  # UTC
     slug = f"{date_time_str}-{lang_code}-ai-news"
     path = BLOG_DIR / lang_code
     path.mkdir(exist_ok=True)
-    image_path_for_blog = f"/blog_images/{image_filename if image_filename else 'default.png'}"
+    image_path_for_blog = resolve_image_path(image_filename)
     html = f"""---
 title: "AI Daily — {LANG_NAMES[lang_code]}"
 date: {date_time_str}
@@ -286,19 +296,19 @@ def main():
         print("❌ Haberler alınamadı, işlem durduruluyor.")
         return
 
-    print("\nGenerating image...")
-    image_prompt = news[0]['title'] if news else "AI breakthroughs and future technology"
-    image_filename = generate_image(image_prompt)
-
-    if not image_filename:
-        print("⚠️ Görsel üretilemedi, varsayılan görsel kullanılacak: default.png")
-        image_filename = "default.png"
+    try:
+        rotator = ImageRotator()
+        print("\n✅ /fotos klasöründeki görseller kullanılacak.")
+    except NoImagesAvailableError as exc:
+        print(f"\n⚠️ {exc} Varsayılan görsel kullanılacak: default.png")
+        rotator = None
 
     for lang_code in LANGS.keys():
         print(f"\n--- {LANG_NAMES[lang_code]} için içerik üretiliyor ---")
         blog_text = generate_single_blog(news, lang_code)
         if blog_text:
-            save_blog(blog_text, lang_code, image_filename)
+            next_image = rotator.next_for_language(lang_code) if rotator else "default.png"
+            save_blog(blog_text, lang_code, next_image)
         else:
             print(f"❌ {LANG_NAMES[lang_code]} için blog metni oluşturulamadı.")
 
