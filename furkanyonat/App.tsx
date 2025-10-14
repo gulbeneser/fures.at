@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { translations, experienceOrder } from './data/translations';
-import Sidebar from './components/Sidebar';
+import Header from './components/Sidebar';
 import KPIs from './components/KPIs';
 import Experience from './components/Experience';
 import Skills from './components/Skills';
@@ -15,31 +14,54 @@ import { AccessibilityModal } from './components/modals/AccessibilityModal';
 
 type Theme = 'light' | 'dark' | 'system';
 
+const Hero = ({ t }: { t: any }) => (
+  <section id="hero" className="min-h-screen flex items-center justify-center text-center -mt-20">
+    <div className="max-w-3xl mx-auto px-4">
+      <div className="inline-block glass-card rounded-full px-4 py-1.5 text-sm font-semibold mb-4 border-none">
+        {t.hero.pretitle}
+      </div>
+      <h1 className="text-5xl md:text-7xl font-bold text-primary-text font-display leading-tight">
+        {t.hero.title}{' '}
+        <span className="text-transparent bg-clip-text bg-[var(--highlight-gradient)]">
+          {t.hero.titleGradient}
+        </span>
+      </h1>
+      <p className="mt-6 text-lg md:text-xl max-w-2xl mx-auto text-secondary-text leading-relaxed">
+        {t.hero.subtitle}
+      </p>
+      <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="#experience" className="btn btn-primary w-full sm:w-auto">
+          {t.hero.button1}
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.707-10.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L9.414 11H13a1 1 0 100-2H9.414l1.293-1.293z" clipRule="evenodd" /></svg>
+        </a>
+        <a href="#projects" className="btn btn-secondary w-full sm:w-auto">
+          {t.hero.button2}
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clipRule="evenodd" /></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+);
+
 const App = () => {
   const [language, setLanguage] = useState('tr');
-  const [theme, setTheme] = useState<Theme>('system');
+  const [theme, setTheme] = useState<Theme>('dark');
   const [selectedCert, setSelectedCert] = useState<any>(null);
   const [isAccessibilityModalOpen, setIsAccessibilityModalOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState('experience');
-  // FIX: Add state to track printing status for Chatbot component.
+  const [activeSection, setActiveSection] = useState('hero');
   const [isPrinting, setIsPrinting] = useState(false);
 
   const contentRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
-    // Auto-detect language
     const userLang = navigator.language.split('-')[0];
     if (translations[userLang as keyof typeof translations]) {
       setLanguage(userLang);
     }
-    // Load saved theme
     const savedTheme = localStorage.getItem('theme') as Theme | null;
-    if (savedTheme) {
-      setTheme(savedTheme);
-    }
+    setTheme(savedTheme || 'dark');
   }, []);
 
-  // Theme management
   useEffect(() => {
     const root = window.document.documentElement;
     const isDark =
@@ -52,7 +74,6 @@ const App = () => {
     localStorage.setItem('theme', theme);
   }, [theme]);
 
-  // Active section tracking for sidebar nav
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -62,7 +83,7 @@ const App = () => {
           }
         });
       },
-      { rootMargin: '-30% 0px -70% 0px', threshold: 0 }
+      { rootMargin: '-40% 0px -60% 0px', threshold: 0 }
     );
 
     const sections = contentRef.current?.querySelectorAll('section');
@@ -71,18 +92,6 @@ const App = () => {
     return () => sections?.forEach((section) => observer.unobserve(section));
   }, [contentRef]);
 
-  // Interactive cursor spotlight
-  useEffect(() => {
-    const spotlight = document.getElementById('cursor-spotlight');
-    const updateSpotlight = (e: MouseEvent) => {
-      spotlight?.style.setProperty('--x', `${e.clientX}px`);
-      spotlight?.style.setProperty('--y', `${e.clientY}px`);
-    };
-    window.addEventListener('mousemove', updateSpotlight);
-    return () => window.removeEventListener('mousemove', updateSpotlight);
-  }, []);
-
-  // FIX: Add effect to listen for print events to hide chatbot.
   useEffect(() => {
     const handleBeforePrint = () => setIsPrinting(true);
     const handleAfterPrint = () => setIsPrinting(false);
@@ -100,32 +109,28 @@ const App = () => {
 
   return (
     <div className="min-h-screen">
-      <div className="container mx-auto px-4 lg:px-8 lg:max-w-screen-xl">
-        <div className="lg:flex lg:gap-16">
-          <Sidebar
-            t={t}
-            language={language}
-            setLanguage={setLanguage}
-            activeSection={activeSection}
-            theme={theme}
-            setTheme={setTheme}
-          />
+      <Header
+        t={t}
+        language={language}
+        setLanguage={setLanguage}
+        activeSection={activeSection}
+        theme={theme}
+        setTheme={setTheme}
+      />
           
-          <div ref={contentRef} className="lg:w-2/3 lg:pt-24 lg:pb-16">
-            <main className="space-y-24">
-              <KPIs t={t} />
-              <Experience t={t} experienceOrder={experienceOrder} />
-              <Skills t={t} />
-              <Projects t={t} />
-              <Education t={t} />
-              <Certificates t={t} onCertificateSelect={setSelectedCert} />
-              <Footer t={t} onAccessibilityClick={() => setIsAccessibilityModalOpen(true)} />
-            </main>
-          </div>
-        </div>
+      <div ref={contentRef} className="container mx-auto px-4 lg:px-8 max-w-screen-lg">
+          <main className="space-y-24 md:space-y-32 pt-24 pb-16">
+            <Hero t={t} />
+            <KPIs t={t} />
+            <Experience t={t} experienceOrder={experienceOrder} />
+            <Skills t={t} />
+            <Projects t={t} />
+            <Education t={t} />
+            <Certificates t={t} onCertificateSelect={setSelectedCert} />
+            <Footer t={t} onAccessibilityClick={() => setIsAccessibilityModalOpen(true)} />
+          </main>
       </div>
-
-      {/* FIX: Pass isPrinting prop to Chatbot component. */}
+      
       <Chatbot t={t} language={language} isPrinting={isPrinting} />
 
       {selectedCert && <CertificateModal cert={selectedCert} onClose={() => setSelectedCert(null)} lang={t.certificates} />}
