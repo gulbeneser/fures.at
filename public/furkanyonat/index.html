@@ -10,75 +10,66 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <style>
       :root {
-        --bg-color: #0A0A0A;
-        --primary-text: #F1F1F1;
-        --secondary-text: #A1A1A1;
-        --accent-color: #38BDF8; /* sky-500 */
-        --accent-dark: #0EA5E9; /* sky-600 */
-        --accent-glow: rgba(56, 189, 248, 0.2);
-        --card-bg: rgba(23, 23, 23, 0.6);
-        --card-border: rgba(161, 161, 161, 0.2);
+        --bg-color: #0D0D0F;
+        --bg-image-url: url('https://images.unsplash.com/photo-1588295982237-62b4193574d6?auto=format&fit=crop&q=80&w=2000');
+        --primary-text: #F3F4F6;
+        --secondary-text: #F3F4F6;
+        --card-bg: rgba(28, 28, 31, 0.92);
+        --card-border: rgba(255, 255, 255, 0.15);
         --card-shadow: rgba(0, 0, 0, 0.3);
+        --accent-gradient: linear-gradient(90deg, #1e3a8a, #3b82f6); /* New Blue Gradient */
+        --accent-glow: rgba(59, 130, 246, 0.25); /* New Blue Glow */
+        --highlight-gradient: linear-gradient(90deg, #2563eb, #06b6d4); /* New Blue to Cyan Gradient */
+        --active-pill-bg: rgba(255, 255, 255, 0.2);
+        --active-pill-text: #FFFFFF;
       }
       html.light {
-        --bg-color: #F9FAFB;
-        --primary-text: #1F2937;
-        --secondary-text: #6B7280;
-        --accent-color: #0EA5E9; /* sky-600 */
-        --accent-dark: #0284C7; /* sky-700 */
-        --accent-glow: rgba(14, 165, 233, 0.15);
-        --card-bg: rgba(255, 255, 255, 0.6);
-        --card-border: rgba(107, 114, 128, 0.2);
+        --bg-color: #F0F2F5;
+        --bg-image-url: url('https://images.unsplash.com/photo-1634394057039-4d69b4458f4a?auto=format&fit=crop&q=80&w=2000');
+        --primary-text: #0D0D0F;
+        --secondary-text: #374151;
+        --card-bg: rgba(255, 255, 255, 0.85);
+        --card-border: rgba(0, 0, 0, 0.1);
         --card-shadow: rgba(0, 0, 0, 0.1);
+        --active-pill-bg: rgba(0, 0, 0, 0.1);
+        --active-pill-text: #111827;
       }
       body {
         font-family: 'Inter', sans-serif;
         background-color: var(--bg-color);
         color: var(--secondary-text);
-        overflow-y: scroll;
+        background-image: var(--bg-image-url);
+        background-size: cover;
+        background-position: center center;
+        background-attachment: fixed;
         transition: background-color 0.5s ease-in-out, color 0.5s ease-in-out;
       }
       
-      /* Interactive Gradient Background */
-      #background-gradient {
+      #background-overlay {
         position: fixed;
         top: 0; left: 0; width: 100%; height: 100%;
-        z-index: -2;
-        --color1: #a78bfa;
-        --color2: #38bdf8;
-        --color3: #a78bfa;
-        background: linear-gradient(120deg, var(--color1), var(--color2), var(--color3));
-        background-size: 400% 400%;
-        animation: gradientAnimation 20s ease infinite;
-      }
-      @keyframes gradientAnimation {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
+        z-index: -1;
+        background-color: rgba(13, 13, 15, 0.7);
+        backdrop-filter: blur(10px) brightness(0.6);
+        -webkit-backdrop-filter: blur(10px) brightness(0.6);
+        transition: background-color 0.5s ease-in-out, backdrop-filter 0.5s ease-in-out;
       }
 
-      /* Cursor Spotlight Effect */
-      #cursor-spotlight {
-        position: fixed;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        z-index: -1;
-        pointer-events: none;
-        background: radial-gradient(circle at var(--x, 0) var(--y, 0), rgba(255, 255, 255, 0.06), transparent 30%);
-      }
-      html.light #cursor-spotlight {
-        background: radial-gradient(circle at var(--x, 0) var(--y, 0), rgba(0, 0, 0, 0.04), transparent 30%);
+      html.light #background-overlay {
+        background-color: rgba(240, 242, 245, 0.5);
+        backdrop-filter: blur(10px) brightness(1.0);
+        -webkit-backdrop-filter: blur(10px) brightness(1.0);
       }
 
       .font-display { font-family: 'Space Grotesk', sans-serif; }
 
-      /* Glassmorphism Card 2.0 */
+      .text-primary-text { color: var(--primary-text); }
+      .text-secondary-text { color: var(--secondary-text); }
+
       .glass-card {
         background: var(--card-bg);
-        backdrop-filter: blur(24px);
-        -webkit-backdrop-filter: blur(24px);
+        backdrop-filter: blur(40px);
+        -webkit-backdrop-filter: blur(40px);
         border: 1px solid var(--card-border);
         box-shadow: 0 8px 32px 0 var(--card-shadow);
         transition: background-color 0.5s ease-in-out, border-color 0.5s ease-in-out;
@@ -86,25 +77,70 @@
         z-index: 1;
         overflow: hidden;
       }
-      /* Animated Gradient Border */
-      .glass-card::before {
-        content: "";
-        position: absolute;
-        inset: -1px;
-        z-index: -1;
-        border-radius: inherit;
-        background: conic-gradient(from var(--angle), transparent 50%, var(--accent-color) 100%);
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        animation: spin 6s linear infinite;
-        --angle: 0deg;
+      
+      .active-pill-button {
+        background-color: var(--active-pill-bg);
+        color: var(--active-pill-text);
       }
-      .group:hover .glass-card::before, .glass-card:hover::before {
-        opacity: 1;
+
+      .btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 9999px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        justify-content: center;
       }
-      @property --angle { syntax: "<angle>"; initial-value: 0deg; inherits: false; }
-      @keyframes spin {
-        to { --angle: 360deg; }
+      .btn-primary {
+        background: var(--accent-gradient);
+        color: white;
+        box-shadow: 0 4px 15px 0 var(--accent-glow);
+      }
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px 0 var(--accent-glow);
+      }
+      .btn-secondary {
+        background: var(--card-bg);
+        border: 1px solid var(--card-border);
+        color: var(--primary-text);
+      }
+      .btn-secondary:hover {
+        background: rgba(255,255,255,0.1);
+        border-color: rgba(255,255,255,0.2);
+      }
+      html.light .btn-secondary {
+        color: var(--primary-text)
+      }
+      html.light .btn-secondary:hover {
+        background: rgba(0,0,0,0.05);
+        border-color: rgba(0,0,0,0.15);
+      }
+
+      /* Scrollbar styles */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.3);
+      }
+      html.light ::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.2);
+      }
+      html.light ::-webkit-scrollbar-thumb:hover {
+        background: rgba(0, 0, 0, 0.3);
       }
 
       @media print {
@@ -114,8 +150,8 @@
           --secondary-text: #333333;
           --card-border: #dddddd;
         }
-        body { background: var(--bg-color) !important; }
-        #background-gradient, #cursor-spotlight { display: none; }
+        body { background: var(--bg-color) !important; background-image: none !important; }
+        #background-overlay { display: none; }
         .glass-card {
           background: #ffffff !important; border: 1px solid var(--card-border) !important;
           box-shadow: none !important; backdrop-filter: none !important;
@@ -124,7 +160,6 @@
       }
     </style>
 
-<link rel="stylesheet" href="/index.css">
   <script type="importmap">
 {
   "imports": {
@@ -135,11 +170,10 @@
   }
 }
 </script>
-  <script type="module" crossorigin src="/furkanyonat/assets/index-DsyQPLw6.js"></script>
+  <script type="module" crossorigin src="/furkanyonat/assets/index-BPpecajB.js"></script>
 </head>
   <body>
-    <div id="background-gradient"></div>
-    <div id="cursor-spotlight"></div>
+    <div id="background-overlay"></div>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
   </body>

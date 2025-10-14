@@ -175,7 +175,15 @@ export const translations = {
       instagram: 'https://www.instagram.com/furkanyonat9/',
       xing: 'https://www.xing.com/profile/Furkan_Yonat2/'
     },
-    chatbot: { greeting: 'Merhaba! Ben Furkan\'ın kariyer asistanı. Size nasıl yardımcı olabilirim?', placeholder: 'Bir soru sorun...', title: 'Kariyer Asistanı', notConfigured: 'AI asistanı yapılandırılmamış. API anahtarı eksik.', voiceStart: 'Sesli komutu başlat', voiceStop: 'Dinlemeyi durdur' },
+    chatbot: {
+      greeting: 'Merhaba! Ben Furkan\'ın kariyer asistanı. Size nasıl yardımcı olabilirim?',
+      placeholder: 'Bir soru sorun...',
+      title: 'Kariyer Asistanı',
+      notConfigured: 'AI asistanı yapılandırılmamış. API anahtarı eksik.',
+      unavailable: 'AI asistanı şu anda kullanılamıyor. Lütfen daha sonra tekrar deneyin.',
+      voiceStart: 'Sesli komutu başlat',
+      voiceStop: 'Dinlemeyi durdur'
+    },
     footer: {
         copyright: `© ${new Date().getFullYear()} Furkan Yonat.`,
         motto: 'Tutku ve hassasiyetle inşa edilmiştir.',
@@ -363,7 +371,15 @@ export const translations = {
       instagram: 'https://www.instagram.com/furkanyonat9/',
       xing: 'https://www.xing.com/profile/Furkan_Yonat2/'
     },
-    chatbot: { greeting: 'Hello! I am Furkan\'s career assistant. How can I help you?', placeholder: 'Ask a question...', title: 'Career Assistant', notConfigured: 'AI assistant is not configured. API key is missing.', voiceStart: 'Start voice input', voiceStop: 'Stop listening' },
+    chatbot: {
+      greeting: 'Hello! I am Furkan\'s career assistant. How can I help you?',
+      placeholder: 'Ask a question...',
+      title: 'Career Assistant',
+      notConfigured: 'AI assistant is not configured. API key is missing.',
+      unavailable: 'The AI assistant is currently unavailable. Please try again later.',
+      voiceStart: 'Start voice input',
+      voiceStop: 'Stop listening'
+    },
     footer: {
       copyright: `© ${new Date().getFullYear()} Furkan Yonat.`,
       motto: 'Built with passion and precision.',
@@ -488,7 +504,15 @@ export const translations = {
     contactInfo: {
       email: 'furkanyonat@gmail.com', phone: '+905338704176', whatsapp: 'https://wa.me/905338704176', portfolio: 'https://www.fures.at/furkanyonat/', profileImage: 'https://i.imgur.com/5d2y3tD.jpeg', linkedin: 'https://www.linkedin.com/in/furkan-yonat-2745061ba/', facebook: 'https://www.facebook.com/furkanyonat900/', instagram: 'https://www.instagram.com/furkanyonat9/', xing: 'https://www.xing.com/profile/Furkan_Yonat2/'
     },
-    chatbot: { greeting: 'Hallo! Ich bin Furkans Karriereassistent. Wie kann ich Ihnen helfen?', placeholder: 'Stellen Sie eine Frage...', title: 'Karriereassistent', notConfigured: 'KI-Assistent ist nicht konfiguriert. API-Schlüssel fehlt.', voiceStart: 'Spracheingabe starten', voiceStop: 'Zuhören beenden' },
+    chatbot: {
+      greeting: 'Hallo! Ich bin Furkans Karriereassistent. Wie kann ich Ihnen helfen?',
+      placeholder: 'Stellen Sie eine Frage...',
+      title: 'Karriereassistent',
+      notConfigured: 'KI-Assistent ist nicht konfiguriert. API-Schlüssel fehlt.',
+      unavailable: 'Der KI-Assistent ist derzeit nicht verfügbar. Bitte versuchen Sie es später erneut.',
+      voiceStart: 'Spracheingabe starten',
+      voiceStop: 'Zuhören beenden'
+    },
     footer: {
       copyright: `© ${new Date().getFullYear()} Furkan Yonat.`,
       motto: 'Mit Leidenschaft und Präzision gebaut.',
@@ -613,7 +637,15 @@ export const translations = {
     contactInfo: {
       email: 'furkanyonat@gmail.com', phone: '+905338704176', whatsapp: 'https://wa.me/905338704176', portfolio: 'https://www.fures.at/furkanyonat/', profileImage: 'https://i.imgur.com/5d2y3tD.jpeg', linkedin: 'https://www.linkedin.com/in/furkan-yonat-2745061ba/', facebook: 'https://www.facebook.com/furkanyonat900/', instagram: 'https://www.instagram.com/furkanyonat9/', xing: 'https://www.xing.com/profile/Furkan_Yonat2/'
     },
-    chatbot: { greeting: '¡Hola! Soy el asistente profesional de Furkan. ¿Cómo puedo ayudarte?', placeholder: 'Haz una pregunta...', title: 'Asistente de Carrera', notConfigured: 'El asistente de IA no está configurado. Falta la clave de API.', voiceStart: 'Iniciar entrada de voz', voiceStop: 'Dejar de escuchar' },
+    chatbot: {
+      greeting: '¡Hola! Soy el asistente profesional de Furkan. ¿Cómo puedo ayudarte?',
+      placeholder: 'Haz una pregunta...',
+      title: 'Asistente de Carrera',
+      notConfigured: 'El asistente de IA no está configurado. Falta la clave de API.',
+      unavailable: 'El asistente de IA no está disponible en este momento. Vuelve a intentarlo más tarde.',
+      voiceStart: 'Iniciar entrada de voz',
+      voiceStop: 'Dejar de escuchar'
+    },
     footer: {
       copyright: `© ${new Date().getFullYear()} Furkan Yonat.`,
       motto: 'Construido con pasión y precisión.',
