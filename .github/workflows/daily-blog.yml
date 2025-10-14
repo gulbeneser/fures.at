@@ -1,10 +1,8 @@
-# .github/workflows/daily-blog.yml
-
 name: Daily AI Blog (Gemini, 4 Lang)
 
 on:
   schedule:
-    - cron: "10 6 * * *"   # 09:10 Europe/Istanbul
+    - cron: "10 6 * * *"   # 09:10 Europe/Istanbul (UTC+3)
   workflow_dispatch: {}
 
 permissions:
@@ -28,25 +26,39 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          
-      # ------------------------------------------------------------------
-      # YENİ EKLENECEK KISIM: GCP Yetkilendirmesi
-      # ------------------------------------------------------------------
+
+      # --- GCP (Vertex AI yedeği) kullanacaksan açık kalsın; istemiyorsan bu iki adımı kaldır. ---
       - name: Configure Google Cloud Credentials
         id: auth
         uses: google-github-actions/auth@v2
         with:
-          # Kaydettiğiniz Hizmet Hesabı JSON anahtarını kullanır
-          credentials_json: ${{ secrets.GCP_SA_KEY }} 
-          
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
       - name: Set GCP Project ID as Environment Variable
         run: echo "GCP_PROJECT_ID=${{ secrets.GCP_PROJECT_ID }}" >> $GITHUB_ENV
-      # ------------------------------------------------------------------
+      # --- GCP bölümü sonu ---
+
+      # (İsteğe bağlı) Hızlı kontrol: secret var/yok (değer yazdırmaz)
+      # - name: Check env presence
+      #   run: |
+      #     python - <<'PY'
+      #     import os
+      #     print("Has FAL_KEY:", bool(os.environ.get("FAL_KEY")))
+      #     print("Has GEMINI_API_KEY:", bool(os.environ.get("GEMINI_API_KEY")))
+      #     print("Has STABILITY_API_KEY:", bool(os.environ.get("STABILITY_API_KEY")))
+      #     print("Has GCP_PROJECT_ID:", bool(os.environ.get("GCP_PROJECT_ID")))
+      #     PY
+      #   env:
+      #     FAL_KEY: ${{ secrets.FAL_KEY }}
+      #     GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      #     STABILITY_API_KEY: ${{ secrets.STABILITY_API_KEY }}
 
       - name: Generate and publish daily posts
-        # ÖNEMLİ: GCP_PROJECT_ID artık $GITHUB_ENV ile ayarlandığı için
-        # bu env bloğuna eklemenize GEREK YOK.
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          FAL_KEY: ${{ secrets.FAL_KEY }}                 # Fal.ai için ZORUNLU
+          STABILITY_API_KEY: ${{ secrets.STABILITY_API_KEY }} # Opsiyonel yedek
+          # GCP_PROJECT_ID artık $GITHUB_ENV ile ayarlı; ayrıca vermenize gerek yok.
+          # GCP_LOCATION'ı vermediğinizde kod varsayılan "us-central1" kullanır.
         run: |
           python scripts/gemini_daily.py
