@@ -37,7 +37,7 @@ genai.configure(api_key=GEMINI_API_KEY)
 print("✅ Gemini (metin için) yapılandırıldı.")
 
 # 2) Fal.ai ve Stability AI anahtarları (Görsel üretimi için)
-FAL_KEY = os.environ.get("FAL_KEY")  # Zorunlu (birincil)
+FAL_KEY = os.environ.get("secrets.FAL_KEY")  # Zorunlu (birincil)
 STABILITY_API_KEY = os.environ.get("STABILITY_API_KEY")  # Opsiyonel (yedek)
 
 # 3) Vertex AI (opsiyonel yedek)
