@@ -253,14 +253,17 @@ def resolve_image_path(image_filename: str | None) -> str:
 def save_blog(blog_content, lang_code, image_filename=None):
     if not blog_content:
         return
-    date_time_str = datetime.datetime.utcnow().strftime("%Y-%m-%d-%H%M")  # UTC
-    slug = f"{date_time_str}-{lang_code}-ai-news"
+    now_utc = datetime.datetime.now(datetime.timezone.utc)
+    date_time_slug = now_utc.strftime("%Y-%m-%d-%H%M")
+    # Eleventy requires a valid date string, so we store an ISO 8601 UTC timestamp.
+    date_time_iso = now_utc.replace(microsecond=0).isoformat().replace("+00:00", "Z")
+    slug = f"{date_time_slug}-{lang_code}-ai-news"
     path = BLOG_DIR / lang_code
     path.mkdir(exist_ok=True)
     image_path_for_blog = resolve_image_path(image_filename)
     html = f"""---
 title: "AI Daily — {LANG_NAMES[lang_code]}"
-date: {date_time_str}
+date: {date_time_iso}
 image: {image_path_for_blog}
 lang: {lang_code}
 ---
