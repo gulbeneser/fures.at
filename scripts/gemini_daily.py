@@ -181,15 +181,21 @@ def generate_single_blog(news_list, lang_code):
     language = LANGS[lang_code]
     summaries = "\n".join([f"- Title: {n['title']}\n  Link: {n['link']}" for n in news_list])
     prompt = f"""
-    Persona: You are a master storyteller and expert AI journalist for a popular tech blog.
-    Tone: Your tone is engaging, insightful, and slightly playful.
-    Task: Analyze the following AI news and synthesize them into a single, compelling blog article (400-600 words) in {language}.
+    You are an expert AI journalist writing for a technology blog.
+    Analyze the following AI news items and synthesize them into a single, compelling blog article (400-600 words) in {language}.
+
+    Requirements:
+    - Output must begin immediately with the title line formatted as '### <title>'.
+    - Address the reader directly and focus on why the news matters without any meta commentary about writing the article, taking on personas, or following instructions.
+    - Do not mention being an AI, receiving a task, or preparing to write; avoid phrases about donning hats, exciting assignments, or similar internal monologue.
+
     News Sources:\n{summaries}
+
     Output Structure:
-    1. Title: Start with a catchy title, prefixed with '###'.
-    2. Body: Weave the news into a coherent narrative. Focus on the "Wow" factor and WHY this news matters.
-    3. Hashtags: Include a line with 5-7 relevant hashtags in {language}.
-    4. Sources: Conclude with a "Sources" section (in the correct language), listing ALL original links.
+    1. Title line as specified.
+    2. Body that weaves the news into a coherent narrative with an engaging, insightful tone.
+    3. A line with 5-7 relevant hashtags in {language}.
+    4. A "Sources" section (translated appropriately) listing ALL original links.
     """
     model = genai.GenerativeModel(MODEL_TEXT)
     try:
