@@ -1,21 +1,10 @@
-"""Utilities for assigning blog images from the `/fotos` directory.
-
-This module centralises the logic that selects images for blog posts so the
-same behaviour can be reused by both content generation scripts and one-off
-
-maintenance utilities. Image selection happens in a language-specific,
-randomised round that keeps cycling through the available assets without
-repeating the most recently used file.
-,
-"""
+"""Utilities for assigning blog images from the `/fotos` directory."""
 from __future__ import annotations
 
 import json
-
 import random
 from pathlib import Path
 from typing import Any, Dict, List
-
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 IMAGES_DIR = ROOT_DIR / "fotos"
@@ -31,10 +20,7 @@ class NoImagesAvailableError(RuntimeError):
 
 
 def get_available_images() -> List[str]:
-    """Return a sorted list of available image filenames.
-
-    Only files with whitelisted extensions are returned.
-    """
+    """Return a sorted list of available image filenames."""
 
     if not IMAGES_DIR.exists():
         return []
@@ -44,7 +30,6 @@ def get_available_images() -> List[str]:
         for file in IMAGES_DIR.iterdir()
         if file.is_file() and file.suffix.lower() in ALLOWED_EXTENSIONS
     )
-
 
 
 def _empty_state() -> Dict[str, Any]:
@@ -81,7 +66,6 @@ def _normalise_state(raw_state: object) -> Dict[str, Any]:
 
 
 def _load_state(path: Path) -> Dict[str, Any]:
-
     if not path.exists():
         return {}
     try:
@@ -91,23 +75,18 @@ def _load_state(path: Path) -> Dict[str, Any]:
         return {}
 
 
-
 def _save_state(path: Path, state: Dict[str, Any]) -> None:
+    path.write_text(json.dumps(state, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
 class ImageRotator:
-
     """Random-but-fair image selector with per-language cycles."""
-
 
     def __init__(self, state_path: Path | None = None):
         self.state_path = state_path or STATE_PATH
         self.images = get_available_images()
         if not self.images:
-            raise NoImagesAvailableError(
-                "`/fotos` klasöründe kullanılabilir görsel bulunamadı."
-            )
-
+            raise NoImagesAvailableError("`/fotos` klasöründe kullanılabilir görsel bulunamadı.")
 
         raw_state = _load_state(self.state_path)
         self.state = _normalise_state(raw_state)
@@ -122,25 +101,22 @@ class ImageRotator:
 
         changed = False
         valid = set(self.images)
-        languages = self.state.get("languages", {})
+        languages = self.state.setdefault("languages", {})
 
-        for lang_code, info in languages.items():
+        for lang_code, payload in list(languages.items()):
+            info = payload if isinstance(payload, dict) else {}
+
             last_value = info.get("last") if isinstance(info.get("last"), str) else None
             if last_value not in valid:
-                info["last"] = None
                 last_value = None
                 changed = True
 
             remaining_list = info.get("remaining") if isinstance(info.get("remaining"), list) else []
             filtered_remaining = [item for item in remaining_list if item in valid]
             if len(filtered_remaining) != len(remaining_list):
-                info["remaining"] = filtered_remaining
                 changed = True
-            else:
-                info["remaining"] = list(filtered_remaining)
 
-            info.setdefault("last", last_value)
-            info.setdefault("remaining", filtered_remaining)
+            languages[lang_code] = {"last": last_value, "remaining": filtered_remaining}
 
         return changed
 
@@ -149,6 +125,7 @@ class ImageRotator:
         random.shuffle(pool)
 
         if last_value and len(pool) > 1 and pool[-1] == last_value:
+            # Move the last item to the front so we pick a different one.
             pool.insert(0, pool.pop())
 
         return pool
@@ -162,7 +139,8 @@ class ImageRotator:
         remaining = lang_state.get("remaining") if isinstance(lang_state.get("remaining"), list) else []
         remaining_filtered = [item for item in remaining if item in self.images]
         if not remaining_filtered:
-            remaining_filtered = self._build_new_pool(lang_state.get("last") if isinstance(lang_state.get("last"), str) else None)
+            last_value = lang_state.get("last") if isinstance(lang_state.get("last"), str) else None
+            remaining_filtered = self._build_new_pool(last_value)
 
         filename = remaining_filtered.pop()
         lang_state["last"] = filename
@@ -175,5 +153,4 @@ class ImageRotator:
         """Reset all rotation counters and histories."""
 
         self.state = _empty_state()
-=======
         _save_state(self.state_path, self.state)
