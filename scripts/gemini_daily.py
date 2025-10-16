@@ -4,6 +4,7 @@ import datetime
 import subprocess
 from pathlib import Path
 import requests
+from urllib.parse import urlparse, parse_qs, urlunparse, urlencode
 from io import BytesIO
 from PIL import Image  # Pillow gerekli!
 
@@ -58,6 +59,52 @@ else:
     print("ℹ️ Vertex AI opsiyonel; paket veya proje bilgisi yoksa atlanacak.")
 
 # === 1. Haberleri Çek ===
+def _clean_tracking_params(url: str) -> str:
+    """Strip common tracking query parameters from a URL."""
+    parsed = urlparse(url)
+    if not parsed.query:
+        return url
+
+    query_params = parse_qs(parsed.query, keep_blank_values=True)
+    filtered_items = []
+    for key, values in query_params.items():
+        if key.lower().startswith("utm_") or key.lower() in {"oc", "ved", "usg", "clid", "ei", "sa", "source"}:
+            continue
+        for value in values:
+            filtered_items.append((key, value))
+
+    if not filtered_items:
+        return urlunparse(parsed._replace(query="", fragment=""))
+
+    clean_query = urlencode(filtered_items)
+    return urlunparse(parsed._replace(query=clean_query, fragment=""))
+
+
+def _resolve_final_url(session: requests.Session, link: str) -> str:
+    """Resolve Google News or redirecting links to the original article URL."""
+    parsed = urlparse(link)
+
+    # Google redirect links may include the real URL in the `url` query parameter
+    if parsed.netloc.endswith("google.com") and parsed.path == "/url":
+        target = parse_qs(parsed.query).get("url", [None])[0]
+        if target:
+            return _clean_tracking_params(target)
+
+    # Attempt to follow redirects for news.google.com article links
+    if parsed.netloc.endswith("news.google.com"):
+        try:
+            resp = session.get(link, allow_redirects=True, timeout=10, stream=True)
+            resp.raise_for_status()
+            final_url = resp.url
+            resp.close()
+            if final_url:
+                return _clean_tracking_params(final_url)
+        except requests.RequestException:
+            pass
+
+    return _clean_tracking_params(link)
+
+
 def fetch_ai_news(limit=5):
     feeds = [
         "https://news.google.com/rss/search?q=artificial+intelligence+breakthrough&hl=en-US&gl=US&ceid=US:en",
@@ -74,12 +121,7 @@ def fetch_ai_news(limit=5):
                     google_news_url = entry.link
                     if google_news_url in seen_links:
                         continue
-                    final_url = google_news_url
-                    try:
-                        response = session.head(google_news_url, allow_redirects=True, timeout=5)
-                        final_url = response.url
-                    except requests.RequestException:
-                        pass
+                    final_url = _resolve_final_url(session, google_news_url)
                     articles.append({"title": entry.title, "link": final_url})
                     seen_links.add(google_news_url)
             except Exception as e:
@@ -253,14 +295,17 @@ def resolve_image_path(image_filename: str | None) -> str:
 def save_blog(blog_content, lang_code, image_filename=None):
     if not blog_content:
         return
-    date_time_str = datetime.datetime.utcnow().strftime("%Y-%m-%d-%H%M")  # UTC
-    slug = f"{date_time_str}-{lang_code}-ai-news"
+    now_utc = datetime.datetime.now(datetime.timezone.utc)
+    date_time_slug = now_utc.strftime("%Y-%m-%d-%H%M")
+    # Eleventy requires a valid date string, so we store an ISO 8601 UTC timestamp.
+    date_time_iso = now_utc.replace(microsecond=0).isoformat().replace("+00:00", "Z")
+    slug = f"{date_time_slug}-{lang_code}-ai-news"
     path = BLOG_DIR / lang_code
     path.mkdir(exist_ok=True)
     image_path_for_blog = resolve_image_path(image_filename)
     html = f"""---
 title: "AI Daily — {LANG_NAMES[lang_code]}"
-date: {date_time_str}
+date: {date_time_iso}
 image: {image_path_for_blog}
 lang: {lang_code}
 ---
