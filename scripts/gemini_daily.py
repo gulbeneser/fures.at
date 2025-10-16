@@ -1,4 +1,5 @@
 import os
+import base64
 import feedparser
 import datetime
 import subprocess
@@ -15,6 +16,8 @@ from utils import slugify
 
 # Metin üretimi için Gemini API
 import google.generativeai as genai
+
+from openai import OpenAI
 
 try:
     from google import genai as google_genai_lib
@@ -53,11 +56,23 @@ if not GEMINI_API_KEY:
 genai.configure(api_key=GEMINI_API_KEY)
 print("✅ Gemini (metin için) yapılandırıldı.")
 
-# 2) Fal.ai ve Stability AI anahtarları (Görsel üretimi için)
+# 2) OpenAI DALL·E (birincil görsel üretici)
+DALL_E_API_KEY = os.environ.get("DALL_E") or os.environ.get("OPENAI_API_KEY")
+OPENAI_CLIENT = None
+if DALL_E_API_KEY:
+    try:
+        OPENAI_CLIENT = OpenAI(api_key=DALL_E_API_KEY)
+        print("✅ OpenAI DALL·E yapılandırıldı.")
+    except Exception as e:
+        print(f"ℹ️ OpenAI DALL·E istemcisi başlatılamadı: {e}")
+else:
+    print("ℹ️ DALL_E veya OPENAI_API_KEY anahtarı yok, DALL·E adımı atlanacak.")
+
+# 3) Fal.ai ve Stability AI anahtarları (Görsel üretimi için)
 FAL_KEY = os.environ.get("FAL_KEY")  # ZORUNLU (birincil görsel üretici)
 STABILITY_API_KEY = os.environ.get("STABILITY_API_KEY")  # Opsiyonel (yedek)
 
-# 3) Vertex AI (opsiyonel yedek)
+# 4) Vertex AI (opsiyonel yedek)
 GCP_PROJECT_ID = os.environ.get("GCP_PROJECT_ID")
 GCP_LOCATION = os.environ.get("GCP_LOCATION", "us-central1")
 VERTEX_ENABLED = False
@@ -71,7 +86,7 @@ if GCP_PROJECT_ID and vertexai is not None:
 else:
     print("ℹ️ Vertex AI opsiyonel; paket veya proje bilgisi yoksa atlanacak.")
 
-# 4) Google Imagen 4.0 (opsiyonel yedek)
+# 5) Google Imagen 4.0 (opsiyonel yedek)
 GOOGLE_IMAGEN_CLIENT = None
 if google_genai_lib is None:
     print("ℹ️ google.genai paketi bulunamadı, Google Imagen 4.0 atlanacak.")
@@ -83,7 +98,7 @@ else:
         GOOGLE_IMAGEN_CLIENT = None
         print(f"ℹ️ Google Imagen 4.0 başlatılamadı: {e}")
 
-# 5) Replicate (opsiyonel yedek)
+# 6) Replicate (opsiyonel yedek)
 DEFAULT_REPLICATE_TOKEN = "r8_NxXwms7k489axZVAuz32iPXbjlXbRge4SRKGF"
 REPLICATE_API_TOKEN = os.environ.get("REPLICATE_API_TOKEN") or DEFAULT_REPLICATE_TOKEN
 if REPLICATE_API_TOKEN:
@@ -205,7 +220,47 @@ def generate_single_blog(news_list, lang_code):
         print(f"❌ {language} dilinde içerik üretilirken hata: {e}")
         return None
 
-# === GÖRSEL ÜRETİMİ: Fal.ai (Birincil) ===
+# === GÖRSEL ÜRETİMİ: OpenAI DALL·E (Birincil) ===
+def generate_image_dalle(final_prompt):
+    if OPENAI_CLIENT is None:
+        print("ℹ️ OpenAI DALL·E devre dışı, atlanıyor.")
+        return None
+
+    print("\n[ OpenAI DALL·E 3 ] Görsel üretiliyor...")
+    try:
+        response = OPENAI_CLIENT.images.generate(
+            model="gpt-image-1",
+            prompt=final_prompt,
+            size="1792x1024",
+        )
+        data = getattr(response, "data", None) or []
+        if not data:
+            raise ValueError("OpenAI DALL·E yanıtı boş döndü.")
+        first = data[0]
+        image_bytes: bytes | None = None
+
+        b64_json = getattr(first, "b64_json", None)
+        if b64_json:
+            image_bytes = base64.b64decode(b64_json)
+        else:
+            url = getattr(first, "url", None)
+            if url:
+                img_resp = requests.get(url, timeout=120)
+                img_resp.raise_for_status()
+                image_bytes = img_resp.content
+
+        if not image_bytes:
+            raise ValueError("OpenAI DALL·E görsel içeriği alınamadı.")
+
+        image = _load_image(image_bytes)
+        print("✅ [ OpenAI DALL·E BAŞARILI ] Görsel elde edildi.")
+        return image
+    except Exception as e:
+        print(f"❌ [ OpenAI DALL·E BAŞARISIZ ] {e}")
+        return None
+
+
+# === GÖRSEL ÜRETİMİ: Fal.ai (Yedek) ===
 def _load_image(content: bytes) -> Image.Image:
     """Load image bytes into a PIL Image instance."""
 
@@ -436,27 +491,32 @@ def generate_image(prompt_text):
     **Lighting:** Photorealistic, cinematic lighting with strong volumetric rays.
     """
 
-    # 1) Fal.ai
+    # 1) OpenAI DALL·E
+    image = generate_image_dalle(final_prompt)
+    if image:
+        return image
+
+    # 2) Fal.ai
     image = generate_image_fal_flux(final_prompt)
     if image:
         return image
 
-    # 2) Google Imagen 4.0
+    # 3) Google Imagen 4.0
     image = generate_image_google_imagen(final_prompt)
     if image:
         return image
 
-    # 3) Replicate (Google/Imagen-4)
+    # 4) Replicate (Google/Imagen-4)
     image = generate_image_replicate(final_prompt)
     if image:
         return image
 
-    # 4) Stability AI
+    # 5) Stability AI
     image = generate_image_stability(final_prompt)
     if image:
         return image
 
-    # 5) Vertex AI (opsiyonel)
+    # 6) Vertex AI (opsiyonel)
     image = generate_image_vertexai(final_prompt)
     if image:
         return image
