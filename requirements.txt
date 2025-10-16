@@ -1,7 +1,9 @@
 google-generativeai
+google-genai
 feedparser
 PyYAML
 python-dateutil
 requests
 google-cloud-aiplatform
 Pillow
+replicate
