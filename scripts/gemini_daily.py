@@ -520,55 +520,59 @@ def main():
         rotator = None
 
     primary_title = next((item.get("title") for item in news if item.get("title")), None)
-    image_slug = slugify(primary_title) if primary_title else datetime.datetime.utcnow().strftime("ai-news-%Y%m%d%H%M")
-    if not image_slug:
-        image_slug = datetime.datetime.utcnow().strftime("ai-news-%Y%m%d%H%M")
+    timestamp_part = datetime.datetime.utcnow().strftime("%Y%m%d%H%M")
+    slug_source = slugify(primary_title) if primary_title else "ai-news"
+    slug_source = slug_source or "ai-news"
+    # Çok uzun slug'ların dosya adını aşırı uzatmaması için kısalt.
+    slug_trimmed = slug_source[:60].rstrip("-") or "ai-news"
+    image_slug = f"{timestamp_part}-{slug_trimmed}"
     image_filename = f"{image_slug}.jpg"
     image_relative_path = f"/fotos/{image_filename}"
     image_path = FOTOS_DIR / image_filename
     image_created = False
 
-    if image_path.exists():
-        print(f"ℹ️ Haber görseli zaten mevcut: {image_path}")
-    else:
-        prompt_seed = primary_title or "Artificial intelligence daily news"
-        generated_image = generate_image(prompt_seed)
-        if generated_image:
+    prompt_seed = primary_title or "Artificial intelligence daily news"
+    generated_image = generate_image(prompt_seed)
+    if generated_image:
+        try:
+            image_path.parent.mkdir(parents=True, exist_ok=True)
+            generated_image.convert("RGB").save(image_path, format="JPEG", quality=92, optimize=True)
+            image_created = True
+            print(f"✅ Yeni görsel kaydedildi: {image_path}")
+        except Exception as save_error:
+            print(f"❌ Üretilen görsel kaydedilemedi: {save_error}")
+
+    if not image_path.exists():
+        fallback_source = None
+        if rotator:
+            try:
+                fallback_name = rotator.next_for_language("fallback")
+                fallback_candidate = FOTOS_DIR / fallback_name
+                if fallback_candidate.exists():
+                    fallback_source = fallback_candidate
+                    print(f"ℹ️ Otomatik yedek görsel seçildi: {fallback_candidate}")
+            except Exception as e:
+                print(f"⚠️ Yedek görsel seçilemedi: {e}")
+        if fallback_source is None:
+            default_source = ROOT / "public" / "images" / "fures.png"
+            if default_source.exists():
+                fallback_source = default_source
+                print(f"ℹ️ Varsayılan görsel kullanılacak: {default_source}")
+        if fallback_source and fallback_source.exists():
             try:
                 image_path.parent.mkdir(parents=True, exist_ok=True)
-                generated_image.convert("RGB").save(image_path, format="JPEG", quality=92, optimize=True)
+                if fallback_source.suffix.lower() != ".jpg":
+                    with Image.open(fallback_source) as image:
+                        image.convert("RGB").save(image_path, format="JPEG", quality=88, optimize=True)
+                else:
+                    shutil.copy(fallback_source, image_path)
                 image_created = True
-                print(f"✅ Yeni görsel kaydedildi: {image_path}")
-            except Exception as save_error:
-                print(f"❌ Üretilen görsel kaydedilemedi: {save_error}")
-        if not image_path.exists():
-            fallback_source = None
-            if rotator:
-                try:
-                    fallback_name = rotator.next_for_language("fallback")
-                    fallback_candidate = FOTOS_DIR / fallback_name
-                    if fallback_candidate.exists():
-                        fallback_source = fallback_candidate
-                except Exception as e:
-                    print(f"⚠️ Yedek görsel seçilemedi: {e}")
-            if fallback_source is None:
-                default_source = ROOT / "public" / "images" / "fures.png"
-                if default_source.exists():
-                    fallback_source = default_source
-            if fallback_source and fallback_source.exists():
-                try:
-                    if fallback_source.suffix.lower() != ".jpg":
-                        with Image.open(fallback_source) as image:
-                            image.convert("RGB").save(image_path, format="JPEG", quality=88, optimize=True)
-                    else:
-                        shutil.copy(fallback_source, image_path)
-                    image_created = True
-                    print(f"✅ Yedek görsel kopyalandı: {image_path}")
-                except Exception as copy_error:
-                    print(f"❌ Yedek görsel kopyalanamadı: {copy_error}")
-            else:
-                print("⚠️ Hiçbir görsel bulunamadı; front-matter varsayılan kapak ile güncellenecek.")
-                image_relative_path = "/images/fures.png"
+                print(f"✅ Yedek görsel kopyalandı: {image_path}")
+            except Exception as copy_error:
+                print(f"❌ Yedek görsel kopyalanamadı: {copy_error}")
+        else:
+            print("⚠️ Hiçbir görsel bulunamadı; front-matter varsayılan kapak ile güncellenecek.")
+            image_relative_path = "/images/fures.png"
 
     created_posts: list[Path] = []
     for lang_code in LANGS.keys():
