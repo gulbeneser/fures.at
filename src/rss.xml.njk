@@ -30,9 +30,9 @@ eleventyExcludeFromCollections: true
       {% endif %}
       <description>{{ (post.excerpt ~ " — Read more: " ~ post.url ~ " — Explore Fures: https://fures.at") | escape }}</description>
       <content:encoded><![CDATA[
-        {{ post.content | markdown | striptags | trim }}
-        Read more: {{ post.url }}
-        Explore Fures: https://fures.at
+        {{ post.content | markdown | trim | safe }}
+        <p>Read more: <a href="{{ post.url }}">{{ post.url }}</a></p>
+        <p>Explore Fures: <a href="https://fures.at">https://fures.at</a></p>
 ]]></content:encoded>
     </item>
     {% endfor %}

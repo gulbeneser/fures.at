@@ -122,6 +122,20 @@ def fetch_ai_news(limit=5):
                     if google_news_url in seen_links:
                         continue
                     final_url = _resolve_final_url(session, google_news_url)
+
+                    source_url = None
+                    source = entry.get("source")
+                    if isinstance(source, dict):
+                        source_url = source.get("href") or source.get("url")
+                    if source_url:
+                        source_url = _clean_tracking_params(source_url)
+
+                    parsed_final = urlparse(final_url)
+                    if parsed_final.netloc.endswith("news.google.com") and source_url:
+                        final_url = source_url
+                    elif source_url and not final_url:
+                        final_url = source_url
+
                     articles.append({"title": entry.title, "link": final_url})
                     seen_links.add(google_news_url)
             except Exception as e:
