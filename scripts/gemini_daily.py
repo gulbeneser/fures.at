@@ -16,6 +16,16 @@ from utils import slugify
 # Metin üretimi için Gemini API
 import google.generativeai as genai
 
+try:
+    from google import genai as google_genai_lib
+except ImportError:  # pragma: no cover - optional dependency
+    google_genai_lib = None
+
+try:
+    import replicate
+except ImportError:  # pragma: no cover - optional dependency
+    replicate = None
+
 # Vertex AI opsiyonel (yedek)
 try:
     import vertexai
@@ -60,6 +70,27 @@ if GCP_PROJECT_ID and vertexai is not None:
         print(f"ℹ️ Vertex AI başlatılamadı: {e}")
 else:
     print("ℹ️ Vertex AI opsiyonel; paket veya proje bilgisi yoksa atlanacak.")
+
+# 4) Google Imagen 4.0 (opsiyonel yedek)
+GOOGLE_IMAGEN_CLIENT = None
+if google_genai_lib is None:
+    print("ℹ️ google.genai paketi bulunamadı, Google Imagen 4.0 atlanacak.")
+else:
+    try:
+        GOOGLE_IMAGEN_CLIENT = google_genai_lib.Client(api_key=GEMINI_API_KEY)
+        print("✅ Google Imagen 4.0 (görsel) yapılandırıldı.")
+    except Exception as e:  # pragma: no cover - depends on runtime config
+        GOOGLE_IMAGEN_CLIENT = None
+        print(f"ℹ️ Google Imagen 4.0 başlatılamadı: {e}")
+
+# 5) Replicate (opsiyonel yedek)
+DEFAULT_REPLICATE_TOKEN = "r8_NxXwms7k489axZVAuz32iPXbjlXbRge4SRKGF"
+REPLICATE_API_TOKEN = os.environ.get("REPLICATE_API_TOKEN") or DEFAULT_REPLICATE_TOKEN
+if REPLICATE_API_TOKEN:
+    os.environ.setdefault("REPLICATE_API_TOKEN", REPLICATE_API_TOKEN)
+    print("ℹ️ Replicate API anahtarı ayarlandı (varsayılan veya ortam).")
+else:
+    print("ℹ️ Replicate API anahtarı bulunamadı, Replicate adımı atlanabilir.")
 
 # === 1. Haberleri Çek ===
 def _clean_tracking_params(url: str) -> str:
@@ -220,6 +251,111 @@ def generate_image_fal_flux(final_prompt):
         print(f"❌ [ Fal.ai BAŞARISIZ ] {e}")
         return None
 
+# === GÖRSEL ÜRETİMİ: Google Imagen 4.0 (Yedek) ===
+def generate_image_google_imagen(final_prompt):
+    if GOOGLE_IMAGEN_CLIENT is None:
+        print("ℹ️ Google Imagen 4.0 devre dışı, atlanıyor.")
+        return None
+
+    print("\n[ Google Imagen 4.0 ] Görsel üretiliyor...")
+    try:
+        result = GOOGLE_IMAGEN_CLIENT.models.generate_images(
+            model="models/imagen-4.0-generate-001",
+            prompt=final_prompt,
+            config=dict(
+                number_of_images=1,
+                output_mime_type="image/png",
+                person_generation="ALLOW_ADULT",
+                aspect_ratio="16:9",
+                image_size="1K",
+            ),
+        )
+
+        generated_images = getattr(result, "generated_images", None) or []
+        if not generated_images:
+            raise ValueError("Google Imagen 4.0 yanıtı boş döndü.")
+
+        primary = generated_images[0]
+        pil_image = None
+
+        image_bytes = getattr(primary, "image_bytes", None)
+        if image_bytes:
+            pil_image = _load_image(image_bytes)
+        else:
+            image_obj = getattr(primary, "image", None)
+            if isinstance(image_obj, Image.Image):
+                pil_image = image_obj
+            elif hasattr(image_obj, "as_pil_image"):
+                pil_image = image_obj.as_pil_image()
+            elif hasattr(image_obj, "read"):
+                pil_image = _load_image(image_obj.read())
+
+        if pil_image is None:
+            raise ValueError("Google Imagen 4.0 yanıtı çözümlenemedi.")
+
+        print("✅ [ Google Imagen 4.0 BAŞARILI ] Görsel elde edildi.")
+        return pil_image
+    except Exception as e:
+        print(f"❌ [ Google Imagen 4.0 BAŞARISIZ ] {e}")
+        return None
+
+# === GÖRSEL ÜRETİMİ: Replicate (Google/Imagen-4) ===
+def generate_image_replicate(final_prompt):
+    if replicate is None:
+        print("ℹ️ Replicate paketi kurulu değil, atlanıyor.")
+        return None
+    if not REPLICATE_API_TOKEN:
+        print("ℹ️ REPLICATE_API_TOKEN yok, Replicate atlanıyor.")
+        return None
+
+    print("\n[ Replicate Imagen-4 ] Görsel üretiliyor...")
+    try:
+        output = replicate.run(
+            "google/imagen-4",
+            input={
+                "prompt": final_prompt,
+                "aspect_ratio": "16:9",
+                "safety_filter_level": "block_medium_and_above",
+            },
+        )
+
+        image_bytes = None
+        image_url = None
+
+        if hasattr(output, "read"):
+            image_bytes = output.read()
+            if hasattr(output, "url"):
+                image_url = output.url()
+        elif isinstance(output, (bytes, bytearray)):
+            image_bytes = bytes(output)
+        elif isinstance(output, str):
+            image_url = output
+        elif isinstance(output, dict):
+            image_url = output.get("url") or output.get("href")
+        elif isinstance(output, (list, tuple)) and output:
+            candidate = output[0]
+            if isinstance(candidate, (bytes, bytearray)):
+                image_bytes = bytes(candidate)
+            elif isinstance(candidate, str):
+                image_url = candidate
+            elif hasattr(candidate, "read"):
+                image_bytes = candidate.read()
+
+        if image_bytes is None and image_url:
+            response = requests.get(image_url, timeout=120)
+            response.raise_for_status()
+            image_bytes = response.content
+
+        if not image_bytes:
+            raise ValueError("Replicate API'den görsel verisi alınamadı.")
+
+        pil_image = _load_image(image_bytes)
+        print("✅ [ Replicate Imagen-4 BAŞARILI ] Görsel elde edildi.")
+        return pil_image
+    except Exception as e:
+        print(f"❌ [ Replicate Imagen-4 BAŞARISIZ ] {e}")
+        return None
+
 # === GÖRSEL ÜRETİMİ: Stability AI (Yedek) ===
 def generate_image_stability(final_prompt):
     print("\n[ Stability AI ] Görsel üretiliyor...")
@@ -299,12 +435,22 @@ def generate_image(prompt_text):
     if image:
         return image
 
-    # 2) Stability AI
+    # 2) Google Imagen 4.0
+    image = generate_image_google_imagen(final_prompt)
+    if image:
+        return image
+
+    # 3) Replicate (Google/Imagen-4)
+    image = generate_image_replicate(final_prompt)
+    if image:
+        return image
+
+    # 4) Stability AI
     image = generate_image_stability(final_prompt)
     if image:
         return image
 
-    # 3) Vertex AI (opsiyonel)
+    # 5) Vertex AI (opsiyonel)
     image = generate_image_vertexai(final_prompt)
     if image:
         return image
