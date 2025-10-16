@@ -1,7 +1,10 @@
 <!doctype html>
 <html lang="{{ lang or 'tr' }}">
 {% set site_url = "https://fures.at" %}
-{% set cover = cover_image or image %}
+{% set cover = image or cover_image %}
+{% if not cover %}
+  {% set cover = '/images/fures.png' %}
+{% endif %}
 {% set canonical_url = canonical or (page.url | url) or '/' %}
 {% if canonical_url and not canonical_url.startsWith('http') %}
   {% set absolute_canonical = site_url + canonical_url %}
@@ -32,7 +35,7 @@
   <!-- Open Graph Meta Etiketleri -->
   <meta property="og:title" content="{{ title }}">
   <meta property="og:description" content="{{ description_text }}">
-  {% if absolute_cover %}<meta property="og:image" content="{{ absolute_cover }}">{% endif %}
+  <meta property="og:image" content="{{ absolute_cover }}">
   <meta property="og:url" content="{{ absolute_canonical }}">
   <meta property="og:type" content="article">
   <meta property="og:site_name" content="Fures Blog">
@@ -41,7 +44,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{{ title }}">
   <meta name="twitter:description" content="{{ description_text }}">
-  {% if absolute_cover %}<meta name="twitter:image" content="{{ absolute_cover }}">{% endif %}
+  <meta name="twitter:image" content="{{ absolute_cover }}">
 </head>
 <body>
   <header>
