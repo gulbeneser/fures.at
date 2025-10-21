@@ -162,7 +162,7 @@ const translations = {
     
     // Mission
     'mission.title': 'Misyonumuz',
-    'mission.description': 'Girne, Lefkoşa ve Gazimağusa\'daki işletmeleri ürün web siteleri, otel web sitesi projeleri, logo tasarımı ve yapay zekâ otomasyonu ile dijitalde zirveye taşımak.',
+    'mission.description': 'İşletmeleri ürün web siteleri, otel web sitesi projeleri, logo tasarımı ve yapay zekâ otomasyonu ile dijitalde zirveye taşımak.',
     'mission.priority': 'Önceliğimiz: netlik, hız ve kalıcı estetik.',
     'mission.cta': 'Bir Görüşme Ayarla',
     
