@@ -100,7 +100,26 @@
   }
 }
 </script>
-  <script type="module" crossorigin src="/aboutcyprus/assets/index-SzDMH3VP.js"></script>
+<script>
+    (function injectFuresTravelApiKeys() {
+      const apiKey = 'AIzaSyBEpqKAEZKYSyznxeZsQ1MYO-9hqV5LGoA';
+      const processGlobal = window.process || {};
+      const env = processGlobal.env || {};
+
+      if (!env.API_KEY) {
+        env.API_KEY = apiKey;
+      }
+
+      if (!env.GEMINI_API_KEY) {
+        env.GEMINI_API_KEY = apiKey;
+      }
+
+      processGlobal.env = env;
+      window.process = processGlobal;
+      window.__FURES_TRAVEL_AI_COMPANION_API_KEY__ = apiKey;
+    })();
+</script>
+<script type="module" crossorigin src="/aboutcyprus/assets/index-SzDMH3VP.js"></script>
   <link rel="stylesheet" crossorigin href="/aboutcyprus/assets/index-YS3HQWpN.css">
 </head>
 <body>
