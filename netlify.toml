@@ -56,6 +56,21 @@
   status = 200
 
 [[redirects]]
+  from = "/travel/assets/*"
+  to = "/travel/assets/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/travel"
+  to = "/travel/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/travel/*"
+  to = "/travel/index.html"
+  status = 200
+
+[[redirects]]
   from = "/projects/:project"
   to = "/projects/:project/index.html"
   status = 200
