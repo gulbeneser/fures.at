@@ -6,7 +6,8 @@
     "predev": "node scripts/sync-static-projects.mjs",
     "dev": "vite",
     "dev:eleventy": "ELEVENTY_ENV=development npx @11ty/eleventy --serve",
-    "build": "tsc && vite build && ELEVENTY_ENV=production npx @11ty/eleventy && node scripts/build-profiles.mjs",
+    "build:travel": "node scripts/build-travel.mjs",
+    "build": "npm run build:travel && tsc && vite build && ELEVENTY_ENV=production npx @11ty/eleventy && node scripts/build-profiles.mjs",
     "build:profiles": "node scripts/build-profiles.mjs",
     "build:eleventy": "ELEVENTY_ENV=production npx @11ty/eleventy",
     "preview": "vite preview"

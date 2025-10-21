@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
-import { ExternalLink, Cpu, Globe, Hotel, Users, Camera, ChefHat, BarChart3, Briefcase } from "lucide-react";
+import { ExternalLink, Cpu, Globe, Hotel, Users, Camera, ChefHat, BarChart3, Briefcase, Plane } from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext";
 import { Link } from "react-router-dom";
 
@@ -17,6 +17,12 @@ export const PROJECTS = [
     description: 'An intelligent application that creates multilingual, personalized travel plans based on user preferences and weather conditions.',
     link: '/projeler/aboutcyprus',
     icon: Globe
+  },
+  {
+    name: 'Fures Travel AI Companion',
+    description: 'Conversational 3D travel guide powered by Gemini Live, streaming itineraries onto a photorealistic Google Maps experience.',
+    link: '/projeler/travel',
+    icon: Plane
   },
   {
     name: 'AI-Powered Serakıncı Product Platform',

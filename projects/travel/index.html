@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Fures Travel AI Companion</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: radial-gradient(circle at top left, rgba(255, 111, 97, 0.2), rgba(38, 38, 38, 0.95));
+        --accent: #f97316;
+        --accent-secondary: #a855f7;
+        --text: #f5f5f5;
+        --muted: #d1d5db;
+        --border: rgba(255, 255, 255, 0.08);
+        font-size: 16px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.7;
+      }
+
+      header {
+        padding: 4rem 1.5rem 3rem;
+        max-width: 960px;
+        margin: 0 auto;
+        text-align: center;
+      }
+
+      header h1 {
+        font-size: clamp(2.5rem, 4vw + 1rem, 3.5rem);
+        margin-bottom: 1rem;
+      }
+
+      header p {
+        font-size: 1.15rem;
+        color: var(--muted);
+        margin-bottom: 2.5rem;
+      }
+
+      .cta {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
+        color: #fff;
+        padding: 0.85rem 1.8rem;
+        border-radius: 999px;
+        text-decoration: none;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .cta:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 35px rgba(249, 115, 22, 0.35);
+      }
+
+      main {
+        padding: 0 1.5rem 5rem;
+      }
+
+      section {
+        max-width: 960px;
+        margin: 0 auto 3.5rem;
+        padding: 2.5rem;
+        background: rgba(15, 15, 15, 0.65);
+        border-radius: 24px;
+        border: 1px solid var(--border);
+        backdrop-filter: blur(16px);
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+      }
+
+      section h2 {
+        margin-top: 0;
+        font-size: 1.9rem;
+        margin-bottom: 1.2rem;
+        background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      section h3 {
+        font-size: 1.2rem;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        color: var(--text);
+      }
+
+      ul, ol {
+        margin: 1rem 0 1.5rem 1.5rem;
+        padding: 0;
+      }
+
+      li {
+        margin-bottom: 0.6rem;
+        color: var(--muted);
+      }
+
+      .grid {
+        display: grid;
+        gap: 1.5rem;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        margin-top: 2rem;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.4rem 0.9rem;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--muted);
+        font-size: 0.85rem;
+        margin-right: 0.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .callout {
+        border-left: 4px solid var(--accent);
+        padding-left: 1rem;
+        margin: 1.5rem 0;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      @media (max-width: 640px) {
+        section {
+          padding: 1.75rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Fures Travel AI Companion</h1>
+      <p>
+        Gemini Live API ile Google Maps Platform'u birleştiren, sesli ve yazılı komutlarla kişiselleştirilmiş gezi planları oluşturup fotogerçekçi 3D dünya üzerinde anlık olarak gösteren yeni nesil tur rehberimiz.
+      </p>
+      <a class="cta" href="/travel" target="_blank" rel="noopener">
+        Canlı Demoyu Aç
+        <span aria-hidden="true">↗</span>
+      </a>
+    </header>
+
+    <main>
+      <section>
+        <h2>Bölüm 1: Bu Uygulama Nedir ve Ne İşe Yarar?</h2>
+        <p>
+          Kullanıcı gözünden baktığımızda Fures Travel, elinizin altında yaşayan bir gezi planlayıcısıdır. Sesinizle veya yazıyla konuştuğunuzda Gemini, Google Maps'in güncel verileriyle desteklenen öneriler üretir ve önerdiği yerleri Photorealistic 3D haritada işaretleyerek sizi sanal bir şehir turuna çıkarır.
+        </p>
+        <ul>
+          <li><strong>Sesli ve yazılı etkileşim:</strong> Mikrofon açtığınız anda çift yönlü ses akışı başlar; dilerseniz metin tabanlı sohbeti tercih edebilirsiniz.</li>
+          <li><strong>Anlık gezi planlama:</strong> “Gazimağusa'da öğlen yemeği yiyelim, ardından tarihi bir yer görelim” gibi doğal cümleler anında gündelik bir rota hâline gelir.</li>
+          <li><strong>3D harita koreografisi:</strong> Anlatılan mekânlar haritada işaretlenir, kamera o noktaları çerçeveleyecek şekilde otomatik olarak ayarlanır.</li>
+          <li><strong>Canlı veri entegrasyonu:</strong> Restoran popülerliği, müze teması veya çalışma saatleri gibi bilgiler Google Maps Places veritabanından çekilerek güncel biçimde sunulur.</li>
+        </ul>
+        <div class="callout">
+          Bu demo, yapay zekânın sadece metin üretmekle kalmayıp, harici servislerle konuşarak zengin ve görsel deneyimler yaratabileceğinin güçlü bir kanıtıdır.
+        </div>
+      </section>
+
+      <section>
+        <h2>Bölüm 2: Teknik Derinlemesine İnceleme</h2>
+        <h3>A. Temel Teknolojiler</h3>
+        <div class="grid">
+          <div>
+            <strong>Frontend</strong>
+            <p>React + TypeScript ile geliştirilmiş tek sayfa uygulaması.</p>
+          </div>
+          <div>
+            <strong>Yapay Zekâ</strong>
+            <p>Gerçek zamanlı ses ve metin akışı sağlayan Google Gemini Live API.</p>
+          </div>
+          <div>
+            <strong>Harita</strong>
+            <p>Google Maps Photorealistic 3D Maps, Places API ve Geocoding API.</p>
+          </div>
+          <div>
+            <strong>Durum Yönetimi</strong>
+            <p>Zustand ile global sohbet geçmişi, marker listesi ve ayarların takibi.</p>
+          </div>
+        </div>
+
+        <h3>B. Mimari Katmanlar</h3>
+        <ul>
+          <li><strong>App.tsx:</strong> Sidebar, ControlTray, StreamingConsole ve Map3D bileşenlerini orkestre eder; Zustand store'u dinleyerek kamerayı günceller.</li>
+          <li><strong>/components:</strong> Kontrol tepsisi, konuşma konsolu, 3D harita sarmalayıcısı ve pop-up gibi görsel elemanlar.</li>
+          <li><strong>/hooks/use-live-api.ts:</strong> Gemini Live bağlantısını yöneten kalp atışı; ses göndermeyi, transkriptleri ve tool call'ları yönetir.</li>
+          <li><strong>/lib:</strong> GenAILiveClient sarmalayıcısı, audio streamer, map controller ve tool registry gibi altyapı yardımcıları.</li>
+          <li><strong>/contexts/LiveAPIContext:</strong> Hook'tan dönen bağlantı durumunu uygulama geneline taşır.</li>
+        </ul>
+
+        <h3>C. Veri Akışı</h3>
+        <ol>
+          <li>Kullanıcı, ControlTray üzerinden oturumu başlatır; use-live-api hook'u Gemini Live'a bağlanır.</li>
+          <li>Mikrofon verisi PCM formatına çevrilip anlık olarak gönderilir; yazılı mesajlar sendRealtimeText ile iletilir.</li>
+          <li>Gemini'den gelen ses veri paketleri AudioStreamer tarafından çalınır; metin transkriptleri StreamingConsole'da gösterilir.</li>
+          <li>Model bir araç çağırdığında (ör. <code>mapsGrounding</code>), tool-registry fonksiyonları devreye girer ve Google Maps'ten detayları çeker.</li>
+          <li>Zustand store güncellenir, MapController marker'ları ve kamerayı yeni verilere göre yeniden çerçeveler.</li>
+          <li>Sonuç modeli besler ve kullanıcıya doğal bir yanıt olarak geri döner.</li>
+        </ol>
+      </section>
+
+      <section>
+        <h2>Bölüm 3: Geliştirme ve Dağıtım</h2>
+        <h3>Başlangıç Adımları</h3>
+        <ol>
+          <li>Vite + React + TypeScript şablonuyla projeyi başlatın, @google/genai, @vis.gl/react-google-maps ve zustand paketlerini ekleyin.</li>
+          <li>Statik UI'ı kurun; ControlTray, StreamingConsole ve Map3D bileşenlerini tasarlayın.</li>
+          <li>Zustand store'larını (UI, sohbet geçmişi, harita) tanımlayın ve App.tsx içinde dinleyin.</li>
+          <li>Gemini Live entegrasyonu için <code>GenAILiveClient</code> ve <code>use-live-api</code> hook'unu hazırlayın; önce echo bot ile bağlantıyı doğrulayın.</li>
+          <li>Tool registry'yi oluşturup <code>mapsGrounding</code>, <code>frameLocations</code> gibi fonksiyonları uygulayın; harita state'ini güncelleyin.</li>
+        </ol>
+
+        <h3>Dağıtım Planı (GitHub + Netlify)</h3>
+        <ol>
+          <li>Projeyi GitHub deposuna gönderin ve Netlify'da yeni bir site olarak içeri aktarın.</li>
+          <li>Netlify build ayarlarında komut olarak <code>npm run build</code> kullanın; bu işlem hem ana siteyi hem travel demosunu paketler.</li>
+          <li><strong>Environment Variables:</strong> Netlify ayarlarında <span class="pill">GEMINI_API_KEY</span> ve <span class="pill">MAPS_API_KEY</span> değerlerini tanımlayın.</li>
+          <li>Dağıtım tamamlandığında Netlify, <code>/travel</code> altında Vite çıktısını sunar ve <code>public/projeler/travel</code> sayfası projeyi detaylı biçimde anlatır.</li>
+        </ol>
+
+        <div class="callout">
+          API anahtarlarını tarayıcı tarafında kullanırken alan kısıtlamaları ve kota yönetimini unutmayın; Gemini için proxy veya token aracı eklemek isteyebilirsiniz.
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
