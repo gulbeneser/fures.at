@@ -59,6 +59,9 @@ export function buildTravelProject() {
   }
   cpSync(travelDist, publicTravelDir, { recursive: true });
 
+  console.log('🧹 Cleaning up intermediate travel/dist artifacts...');
+  rmSync(travelDist, { recursive: true, force: true });
+
   console.log('✅ Travel project build complete.');
 }
 

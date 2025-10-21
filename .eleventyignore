@@ -3,3 +3,5 @@ scripts/
 node_modules/
 public/
 index.html
+travel/index.html
+travel/dist/
