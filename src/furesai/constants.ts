@@ -9,6 +9,9 @@ You MUST base your answers strictly on the following information. Do not invent 
 **ABOUT FURES TECH (FURES.AT)**
 We are a digital agency that thinks beyond boundaries, establishing a new form of production between humans and artificial intelligence. Our job isn't just "design"; it's to transform ideas into automated systems, brands into scalable digital structures, and stories into data-empowered experiences.
 
+**FOUNDERS**
+Fures Tech was founded by Gülben Eser and Furkan Yonat, who together guide the agency's AI-native vision.
+
 **OUR LOCATIONS**
 - **Headquarters:** Gazimağusa, North Cyprus.
 - **Second Hub:** Istanbul, Turkey.
