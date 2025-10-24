@@ -5,6 +5,7 @@ module.exports = function(eleventyConfig) {
   // /static ve Vite çıktısı → üretim çıktısına aynen kopyala
   eleventyConfig.addPassthroughCopy({ "static": "static" });
   eleventyConfig.addPassthroughCopy({ "dist": "." });
+  eleventyConfig.addPassthroughCopy({ "aboutcyprus": "aboutcyprus" });
   eleventyConfig.ignores.add("static/images/ai-daily/.gitkeep");
   eleventyConfig.ignores.add("dist/static/images/ai-daily/.gitkeep");
 

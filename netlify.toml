@@ -56,6 +56,21 @@
   status = 200
 
 [[redirects]]
+  from = "/aboutcyprus/assets/*"
+  to = "/aboutcyprus/assets/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/aboutcyprus"
+  to = "/aboutcyprus/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/aboutcyprus/*"
+  to = "/aboutcyprus/index.html"
+  status = 200
+
+[[redirects]]
   from = "/travel/assets/*"
   to = "/travel/assets/:splat"
   status = 200
