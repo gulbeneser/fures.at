@@ -85,7 +85,7 @@
     }
   </style>
 
-<link rel="stylesheet" href="/index.css">
+<link rel="stylesheet" href="./index.css">
 <script type="importmap">
 {
   "imports": {
@@ -103,24 +103,58 @@
 <script>
     (function injectFuresTravelApiKeys() {
       const apiKey = 'AIzaSyBEpqKAEZKYSyznxeZsQ1MYO-9hqV5LGoA';
-      const processGlobal = window.process || {};
-      const env = processGlobal.env || {};
+      const global = window;
+      const processGlobal = global.process || {};
+      const env = Object.assign({}, processGlobal.env);
 
-      if (!env.API_KEY) {
-        env.API_KEY = apiKey;
-      }
+      const envKeys = [
+        'API_KEY',
+        'GEMINI_API_KEY',
+        'VITE_API_KEY',
+        'VITE_GEMINI_API_KEY',
+        'GOOGLE_API_KEY',
+        'VITE_GOOGLE_API_KEY'
+      ];
 
-      if (!env.GEMINI_API_KEY) {
-        env.GEMINI_API_KEY = apiKey;
-      }
+      envKeys.forEach((key) => {
+        if (!env[key]) {
+          env[key] = apiKey;
+        }
+      });
 
       processGlobal.env = env;
-      window.process = processGlobal;
-      window.__FURES_TRAVEL_AI_COMPANION_API_KEY__ = apiKey;
+      global.process = processGlobal;
+      globalThis.process = processGlobal;
+
+      envKeys.forEach((key) => {
+        if (!global[key]) {
+          global[key] = apiKey;
+        }
+      });
+
+      const aliasTargets = ['__ENV__', '__env', '__APP_ENV__', '__appEnv'];
+      aliasTargets.forEach((target) => {
+        const existing = global[target] && typeof global[target] === 'object'
+          ? global[target]
+          : {};
+        const next = Object.assign({}, existing);
+        envKeys.forEach((key) => {
+          if (!next[key]) {
+            next[key] = apiKey;
+          }
+        });
+        global[target] = next;
+      });
+
+      global.GEMINI_API_KEY = global.GEMINI_API_KEY || apiKey;
+      global.VITE_API_KEY = global.VITE_API_KEY || apiKey;
+      global.VITE_GEMINI_API_KEY = global.VITE_GEMINI_API_KEY || apiKey;
+      global.GOOGLE_API_KEY = global.GOOGLE_API_KEY || apiKey;
+      global.__FURES_TRAVEL_AI_COMPANION_API_KEY__ = apiKey;
     })();
 </script>
-<script type="module" crossorigin src="/aboutcyprus/assets/index-SzDMH3VP.js"></script>
-  <link rel="stylesheet" crossorigin href="/aboutcyprus/assets/index-YS3HQWpN.css">
+<script type="module" crossorigin src="./assets/index-SzDMH3VP.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-YS3HQWpN.css">
 </head>
 <body>
   <div id="root"></div>
