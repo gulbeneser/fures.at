@@ -7,6 +7,7 @@ export default defineConfig(({ mode }) => {
     const geminiKey = env.GEMINI_API_KEY || env.VITE_GEMINI_API_KEY || env.API_KEY || '';
 
     return {
+      base: '/ai-content-detector/',
       server: {
         port: 3000,
         host: '0.0.0.0',
@@ -16,6 +17,7 @@ export default defineConfig(({ mode }) => {
         'process.env.API_KEY': JSON.stringify(geminiKey),
         'process.env.GEMINI_API_KEY': JSON.stringify(geminiKey),
         'import.meta.env.VITE_GEMINI_API_KEY': JSON.stringify(geminiKey),
+        'process.env.apikey': JSON.stringify(geminiKey),
       },
       resolve: {
         alias: {
