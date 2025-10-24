@@ -12,8 +12,6 @@
 import { GoogleGenAI, GenerateContentResponse } from '@google/genai';
 import { resolveGeminiApiKey } from './env';
 
-
-// TODO - replace with appropriate key
 const API_KEY = resolveGeminiApiKey();
 const SYS_INSTRUCTIONS = "You are a helpful assistant that provides concise answers based on the user's query. Provide details for the top 3 results, unless the user requests less. Provide the name and a concise one line description that highlights a unique, interesting, or fun aspect about the place. Do not state addresses. "
 /**
