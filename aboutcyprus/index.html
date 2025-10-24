@@ -152,6 +152,11 @@
         'GOOGLE_MAPS_KEY'
       ];
 
+      const GENERATIVE_LANGUAGE_HOST = 'generativelanguage.googleapis.com';
+      const GEMINI_FETCH_PATCH_FLAG = '__FURES_GEMINI_FETCH_PATCH__';
+      let activeGeminiKey = '';
+      let activeMapsKey = '';
+
       const ENV_CONTAINER_KEYS = [
         '__FURES_TRAVEL_ENV__',
         '__FURES_ENV__',
@@ -224,7 +229,7 @@
         return undefined;
       };
 
-      const applyKey = (value, property, envKeys, globalKeys) => {
+      const applyKey = (value, property, envKeys, globalKeys, onResolved) => {
         const key = coerceString(value);
         if (!key) {
           return;
@@ -258,9 +263,17 @@
           writable: true,
           value: key,
         });
+
+        if (typeof onResolved === 'function') {
+          try {
+            onResolved(key);
+          } catch (error) {
+            console.warn('Failed to propagate runtime key update', error);
+          }
+        }
       };
 
-      const setupReactiveKey = (property, envKeys, globalKeys, initialValue) => {
+      const setupReactiveKey = (property, envKeys, globalKeys, initialValue, onResolved) => {
         Object.defineProperty(global, property, {
           configurable: true,
           enumerable: false,
@@ -273,7 +286,7 @@
               return;
             }
             delete global[property];
-            applyKey(resolved, property, envKeys, globalKeys);
+            applyKey(resolved, property, envKeys, globalKeys, onResolved);
           },
         });
 
@@ -298,11 +311,195 @@
         return readFromContainers(global, envKeys);
       };
 
-      const geminiInitial = resolveExisting('__FURES_TRAVEL_AI_COMPANION_API_KEY__', GEMINI_ENV_KEYS, GEMINI_GLOBAL_KEYS);
-      const mapsInitial = resolveExisting('__FURES_TRAVEL_MAPS_API_KEY__', MAPS_ENV_KEYS, MAPS_GLOBAL_KEYS);
+      const updateGeminiKey = (value) => {
+        const normalized = coerceString(value);
+        if (normalized) {
+          activeGeminiKey = normalized;
+        }
+      };
 
-      setupReactiveKey('__FURES_TRAVEL_AI_COMPANION_API_KEY__', GEMINI_ENV_KEYS, GEMINI_GLOBAL_KEYS, geminiInitial);
-      setupReactiveKey('__FURES_TRAVEL_MAPS_API_KEY__', MAPS_ENV_KEYS, MAPS_GLOBAL_KEYS, mapsInitial);
+      const updateMapsKey = (value) => {
+        const normalized = coerceString(value);
+        if (normalized) {
+          activeMapsKey = normalized;
+        }
+      };
+
+      const geminiInitial = resolveExisting('__FURES_TRAVEL_AI_COMPANION_API_KEY__', GEMINI_ENV_KEYS, GEMINI_GLOBAL_KEYS);
+      if (geminiInitial) {
+        updateGeminiKey(geminiInitial);
+      }
+      const mapsInitial = resolveExisting('__FURES_TRAVEL_MAPS_API_KEY__', MAPS_ENV_KEYS, MAPS_GLOBAL_KEYS);
+      if (mapsInitial) {
+        updateMapsKey(mapsInitial);
+      }
+
+      const getActiveGeminiKey = () => {
+        if (coerceString(activeGeminiKey)) {
+          return activeGeminiKey;
+        }
+        const resolved = resolveExisting('__FURES_TRAVEL_AI_COMPANION_API_KEY__', GEMINI_ENV_KEYS, GEMINI_GLOBAL_KEYS);
+        if (resolved) {
+          updateGeminiKey(resolved);
+        }
+        return activeGeminiKey;
+      };
+
+      const mergeHeaders = (sourceA, sourceB, key) => {
+        const headers = new Headers();
+        const apply = (source) => {
+          if (!source) {
+            return;
+          }
+          try {
+            new Headers(source).forEach((value, name) => {
+              headers.set(name, value);
+            });
+          } catch (error) {
+            if (typeof source === 'object') {
+              Object.entries(source).forEach(([name, value]) => {
+                if (value != null) {
+                  headers.set(name, Array.isArray(value) ? value.join(', ') : String(value));
+                }
+              });
+            }
+          }
+        };
+
+        apply(sourceA);
+        apply(sourceB);
+        headers.set('x-goog-api-key', key);
+        return headers;
+      };
+
+      const shouldInterceptUrl = (input) => {
+        let urlString = '';
+        if (typeof input === 'string') {
+          urlString = input;
+        } else if (typeof URL !== 'undefined' && input instanceof URL) {
+          urlString = input.href;
+        } else if (typeof Request !== 'undefined' && input instanceof Request) {
+          urlString = input.url;
+        } else if (input && typeof input.url === 'string') {
+          urlString = input.url;
+        }
+
+        if (!urlString) {
+          return false;
+        }
+
+        try {
+          const parsed = new URL(urlString, global.location?.origin || 'https://example.com');
+          const host = parsed.hostname.toLowerCase();
+          return host === GENERATIVE_LANGUAGE_HOST || host.endsWith(`.${GENERATIVE_LANGUAGE_HOST}`);
+        } catch (error) {
+          return false;
+        }
+      };
+
+      const createPatchedRequest = (request, init, key) => {
+        const clone = request.clone();
+        let url = clone.url;
+        try {
+          const parsed = new URL(url, global.location?.origin || 'https://example.com');
+          parsed.searchParams.set('key', key);
+          url = parsed.toString();
+        } catch (error) {
+          /* ignore malformed URL */
+        }
+
+        const method = (init?.method || clone.method || 'GET').toUpperCase();
+        const bodyAllowed = method !== 'GET' && method !== 'HEAD';
+        const headers = mergeHeaders(clone.headers, init?.headers, key);
+        const body = init?.body !== undefined ? init.body : bodyAllowed ? clone.body : undefined;
+
+        return new Request(url, {
+          method,
+          headers,
+          body,
+          mode: init?.mode ?? clone.mode,
+          credentials: init?.credentials ?? clone.credentials,
+          cache: init?.cache ?? clone.cache,
+          redirect: init?.redirect ?? clone.redirect,
+          referrer: init?.referrer ?? clone.referrer,
+          referrerPolicy: init?.referrerPolicy ?? clone.referrerPolicy,
+          integrity: init?.integrity ?? clone.integrity,
+          keepalive: init?.keepalive ?? clone.keepalive,
+          signal: init?.signal ?? clone.signal,
+        });
+      };
+
+      const patchGenerativeLanguageClients = () => {
+        if (global[GEMINI_FETCH_PATCH_FLAG]) {
+          return;
+        }
+        global[GEMINI_FETCH_PATCH_FLAG] = true;
+
+        const originalFetch = typeof global.fetch === 'function' ? global.fetch.bind(global) : null;
+        if (originalFetch) {
+          global.fetch = function patchedFetch(input, init) {
+            const key = coerceString(getActiveGeminiKey());
+            if (!key || !shouldInterceptUrl(input)) {
+              return originalFetch(input, init);
+            }
+
+            if (typeof Request !== 'undefined' && input instanceof Request) {
+              const patchedRequest = createPatchedRequest(input, init || {}, key);
+              return originalFetch(patchedRequest);
+            }
+
+            let target = input;
+            if (typeof URL !== 'undefined' && input instanceof URL) {
+              target = input.toString();
+            }
+
+            if (typeof target === 'string') {
+              try {
+                const parsed = new URL(target, global.location?.origin || 'https://example.com');
+                parsed.searchParams.set('key', key);
+                target = parsed.toString();
+              } catch (error) {
+                /* ignore parsing errors */
+              }
+            }
+
+            const headers = mergeHeaders(undefined, init?.headers, key);
+            const nextInit = { ...(init || {}), headers };
+            return originalFetch(target, nextInit);
+          };
+        }
+
+        const OriginalWebSocket = global.WebSocket;
+        if (typeof OriginalWebSocket === 'function') {
+          const PatchedWebSocket = function(url, protocols) {
+            const key = coerceString(getActiveGeminiKey());
+            if (key && typeof url === 'string' && shouldInterceptUrl(url)) {
+              try {
+                const parsed = new URL(url, global.location?.origin || 'https://example.com');
+                parsed.searchParams.set('key', key);
+                return new OriginalWebSocket(parsed.toString(), protocols);
+              } catch (error) {
+                /* ignore malformed URLs */
+              }
+            }
+            return new OriginalWebSocket(url, protocols);
+          };
+
+          try {
+            Object.defineProperty(PatchedWebSocket, 'name', { value: 'WebSocket' });
+          } catch (error) {
+            /* ignore defineProperty errors */
+          }
+          PatchedWebSocket.prototype = OriginalWebSocket.prototype;
+          Object.setPrototypeOf(PatchedWebSocket, OriginalWebSocket);
+          global.WebSocket = PatchedWebSocket;
+        }
+      };
+
+      setupReactiveKey('__FURES_TRAVEL_AI_COMPANION_API_KEY__', GEMINI_ENV_KEYS, GEMINI_GLOBAL_KEYS, geminiInitial, updateGeminiKey);
+      setupReactiveKey('__FURES_TRAVEL_MAPS_API_KEY__', MAPS_ENV_KEYS, MAPS_GLOBAL_KEYS, mapsInitial, updateMapsKey);
+
+      patchGenerativeLanguageClients();
     })();
 </script>
 <script type="module" crossorigin src="./assets/index-SzDMH3VP.js"></script>
