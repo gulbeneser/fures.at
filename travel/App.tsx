@@ -30,15 +30,16 @@ import { APIProvider, useMapsLibrary } from '@vis.gl/react-google-maps';
 import { Map3D, Map3DCameraProps} from './components/map-3d';
 import { useMapStore } from './lib/state';
 import { MapController } from './lib/map-controller';
+import { resolveGeminiApiKey, resolveMapsApiKey } from './lib/env';
 
-const API_KEY = process.env.GEMINI_API_KEY as string;
+const API_KEY = resolveGeminiApiKey();
 if (!API_KEY) {
   throw new Error(
     'Eksik ortam değişkeni: GEMINI_API_KEY. Lütfen Netlify veya dağıtım ortamınızda ayarlayın. Talimatlar için README.md dosyasına bakın.'
   );
 }
 
-const MAPS_API_KEY = process.env.MAPS_API_KEY as string;
+const MAPS_API_KEY = resolveMapsApiKey();
 if (!MAPS_API_KEY) {
     throw new Error(
     'Eksik ortam değişkeni: MAPS_API_KEY. Lütfen Netlify veya dağıtım ortamınızda ayarlayın. Talimatlar için README.md dosyasına bakın.'

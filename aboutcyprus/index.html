@@ -101,56 +101,208 @@
 }
 </script>
 <script>
-    (function injectFuresTravelApiKeys() {
-      const apiKey = 'AIzaSyBEpqKAEZKYSyznxeZsQ1MYO-9hqV5LGoA';
+    (function configureFuresTravelEnvironment() {
       const global = window;
-      const processGlobal = global.process || {};
-      const env = Object.assign({}, processGlobal.env);
 
-      const envKeys = [
-        'API_KEY',
+      const GEMINI_ENV_KEYS = [
         'GEMINI_API_KEY',
-        'VITE_API_KEY',
+        'API_KEY',
         'VITE_GEMINI_API_KEY',
+        'VITE_API_KEY',
         'GOOGLE_API_KEY',
-        'VITE_GOOGLE_API_KEY'
+        'GOOGLEAI_API_KEY',
+        'GEMINI_KEY',
+        'GEMINIAPIKEY',
+        'GEMINIKEY',
+        'apikey'
+      ];
+      const GEMINI_GLOBAL_KEYS = [
+        '__FURES_GEMINI_API_KEY__',
+        '__FURES_TRAVEL_GEMINI_API_KEY__',
+        '__GEMINI_API_KEY__',
+        'GEMINI_API_KEY',
+        'API_KEY',
+        'VITE_GEMINI_API_KEY',
+        'VITE_API_KEY',
+        'GOOGLE_API_KEY',
+        'GOOGLEAI_API_KEY',
+        'GEMINI_KEY',
+        'GEMINIAPIKEY',
+        'GEMINIKEY'
       ];
 
-      envKeys.forEach((key) => {
-        if (!env[key]) {
-          env[key] = apiKey;
+      const MAPS_ENV_KEYS = [
+        'MAPS_API_KEY',
+        'VITE_MAPS_API_KEY',
+        'GOOGLE_MAPS_API_KEY',
+        'VITE_GOOGLE_MAPS_API_KEY',
+        'MAPS_KEY',
+        'MAPSAPIKEY',
+        'GOOGLE_MAPS_KEY'
+      ];
+      const MAPS_GLOBAL_KEYS = [
+        '__FURES_TRAVEL_MAPS_API_KEY__',
+        '__GOOGLE_MAPS_API_KEY__',
+        'MAPS_API_KEY',
+        'VITE_MAPS_API_KEY',
+        'GOOGLE_MAPS_API_KEY',
+        'VITE_GOOGLE_MAPS_API_KEY',
+        'MAPS_KEY',
+        'MAPSAPIKEY',
+        'GOOGLE_MAPS_KEY'
+      ];
+
+      const ENV_CONTAINER_KEYS = [
+        '__FURES_TRAVEL_ENV__',
+        '__FURES_ENV__',
+        '__ENV__',
+        '__env',
+        '__APP_ENV__',
+        '__appEnv',
+        '_env_',
+        'ENV',
+        'env'
+      ];
+
+      const isRecord = (value) => value && typeof value === 'object';
+
+      const coerceString = (value) => {
+        if (typeof value !== 'string') {
+          return '';
         }
-      });
+        const trimmed = value.trim();
+        return trimmed.length > 0 ? trimmed : '';
+      };
 
-      processGlobal.env = env;
-      global.process = processGlobal;
-      globalThis.process = processGlobal;
-
-      envKeys.forEach((key) => {
-        if (!global[key]) {
-          global[key] = apiKey;
+      const readFromRecord = (record, keys) => {
+        if (!isRecord(record)) {
+          return '';
         }
-      });
+        for (const key of keys) {
+          const result = coerceString(record[key]);
+          if (result) {
+            return result;
+          }
+        }
+        return '';
+      };
 
-      const aliasTargets = ['__ENV__', '__env', '__APP_ENV__', '__appEnv'];
-      aliasTargets.forEach((target) => {
-        const existing = global[target] && typeof global[target] === 'object'
-          ? global[target]
-          : {};
-        const next = Object.assign({}, existing);
-        envKeys.forEach((key) => {
-          if (!next[key]) {
-            next[key] = apiKey;
+      const readFromContainers = (record, keys) => {
+        if (!isRecord(record)) {
+          return '';
+        }
+        for (const containerKey of ENV_CONTAINER_KEYS) {
+          const container = record[containerKey];
+          const result = readFromRecord(container, keys);
+          if (result) {
+            return result;
+          }
+        }
+        return '';
+      };
+
+      const ensureProcessEnv = () => {
+        const processGlobal = isRecord(global.process) ? global.process : {};
+        if (!isRecord(processGlobal.env)) {
+          processGlobal.env = {};
+        }
+        global.process = processGlobal;
+        globalThis.process = processGlobal;
+        return processGlobal.env;
+      };
+
+      const ensureContainer = (key) => {
+        const current = global[key];
+        if (isRecord(current)) {
+          return current;
+        }
+        if (typeof current === 'undefined') {
+          const next = {};
+          global[key] = next;
+          return next;
+        }
+        return undefined;
+      };
+
+      const applyKey = (value, property, envKeys, globalKeys) => {
+        const key = coerceString(value);
+        if (!key) {
+          return;
+        }
+
+        const processEnv = ensureProcessEnv();
+        envKeys.forEach((envKey) => {
+          processEnv[envKey] = key;
+        });
+
+        globalKeys.forEach((aliasKey) => {
+          try {
+            global[aliasKey] = key;
+          } catch (error) {
+            /* ignore read-only assignments */
           }
         });
-        global[target] = next;
-      });
 
-      global.GEMINI_API_KEY = global.GEMINI_API_KEY || apiKey;
-      global.VITE_API_KEY = global.VITE_API_KEY || apiKey;
-      global.VITE_GEMINI_API_KEY = global.VITE_GEMINI_API_KEY || apiKey;
-      global.GOOGLE_API_KEY = global.GOOGLE_API_KEY || apiKey;
-      global.__FURES_TRAVEL_AI_COMPANION_API_KEY__ = apiKey;
+        ENV_CONTAINER_KEYS.forEach((containerKey) => {
+          const container = ensureContainer(containerKey);
+          if (container) {
+            envKeys.forEach((envKey) => {
+              container[envKey] = key;
+            });
+          }
+        });
+
+        Object.defineProperty(global, property, {
+          configurable: true,
+          enumerable: false,
+          writable: true,
+          value: key,
+        });
+      };
+
+      const setupReactiveKey = (property, envKeys, globalKeys, initialValue) => {
+        Object.defineProperty(global, property, {
+          configurable: true,
+          enumerable: false,
+          get() {
+            return undefined;
+          },
+          set(value) {
+            const resolved = coerceString(value);
+            if (!resolved) {
+              return;
+            }
+            delete global[property];
+            applyKey(resolved, property, envKeys, globalKeys);
+          },
+        });
+
+        if (coerceString(initialValue)) {
+          global[property] = initialValue;
+        }
+      };
+
+      const resolveExisting = (property, envKeys, globalKeys) => {
+        const processEnv = isRecord(global.process) && isRecord(global.process.env)
+          ? global.process.env
+          : undefined;
+
+        const direct = readFromRecord(global, [property, ...globalKeys, ...envKeys]);
+        if (direct) {
+          return direct;
+        }
+        const fromProcess = readFromRecord(processEnv, envKeys);
+        if (fromProcess) {
+          return fromProcess;
+        }
+        return readFromContainers(global, envKeys);
+      };
+
+      const geminiInitial = resolveExisting('__FURES_TRAVEL_AI_COMPANION_API_KEY__', GEMINI_ENV_KEYS, GEMINI_GLOBAL_KEYS);
+      const mapsInitial = resolveExisting('__FURES_TRAVEL_MAPS_API_KEY__', MAPS_ENV_KEYS, MAPS_GLOBAL_KEYS);
+
+      setupReactiveKey('__FURES_TRAVEL_AI_COMPANION_API_KEY__', GEMINI_ENV_KEYS, GEMINI_GLOBAL_KEYS, geminiInitial);
+      setupReactiveKey('__FURES_TRAVEL_MAPS_API_KEY__', MAPS_ENV_KEYS, MAPS_GLOBAL_KEYS, mapsInitial);
     })();
 </script>
 <script type="module" crossorigin src="./assets/index-SzDMH3VP.js"></script>

@@ -22,6 +22,25 @@ import React, {StrictMode} from 'react';
 import ReactDOM from 'react-dom/client';
 
 import App from './App';
+import { resolveGeminiApiKey, resolveMapsApiKey } from './lib/env';
+
+type FuresTravelWindow = Window & {
+  __FURES_TRAVEL_AI_COMPANION_API_KEY__?: string;
+  __FURES_TRAVEL_MAPS_API_KEY__?: string;
+};
+
+const geminiApiKey = resolveGeminiApiKey();
+const mapsApiKey = resolveMapsApiKey();
+
+if (typeof window !== 'undefined') {
+  const globalWindow = window as FuresTravelWindow;
+  if (geminiApiKey) {
+    globalWindow.__FURES_TRAVEL_AI_COMPANION_API_KEY__ = geminiApiKey;
+  }
+  if (mapsApiKey) {
+    globalWindow.__FURES_TRAVEL_MAPS_API_KEY__ = mapsApiKey;
+  }
+}
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
