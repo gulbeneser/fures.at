@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useLocation } from "react-router-dom";
-import { Projects, PROJECTS } from "../components/Projects";
+import { Projects, PROJECTS, FALLBACK_LANGUAGE } from "../components/Projects";
 import { useLanguage } from "../contexts/LanguageContext";
 import {
   useSEO,
@@ -35,12 +35,16 @@ export function ProjectsPage() {
   );
 
   const projectItems = useMemo(
-    () => PROJECTS.map((project) => ({
-      name: project.name,
-      description: project.description,
-      url: project.link
-    })),
-    []
+    () =>
+      PROJECTS.map((project) => {
+        const translation = project.translations[language] ?? project.translations[FALLBACK_LANGUAGE];
+        return {
+          name: translation.name,
+          description: translation.description,
+          url: project.link
+        };
+      }),
+    [language]
   );
 
   const structuredData = useMemo(

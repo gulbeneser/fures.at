@@ -8,7 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const rootDir = path.resolve(__dirname, '..');
 
-const apps = ['gulbeneser', 'furkanyonat', 'kariyer'];
+const apps = ['gulbeneser', 'furkanyonat', 'kariyer', 'ai-content-detector'];
 
 for (const app of apps) {
   const appDir = path.join(rootDir, app);
