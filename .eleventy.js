@@ -39,12 +39,48 @@ module.exports = function(eleventyConfig) {
 
   const markdownFilter = (content) => (content ? markdownRenderer.render(String(content)) : "");
 
+  const toPlainText = (value) => {
+    if (value === undefined || value === null) {
+      return "";
+    }
+
+    const rendered = markdownFilter(value);
+
+    if (!rendered) {
+      return "";
+    }
+
+    const normalised = rendered
+      .replace(/\r\n/g, "\n")
+      .replace(/<\s*br\s*\/?\s*>/gi, "\n")
+      .replace(/<\/(p|div|h[1-6]|blockquote)\s*>/gi, "\n\n")
+      .replace(/<\/(tr|table|thead|tbody)\s*>/gi, "\n")
+      .replace(/<li[^>]*>/gi, "- ")
+      .replace(/<\/(li)\s*>/gi, "\n")
+      .replace(/<\/(ul|ol)\s*>/gi, "\n\n");
+
+    const withoutTags = normalised.replace(/<[^>]+>/g, "");
+
+    const collapsed = withoutTags
+      .replace(/\u00a0/g, " ")
+      .replace(/[ \t]+\n/g, "\n")
+      .replace(/\n[ \t]+/g, "\n")
+      .replace(/\n{3,}/g, "\n\n")
+      .replace(/[ \t]{2,}/g, " ");
+
+    const trimmed = collapsed.trim();
+
+    return trimmed ? markdownRenderer.utils.unescapeAll(trimmed) : "";
+  };
+
   eleventyConfig.addFilter("readableDate", readableDate);
   eleventyConfig.addNunjucksFilter("readableDate", readableDate);
   eleventyConfig.addFilter("rssDate", rssDate);
   eleventyConfig.addNunjucksFilter("rssDate", rssDate);
   eleventyConfig.addFilter("markdown", markdownFilter);
   eleventyConfig.addNunjucksFilter("markdown", markdownFilter);
+  eleventyConfig.addFilter("plainText", toPlainText);
+  eleventyConfig.addNunjucksFilter("plainText", toPlainText);
 
   // Koleksiyonlar (dil bazlı)
   eleventyConfig.addCollection("posts", (c) =>

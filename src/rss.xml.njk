@@ -28,11 +28,21 @@ eleventyExcludeFromCollections: true
       <enclosure url="{{ post.imageAbsolute }}" length="{{ post.imageSize | default(0) }}"{% if post.imageMime %} type="{{ post.imageMime }}"{% endif %} />
       <media:content url="{{ post.imageAbsolute }}" medium="image"{% if post.imageMime %} type="{{ post.imageMime }}"{% endif %} />
       {% endif %}
-      <description>{{ (post.excerpt ~ " — Read more: " ~ post.url ~ " — Explore Fures: https://fures.at") | escape }}</description>
+      {% set summary = post.excerpt | plainText %}
+      {% if summary | trim | length == 0 %}
+      {% set summary = post.title | plainText %}
+      {% endif %}
+      {% set contentPlain = post.content | plainText %}
+      {% if contentPlain | trim | length == 0 %}
+      {% set contentPlain = summary %}
+      {% endif %}
+      {% set descriptionText = (summary | replace("\n", " ")) ~ " — Read more: " ~ post.url ~ " — Explore Fures: https://fures.at" %}
+      <description>{{ descriptionText | escape }}</description>
       <content:encoded><![CDATA[
-        {{ post.content | markdown | trim | safe }}
-        <p>Read more: <a href="{{ post.url }}">{{ post.url }}</a></p>
-        <p>Explore Fures: <a href="https://fures.at">https://fures.at</a></p>
+{{- contentPlain -}}
+
+Read more: {{ post.url }}
+Explore Fures: https://fures.at
 ]]></content:encoded>
     </item>
     {% endfor %}
