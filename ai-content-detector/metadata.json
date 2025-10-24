@@ -1,0 +1,5 @@
+{
+  "name": "AI Content Detector & Humanizer",
+  "description": "An advanced tool to analyze text and images for AI-generated content. Features a powerful 'humanizer' to rewrite text, making it sound more natural and bypass AI detection.",
+  "requestFramePermissions": []
+}
