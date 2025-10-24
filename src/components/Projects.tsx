@@ -1,69 +1,296 @@
+import type { LucideIcon } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
-import { ExternalLink, Cpu, Globe, Hotel, Users, Camera, ChefHat, BarChart3, Briefcase, Plane } from "lucide-react";
-import { useLanguage } from "../contexts/LanguageContext";
+import { ExternalLink, Cpu, Globe, Hotel, Users, Camera, ChefHat, BarChart3, Briefcase, Plane, ShieldCheck } from "lucide-react";
+import { useLanguage, type Language } from "../contexts/LanguageContext";
 import { Link } from "react-router-dom";
 
-export const PROJECTS = [
+type ProjectTranslations = Record<Language, { name: string; description: string }>;
+
+type ProjectConfig = {
+  id: string;
+  link: string;
+  icon: LucideIcon;
+  translations: ProjectTranslations;
+};
+
+export const FALLBACK_LANGUAGE: Language = 'en';
+
+export const PROJECTS: readonly ProjectConfig[] = [
   {
-    name: 'Fures Kariyer Koçu',
-    description:
-      'AI destekli kariyer koçunuz: CV hazırlama, ön yazı, mülakat pratiği ve dil geliştirme için uçtan uca destek sunar.',
+    id: 'fures-career-coach',
     link: '/kariyer.html',
-    icon: Briefcase
+    icon: Briefcase,
+    translations: {
+      tr: {
+        name: 'Fures Kariyer Koçu',
+        description:
+          'AI destekli kariyer koçunuz: CV hazırlama, ön yazı, mülakat pratiği ve dil geliştirme için uçtan uca destek sunar.',
+      },
+      en: {
+        name: 'Fures Career Coach',
+        description:
+          'Your AI-powered career coach delivering end-to-end support for CVs, cover letters, interview practice, and language growth.',
+      },
+      de: {
+        name: 'Fures Karriere-Coach',
+        description:
+          'KI-gestützter Karrierecoach mit ganzheitlicher Unterstützung für Lebenslauf, Anschreiben, Interviewtraining und Sprachentwicklung.',
+      },
+      ru: {
+        name: 'Fures карьерный коуч',
+        description:
+          'Карьерный коуч на базе ИИ: комплексная помощь с резюме, сопроводительными письмами, собеседованиями и развитием языка.',
+      },
+    },
   },
   {
-    name: 'AI-Powered Cyprus Vacation Planner',
-    description: 'An intelligent application that creates multilingual, personalized travel plans based on user preferences and weather conditions.',
+    id: 'ai-detector',
+    link: '/ai-content-detector/',
+    icon: ShieldCheck,
+    translations: {
+      tr: {
+        name: 'AI-Detector',
+        description:
+          'Metin ve görsellerdeki yapay zekâ izlerini saniyeler içinde analiz eden, kanıtlı raporlar ve tek tıkla insanileştirme sunan hepsi bir arada çözüm.',
+      },
+      en: {
+        name: 'AI-Detector',
+        description:
+          'All-in-one platform that inspects text and visuals for AI signals in seconds, delivers evidence-backed reports, and humanizes content with one click.',
+      },
+      de: {
+        name: 'AI-Detector',
+        description:
+          'All-in-One-Plattform, die Texte und Bilder in Sekunden auf KI-Spuren prüft, belegte Reports liefert und Inhalte per Klick humanisiert.',
+      },
+      ru: {
+        name: 'AI-Detector',
+        description:
+          'Единая платформа: за секунды анализирует тексты и изображения на следы ИИ, выдаёт доказательные отчёты и гуманизирует контент одним кликом.',
+      },
+    },
+  },
+  {
+    id: 'cyprus-vacation-planner',
     link: '/projeler/aboutcyprus',
-    icon: Globe
+    icon: Globe,
+    translations: {
+      tr: {
+        name: 'AI Destekli Kıbrıs Tatil Planlayıcı',
+        description:
+          'Kullanıcı tercihleri ve hava durumuna göre çok dilli, kişiselleştirilmiş Kıbrıs tatil planları oluşturan akıllı uygulama.',
+      },
+      en: {
+        name: 'AI-Powered Cyprus Vacation Planner',
+        description:
+          'Intelligent planner that builds multilingual, personalised Cyprus itineraries around traveller preferences and live weather.',
+      },
+      de: {
+        name: 'KI-gestützter Zypern-Reiseplaner',
+        description:
+          'Intelligenter Planer, der mehrsprachige, personalisierte Zypern-Reisepläne anhand von Vorlieben und Wetterdaten erstellt.',
+      },
+      ru: {
+        name: 'AI-планировщик отпуска на Кипре',
+        description:
+          'Умное приложение формирует многоязычные и персонализированные маршруты по Кипру с учётом предпочтений и погоды.',
+      },
+    },
   },
   {
-    name: 'Fures Travel AI Companion',
-    description: 'Conversational 3D travel guide powered by Gemini Live, streaming itineraries onto a photorealistic Google Maps experience.',
+    id: 'travel-ai-companion',
     link: '/projeler/travel',
-    icon: Plane
+    icon: Plane,
+    translations: {
+      tr: {
+        name: 'Fures Travel AI Companion',
+        description:
+          'Gemini Live destekli 3D seyahat asistanı; rotaları gerçekçi Google Maps deneyimi üzerinde anlık olarak sunar.',
+      },
+      en: {
+        name: 'Fures Travel AI Companion',
+        description:
+          'Gemini Live-powered conversational 3D travel companion that streams itineraries onto a photorealistic Google Maps canvas.',
+      },
+      de: {
+        name: 'Fures Travel AI Companion',
+        description:
+          'Gesprächiger 3D-Reisebegleiter mit Gemini Live, der Routen live in einer fotorealistischen Google-Maps-Ansicht darstellt.',
+      },
+      ru: {
+        name: 'Fures Travel AI Companion',
+        description:
+          'Разговорный 3D-помощник путешествий на базе Gemini Live, показывающий маршруты на фотореалистичных картах Google.',
+      },
+    },
   },
   {
-    name: 'AI-Powered Serakıncı Product Platform',
-    description: 'An automated, multilingual, SEO-driven catalog with AI-generated descriptions and scraping pipelines.',
+    id: 'serakinci-platform',
     link: '/projeler/serakinci',
-    icon: Cpu
+    icon: Cpu,
+    translations: {
+      tr: {
+        name: 'Serakıncı AI Ürün Platformu',
+        description:
+          'Serakıncı için otomatik, çok dilli, SEO odaklı ürün kataloğu; AI içerik üretimi ve scraping hatlarıyla beslenir.',
+      },
+      en: {
+        name: 'AI-Powered Serakıncı Product Platform',
+        description:
+          'Automated, multilingual, SEO-driven product catalog for Serakıncı with AI-authored descriptions and scraping pipelines.',
+      },
+      de: {
+        name: 'KI-gestützte Serakıncı-Produktplattform',
+        description:
+          'Automatisierter, mehrsprachiger und SEO-starker Produktkatalog für Serakıncı mit KI-Beschreibungen und Scraping-Pipelines.',
+      },
+      ru: {
+        name: 'Платформа продуктов Serakıncı на базе ИИ',
+        description:
+          'Автоматизированный многоязычный SEO-каталог Serakıncı с генерацией описаний ИИ и пайплайнами для сбора данных.',
+      },
+    },
   },
   {
-    name: 'Hotel & Agency Integration',
-    description: 'Integrated 6 hotels with agency operations; optimized processes, reduced costs, and unified data flows.',
+    id: 'hotel-agency-integration',
     link: '/projeler/hotel',
-    icon: Hotel
+    icon: Hotel,
+    translations: {
+      tr: {
+        name: 'Otel & Acenta Entegrasyonu',
+        description:
+          'Altı oteli acente operasyonlarına entegre ederek süreçleri optimize ettik, maliyetleri düşürdük ve veri akışını birleştirdik.',
+      },
+      en: {
+        name: 'Hotel & Agency Integration',
+        description:
+          'Integrated six hotels with agency operations, streamlining processes, reducing costs, and unifying data flows.',
+      },
+      de: {
+        name: 'Hotel- & Agentur-Integration',
+        description:
+          'Integration von sechs Hotels in Agenturprozesse: optimierte Abläufe, geringere Kosten und gebündelte Datenströme.',
+      },
+      ru: {
+        name: 'Интеграция отелей и агентства',
+        description:
+          'Интегрировали шесть отелей с агентскими процессами, оптимизировали операции, снизили расходы и объединили потоки данных.',
+      },
+    },
   },
   {
-    name: 'ICALT 2024 Congress Management',
-    description: 'Planning and coordination of an international conference in collaboration with Dorana Tourism.',
+    id: 'icalt-2024',
     link: '/projeler/icalt',
-    icon: Users
+    icon: Users,
+    translations: {
+      tr: {
+        name: 'ICALT 2024 Kongre Yönetimi',
+        description:
+          'Dorana Tourism iş birliğiyle uluslararası kongre için baştan sona planlama ve koordinasyon hizmeti.',
+      },
+      en: {
+        name: 'ICALT 2024 Congress Management',
+        description:
+          'End-to-end planning and coordination of the international ICALT 2024 congress alongside Dorana Tourism.',
+      },
+      de: {
+        name: 'ICALT 2024 Kongressmanagement',
+        description:
+          'Ganzheitliche Planung und Koordination des internationalen ICALT-2024-Kongresses in Zusammenarbeit mit Dorana Tourism.',
+      },
+      ru: {
+        name: 'Управление конгрессом ICALT 2024',
+        description:
+          'Полное планирование и координация международного конгресса ICALT 2024 совместно с Dorana Tourism.',
+      },
+    },
   },
   {
-    name: 'PixShop',
-    description: 'AI-powered photo editing, simplified. Retouch photos, apply creative filters, or make professional adjustments with simple text instructions. No complex tools required.',
+    id: 'pixshop',
     link: 'https://pixshop-720548631405.us-west1.run.app/',
-    icon: Camera
+    icon: Camera,
+    translations: {
+      tr: {
+        name: 'PixShop',
+        description:
+          'Yapay zekâ destekli fotoğraf düzenleme: tek tıkla rötuş, yaratıcı filtreler ve profesyonel ayarlamalar.',
+      },
+      en: {
+        name: 'PixShop',
+        description:
+          'AI-powered photo editing made simple: retouch, apply creative filters, or make professional adjustments in one click.',
+      },
+      de: {
+        name: 'PixShop',
+        description:
+          'KI-gestütztes Foto-Editing leicht gemacht: Retusche, kreative Filter und professionelle Anpassungen mit nur einem Klick.',
+      },
+      ru: {
+        name: 'PixShop',
+        description:
+          'Простое редактирование фото на базе ИИ: ретушь, творческие фильтры и профессиональные настройки в один клик.',
+      },
+    },
   },
   {
-    name: 'Pantry Chef AI',
-    description: 'What\'s in your pantry? Enter your ingredients and let our AI chef whip up something delicious for you.',
+    id: 'pantry-chef',
     link: 'https://ai-recipe-generator-720548631405.us-west1.run.app/',
-    icon: ChefHat
+    icon: ChefHat,
+    translations: {
+      tr: {
+        name: 'Pantry Chef AI',
+        description:
+          'Dolabınızdaki malzemeleri girin; yapay zekâ şefimiz size anında yaratıcı tarifler önersin.',
+      },
+      en: {
+        name: 'Pantry Chef AI',
+        description:
+          'Enter the ingredients in your pantry and let our AI chef instantly suggest creative recipes.',
+      },
+      de: {
+        name: 'Pantry Chef KI',
+        description:
+          'Einfach vorhandene Zutaten eingeben und der KI-Koch schlägt sofort kreative Rezepte vor.',
+      },
+      ru: {
+        name: 'Pantry Chef AI',
+        description:
+          'Введи продукты из кладовой — ИИ-шеф мгновенно предложит креативные рецепты.',
+      },
+    },
   },
   {
-    name: 'ODYSSEUS',
-    description: 'Future-Ready Business Intelligence. To get started, select one of the defined hotels below or paste the content of your own website.',
+    id: 'odysseus',
     link: 'https://project-odysseus-720548631405.us-west1.run.app/',
-    icon: BarChart3
-  }
+    icon: BarChart3,
+    translations: {
+      tr: {
+        name: 'ODYSSEUS',
+        description:
+          'Geleceğe hazır iş zekâsı platformu; tanımlı otelleri seçin veya kendi web sitenizi analiz edin.',
+      },
+      en: {
+        name: 'ODYSSEUS',
+        description:
+          'Future-ready business intelligence platform—select a featured hotel or analyse your own website content.',
+      },
+      de: {
+        name: 'ODYSSEUS',
+        description:
+          'Zukunftsfähige Business-Intelligence-Plattform: Wähle ein Hotel oder analysiere deine eigene Website.',
+      },
+      ru: {
+        name: 'ODYSSEUS',
+        description:
+          'Бизнес-аналитика нового поколения: выберите один из отелей или проанализируйте свой сайт.',
+      },
+    },
+  },
 ] as const;
 
 export function Projects() {
-  const { t } = useLanguage();
+  const { language, t } = useLanguage();
 
   return (
     <section id="projeler" className="py-20 lg:py-32">
@@ -83,11 +310,12 @@ export function Projects() {
 
         {/* Projects Grid */}
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {PROJECTS.map((project, index) => {
+          {PROJECTS.map((project) => {
             const Icon = project.icon;
+            const translation = project.translations[language] ?? project.translations[FALLBACK_LANGUAGE];
             return (
               <Card
-                key={index}
+                key={project.id}
                 className="group relative overflow-hidden transition-all duration-500 hover:scale-[1.02]"
               >
                 <div className="pointer-events-none absolute inset-0 rounded-[2rem] bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.22),transparent_70%)] opacity-0 transition-opacity duration-500 group-hover:opacity-80"></div>
@@ -97,13 +325,13 @@ export function Projects() {
                     <Icon className="h-7 w-7 text-white" />
                   </div>
                   <CardTitle className="text-xl text-white group-hover:text-orange-400 transition-colors line-clamp-2">
-                    {project.name}
+                    {translation.name}
                   </CardTitle>
                 </CardHeader>
-                
+
                 <CardContent className="relative">
                   <CardDescription className="text-gray-400 mb-6 line-clamp-3">
-                    {project.description}
+                    {translation.description}
                   </CardDescription>
                   
                   <Button
