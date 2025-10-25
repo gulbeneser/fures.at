@@ -1,13 +1,10 @@
-import os
-import base64
-import feedparser
-import datetime
-import subprocess
-import shutil
+import os, base64, datetime, subprocess, shutil, time, re
 from pathlib import Path
-import requests
-from urllib.parse import urlparse, parse_qs, urlunparse, urlencode
 from io import BytesIO
+from urllib.parse import urlparse, parse_qs, urlunparse, urlencode
+
+import feedparser
+import requests
 from PIL import Image  # Pillow gerekli!
 
 from image_rotation import ImageRotator, NoImagesAvailableError
@@ -24,7 +21,7 @@ except Exception:
     google_genai_lib = None
     google_genai_types = None
 
-# === CONFIG ===
+# ================== CONFIG ==================
 MODEL_TEXT = "gemini-2.5-pro"
 LANGS = {"tr": "Turkish", "en": "English", "de": "German", "ru": "Russian"}
 LANG_NAMES = {"tr": "Türkçe", "en": "English", "de": "Deutsch", "ru": "Русский"}
@@ -35,7 +32,7 @@ FOTOS_DIR = ROOT / "fotos"
 BLOG_DIR.mkdir(exist_ok=True)
 FOTOS_DIR.mkdir(exist_ok=True)
 
-# === ORTAM ===
+# ================== INIT ==================
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 if not GEMINI_API_KEY:
     raise ValueError("HATA: GEMINI_API_KEY yok!")
@@ -44,7 +41,7 @@ print("✅ [INIT] Gemini (metin) hazır.")
 
 GOOGLE_GENAI_CLIENT = None
 if google_genai_lib is None:
-    print("ℹ️ [INIT] google.genai paketi yok; görsel üretimi yapılamaz.")
+    print("ℹ️ [INIT] google.genai yok; görsel üretimi atlanır.")
 else:
     try:
         GOOGLE_GENAI_CLIENT = google_genai_lib.Client(api_key=GEMINI_API_KEY)
@@ -52,60 +49,97 @@ else:
     except Exception as e:
         print(f"❌ [INIT] google.genai istemcisi açılamadı: {e}")
 
-# === YARDIMCI: retry ===
-import time
+# ================== UTIL ==================
 def with_retry(fn, tries=2, wait=6, label=""):
     for i in range(tries):
         try:
             return fn()
         except Exception as e:
             if i == tries - 1:
-                print(f"❌ [{label}] Denemeler tükendi: {e}")
+                print(f"❌ [{label}] Denemeler bitti: {e}")
                 raise
-            print(f"⚠️  [{label}] Hata: {e} → {i+1}. deneme başarısız, {wait}s bekleniyor...")
+            print(f"⚠️  [{label}] {e} → {i+1}. deneme başarısız, {wait}s bekleniyor...")
             time.sleep(wait)
 
-# === 1) URL temizleme/çözme ===
 def _clean_tracking_params(url: str) -> str:
-    parsed = urlparse(url)
-    if not parsed.query:
+    p = urlparse(url)
+    if not p.query:
         return url
-    query_params = parse_qs(parsed.query, keep_blank_values=True)
-    filtered_items = []
-    for key, values in query_params.items():
-        if key.lower().startswith("utm_") or key.lower() in {"oc","ved","usg","clid","ei","sa","source","gws_rd"}:
+    q = parse_qs(p.query, keep_blank_values=True)
+    filtered = []
+    for k, vals in q.items():
+        if k.lower().startswith("utm_") or k.lower() in {"oc","ved","usg","clid","ei","sa","source","gws_rd","hl","gl","ceid"}:
             continue
-        for v in values:
-            filtered_items.append((key, v))
-    if not filtered_items:
-        return urlunparse(parsed._replace(query="", fragment=""))
-    clean_query = urlencode(filtered_items)
-    return urlunparse(parsed._replace(query=clean_query, fragment=""))
+        for v in vals:
+            filtered.append((k, v))
+    new_q = urlencode(filtered)
+    return urlunparse(p._replace(query=new_q, fragment=""))
+
+# ---- Google News sayfasından orijinal linki çıkar ----
+_ORIGINAL_LINK_RE = re.compile(
+    r'href="(https?://(?!news\.google\.com)(?!www\.google\.com)[^"]+)"'
+)
+
+def _extract_external_from_google_article(article_url: str, session: requests.Session) -> str | None:
+    """
+    news.google.com/articles/... sayfasını indirip google alan adı dışındaki ilk mutlak URL'yi döndürür.
+    """
+    try:
+        resp = session.get(article_url, timeout=12)
+        resp.raise_for_status()
+        html = resp.text
+        # 1) Açık <a href="https://publisher..."> yakala
+        m = _ORIGINAL_LINK_RE.search(html)
+        if m:
+            return _clean_tracking_params(m.group(1))
+        # 2) Bazı varyantlarda JSON içinde çıplak URL olur
+        m2 = re.search(r'"(https?://(?!news\.google\.com)(?!www\.google\.com)[^"]+)"', html)
+        if m2:
+            return _clean_tracking_params(m2.group(1))
+    except Exception:
+        pass
+    return None
 
 def _resolve_final_url(session: requests.Session, link: str) -> str:
+    """
+    RSS linkini gerçek yayıncı linkine çevir.
+    - https://news.google.com/rss/articles/... → önce /articles/... sayfasına, oradan yayıncı URL’sine
+    - https://www.google.com/url?url=<gerçek> → url paramından çek
+    """
     parsed = urlparse(link)
 
-    # Google yönlendirmesi: gerçek link genelde "url" paramında
+    # google.com/url?url=...
     if parsed.netloc.endswith("google.com") and parsed.path == "/url":
         target = parse_qs(parsed.query).get("url", [None])[0]
         if target:
             return _clean_tracking_params(target)
 
-    # news.google.com → gerçek siteye takip et
-    if parsed.netloc.endswith("news.google.com"):
+    # news.google.com/rss/articles/... → önce /articles/...’a yönlen
+    if parsed.netloc.endswith("news.google.com") and "/rss/articles/" in parsed.path:
         try:
-            resp = session.get(link, allow_redirects=True, timeout=10, stream=True)
-            resp.raise_for_status()
-            final_url = resp.url
-            resp.close()
-            if final_url:
-                return _clean_tracking_params(final_url)
-        except requests.RequestException:
-            pass
+            # İlk istek: rss/articles → çoğu zaman /articles/...’a 302 verir
+            r1 = session.get(link, allow_redirects=True, timeout=10)
+            r1.raise_for_status()
+            page_url = r1.url
+            # /articles/... sayfasından yayıncı linkini kazı
+            external = _extract_external_from_google_article(page_url, session)
+            if external:
+                return external
+            # dış link bulunamazsa en azından sayfa_url (Google makale sayfası) döner
+            return _clean_tracking_params(page_url)
+        except Exception:
+            return _clean_tracking_params(link)
+
+    # news.google.com/articles/... → doğrudan sayfayı kazı
+    if parsed.netloc.endswith("news.google.com") and "/articles/" in parsed.path:
+        external = _extract_external_from_google_article(link, session)
+        if external:
+            return external
+        return _clean_tracking_params(link)
 
     return _clean_tracking_params(link)
 
-# === 2) RSS'den haber çekme (tam makale URL'leriyle) ===
+# ================== RSS ==================
 def fetch_ai_news(limit=5):
     feeds = [
         "https://news.google.com/rss/search?q=artificial+intelligence+breakthrough&hl=en-US&gl=US&ceid=US:en",
@@ -113,7 +147,7 @@ def fetch_ai_news(limit=5):
         "https://news.google.com/rss/search?q=generative+ai+startups&hl=en-US&gl=US&ceid=US:en",
     ]
     print("🔎 [RSS] Akışlar okunuyor...")
-    articles, seen = [], set()
+    arts, seen = [], set()
     with requests.Session() as session:
         for feed in feeds:
             try:
@@ -123,23 +157,17 @@ def fetch_ai_news(limit=5):
                     if g_url in seen:
                         continue
                     final_url = _resolve_final_url(session, g_url)
-
-                    # Bazı girdilerde "source" alanı var; ama biz her zaman tam makale URL'sini istiyoruz
-                    # final_url zaten Google yönlendirmesinden arındırıldı.
-                    title = entry.title
-                    articles.append({"title": title, "link": final_url})
+                    arts.append({"title": entry.title, "link": final_url})
                     seen.add(g_url)
             except Exception as e:
                 print(f"⚠️  [RSS] Hata ({feed}): {e}")
-    # log
-    for i, a in enumerate(articles[:limit], 1):
+    for i, a in enumerate(arts[:limit], 1):
         print(f"   • [{i}] {a['title']} → {a['link']}")
-    return articles[:limit]
+    return arts[:limit]
 
-# === 3) Metin üretimi (Gemini) ===
+# ================== TEXT (Gemini) ==================
 def generate_single_blog(news_list, lang_code):
     language = LANGS[lang_code]
-    # Model içeriğe odaklansın diye kısa ve net prompt:
     summaries = "\n".join([f"- {n['title']}: {n['link']}" for n in news_list])
     prompt = f"""
 Write a single {language} technology blog article (400–600 words) that synthesizes the following AI news items into a coherent narrative.
@@ -152,30 +180,25 @@ News:
 Finish with one line of 5–7 relevant hashtags in {language}.
 """
     model = genai.GenerativeModel(MODEL_TEXT)
-
     def _call():
         resp = model.generate_content(prompt)
         return resp.text
-
     return with_retry(_call, tries=2, wait=6, label=f"TXT-{lang_code}")
 
-# === 4) Görsel üretimi (Gemini 2.5 Flash Image) ===
+# ================== IMAGE (Gemini) ==================
 def _extract_inline_image_from_gemini(response):
     if response is None:
         return None, []
-    alt_texts = []
-    image_bytes = None
+    alt_texts, image_bytes = [], None
     for cand in getattr(response, "candidates", []) or []:
         content = getattr(cand, "content", None)
         parts = getattr(content, "parts", None)
         if not parts:
             continue
         for part in parts:
-            # metin parçalarını ALT metin havuzuna atalım
             if getattr(part, "text", None):
                 t = part.text.strip()
-                if t:
-                    alt_texts.append(t)
+                if t: alt_texts.append(t)
             inline_data = getattr(part, "inline_data", None)
             data = getattr(inline_data, "data", None) if inline_data else None
             if data:
@@ -192,31 +215,26 @@ def _load_image(content: bytes) -> Image.Image:
 
 def generate_image_gemini_flash(final_prompt):
     if GOOGLE_GENAI_CLIENT is None:
-        print("ℹ️ [IMG] Gemini Flash istemcisi yok; görsel atlandı.")
+        print("ℹ️ [IMG] Gemini Flash yok; görsel atlandı.")
         return None, ""
-
     print("[IMG][Gemini] Üretim başlıyor...")
     def _call():
-        request_kwargs = dict(
-            model="gemini-2.5-flash-image",
-            contents=[final_prompt],
-        )
+        kwargs = dict(model="gemini-2.5-flash-image", contents=[final_prompt])
         if google_genai_types is not None:
-            request_kwargs["config"] = google_genai_types.GenerateContentConfig(
+            kwargs["config"] = google_genai_types.GenerateContentConfig(
                 response_modalities=["IMAGE"],
                 image_config=google_genai_types.ImageConfig(aspect_ratio="16:9"),
             )
-        resp = GOOGLE_GENAI_CLIENT.models.generate_content(**request_kwargs)
-        image_bytes, alt_texts = _extract_inline_image_from_gemini(resp)
-        if not image_bytes:
-            raise RuntimeError("Gemini Flash yanıtında görsel verisi yok.")
-        return _load_image(image_bytes), (alt_texts[0] if alt_texts else "")
-
+        resp = GOOGLE_GENAI_CLIENT.models.generate_content(**kwargs)
+        b, alts = _extract_inline_image_from_gemini(resp)
+        if not b:
+            raise RuntimeError("Gemini Flash: görsel verisi yok.")
+        return _load_image(b), (alts[0] if alts else "")
     image, alt = with_retry(_call, tries=2, wait=6, label="IMG-Gemini")
     print("[IMG][Gemini] OK")
     return image, alt
 
-# === 5) Kaydetme ===
+# ================== SAVE ==================
 def save_blog(blog_content, lang_code, image_path_for_blog: str, image_alt: str, sources):
     if not blog_content:
         return None
@@ -227,9 +245,7 @@ def save_blog(blog_content, lang_code, image_path_for_blog: str, image_alt: str,
     path = BLOG_DIR / lang_code
     path.mkdir(exist_ok=True)
 
-    # Dil bazlı "Kaynaklar" başlığı
     src_title = {"tr": "Kaynaklar", "en": "Sources", "de": "Quellen", "ru": "Источники"}[lang_code]
-    # Tam URL’leri kesinlikle yaz
     sources_md = "\n".join([f"- {item['link']}" for item in sources])
 
     html = f"""---
@@ -250,7 +266,7 @@ lang: {lang_code}
     print(f"[TXT][{lang_code.upper()}] OK → {slug}.md")
     return post_path
 
-# === 6) Git ===
+# ================== GIT ==================
 def commit_and_push(paths_to_stage: list[str]):
     try:
         if not paths_to_stage:
@@ -270,7 +286,7 @@ def commit_and_push(paths_to_stage: list[str]):
     except (subprocess.CalledProcessError, FileNotFoundError) as e:
         print(f"❌ [GIT] Hata: {e}")
 
-# === 7) Main ===
+# ================== MAIN ==================
 def main():
     print("===== Daily AI Blog Pipeline =====")
     news = fetch_ai_news()
@@ -278,7 +294,6 @@ def main():
         print("❌ [RSS] Haber bulunamadı, duruyoruz.")
         return
 
-    # Fallback görsel rotasyonu (yerel yedekler)
     try:
         rotator = ImageRotator()
         print("✅ [IMG] /fotos yedek hazır (rotator).")
@@ -286,10 +301,10 @@ def main():
         print(f"⚠️  [IMG] {exc} — varsayılan kapak kullanılabilir.")
         rotator = None
 
-    primary_title = next((item.get("title") for item in news if item.get("title")), None)
+    primary_title = next((it.get("title") for it in news if it.get("title")), None)
     timestamp_part = datetime.datetime.utcnow().strftime("%Y%m%d%H%M")
-    slug_source = slugify(primary_title) if primary_title else "ai-news"
-    slug_source = (slug_source or "ai-news")[:60].rstrip("-") or "ai-news"
+    slug_source = (slugify(primary_title) if primary_title else "ai-news") or "ai-news"
+    slug_source = slug_source[:60].rstrip("-") or "ai-news"
     image_slug = f"{timestamp_part}-{slug_source}"
     image_filename = f"{image_slug}.jpg"
     image_relative_path = f"/fotos/{image_filename}"
@@ -297,7 +312,6 @@ def main():
     image_created = False
     image_alt = ""
 
-    # Görsel promptu
     prompt_seed = primary_title or "Artificial intelligence daily news"
     final_prompt = f"""
 A visually striking 16:9 digital illustration about: "{prompt_seed}".
@@ -312,7 +326,6 @@ Cyberpunk-minimal fusion, geometric patterns, glowing neural core, cinematic vol
     if generated_image:
         try:
             image_path.parent.mkdir(parents=True, exist_ok=True)
-            # Hafif sıkıştırma (çok büyük gelir ise)
             max_w = 1600
             if generated_image.width > max_w:
                 h = int(generated_image.height * (max_w / generated_image.width))
@@ -323,16 +336,15 @@ Cyberpunk-minimal fusion, geometric patterns, glowing neural core, cinematic vol
         except Exception as e:
             print(f"❌ [IMG] Kaydetme hatası: {e}")
 
-    # Görsel yoksa fallback
     if not image_path.exists():
         fallback_source = None
         if rotator:
             try:
-                fallback_name = rotator.next_for_language("fallback")
-                cand = FOTOS_DIR / fallback_name
+                name = rotator.next_for_language("fallback")
+                cand = FOTOS_DIR / name
                 if cand.exists():
                     fallback_source = cand
-                    print(f"ℹ️ [IMG] Yedek seçildi: {cand}")
+                    print(f"ℹ️ [IMG] Yedek: {cand}")
             except Exception as e:
                 print(f"⚠️  [IMG] Yedek seçilemedi: {e}")
         if fallback_source is None:
@@ -353,10 +365,9 @@ Cyberpunk-minimal fusion, geometric patterns, glowing neural core, cinematic vol
             except Exception as e:
                 print(f"❌ [IMG] Yedek kopyalanamadı: {e}")
         else:
-            print("⚠️  [IMG] Hiçbir görsel yok → front-matter '/images/fures.png'")
+            print("⚠️  [IMG] Görsel yok → front-matter '/images/fures.png'")
             image_relative_path = "/images/fures.png"
 
-    # İçerikler (4 dil) + gerçek kaynak linkleri
     created_posts: list[Path] = []
     for lang_code in LANGS.keys():
         print(f"--- [{LANG_NAMES[lang_code]}] üretim ---")
@@ -371,12 +382,12 @@ Cyberpunk-minimal fusion, geometric patterns, glowing neural core, cinematic vol
         else:
             print(f"❌ [TXT][{lang_code.upper()}] içerik oluşturulamadı.")
 
-    paths_to_stage = [str(p.relative_to(ROOT)) for p in created_posts if p.exists()]
+    paths = [str(p.relative_to(ROOT)) for p in created_posts if p.exists()]
     if image_created and image_relative_path.startswith("/fotos/") and image_path.exists():
-        paths_to_stage.append(str(image_path.relative_to(ROOT)))
+        paths.append(str(image_path.relative_to(ROOT)))
 
     print("[GIT] Commit/push başlıyor...")
-    commit_and_push(paths_to_stage)
+    commit_and_push(paths)
     print("✅ Tamam.")
 
 if __name__ == "__main__":
