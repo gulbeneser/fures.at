@@ -109,3 +109,43 @@ export function createPcmBlob(data: Float32Array): Blob {
     mimeType: 'audio/pcm;rate=16000',
   };
 }
+
+export async function generateImage(prompt: string): Promise<{ base64Image: string; mimeType: string; description?: string }> {
+  const response = await (ai as unknown as any).models.generateContent({
+    model: 'gemini-2.5-flash-image',
+    contents: [
+      {
+        role: 'user',
+        parts: [{ text: prompt }],
+      },
+    ],
+    config: {
+      responseModalities: [Modality.IMAGE, Modality.TEXT],
+    },
+  });
+
+  const candidate = response.candidates?.[0];
+  const parts = candidate?.content?.parts ?? [];
+
+  let imageData: { data: string; mimeType?: string } | undefined;
+  const descriptionTexts: string[] = [];
+
+  for (const part of parts) {
+    if ('inlineData' in part && part.inlineData) {
+      imageData = part.inlineData;
+    }
+    if ('text' in part && part.text) {
+      descriptionTexts.push(part.text);
+    }
+  }
+
+  if (!imageData) {
+    throw new Error('No image data returned from Gemini');
+  }
+
+  return {
+    base64Image: imageData.data,
+    mimeType: imageData.mimeType ?? 'image/png',
+    description: descriptionTexts.join('\n').trim(),
+  };
+}
