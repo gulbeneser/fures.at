@@ -21,6 +21,25 @@
 - Özetler çok dilli üretildiğinden `LANGS` sözlüğüne yeni dil eklersen, ilgili çeviriler ve Instagram özeti kısıtlarının da aynı şekilde çalıştığından emin ol.
 - Oluşturulan caption'lar link eklemez; farklı sosyal ağlar için link gerekiyorsa yeni bir alan ekleyerek mantığı ayır.
 
+## Zapier ve Sosyal Paylaşım Otomasyonları
+- Blog üretim zinciri RSS çıktısını `public/feed.xml` altında günceller; Zapier "RSS by Zapier" tetikleyicisi bu feed'i 15 dakikalık
+  aralıklarla dinler.
+- Zapier tarafında iki ayrı aksiyon kurgusu aktif:
+  - **Instagram for Business → Fotoğraf paylaşımı**: `Media` alanı RSS öğesindeki görsel URL'sinden (enclosure) gelir. Caption,
+    önce makalenin başlığını (`Title: AI Daily — English` örneğinde olduğu gibi) kullanır, ardından feed'deki kısa özet metnini
+    yeni satırda ekler. Zapier arayüzünde iki satırlı yapı korunmalı, "Test run" sırasında çıktı metnini gözle kontrol et ve
+    karakter sınırını aşmadığına emin ol.
+  - **LinkedIn → Create Share Update (Furkan Yonat profili)**: `Comment` alanı feed'den gelen "Raw Encoded" açıklamayı içerir ve
+    otomatik olarak bağlantıyı da ekler. `Title`, `Content - Description`, `Content - Image URL` ve `Content - URL` alanları
+    sırasıyla başlık, kısa açıklama, kapak görseli ve blog linkiyle doldurulur. `Visible To` ayarı "Anyone" olarak bırakılmalı.
+    Yeni alanlar eklersen aynı kaynaktan beslenecek şekilde eşleştirmeleri güncelle.
+- Otomasyon değişikliklerinde Zapier senaryosunu ("v2" sürümü) güncellediğini, test çalıştırmasının başarılı olduğunu ve hem
+  `fures.at` Instagram hesabında hem de `linkedin.com/in/furkanyonat` profilinde paylaşımın beklenen formatta göründüğünü doğrula.
+- Instagram paylaşımında görselin kare veya 4:5 dikey oranında olması gerekir; script'in ürettiği görsel boyutları farklıysa
+  Zapier aşamasında kırpma veya yedek görsel tanımla.
+- LinkedIn gönderileri için açıklama alanında URL otomatik kısaltıldığından, RSS açıklamasına ek link koyma; aksi halde gönderi
+  tekrar eden bağlantılarla spam görünebilir.
+
 ## Çalışma İlkeleri
 - SEO önemlidir: yeni sayfalar oluşturulduğunda `public/sitemap.xml` dosyasını gözden geçir ve gerekiyorsa yeni URL'leri ekle.
 - Çok dilli içeriklerde `LANGS` ve `LANG_NAMES` sözlüklerini güncel tut; yeni dil eklerken ilgili klasör ve çeviri dosyalarını oluştur.
