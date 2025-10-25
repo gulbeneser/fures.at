@@ -4,6 +4,8 @@ import feedparser
 import datetime
 import subprocess
 import shutil
+import json
+import re
 from pathlib import Path
 import requests
 from urllib.parse import urlparse, parse_qs, urlunparse, urlencode
@@ -28,6 +30,7 @@ except Exception:
 MODEL_TEXT = "gemini-2.5-pro"
 LANGS = {"tr": "Turkish", "en": "English", "de": "German", "ru": "Russian"}
 LANG_NAMES = {"tr": "Türkçe", "en": "English", "de": "Deutsch", "ru": "Русский"}
+INSTAGRAM_CAPTION_LIMIT = 2200
 
 ROOT = Path(__file__).resolve().parent.parent
 BLOG_DIR = ROOT / "blog"
@@ -64,6 +67,22 @@ def with_retry(fn, tries=2, wait=6, label=""):
                 raise
             print(f"⚠️  [{label}] Hata: {e} → {i+1}. deneme başarısız, {wait}s bekleniyor...")
             time.sleep(wait)
+
+# === Yardımcı: Instagram caption temizleme ===
+def _clean_instagram_caption(text: str, limit: int = INSTAGRAM_CAPTION_LIMIT) -> str:
+    text = text or ""
+    text = re.sub(r"https?://\S+", "", text, flags=re.IGNORECASE)
+    lines = [re.sub(r"\s+", " ", line).strip() for line in text.splitlines()]
+    cleaned = "\n".join(line for line in lines if line)
+    cleaned = re.sub(r"[ \t]{2,}", " ", cleaned).strip()
+    if len(cleaned) <= limit:
+        return cleaned
+    truncated = cleaned[:limit]
+    last_break = max(truncated.rfind("\n"), truncated.rfind(" "))
+    if last_break > 0:
+        truncated = truncated[:last_break]
+    truncated = truncated.rstrip(" ,.;:-")
+    return (truncated or cleaned[:limit]).rstrip(" ,.;:-") + "…"
 
 # === 1) URL temizleme/çözme ===
 def _clean_tracking_params(url: str) -> str:
@@ -159,6 +178,34 @@ Finish with one line of 5–7 relevant hashtags in {language}.
 
     return with_retry(_call, tries=2, wait=6, label=f"TXT-{lang_code}")
 
+# === 3.b) Instagram özeti ===
+def generate_instagram_caption(news_list, lang_code):
+    language = LANGS[lang_code]
+    headlines = "\n".join([f"- {n['title']}" for n in news_list if n.get("title")])
+    if not headlines:
+        headlines = "- Günün öne çıkan yapay zekâ gelişmeleri"
+    soft_limit = INSTAGRAM_CAPTION_LIMIT - 160
+    prompt = f"""
+Create a concise Instagram caption in {language} that teases today's AI blog post based on these headlines:
+{headlines}
+
+Requirements:
+- Maximum {soft_limit} characters (absolute Instagram limit {INSTAGRAM_CAPTION_LIMIT}).
+- Do not include URLs, @mentions, or hashtags.
+- Use 2 short sentences that highlight key takeaways in an informative, inviting tone.
+- Return only the caption text without additional commentary.
+"""
+    model = genai.GenerativeModel(MODEL_TEXT)
+
+    def _call():
+        resp = model.generate_content(prompt)
+        return resp.text
+
+    raw_caption = with_retry(_call, tries=2, wait=6, label=f"IG-{lang_code}")
+    if not raw_caption:
+        return ""
+    return _clean_instagram_caption(raw_caption, INSTAGRAM_CAPTION_LIMIT)
+
 # === 4) Görsel üretimi (Gemini 2.5 Flash Image) ===
 def _extract_inline_image_from_gemini(response):
     if response is None:
@@ -217,7 +264,7 @@ def generate_image_gemini_flash(final_prompt):
     return image, alt
 
 # === 5) Kaydetme ===
-def save_blog(blog_content, lang_code, image_path_for_blog: str, image_alt: str, sources):
+def save_blog(blog_content, lang_code, image_path_for_blog: str, image_alt: str, instagram_caption: str, sources):
     if not blog_content:
         return None
     now_utc = datetime.datetime.now(datetime.timezone.utc)
@@ -232,12 +279,15 @@ def save_blog(blog_content, lang_code, image_path_for_blog: str, image_alt: str,
     # Tam URL’leri kesinlikle yaz
     sources_md = "\n".join([f"- {item['link']}" for item in sources])
 
+    image_alt_json = json.dumps(image_alt or "", ensure_ascii=False)
+    caption_json = json.dumps(instagram_caption or "", ensure_ascii=False)
     html = f"""---
 title: "AI Daily — {LANG_NAMES[lang_code]}"
 date: {date_time_iso}
 image: {image_path_for_blog}
-imageAlt: {image_alt!r}
+imageAlt: {image_alt_json}
 lang: {lang_code}
+description: {caption_json}
 ---
 {blog_content.strip()}
 
@@ -365,7 +415,18 @@ Cyberpunk-minimal fusion, geometric patterns, glowing neural core, cinematic vol
         except Exception:
             blog_text = None
         if blog_text:
-            post_path = save_blog(blog_text, lang_code, image_relative_path, image_alt, news)
+            try:
+                instagram_caption = generate_instagram_caption(news, lang_code)
+            except Exception:
+                instagram_caption = ""
+            post_path = save_blog(
+                blog_text,
+                lang_code,
+                image_relative_path,
+                image_alt,
+                instagram_caption,
+                news,
+            )
             if post_path:
                 created_posts.append(post_path)
         else:
