@@ -85,18 +85,6 @@ def _clean_instagram_caption(text: str, limit: int = INSTAGRAM_CAPTION_LIMIT) ->
     return (truncated or cleaned[:limit]).rstrip(" ,.;:-") + "…"
 
 # === 1) URL temizleme/çözme ===
-
-# — Google/CDN/görsel linkleri elemeye yarayan sabitler —
-_IMG_EXT = (".jpg", ".jpeg", ".png", ".gif", ".webp", ".avif", ".svg")
-_GOOGLEISH = {
-    "news.google.com", "www.google.com", "google.com",
-    "gstatic.com", "www.gstatic.com",
-    "googleusercontent.com", "lh3.googleusercontent.com", "lh4.googleusercontent.com"
-}
-_CANON_RE = re.compile(r'<link[^>]+rel=["\']canonical["\'][^>]+href=["\'](https?://[^"\']+)["\']', re.I)
-_OGURL_RE = re.compile(r'<meta[^>]+property=["\']og:url["\'][^>]+content=["\'](https?://[^"\']+)["\']', re.I)
-_HREF_RE  = re.compile(r'<a[^>]+href=["\'](https?://[^"\']+)["\']', re.I)
-
 def _clean_tracking_params(url: str) -> str:
     parsed = urlparse(url)
     if not parsed.query:
@@ -104,9 +92,7 @@ def _clean_tracking_params(url: str) -> str:
     query_params = parse_qs(parsed.query, keep_blank_values=True)
     filtered_items = []
     for key, values in query_params.items():
-        if key.lower().startswith("utm_") or key.lower() in {
-            "oc", "ved", "usg", "clid", "ei", "sa", "source", "gws_rd", "hl", "gl", "ceid"
-        }:
+        if key.lower().startswith("utm_") or key.lower() in {"oc","ved","usg","clid","ei","sa","source","gws_rd"}:
             continue
         for v in values:
             filtered_items.append((key, v))
@@ -114,46 +100,6 @@ def _clean_tracking_params(url: str) -> str:
         return urlunparse(parsed._replace(query="", fragment=""))
     clean_query = urlencode(filtered_items)
     return urlunparse(parsed._replace(query=clean_query, fragment=""))
-
-def _is_good_publisher_url(u: str) -> bool:
-    try:
-        p = urlparse(u)
-        host = (p.hostname or "").lower()
-        if any(host.endswith(bad) for bad in _GOOGLEISH):
-            return False
-        if (p.path or "").lower().endswith(_IMG_EXT):
-            return False
-        # makale gibi dursun: alan adından sonra en az bir segment
-        return p.scheme in {"http", "https"} and len((p.path or "/").strip("/").split("/")) >= 1
-    except Exception:
-        return False
-
-def _extract_external_from_google_article(article_url: str, session: requests.Session) -> str | None:
-    """
-    Öncelik sırası:
-      1) <link rel="canonical" href="...">
-      2) <meta property="og:url" content="...">
-      3) <a href="..."> içinde Google/CDN olmayan ilk makale linki
-    """
-    try:
-        resp = session.get(article_url, timeout=12)
-        resp.raise_for_status()
-        html = resp.text
-
-        m = _CANON_RE.search(html)
-        if m and _is_good_publisher_url(m.group(1)):
-            return _clean_tracking_params(m.group(1))
-
-        m = _OGURL_RE.search(html)
-        if m and _is_good_publisher_url(m.group(1)):
-            return _clean_tracking_params(m.group(1))
-
-        for u in _HREF_RE.findall(html) or []:
-            if _is_good_publisher_url(u):
-                return _clean_tracking_params(u)
-    except Exception:
-        pass
-    return None
 
 def _resolve_final_url(session: requests.Session, link: str) -> str:
     parsed = urlparse(link)
@@ -164,23 +110,18 @@ def _resolve_final_url(session: requests.Session, link: str) -> str:
         if target:
             return _clean_tracking_params(target)
 
-    # news.google.com/rss/articles/... → /articles/...’a yönlen; oradan yayıncı linkini çıkar
-    if parsed.netloc.endswith("news.google.com") and "/rss/articles/" in parsed.path:
+    # news.google.com → gerçek siteye takip et
+    if parsed.netloc.endswith("news.google.com"):
         try:
-            r1 = session.get(link, allow_redirects=True, timeout=10)
-            r1.raise_for_status()
-            page_url = r1.url  # genellikle /articles/...
-            ext = _extract_external_from_google_article(page_url, session)
-            return _clean_tracking_params(ext or page_url)
-        except Exception:
-            return _clean_tracking_params(link)
+            resp = session.get(link, allow_redirects=True, timeout=10, stream=True)
+            resp.raise_for_status()
+            final_url = resp.url
+            resp.close()
+            if final_url:
+                return _clean_tracking_params(final_url)
+        except requests.RequestException:
+            pass
 
-    # doğrudan /articles/...
-    if parsed.netloc.endswith("news.google.com") and "/articles/" in parsed.path:
-        ext = _extract_external_from_google_article(link, session)
-        return _clean_tracking_params(ext or link)
-
-    # zaten dış kaynak
     return _clean_tracking_params(link)
 
 # === 2) RSS'den haber çekme (tam makale URL'leriyle) ===
@@ -201,6 +142,9 @@ def fetch_ai_news(limit=5):
                     if g_url in seen:
                         continue
                     final_url = _resolve_final_url(session, g_url)
+
+                    # Bazı girdilerde "source" alanı var; ama biz her zaman tam makale URL'sini istiyoruz
+                    # final_url zaten Google yönlendirmesinden arındırıldı.
                     title = entry.title
                     articles.append({"title": title, "link": final_url})
                     seen.add(g_url)
@@ -208,13 +152,13 @@ def fetch_ai_news(limit=5):
                 print(f"⚠️  [RSS] Hata ({feed}): {e}")
     # log
     for i, a in enumerate(articles[:limit], 1):
-        host = urlparse(a['link']).hostname or "?"
-        print(f"   • [{i}] {a['title']} → {host}")
+        print(f"   • [{i}] {a['title']} → {a['link']}")
     return articles[:limit]
 
 # === 3) Metin üretimi (Gemini) ===
 def generate_single_blog(news_list, lang_code):
     language = LANGS[lang_code]
+    # Model içeriğe odaklansın diye kısa ve net prompt:
     summaries = "\n".join([f"- {n['title']}: {n['link']}" for n in news_list])
     prompt = f"""
 Write a single {language} technology blog article (400–600 words) that synthesizes the following AI news items into a coherent narrative.
@@ -274,6 +218,7 @@ def _extract_inline_image_from_gemini(response):
         if not parts:
             continue
         for part in parts:
+            # metin parçalarını ALT metin havuzuna atalım
             if getattr(part, "text", None):
                 t = part.text.strip()
                 if t:
@@ -329,7 +274,9 @@ def save_blog(blog_content, lang_code, image_path_for_blog: str, image_alt: str,
     path = BLOG_DIR / lang_code
     path.mkdir(exist_ok=True)
 
+    # Dil bazlı "Kaynaklar" başlığı
     src_title = {"tr": "Kaynaklar", "en": "Sources", "de": "Quellen", "ru": "Источники"}[lang_code]
+    # Tam URL’leri kesinlikle yaz
     sources_md = "\n".join([f"- {item['link']}" for item in sources])
 
     image_alt_json = json.dumps(image_alt or "", ensure_ascii=False)
@@ -459,7 +406,7 @@ Cyberpunk-minimal fusion, geometric patterns, glowing neural core, cinematic vol
             print("⚠️  [IMG] Hiçbir görsel yok → front-matter '/images/fures.png'")
             image_relative_path = "/images/fures.png"
 
-    # İçerikler (4 dil) + Instagram description + gerçek kaynak linkleri
+    # İçerikler (4 dil) + gerçek kaynak linkleri
     created_posts: list[Path] = []
     for lang_code in LANGS.keys():
         print(f"--- [{LANG_NAMES[lang_code]}] üretim ---")
