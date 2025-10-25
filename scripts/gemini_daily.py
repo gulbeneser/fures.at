@@ -24,6 +24,14 @@ try:
 except ImportError:  # pragma: no cover - optional dependency
     google_genai_lib = None
 
+if google_genai_lib is not None:  # pragma: no branch - import guard
+    try:
+        from google.genai import types as google_genai_types
+    except ImportError:  # pragma: no cover - optional dependency
+        google_genai_types = None
+else:
+    google_genai_types = None
+
 try:
     import replicate
 except ImportError:  # pragma: no cover - optional dependency
@@ -86,17 +94,17 @@ if GCP_PROJECT_ID and vertexai is not None:
 else:
     print("ℹ️ Vertex AI opsiyonel; paket veya proje bilgisi yoksa atlanacak.")
 
-# 5) Google Imagen 4.0 (opsiyonel yedek)
-GOOGLE_IMAGEN_CLIENT = None
+# 5) Google Gemini Görsel Üretim (gemini-2.5-flash-image) ve Imagen 4.0 (opsiyonel yedek)
+GOOGLE_GENAI_CLIENT = None
 if google_genai_lib is None:
-    print("ℹ️ google.genai paketi bulunamadı, Google Imagen 4.0 atlanacak.")
+    print("ℹ️ google.genai paketi bulunamadı, Google Gemini görsel API adımı atlanacak.")
 else:
     try:
-        GOOGLE_IMAGEN_CLIENT = google_genai_lib.Client(api_key=GEMINI_API_KEY)
-        print("✅ Google Imagen 4.0 (görsel) yapılandırıldı.")
+        GOOGLE_GENAI_CLIENT = google_genai_lib.Client(api_key=GEMINI_API_KEY)
+        print("✅ Google Gemini görsel istemcisi yapılandırıldı.")
     except Exception as e:  # pragma: no cover - depends on runtime config
-        GOOGLE_IMAGEN_CLIENT = None
-        print(f"ℹ️ Google Imagen 4.0 başlatılamadı: {e}")
+        GOOGLE_GENAI_CLIENT = None
+        print(f"ℹ️ Google Gemini istemcisi başlatılamadı: {e}")
 
 # 6) Replicate (opsiyonel yedek)
 DEFAULT_REPLICATE_TOKEN = "r8_NxXwms7k489axZVAuz32iPXbjlXbRge4SRKGF"
@@ -220,7 +228,69 @@ def generate_single_blog(news_list, lang_code):
         print(f"❌ {language} dilinde içerik üretilirken hata: {e}")
         return None
 
-# === GÖRSEL ÜRETİMİ: OpenAI DALL·E (Birincil) ===
+# === GÖRSEL ÜRETİMİ: Gemini 2.5 Flash Image (Birincil) ===
+def _extract_inline_image_from_gemini(response):
+    if response is None:
+        return None, []
+
+    alt_texts: list[str] = []
+    image_bytes: bytes | None = None
+
+    for candidate in getattr(response, "candidates", []) or []:
+        content = getattr(candidate, "content", None)
+        parts = getattr(content, "parts", None)
+        if not parts:
+            continue
+        for part in parts:
+            text_value = getattr(part, "text", None)
+            if text_value:
+                stripped = text_value.strip()
+                if stripped:
+                    alt_texts.append(stripped)
+            inline_data = getattr(part, "inline_data", None)
+            data = getattr(inline_data, "data", None) if inline_data else None
+            if data:
+                image_bytes = base64.b64decode(data) if isinstance(data, str) else data
+                break
+        if image_bytes:
+            break
+
+    return image_bytes, alt_texts
+
+
+def generate_image_gemini_flash(final_prompt):
+    if GOOGLE_GENAI_CLIENT is None:
+        print("ℹ️ Gemini 2.5 Flash Image istemcisi hazır değil, atlanıyor.")
+        return None
+
+    print("\n[ Gemini 2.5 Flash Image ] Görsel üretiliyor...")
+    try:
+        request_kwargs = dict(
+            model="gemini-2.5-flash-image",
+            contents=[final_prompt],
+        )
+        if google_genai_types is not None:
+            request_kwargs["config"] = google_genai_types.GenerateContentConfig(
+                response_modalities=["IMAGE"],
+                image_config=google_genai_types.ImageConfig(aspect_ratio="16:9"),
+            )
+
+        response = GOOGLE_GENAI_CLIENT.models.generate_content(**request_kwargs)
+        image_bytes, alt_texts = _extract_inline_image_from_gemini(response)
+        if not image_bytes:
+            raise ValueError("Gemini 2.5 Flash yanıtında görsel içeriği bulunamadı.")
+
+        image = _load_image(image_bytes)
+        if alt_texts:
+            print("ℹ️ Gemini 2.5 Flash metin özeti: " + " | ".join(alt_texts))
+        print("✅ [ Gemini 2.5 Flash Image BAŞARILI ] Görsel elde edildi.")
+        return image
+    except Exception as e:
+        print(f"❌ [ Gemini 2.5 Flash Image BAŞARISIZ ] {e}")
+        return None
+
+
+# === GÖRSEL ÜRETİMİ: OpenAI DALL·E (Yedek) ===
 def generate_image_dalle(final_prompt):
     if OPENAI_CLIENT is None:
         print("ℹ️ OpenAI DALL·E devre dışı, atlanıyor.")
@@ -314,13 +384,13 @@ def generate_image_fal_flux(final_prompt):
 
 # === GÖRSEL ÜRETİMİ: Google Imagen 4.0 (Yedek) ===
 def generate_image_google_imagen(final_prompt):
-    if GOOGLE_IMAGEN_CLIENT is None:
+    if GOOGLE_GENAI_CLIENT is None:
         print("ℹ️ Google Imagen 4.0 devre dışı, atlanıyor.")
         return None
 
     print("\n[ Google Imagen 4.0 ] Görsel üretiliyor...")
     try:
-        result = GOOGLE_IMAGEN_CLIENT.models.generate_images(
+        result = GOOGLE_GENAI_CLIENT.models.generate_images(
             model="models/imagen-4.0-generate-001",
             prompt=final_prompt,
             config=dict(
@@ -491,32 +561,37 @@ def generate_image(prompt_text):
     **Lighting:** Photorealistic, cinematic lighting with strong volumetric rays.
     """
 
-    # 1) OpenAI DALL·E
+    # 1) Gemini 2.5 Flash Image
+    image = generate_image_gemini_flash(final_prompt)
+    if image:
+        return image
+
+    # 2) OpenAI DALL·E
     image = generate_image_dalle(final_prompt)
     if image:
         return image
 
-    # 2) Fal.ai
+    # 3) Fal.ai
     image = generate_image_fal_flux(final_prompt)
     if image:
         return image
 
-    # 3) Google Imagen 4.0
+    # 4) Google Imagen 4.0
     image = generate_image_google_imagen(final_prompt)
     if image:
         return image
 
-    # 4) Replicate (Google/Imagen-4)
+    # 5) Replicate (Google/Imagen-4)
     image = generate_image_replicate(final_prompt)
     if image:
         return image
 
-    # 5) Stability AI
+    # 6) Stability AI
     image = generate_image_stability(final_prompt)
     if image:
         return image
 
-    # 6) Vertex AI (opsiyonel)
+    # 7) Vertex AI (opsiyonel)
     image = generate_image_vertexai(final_prompt)
     if image:
         return image
