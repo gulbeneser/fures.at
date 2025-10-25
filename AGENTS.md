@@ -14,6 +14,13 @@
 - Yeni entegrasyon eklerken önce uygun API anahtarının `.env`/Netlify ayarlarında bulunduğunu kontrol et ve hataları kullanıcıya açıklayan log satırları ekle.
 - Görsel üretimi başarısız olursa haber dosyaları yayınlanmamalı; en az bir sağlayıcıdan çıktı alınmadan yazıyı canlıya alma.
 
+## Sosyal Medya Çıktıları ve Güncel Özellikler
+- `scripts/gemini_daily.py` artık her yazı için `description` front-matter alanında Instagram'a uygun bir özet üretir.
+- `generate_instagram_caption` fonksiyonu Gemini 2.5 Pro modeliyle 2 cümlelik kısa bir özet yazar ve `_clean_instagram_caption` yardımıyla 2.200 karakter sınırını asla aşmaz, URL ve etiketleri temizler.
+- Sınır değeri `INSTAGRAM_CAPTION_LIMIT` sabitindedir; platform limitleri değişirse burayı güncelle ve temizleme fonksiyonundaki mantığı aynı tutulacak şekilde gözden geçir.
+- Özetler çok dilli üretildiğinden `LANGS` sözlüğüne yeni dil eklersen, ilgili çeviriler ve Instagram özeti kısıtlarının da aynı şekilde çalıştığından emin ol.
+- Oluşturulan caption'lar link eklemez; farklı sosyal ağlar için link gerekiyorsa yeni bir alan ekleyerek mantığı ayır.
+
 ## Çalışma İlkeleri
 - SEO önemlidir: yeni sayfalar oluşturulduğunda `public/sitemap.xml` dosyasını gözden geçir ve gerekiyorsa yeni URL'leri ekle.
 - Çok dilli içeriklerde `LANGS` ve `LANG_NAMES` sözlüklerini güncel tut; yeni dil eklerken ilgili klasör ve çeviri dosyalarını oluştur.
