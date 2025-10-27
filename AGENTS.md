@@ -40,6 +40,17 @@
 - LinkedIn gönderileri için açıklama alanında URL otomatik kısaltıldığından, RSS açıklamasına ek link koyma; aksi halde gönderi
   tekrar eden bağlantılarla spam görünebilir.
 
+## Kampanya Otomasyonu ve RSS2
+- `scripts/gemini_daily.py` blog üretimine ek olarak her çalıştırıldığında Türkçe kampanya kiti üretir ve çıktıyı `kampanyalar/tr/`
+  altına Markdown olarak yazar. Görseller `/fotos/campaigns/` altında tutulur ve 4:5 oranında üretilir.
+- Kampanya içeriği `generate_campaign_payload` → `build_campaign_markdown` → `save_campaign` akışında oluşur. JSON şemasını
+  değiştirirsen `src/utils/campaigns.ts`, `CampaignListPage`, `CampaignPostPage` ve `src/_data/campaignPosts.js` dosyalarını da
+  güncelle.
+- Yeni RSS feed’i `src/rss2.xml.njk` içinde tanımlıdır ve `campaignPosts.turkish` verisini kullanır. Zapier tarafında
+  `https://fures.at/rss2.xml` adresini dinleyerek LinkedIn/Instagram kampanya otomasyonlarını tetikle.
+- Kampanya sayfaları `/kampanyalar` ve `/kampanyalar/:slug` rotalarında hizmet verir; navigasyon ve footer bağlantıları eklendi.
+  İçerik sadece Türkçe üretildiğinden diğer dillerde boş liste mesajları gösterilir.
+
 ## Çalışma İlkeleri
 - SEO önemlidir: yeni sayfalar oluşturulduğunda `public/sitemap.xml` dosyasını gözden geçir ve gerekiyorsa yeni URL'leri ekle.
 - Çok dilli içeriklerde `LANGS` ve `LANG_NAMES` sözlüklerini güncel tut; yeni dil eklerken ilgili klasör ve çeviri dosyalarını oluştur.

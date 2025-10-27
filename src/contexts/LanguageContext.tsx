@@ -25,6 +25,7 @@ const translations = {
     'nav.about': 'Hakkımızda',
     'nav.services': 'Hizmetler',
     'nav.projects': 'Projeler',
+    'nav.campaigns': 'Kampanyalar',
     'nav.blog': 'Blog',
     'nav.contact': 'İletişim',
     'nav.more': 'Daha Fazla',
@@ -38,6 +39,15 @@ const translations = {
     'blog.back_to_list': 'Bloga Dön',
     'blog.not_found': 'Yazı bulunamadı',
     'blog.not_found_description': 'Aradığınız içerik taşınmış veya kaldırılmış olabilir. Diğer yazılara göz atın.',
+
+    // Campaigns
+    'campaigns.title': 'Fures Kampanyaları',
+    'campaigns.subtitle': 'Türkiye ve KKTC için günlük yapay zekâ destekli kampanya kitleri.',
+    'campaigns.no_posts': 'Bugün kampanya bulunamadı. Lütfen yarın tekrar kontrol edin.',
+    'campaigns.read_more': 'Detayları Gör',
+    'campaigns.back_to_list': 'Kampanyalara Dön',
+    'campaigns.not_found': 'Kampanya bulunamadı',
+    'campaigns.not_found_description': 'Aradığınız kampanya yayından kaldırılmış olabilir. Güncel kampanyalara göz atın.',
 
     // SEO
     'seo.site_name': 'Fures Tech · Kuzey Kıbrıs Dijital Ajansı',
@@ -93,6 +103,9 @@ const translations = {
     'seo.services.title': 'Hizmetler | Kıbrıs Web Tasarım, Yapay Zekâ Otomasyonu ve Sosyal Medya',
     'seo.services.description': 'Fures Tech; Girne, Lefkoşa ve Gazimağusa\'da ürün ve tanıtım web siteleri, otel web sitesi oluşturma, logo tasarımı, yapay zekâ otomasyonları, sosyal medya yönetimi, veri analitiği ve içerik üretimiyle işletmenizi büyütür.',
     'seo.services.keywords': 'kktc web tasarım hizmetleri, kktc ürün web sitesi geliştirme, kktc tanıtım web sitesi, kktc otel web sitesi, kktc logo tasarımı, kktc otomasyon tasarımı, kktc sosyal medya yönetimi',
+    'seo.campaigns.title': 'Kampanyalar | Fures Tech Günlük Yapay Zekâ Reklam Planları',
+    'seo.campaigns.description': 'Fures Tech her gün Türkiye ve KKTC için yapay zekâ destekli kampanya konseptleri, otomasyon akışları ve sosyal medya fikirleri üretir.',
+    'seo.campaigns.keywords': 'fures kampanyalar, kktc reklam kampanyası, türkiye yapay zeka ajansı, kampanya otomasyonu, sosyal medya otomasyon paketi',
     'seo.projects.title': 'Projeler | Fures Tech Başarı Hikayeleri',
     'seo.projects.description': 'KKTC ve uluslararası pazarlarda gerçekleştirdiğimiz web tasarım, AI otomasyon ve büyüme projelerini inceleyin.',
     'seo.projects.keywords': 'kuzey kıbrıs web projeleri, kıbrıs yapay zeka projeleri, kıbrıs dijital dönüşüm referansları',
@@ -300,6 +313,7 @@ const translations = {
     'nav.about': 'About',
     'nav.services': 'Services',
     'nav.projects': 'Projects',
+    'nav.campaigns': 'Campaigns',
     'nav.blog': 'Blog',
     'nav.contact': 'Contact',
     'nav.more': 'More',
@@ -313,6 +327,15 @@ const translations = {
     'blog.back_to_list': 'Back to Blog',
     'blog.not_found': 'Post not found',
     'blog.not_found_description': 'The article you are looking for might have been moved or deleted. Explore the latest posts instead.',
+
+    // Campaigns
+    'campaigns.title': 'Fures Campaigns',
+    'campaigns.subtitle': 'Daily AI-driven campaign kits for Turkey and Northern Cyprus.',
+    'campaigns.no_posts': 'Campaigns are currently available in Turkish. Check back soon.',
+    'campaigns.read_more': 'View Details',
+    'campaigns.back_to_list': 'Back to Campaigns',
+    'campaigns.not_found': 'Campaign not found',
+    'campaigns.not_found_description': 'The campaign might have been removed. Browse the latest kits.',
 
     // SEO
     'seo.site_name': 'Fures Tech · North Cyprus Digital Agency',
@@ -328,6 +351,9 @@ const translations = {
     'seo.services.title': 'Services | Cyprus Web Design, AI Automation & Social Media',
     'seo.services.description': 'Fures Tech supports your growth in Cyprus with web design and development, AI automations, social media management, analytics and multilingual content production crafted by a TRNC web design agency team.',
     'seo.services.keywords': 'north cyprus web services, cyprus automation solutions, cyprus social media management, cyprus data analytics, trnc web design agency',
+    'seo.campaigns.title': 'Campaigns | Fures Tech Daily AI Marketing Kits',
+    'seo.campaigns.description': 'Fures Tech crafts AI-first campaign concepts, automation flows and social content ideas for Turkey and the TRNC every day.',
+    'seo.campaigns.keywords': 'fures campaigns, turkey ai marketing, trnc advertising automation, campaign automation, social media kit',
     'seo.projects.title': 'Projects | Fures Tech Case Studies',
     'seo.projects.description': 'Explore the web design, AI automation and growth projects we deliver across North Cyprus (TRNC) and global markets.',
     'seo.projects.keywords': 'north cyprus web projects, cyprus ai projects, cyprus digital transformation case studies',
@@ -535,6 +561,7 @@ const translations = {
     'nav.about': 'О нас',
     'nav.services': 'Услуги',
     'nav.projects': 'Проекты',
+    'nav.campaigns': 'Кампании',
     'nav.blog': 'Блог',
     'nav.contact': 'Контакты',
     'nav.more': 'Больше',
@@ -548,6 +575,15 @@ const translations = {
     'blog.back_to_list': 'Назад к блогу',
     'blog.not_found': 'Статья не найдена',
     'blog.not_found_description': 'Возможно, запись была перемещена или удалена. Посмотрите другие публикации.',
+
+    // Campaigns
+    'campaigns.title': 'Кампании Fures',
+    'campaigns.subtitle': 'Ежедневные AI-кампании для Турции и Северного Кипра.',
+    'campaigns.no_posts': 'Кампании доступны только на турецком языке. Загляните позже.',
+    'campaigns.read_more': 'Подробнее',
+    'campaigns.back_to_list': 'Назад к кампаниям',
+    'campaigns.not_found': 'Кампания не найдена',
+    'campaigns.not_found_description': 'Возможно, кампания удалена. Посмотрите актуальные материалы.',
 
     // SEO
     'seo.site_name': 'Fures Tech · Цифровое агентство Северного Кипра',
@@ -563,6 +599,9 @@ const translations = {
     'seo.services.title': 'Услуги | Веб-дизайн, автоматизация ИИ и соцсети на Кипре',
     'seo.services.description': 'Fures Tech помогает вашему бизнесу расти: веб-разработка, автоматизация процессов, управление соцсетями, аналитика и многоязычный контент.',
     'seo.services.keywords': 'северный кипр веб услуги, кипр автоматизация процессов, кипр управление соцсетями, кипр аналитика данных',
+    'seo.campaigns.title': 'Кампании | Ежедневные AI-планы Fures Tech',
+    'seo.campaigns.description': 'Fures Tech ежедневно готовит AI-кампании, автоматизации и контент-пакеты для Турции и Северного Кипра.',
+    'seo.campaigns.keywords': 'fures кампании, турция ai маркетинг, северный кипр реклама, автоматизация кампаний, social media kit',
     'seo.projects.title': 'Проекты | Кейсы Fures Tech',
     'seo.projects.description': 'Изучите проекты по веб-дизайну, автоматизации ИИ и росту, реализованные нами на Северном Кипре и на международных рынках.',
     'seo.projects.keywords': 'северный кипр веб проекты, кипр проекты по ИИ, цифровая трансформация кипр кейсы',
@@ -770,6 +809,7 @@ const translations = {
     'nav.about': 'Über uns',
     'nav.services': 'Dienstleistungen',
     'nav.projects': 'Projekte',
+    'nav.campaigns': 'Kampagnen',
     'nav.blog': 'Blog',
     'nav.contact': 'Kontakt',
     'nav.more': 'Mehr',
@@ -783,6 +823,15 @@ const translations = {
     'blog.back_to_list': 'Zurück zum Blog',
     'blog.not_found': 'Beitrag nicht gefunden',
     'blog.not_found_description': 'Der gewünschte Artikel wurde möglicherweise verschoben oder entfernt. Entdecken Sie unsere weiteren Beiträge.',
+
+    // Campaigns
+    'campaigns.title': 'Fures Kampagnen',
+    'campaigns.subtitle': 'Tägliche KI-Kampagnenkits für die Türkei und Nordzypern.',
+    'campaigns.no_posts': 'Kampagnen sind derzeit nur auf Türkisch verfügbar. Bitte später erneut prüfen.',
+    'campaigns.read_more': 'Details ansehen',
+    'campaigns.back_to_list': 'Zurück zu den Kampagnen',
+    'campaigns.not_found': 'Kampagne nicht gefunden',
+    'campaigns.not_found_description': 'Diese Kampagne ist eventuell nicht mehr verfügbar. Entdecken Sie aktuelle Kits.',
 
     // SEO
     'seo.site_name': 'Fures Tech · Digitalagentur Nordzypern',
@@ -798,6 +847,9 @@ const translations = {
     'seo.services.title': 'Leistungen | Webdesign, KI-Automatisierung & Social Media auf Zypern',
     'seo.services.description': 'Fures Tech unterstützt Ihr Wachstum mit Webdesign und Entwicklung, KI-Automatisierung, Social-Media-Management, Analytics und mehrsprachiger Content-Produktion.',
     'seo.services.keywords': 'nordzypern webdienstleistungen, zypern automatisierungslösungen, zypern social media management, zypern datenanalysen',
+    'seo.campaigns.title': 'Kampagnen | Fures Tech KI-Marketing Kits',
+    'seo.campaigns.description': 'Fures Tech entwickelt täglich KI-basierte Kampagnenkonzepte, Automations-Workflows und Social-Media-Ideen für die Türkei und Nordzypern.',
+    'seo.campaigns.keywords': 'fures kampagnen, türkei ki marketing, nordzypern werbeautomation, kampagnen automation, social media kit',
     'seo.projects.title': 'Projekte | Fures Tech Referenzen',
     'seo.projects.description': 'Entdecken Sie unsere Webdesign-, KI- und Wachstumsprojekte für Kunden in Nordzypern und internationalen Märkten.',
     'seo.projects.keywords': 'nordzypern web projekte, zypern ki projekte, zypern digitale transformation referenzen',

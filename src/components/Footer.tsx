@@ -9,6 +9,7 @@ export function Footer() {
     { title: t('nav.about'), href: "/hakkimizda" },
     { title: t('nav.services'), href: "/hizmetler" },
     { title: t('nav.projects'), href: "/projeler" },
+    { title: t('nav.campaigns'), href: "/kampanyalar" },
     { title: t('nav.blog'), href: "/blog" },
     { title: 'Ekip', href: "/ekip" },
     { title: 'SSS', href: "/sss" },

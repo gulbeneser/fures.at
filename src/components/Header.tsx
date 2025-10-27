@@ -14,6 +14,7 @@ import {
   Sparkles,
   UserRound,
   Newspaper,
+  Megaphone,
 } from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext";
 import { LanguageSelector } from "./LanguageSelector";
@@ -72,6 +73,7 @@ export function Header() {
     { path: "/hakkimizda", label: t("nav.about"), icon: Info },
     { path: "/hizmetler", label: t("nav.services"), icon: Briefcase },
     { path: "/projeler", label: t("nav.projects"), icon: Rocket },
+    { path: "/kampanyalar", label: t("nav.campaigns"), icon: Megaphone },
     { path: "/blog", label: t("nav.blog"), icon: Newspaper },
     { path: "/ekip", label: "Ekip", icon: Users2 },
     { path: "/iletisim", label: t("nav.contact"), icon: MessageCircle },
@@ -80,6 +82,7 @@ export function Header() {
   const navItemPaths = new Set(navItems.map((item) => normalizePath(item.path)));
 
   const moreLinks: MoreLink[] = [
+    { path: "/kampanyalar", label: t("nav.campaigns"), icon: Megaphone },
     { path: "/blog", label: t("nav.blog"), icon: Newspaper },
     { path: "/sss", label: "SSS", icon: HelpCircle },
     { path: "/gulbeneser", label: "Gülben Eser", icon: Users2, external: true },
