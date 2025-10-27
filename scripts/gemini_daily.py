@@ -17,6 +17,7 @@ from utils import slugify
 
 # --- Gemini (metin) ---
 import google.generativeai as genai
+from google.generativeai import types as genai_types
 
 # --- Gemini (görsel) ---
 try:
@@ -35,8 +36,13 @@ INSTAGRAM_CAPTION_LIMIT = 2200
 ROOT = Path(__file__).resolve().parent.parent
 BLOG_DIR = ROOT / "blog"
 FOTOS_DIR = ROOT / "fotos"
+CAMPAIGNS_DIR = ROOT / "kampanyalar"
+CAMPAIGN_IMAGE_DIR = FOTOS_DIR / "campaigns"
+
 BLOG_DIR.mkdir(exist_ok=True)
 FOTOS_DIR.mkdir(exist_ok=True)
+CAMPAIGNS_DIR.mkdir(exist_ok=True)
+CAMPAIGN_IMAGE_DIR.mkdir(parents=True, exist_ok=True)
 
 # === ORTAM ===
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
@@ -67,6 +73,29 @@ def with_retry(fn, tries=2, wait=6, label=""):
                 raise
             print(f"⚠️  [{label}] Hata: {e} → {i+1}. deneme başarısız, {wait}s bekleniyor...")
             time.sleep(wait)
+
+
+def _extract_json_blob(text: str):
+    if not text:
+        return None
+    cleaned = text.strip()
+    if cleaned.startswith("```"):
+        parts = cleaned.split("```")
+        if len(parts) >= 2:
+            cleaned = parts[1]
+    start = cleaned.find("{")
+    end = cleaned.rfind("}")
+    if start == -1 or end == -1 or end <= start:
+        return None
+    candidate = cleaned[start : end + 1]
+    try:
+        return json.loads(candidate)
+    except json.JSONDecodeError:
+        try:
+            return json.loads(candidate.replace("\u2019", "'").replace("\u2018", "'"))
+        except json.JSONDecodeError as exc:
+            print(f"❌ [JSON] Ayrıştırılamadı: {exc}")
+            return None
 
 # === Yardımcı: Instagram caption temizleme ===
 def _clean_instagram_caption(text: str, limit: int = INSTAGRAM_CAPTION_LIMIT) -> str:
@@ -206,6 +235,212 @@ Requirements:
         return ""
     return _clean_instagram_caption(raw_caption, INSTAGRAM_CAPTION_LIMIT)
 
+
+# === Kampanya üretimi ===
+def _ensure_list(value, min_items=0):
+    if isinstance(value, list):
+        return value
+    if value is None:
+        return []
+    if isinstance(value, str):
+        items = [item.strip() for item in re.split(r"[\n;]+", value) if item.strip()]
+        if items:
+            return items
+    return [] if min_items == 0 else [value]
+
+
+def generate_campaign_payload():
+    model = genai.GenerativeModel(MODEL_TEXT)
+    prompt = """
+You are "Fures Growth Strategist", an expert Turkish marketing AI.
+Study today's advertising and AI automation trends in Turkey and the TRNC. Build a single integrated campaign plan for Fures Tech.
+Rules:
+- Respond ONLY in Turkish.
+- Never mention prices, discounts, or currency.
+- Showcase why Fures Tech excels at advertising, automation, and AI-driven creativity.
+- Highlight at least two real advertising or AI agencies from Turkey or the TRNC as market context (not competitors).
+- Emphasise omnichannel automation, new service bundles, and ROI-focused storytelling.
+- Output valid minified JSON that matches this schema exactly:
+{
+  "title": string,
+  "subtitle": string,
+  "summary": string,
+  "trendInsights": string[4+],
+  "agencySpotlights": [{"name": string, "location": string, "focus": string, "insight": string}...],
+  "campaignConcept": {"name": string, "hook": string, "angles": string[3+], "cta": string},
+  "creativePlan": {
+    "instagramCarousel": string[4+],
+    "linkedinArticle": string[3+],
+    "automationWorkflow": string[3+]
+  },
+  "packages": [{"name": string, "description": string, "deliverables": string[3+], "outcome": string}...],
+  "automationIdeas": string[3+],
+  "visualPrompt": string,
+  "copy": {"instagramCaption": string, "linkedinCopy": string},
+  "hashtags": string[10+]
+}
+Do not include markdown or commentary. JSON only.
+"""
+
+    def _call():
+        resp = model.generate_content(prompt, generation_config=genai_types.GenerationConfig(temperature=0.55))
+        return resp.text
+
+    raw_text = with_retry(_call, tries=2, wait=8, label="KAMPANYA")
+    payload = _extract_json_blob(raw_text or "")
+    if not payload:
+        raise ValueError("Kampanya çıktısı JSON formatında alınamadı.")
+    return payload
+
+
+def build_campaign_markdown(payload: dict) -> tuple[str, str, str, str, str]:
+    title = payload.get("title") or "Fures Kampanya"
+    subtitle = payload.get("subtitle") or "Günlük kampanya planı"
+    summary = payload.get("summary") or "Fures Tech için kapsamlı günlük kampanya özeti."
+    trend_insights = _ensure_list(payload.get("trendInsights"))
+    agencies = _ensure_list(payload.get("agencySpotlights"))
+    concept = payload.get("campaignConcept") or {}
+    creative = payload.get("creativePlan") or {}
+    packages = _ensure_list(payload.get("packages"))
+    automation_ideas = _ensure_list(payload.get("automationIdeas"))
+    copy_block = payload.get("copy") or {}
+    hashtags = [tag if tag.startswith("#") else f"#{tag.strip()}" for tag in _ensure_list(payload.get("hashtags"))]
+
+    lines = []
+    lines.append(f"### {subtitle}")
+    lines.append("")
+    lines.append(f"**Kampanya Özeti:** {summary.strip()}")
+    lines.append("")
+
+    if trend_insights:
+        lines.append("## Trendler ve Pazarlama İpuçları")
+        for insight in trend_insights:
+            lines.append(f"- {insight}")
+        lines.append("")
+
+    if agencies:
+        lines.append("## Türkiye ve KKTC Ajans Ekosistemi")
+        for agency in agencies:
+            if isinstance(agency, dict):
+                name = agency.get("name", "Ajans")
+                location = agency.get("location", "Konum")
+                focus = agency.get("focus", "Odak")
+                insight = agency.get("insight", "Fures için anlamı")
+                lines.append(f"- **{name} ({location})** — {focus}. {insight}")
+        lines.append("")
+
+    if concept:
+        lines.append(f"## Kampanya Konsepti · {concept.get('name', 'Fures Çözümü')}")
+        hook = concept.get("hook")
+        if hook:
+            lines.append(f"**Ana Mesaj:** {hook}")
+        angles = _ensure_list(concept.get("angles"))
+        if angles:
+            lines.append("**İletişim Açıları:**")
+            for angle in angles:
+                lines.append(f"- {angle}")
+        cta = concept.get("cta")
+        if cta:
+            lines.append(f"**CTA:** {cta}")
+        lines.append("")
+
+    if creative:
+        insta = _ensure_list(creative.get("instagramCarousel"))
+        linkedin = _ensure_list(creative.get("linkedinArticle"))
+        automation = _ensure_list(creative.get("automationWorkflow"))
+        if insta or linkedin or automation:
+            lines.append("## Kreatif ve Otomasyon Planı")
+        if insta:
+            lines.append("### Instagram Carousel")
+            for slide in insta:
+                lines.append(f"- {slide}")
+        if linkedin:
+            lines.append("")
+            lines.append("### LinkedIn Makalesi")
+            for block in linkedin:
+                lines.append(f"- {block}")
+        if automation:
+            lines.append("")
+            lines.append("### Otomasyon Akışı")
+            for step in automation:
+                lines.append(f"- {step}")
+        lines.append("")
+
+    if packages:
+        lines.append("## Yeni Servis Paketleri")
+        for pkg in packages:
+            if isinstance(pkg, dict):
+                lines.append(f"### {pkg.get('name', 'Fures Paketi')}")
+                desc = pkg.get("description")
+                if desc:
+                    lines.append(desc)
+                deliverables = _ensure_list(pkg.get("deliverables"))
+                if deliverables:
+                    lines.append("- **Teslimatlar:**")
+                    for item in deliverables:
+                        lines.append(f"  - {item}")
+                outcome = pkg.get("outcome")
+                if outcome:
+                    lines.append(f"- **Beklenen Etki:** {outcome}")
+                lines.append("")
+
+    if automation_ideas:
+        lines.append("## Yapay Zekâ Otomasyon Fikirleri")
+        for idea in automation_ideas:
+            lines.append(f"- {idea}")
+        lines.append("")
+
+    ig_caption = (copy_block.get("instagramCaption") or "").strip()
+    linkedin_copy = (copy_block.get("linkedinCopy") or "").strip()
+
+    if ig_caption or linkedin_copy:
+        lines.append("## Sosyal Medya Metinleri")
+        if ig_caption:
+            lines.append("**Instagram:**")
+            lines.append(ig_caption)
+            lines.append("")
+        if linkedin_copy:
+            lines.append("**LinkedIn:**")
+            lines.append(linkedin_copy)
+            lines.append("")
+
+    if hashtags:
+        lines.append("## Hashtag Havuzu")
+        lines.append(" ".join(hashtags))
+        lines.append("")
+
+    visual_prompt = payload.get("visualPrompt") or (
+        "Fures Tech için dörtte beş oranında, neon turuncu ve mor tonlarda, dijital ajans kampanyası görseli."
+    )
+    image_alt = concept.get("hook") or summary
+    description = ig_caption or summary
+    return title, "\n".join(lines).strip(), image_alt, description, visual_prompt
+
+
+def save_campaign(slug: str, date_time_iso: str, title: str, markdown: str, image_path_for_front: str, image_alt: str, description: str):
+    kampanya_dir = CAMPAIGNS_DIR / "tr"
+    kampanya_dir.mkdir(parents=True, exist_ok=True)
+
+    front_lines = [
+        "---",
+        f"title: {json.dumps(title, ensure_ascii=False)}",
+        f"date: {date_time_iso}",
+        f"image: {image_path_for_front}",
+        f"imageAlt: {json.dumps(image_alt or '', ensure_ascii=False)}",
+        "lang: tr",
+        f"description: {json.dumps(description or '', ensure_ascii=False)}",
+        "---",
+        "",
+    ]
+
+    post_path = kampanya_dir / f"{slug}.md"
+    with open(post_path, "w", encoding="utf-8") as f:
+        f.write("\n".join(front_lines))
+        f.write(markdown)
+        f.write("\n")
+    print(f"[KAMPANYA] OK → {post_path}")
+    return post_path
+
 # === 4) Görsel üretimi (Gemini 2.5 Flash Image) ===
 def _extract_inline_image_from_gemini(response):
     if response is None:
@@ -237,7 +472,7 @@ def _load_image(content: bytes) -> Image.Image:
     img.load()
     return img
 
-def generate_image_gemini_flash(final_prompt):
+def generate_image_gemini_flash(final_prompt: str, aspect_ratio: str = "16:9"):
     if GOOGLE_GENAI_CLIENT is None:
         print("ℹ️ [IMG] Gemini Flash istemcisi yok; görsel atlandı.")
         return None, ""
@@ -251,7 +486,7 @@ def generate_image_gemini_flash(final_prompt):
         if google_genai_types is not None:
             request_kwargs["config"] = google_genai_types.GenerateContentConfig(
                 response_modalities=["IMAGE"],
-                image_config=google_genai_types.ImageConfig(aspect_ratio="16:9"),
+                image_config=google_genai_types.ImageConfig(aspect_ratio=aspect_ratio),
             )
         resp = GOOGLE_GENAI_CLIENT.models.generate_content(**request_kwargs)
         image_bytes, alt_texts = _extract_inline_image_from_gemini(resp)
@@ -435,6 +670,95 @@ Cyberpunk-minimal fusion, geometric patterns, glowing neural core, cinematic vol
     paths_to_stage = [str(p.relative_to(ROOT)) for p in created_posts if p.exists()]
     if image_created and image_relative_path.startswith("/fotos/") and image_path.exists():
         paths_to_stage.append(str(image_path.relative_to(ROOT)))
+
+    # Kampanya üretimi
+    campaign_post_path = None
+    campaign_image_path = None
+    campaign_image_relative = None
+    try:
+        campaign_payload = generate_campaign_payload()
+        (
+            campaign_title,
+            campaign_markdown,
+            campaign_image_alt,
+            campaign_description,
+            campaign_visual_prompt,
+        ) = build_campaign_markdown(campaign_payload)
+
+        now_campaign = datetime.datetime.now(datetime.timezone.utc)
+        campaign_slug_base = now_campaign.strftime("%Y-%m-%d-%H%M")
+        campaign_slug = f"{campaign_slug_base}-tr-kampanya"
+        campaign_image_filename = f"{campaign_slug}.jpg"
+        campaign_image_relative = f"/fotos/campaigns/{campaign_image_filename}"
+        campaign_image_path = CAMPAIGN_IMAGE_DIR / campaign_image_filename
+
+        campaign_image_created = False
+        try:
+            generated_campaign_image, campaign_alt_from_model = generate_image_gemini_flash(
+                campaign_visual_prompt,
+                aspect_ratio="4:5",
+            )
+        except Exception as exc:
+            print(f"⚠️  [KAMPANYA][IMG] Üretim hatası: {exc}")
+            generated_campaign_image, campaign_alt_from_model = None, ""
+
+        final_campaign_alt = campaign_image_alt or campaign_alt_from_model
+
+        if generated_campaign_image:
+            try:
+                campaign_image_path.parent.mkdir(parents=True, exist_ok=True)
+                max_w = 1350
+                if generated_campaign_image.width > max_w:
+                    height = int(generated_campaign_image.height * (max_w / generated_campaign_image.width))
+                    generated_campaign_image = generated_campaign_image.resize((max_w, height), Image.LANCZOS)
+                generated_campaign_image.convert("RGB").save(campaign_image_path, format="JPEG", quality=94, optimize=True)
+                campaign_image_created = True
+                print(f"[KAMPANYA][IMG] Kaydedildi → {campaign_image_path}")
+            except Exception as exc:
+                print(f"❌ [KAMPANYA][IMG] Kaydedilemedi: {exc}")
+
+        if not campaign_image_path.exists():
+            fallback_source = None
+            if rotator:
+                try:
+                    fallback_name = rotator.next_for_language("fallback")
+                    candidate = FOTOS_DIR / fallback_name
+                    if candidate.exists():
+                        fallback_source = candidate
+                except Exception as exc:
+                    print(f"⚠️  [KAMPANYA][IMG] Yedek seçilemedi: {exc}")
+            if fallback_source is None:
+                default_source = ROOT / "public" / "images" / "fures.png"
+                if default_source.exists():
+                    fallback_source = default_source
+            if fallback_source and fallback_source.exists():
+                try:
+                    campaign_image_path.parent.mkdir(parents=True, exist_ok=True)
+                    with Image.open(fallback_source) as img_fallback:
+                        img_fallback.convert("RGB").save(campaign_image_path, format="JPEG", quality=88, optimize=True)
+                    print(f"ℹ️ [KAMPANYA][IMG] Yedek görsel kullanıldı: {fallback_source}")
+                except Exception as exc:
+                    print(f"❌ [KAMPANYA][IMG] Yedek kopyalanamadı: {exc}")
+            else:
+                campaign_image_relative = "/images/fures.png"
+
+        campaign_image_relative_for_front = campaign_image_relative or "/images/fures.png"
+        iso_timestamp = now_campaign.replace(microsecond=0).isoformat().replace("+00:00", "Z")
+        campaign_post_path = save_campaign(
+            campaign_slug,
+            iso_timestamp,
+            campaign_title,
+            campaign_markdown,
+            campaign_image_relative_for_front,
+            final_campaign_alt,
+            campaign_description,
+        )
+        if campaign_post_path and campaign_post_path.exists():
+            paths_to_stage.append(str(campaign_post_path.relative_to(ROOT)))
+        if campaign_image_path and campaign_image_path.exists():
+            paths_to_stage.append(str(campaign_image_path.relative_to(ROOT)))
+    except Exception as exc:
+        print(f"❌ [KAMPANYA] Üretim başarısız: {exc}")
 
     print("[GIT] Commit/push başlıyor...")
     commit_and_push(paths_to_stage)
