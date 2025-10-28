@@ -45,6 +45,25 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://fures.at/projeler?lang=en" />
   </url>
   <url>
+    <loc>https://fures.at/kampanyalar</loc>
+    <lastmod>2025-02-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.85</priority>
+    <xhtml:link rel="alternate" hreflang="tr-CY" href="https://fures.at/kampanyalar" />
+    <xhtml:link rel="alternate" hreflang="en-CY" href="https://fures.at/kampanyalar?lang=en" />
+    <xhtml:link rel="alternate" hreflang="ru-RU" href="https://fures.at/kampanyalar?lang=ru" />
+    <xhtml:link rel="alternate" hreflang="de-DE" href="https://fures.at/kampanyalar?lang=de" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://fures.at/kampanyalar?lang=en" />
+  </url>
+  <url>
+    <loc>https://fures.at/kampanyalar/otomatik-pilotta-buyume</loc>
+    <lastmod>2025-02-21</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.75</priority>
+    <xhtml:link rel="alternate" hreflang="tr-CY" href="https://fures.at/kampanyalar/otomatik-pilotta-buyume" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://fures.at/kampanyalar/otomatik-pilotta-buyume" />
+  </url>
+  <url>
     <loc>https://fures.at/ekip</loc>
     <lastmod>2024-06-03</lastmod>
     <changefreq>monthly</changefreq>

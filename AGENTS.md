@@ -40,6 +40,29 @@
 - LinkedIn gönderileri için açıklama alanında URL otomatik kısaltıldığından, RSS açıklamasına ek link koyma; aksi halde gönderi
   tekrar eden bağlantılarla spam görünebilir.
 
+## Kampanya Otomasyonu ve RSS2
+- Günlük kampanya üretimi `python scripts/gemini_daily.py --mode=campaigns --lang=tr --publish` komutuyla tetiklenir. Betik
+  önce tanımlı RSS kaynaklarından (Türkiye/KKTC reklam, AI, turizm, e-ticaret vb.) son 48 saatteki haberleri puanlayarak tek bir
+  konu seçer ve Gemini’dan **KAMPANYA_POSTU_V2** şemasına tam uyan Türkçe JSON ister.
+- Betik JSON’u şu kurallarla doğrular: tarih/saat, slug kebab-case, IG caption ≤1900 karakter ve ≤4 emoji, LinkedIn ≤900
+  karakter ve ≤2 emoji, hashtag sayıları (IG 12–18 / LinkedIn 8–14), yasaklı fiyat/indirim kelimeleri, İngilizce oranı ≤%10,
+  paket CTA’sı `/kampanyalar/{slug}`. Şema dışı çıktılar yeniden üretilir.
+- Başarılı kampanyalar `kampanyalar/tr/{YYYY-MM-DD-HHMM}-tr-kampanya.md` dosyasına yazılır. Front matter alanları: `title`,
+  `date` (ISO, Europe/Istanbul), `slug`, `summary`, `description`, `ogImage`, `imageAlt`, `lang`, `instagramCaption`,
+  `instagramHashtags`, `linkedinPost`, `linkedinHashtags`, `packages` (name/desc/cta) ve `utm`. İç gövde yalnızca CTA satırını
+  içerir.
+- Görseller öncelikle Gemini 2.5 Flash Image ile 1080×1350 (4:5) oranında üretilir; başarısız olursa OpenAI `gpt-image-1`
+  denenir, yine olmazsa `ImageRotator` veya `public/images/fures.png` üzerinden yer tutucu oluşturulur. Nihai dosya
+  `public/campaigns/YYYY/MM/DD/{slug}.jpg` konumuna JPEG (kalite 88) olarak kaydedilir.
+- `src/_data/campaignPosts.js` yalnızca kampanya Markdown’larını okur, Eleventy RSS şablonu (`src/rss2.xml.njk`) `campaignPosts`
+  verisini kullanarak maksimum 20 öğelik `/rss2.xml` akışını üretir. Bu feed Zapier üzerinden LinkedIn ve Instagram otomasyonlarını
+  tetikler.
+- Frontend veri katmanı (`src/utils/campaigns.ts`) kampanya paketlerini, sosyal metinleri ve UTM bilgisini expose eder.
+  `/kampanyalar` listesi kopyalama butonlarıyla (`Instagram Metnini Kopyala`, `LinkedIn Metnini Kopyala`) özet ve görseli sunar;
+  `/kampanyalar/:slug` detay sayfası paketleri listeler, JSON-LD (Article) üretir ve aynı kopyalama akışını sağlar.
+- Sitemap her kampanya için `/public/sitemap.xml` dosyasında `/kampanyalar/{slug}` URL’siyle günlük frekansla güncellenir; betik
+  çalıştığında bu dosyayı da yazmayı unutma.
+
 ## Çalışma İlkeleri
 - SEO önemlidir: yeni sayfalar oluşturulduğunda `public/sitemap.xml` dosyasını gözden geçir ve gerekiyorsa yeni URL'leri ekle.
 - Çok dilli içeriklerde `LANGS` ve `LANG_NAMES` sözlüklerini güncel tut; yeni dil eklerken ilgili klasör ve çeviri dosyalarını oluştur.

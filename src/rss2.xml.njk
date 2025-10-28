@@ -1,0 +1,50 @@
+---
+permalink: "rss2.xml"
+eleventyExcludeFromCollections: true
+---
+<?xml version="1.0" encoding="UTF-8"?>
+{% set turkishCampaigns = campaignPosts.turkish | default([]) %}
+<rss version="2.0"
+  xmlns:atom="http://www.w3.org/2005/Atom"
+  xmlns:content="http://purl.org/rss/1.0/modules/content/"
+  xmlns:media="http://search.yahoo.com/mrss/">
+  <channel>
+    <title>Fures Kampanyalar</title>
+    <link>https://fures.at/kampanyalar</link>
+    <atom:link href="https://fures.at/rss2.xml" rel="self" type="application/rss+xml" />
+    <description>Fures Tech'in Türkiye ve KKTC için hazırladığı günlük kampanya ve otomasyon planları.</description>
+    <language>tr</language>
+    {% if turkishCampaigns | length %}
+    <lastBuildDate>{{ turkishCampaigns[0].date | rssDate }}</lastBuildDate>
+    {% endif %}
+    <generator>Eleventy</generator>
+    {% for post in turkishCampaigns %}
+    <item>
+      <title>{{ post.title | escape }}</title>
+      <link>{{ post.url }}</link>
+      <guid isPermaLink="true">{{ post.url }}</guid>
+      <pubDate>{{ post.date | rssDate }}</pubDate>
+      {% if post.imageAbsolute %}
+      <enclosure url="{{ post.imageAbsolute }}" length="{{ post.imageSize | default(0) }}"{% if post.imageMime %} type="{{ post.imageMime }}"{% endif %} />
+      <media:content url="{{ post.imageAbsolute }}" medium="image"{% if post.imageMime %} type="{{ post.imageMime }}"{% endif %} />
+      {% endif %}
+      {% set summary = post.description | default("") %}
+      {% set contentPlain = post.content | plainText %}
+      {% if contentPlain | trim | length == 0 %}
+      {% set contentPlain = summary %}
+      {% endif %}
+      {% if summary | trim | length == 0 %}
+      {% set summary = contentPlain %}
+      {% endif %}
+      {% set descriptionText = (summary | replace("\n", " ")) ~ " — Kampanya detayları: " ~ post.url ~ " — Fures Tech: https://fures.at" %}
+      <description>{{ descriptionText | escape }}</description>
+      <content:encoded><![CDATA[
+{{- contentPlain -}}
+
+Kampanya detayları: {{ post.url }}
+Fures Tech: https://fures.at
+]]></content:encoded>
+    </item>
+    {% endfor %}
+  </channel>
+</rss>
