@@ -110,8 +110,6 @@ if last_break > 0:
 truncated = truncated[:last_break]
 truncated = truncated.rstrip(" ,.;:-")
 return (truncated or cleaned[:limit]).rstrip(" ,.;:-") + "…"
-
-=== 1) URL temizleme/çözme ===
 def clean_tracking_params(url: str) -> str:
 parsed = urlparse(url)
 if not parsed.query:
