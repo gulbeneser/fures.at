@@ -7,6 +7,7 @@ import shutil
 import json
 import re
 import time
+import random
 from pathlib import Path
 from urllib.parse import urlparse, parse_qs, urlunparse, urlencode
 from io import BytesIO
@@ -62,6 +63,117 @@ FOTOS_DIR.mkdir(exist_ok=True)
 CAMPAIGNS_DIR.mkdir(exist_ok=True)
 CAMPAIGN_IMAGE_DIR.mkdir(parents=True, exist_ok=True)
 
+# Haftanın gününe göre konu ve RSS aramaları
+# weekday: 0=Mon, 6=Sun
+TOPIC_BY_WEEKDAY = {
+    0: {
+        "id": "tech",
+        "tr": "Teknoloji",
+        "en": "technology",
+        "queries": [
+            "technology trends",
+            "software innovation",
+            "hardware breakthroughs",
+            "consumer electronics innovation",
+        ],
+    },
+    1: {
+        "id": "tourism",
+        "tr": "Turizm",
+        "en": "tourism and travel",
+        "queries": [
+            "tourism industry innovation",
+            "travel technology",
+            "hotel technology",
+            "digital marketing in tourism",
+        ],
+    },
+    2: {
+        "id": "ai",
+        "tr": "Yapay zekâ",
+        "en": "artificial intelligence",
+        "queries": [
+            "artificial intelligence breakthroughs",
+            "machine learning research",
+            "generative AI",
+            "AI startups",
+        ],
+    },
+    3: {
+        "id": "space",
+        "tr": "Uzay",
+        "en": "space and astronomy",
+        "queries": [
+            "space exploration",
+            "astronomy discoveries",
+            "space technology",
+            "satellite technology",
+        ],
+    },
+    4: {
+        "id": "microchips",
+        "tr": "Mikroçipler",
+        "en": "microchips and semiconductors",
+        "queries": [
+            "semiconductor industry",
+            "chip design",
+            "microchip technology",
+            "nanometer process technology",
+        ],
+    },
+    5: {
+        "id": "ai_travel",
+        "tr": "Gezi ve yapay zekâ",
+        "en": "AI and travel",
+        "queries": [
+            "AI travel planning",
+            "AI in tourism",
+            "personalized travel recommendation AI",
+            "AI powered travel assistants",
+        ],
+    },
+    6: {
+        "id": "ai_health",
+        "tr": "Sağlık ve yapay zekâ",
+        "en": "AI and healthcare",
+        "queries": [
+            "AI in healthcare",
+            "medical AI",
+            "clinical decision support AI",
+            "radiology AI",
+        ],
+    },
+}
+
+# Görsel çeşitliliği için rastgele stil setleri
+IMAGE_STYLES = [
+    "cinematic, ultra detailed, subtle depth of field, soft light",
+    "isometric illustration, clean vector shapes, minimalistic UI style",
+    "futuristic concept art, particles in the air, epic scale",
+    "neon cyberpunk city vibes, reflections on wet surfaces",
+    "soft gradient backgrounds, abstract geometric forms, modern dashboard",
+    "photorealistic scene with subtle film grain",
+]
+
+IMAGE_COLOR_PALETTES = [
+    "deep blue and cyan accents",
+    "vibrant orange and purple",
+    "pastel teal, soft pink and cream",
+    "emerald green with gold highlights",
+    "warm sunset oranges and magentas",
+    "cool monochrome blues",
+]
+
+IMAGE_SCENES_BY_TOPIC = {
+    "tech": "screens, holographic dashboards, connected devices, code fragments in the background",
+    "tourism": "maps, suitcases, airports, hotels, coastline silhouettes, airplanes",
+    "ai": "neural networks, digital brains, floating data blocks, abstract circuits",
+    "space": "planets, nebulae, stars, spaceships, orbital stations",
+    "microchips": "circuit boards, microchips, wafers, extreme close up of electronic components",
+    "ai_travel": "route maps, AI assistant icons, devices in hands, travel scenes blended with data flows",
+    "ai_health": "medical icons, heartbeat graphs, doctors silhouettes mixed with data streams and neural nets",
+}
+
 # ==============================
 # ORTAM
 # ==============================
@@ -102,10 +214,6 @@ def with_retry(fn, tries=2, wait=6, label=""):
 
 
 def _extract_json_blob(text: str):
-    """
-    Gemini bazen cevabı ```json ... ``` içinde veriyor.
-    İçerideki ilk { ile son } arasını alıp JSON parse etmeye çalışıyoruz.
-    """
     if not text:
         return None
 
@@ -113,9 +221,7 @@ def _extract_json_blob(text: str):
 
     # ```json ... ``` temizle
     if cleaned.startswith("```"):
-        # İlk satır genelde ```json veya ``` oluyor
         lines = cleaned.splitlines()
-        # İlk ve son satır code fence ise at
         if lines and lines[0].startswith("```"):
             lines = lines[1:]
         if lines and lines[-1].startswith("```"):
@@ -144,10 +250,8 @@ def _extract_json_blob(text: str):
 
 def _clean_instagram_caption(text: str, limit: int = INSTAGRAM_CAPTION_LIMIT) -> str:
     text = text or ""
-    # URL sil
     text = re.sub(r"https?://\S+", "", text, flags=re.IGNORECASE)
 
-    # Satır ve boşluk temizliği
     lines = [re.sub(r"\s+", " ", line).strip() for line in text.splitlines()]
     cleaned = "\n".join(line for line in lines if line)
     cleaned = re.sub(r"[ \t]{2,}", " ", cleaned).strip()
@@ -195,13 +299,11 @@ def _clean_tracking_params(url: str) -> str:
 def _resolve_final_url(session: requests.Session, link: str) -> str:
     parsed = urlparse(link)
 
-    # Google yönlendirmesi: gerçek link genelde "url" paramında
     if parsed.netloc.endswith("google.com") and parsed.path == "/url":
         target = parse_qs(parsed.query).get("url", [None])[0]
         if target:
             return _clean_tracking_params(target)
 
-    # news.google.com → gerçek siteye takip et
     if parsed.netloc.endswith("news.google.com"):
         try:
             resp = session.get(link, allow_redirects=True, timeout=10, stream=True)
@@ -220,14 +322,28 @@ def _resolve_final_url(session: requests.Session, link: str) -> str:
 # RSS'den haber çekme
 # ==============================
 
-def fetch_ai_news(limit=5):
-    feeds = [
-        "https://news.google.com/rss/search?q=artificial+intelligence+breakthrough&hl=en-US&gl=US&ceid=US:en",
-        "https://news.google.com/rss/search?q=AI+in+tourism+industry&hl=en-US&gl=US&ceid=US:en",
-        "https://news.google.com/rss/search?q=generative+ai+startups&hl=en-US&gl=US&ceid=US:en",
-    ]
+def fetch_ai_news(limit=5, topic_cfg=None):
+    # Konuya göre Google News RSS aramalarını hazırla
+    feeds = []
+    if topic_cfg and topic_cfg.get("queries"):
+        for q in topic_cfg["queries"]:
+            q_param = q.replace(" ", "+")
+            feeds.append(
+                f"https://news.google.com/rss/search?q={q_param}&hl=en-US&gl=US&ceid=US:en"
+            )
+    else:
+        # Eski AI odaklı fallback
+        feeds = [
+            "https://news.google.com/rss/search?q=artificial+intelligence+breakthrough&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=AI+in+tourism+industry&hl=en-US&gl=US&ceid=US:en",
+            "https://news.google.com/rss/search?q=generative+ai+startups&hl=en-US&gl=US&ceid=US:en",
+        ]
+
     print("🔎 [RSS] Akışlar okunuyor...")
     articles, seen = [], set()
+
+    # feed sırasını karıştır ki hep aynı kaynaklar öne gelmesin
+    random.shuffle(feeds)
 
     with requests.Session() as session:
         for feed in feeds:
@@ -244,6 +360,9 @@ def fetch_ai_news(limit=5):
             except Exception as e:
                 print(f"⚠️ [RSS] Hata ({feed}): {e}")
 
+    # haber listesini de karıştıralım
+    random.shuffle(articles)
+
     for i, a in enumerate(articles[:limit], 1):
         print(f"   • [{i}] {a['title']} → {a['link']}")
     return articles[:limit]
@@ -253,14 +372,19 @@ def fetch_ai_news(limit=5):
 # Metin üretimi (Gemini)
 # ==============================
 
-def generate_single_blog(news_list, lang_code):
+def generate_single_blog(news_list, lang_code, topic_cfg=None):
     language = LANGS[lang_code]
+    topic_en = topic_cfg["en"] if topic_cfg else "artificial intelligence"
+    topic_tr = topic_cfg["tr"] if topic_cfg else "Yapay zekâ"
+
     summaries = "\n".join([f"- {n['title']}: {n['link']}" for n in news_list])
 
     prompt = f"""
-Write a single {language} technology blog article (400-600 words) that synthesizes the following AI news items into a coherent narrative.
-Start with a title line formatted exactly as '### <title>'.
-Write directly to the reader. It should be exciting and engaging. No meta-commentary about being an AI or receiving instructions.
+Write a single {language} blog article (400-600 words) about {topic_en}.
+The article should synthesize the following news items into a coherent narrative and explain why they matter.
+
+Start with a title line formatted exactly as '### <title>' that fits the theme "{topic_tr}".
+Write directly to the reader in an exciting, engaging tone. No meta-commentary about being an AI or receiving instructions.
 
 News:
 {summaries}
@@ -281,16 +405,18 @@ Finish with one line of 5-7 relevant hashtags in {language}.
 # Instagram özeti
 # ==============================
 
-def generate_instagram_caption(news_list, lang_code):
+def generate_instagram_caption(news_list, lang_code, topic_cfg=None):
     language = LANGS[lang_code]
+    topic_en = topic_cfg["en"] if topic_cfg else "artificial intelligence"
+
     headlines = "\n".join([f"- {n['title']}" for n in news_list if n.get("title")])
     if not headlines:
-        headlines = "- Günün öne çıkan yapay zekâ gelişmeleri"
+        headlines = "- Günün öne çıkan haberleri"
 
     soft_limit = INSTAGRAM_CAPTION_LIMIT - 160
 
     prompt = f"""
-Create a concise Instagram caption in {language} that teases today's AI blog post based on these headlines:
+Create a concise Instagram caption in {language} that teases today's blog post about {topic_en} based on these headlines:
 {headlines}
 
 Requirements:
@@ -614,6 +740,7 @@ def save_blog(
     image_alt: str,
     instagram_caption: str,
     sources,
+    topic_cfg=None,
 ):
     if not blog_content:
         return None
@@ -637,9 +764,12 @@ def save_blog(
     image_alt_json = json.dumps(image_alt or "", ensure_ascii=False)
     caption_json = json.dumps(instagram_caption or "", ensure_ascii=False)
 
+    topic_tr = topic_cfg["tr"] if topic_cfg else "Günlük Haberler"
+    title_text = f"AI Daily - {topic_tr} - {LANG_NAMES[lang_code]}"
+
     front_matter = [
         "---",
-        f'title: "AI Daily - {LANG_NAMES[lang_code]}"',
+        f'title: "{title_text}"',
         f"date: {date_time_iso}",
         f"image: {image_path_for_blog}",
         f"imageAlt: {image_alt_json}",
@@ -704,7 +834,16 @@ def commit_and_push(paths_to_stage: list[str]):
 
 def main():
     print("===== Daily AI Blog Pipeline =====")
-    news = fetch_ai_news()
+
+    today = datetime.date.today()
+    weekday = today.weekday()
+    topic_cfg = TOPIC_BY_WEEKDAY.get(weekday)
+    if topic_cfg:
+        print(f"📅 Bugünün konusu: {topic_cfg['tr']} ({topic_cfg['en']})")
+    else:
+        print("📅 Bugünün konusu bulunamadı, varsayılan AI haberleri kullanılacak.")
+
+    news = fetch_ai_news(topic_cfg=topic_cfg)
     if not news:
         print("❌ [RSS] Haber bulunamadı, duruyoruz.")
         return
@@ -719,8 +858,8 @@ def main():
 
     primary_title = next((item.get("title") for item in news if item.get("title")), None)
     timestamp_part = datetime.datetime.utcnow().strftime("%Y%m%d%H%M")
-    slug_source = slugify(primary_title) if primary_title else "ai-news"
-    slug_source = (slug_source or "ai-news")[:60].rstrip("-") or "ai-news"
+    slug_source = slugify(primary_title) if primary_title else "daily-news"
+    slug_source = (slug_source or "daily-news")[:60].rstrip("-") or "daily-news"
     image_slug = f"{timestamp_part}-{slug_source}"
     image_filename = f"{image_slug}.jpg"
     image_relative_path = f"/fotos/{image_filename}"
@@ -728,11 +867,22 @@ def main():
     image_created = False
     image_alt = ""
 
-    # Görsel promptu
-    prompt_seed = primary_title or "Artificial intelligence daily news"
+    # Görsel promptu, konuya ve rastgele stil setine göre
+    prompt_seed = primary_title or "Daily tech news"
+    topic_id = topic_cfg["id"] if topic_cfg else "ai"
+    scene_hint = IMAGE_SCENES_BY_TOPIC.get(topic_id, "abstract data flows and people interacting with technology")
+
+    style = random.choice(IMAGE_STYLES)
+    palette = random.choice(IMAGE_COLOR_PALETTES)
+
     final_prompt = f"""
 A visually striking 16:9 digital illustration about: "{prompt_seed}".
-Glowing neural core, cinematic volumetric lighting, high tech palette, some technology, some life, always random colors.
+The theme is {topic_cfg['en'] if topic_cfg else 'advanced technology and AI'}.
+
+Scene elements: {scene_hint}.
+Style: {style}.
+Color palette: {palette}.
+Avoid text or typography in the image.
 """
 
     try:
@@ -802,13 +952,13 @@ Glowing neural core, cinematic volumetric lighting, high tech palette, some tech
     for lang_code in LANGS.keys():
         print(f"--- [{LANG_NAMES[lang_code]}] üretim ---")
         try:
-            blog_text = generate_single_blog(news, lang_code)
+            blog_text = generate_single_blog(news, lang_code, topic_cfg=topic_cfg)
         except Exception:
             blog_text = None
 
         if blog_text:
             try:
-                instagram_caption = generate_instagram_caption(news, lang_code)
+                instagram_caption = generate_instagram_caption(news, lang_code, topic_cfg=topic_cfg)
             except Exception:
                 instagram_caption = ""
             post_path = save_blog(
@@ -818,6 +968,7 @@ Glowing neural core, cinematic volumetric lighting, high tech palette, some tech
                 image_alt,
                 instagram_caption,
                 news,
+                topic_cfg=topic_cfg,
             )
             if post_path:
                 created_posts.append(post_path)
@@ -866,7 +1017,9 @@ Glowing neural core, cinematic volumetric lighting, high tech palette, some tech
                 campaign_image_path.parent.mkdir(parents=True, exist_ok=True)
                 max_w = 1350
                 if generated_campaign_image.width > max_w:
-                    height = int(generated_campaign_image.height * (max_w / generated_campaign_image.width))
+                    height = int(
+                        generated_campaign_image.height * (max_w / generated_campaign_image.width)
+                    )
                     generated_campaign_image = generated_campaign_image.resize(
                         (max_w, height),
                         Image.LANCZOS,
