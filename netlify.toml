@@ -2,6 +2,9 @@
   command = "npm run build"
   publish = "public"
 
+[functions]
+  directory = "netlify/functions"
+
 [build.environment]
   TZ = "Europe/Istanbul"
 
