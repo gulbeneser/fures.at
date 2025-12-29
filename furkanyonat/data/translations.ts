@@ -13,19 +13,19 @@ export const translations = {
     },
     hero: {
       pretitle: 'IT & Ön Büro Operasyonları',
-      title: 'Ekip-İçi Uyumlu.',
+      title: 'Hiyerarşiye Uyumlu.',
       titleGradient: 'Sahada Çözüm Üreten.',
-      subtitle: 'Gastrodat, Opera ve kanal yöneticileriyle ön büroyu sorunsuz çalıştırır; aynı zamanda web sitenizi ve IT altyapınızı güvenle yönetir. Emir-komuta zincirine uyumlu, Avusturya standartlarına hazır.',
+      subtitle: 'Teknik geçmişe sahip deneyimli otel profesyoneli. Gastrodat/Opera ile ön büroyu sorunsuz çalıştırır, IT altyapınızı güvenceye alırım. Hiyerarşiye saygılı, strese dayanıklı ve Avusturya için hemen göreve hazırım.',
       button1: 'Daha Fazlasını Keşfet',
       button2: 'Projenizi Anlatalım',
     },
     features: {
-      title: 'Kazandırdıklarımız',
+      title: 'Temel Yetkinliklerim',
       items: {
-        operations: { title: 'Operasyonel Verim', description: 'Tekrarlı işleri otomatikleştirir, maliyetleri düşürür, zamanı geri kazandırır.' },
-        design: { title: 'Tasarım + Mühendislik', description: 'Estetikle performansı aynı masada buluştururuz.' },
-        data: { title: 'Veriyle Karar', description: 'Paneller, raporlar, A/B testleriyle neyin işe yaradığını anlarız.' },
-        sector: { title: 'Sektörel Derinlik', description: 'Turizm-otelcilik, e-ticaret/ürün katalogları (dermokozmetik & veteriner), deneyim ve etkinlik satışı.' },
+        operations: { title: 'Süreç İyileştirme & Otomasyon', description: 'Gastrodat, Opera gibi dijital araçlarla manuel adımları azaltır, operasyonu hızlandırırım.' },
+        design: { title: 'IT & Web Altyapısı', description: 'Otel web sitelerini yönetir, sistem stabilitesini ve güvenliğini sağlarım.' },
+        data: { title: 'Veriyle İzleme', description: 'Paneller ve raporlarla hataları erken yakalar, kararları veriye bağlarım.' },
+        sector: { title: 'Konaklama Odaklı Deneyim', description: 'Ön büro, kanal yönetimi ve misafir iletişimini sahada yönettim; turizm KOBİ’lerine teknik destek verdim.' },
       }
     },
     experience: {
@@ -69,6 +69,17 @@ export const translations = {
         company: 'Granada Luxury Hotels',
         date: 'May 2018 – Ağu 2018',
         tasks: ['Yoğun sezonda ön büro operasyonlarını yürüttü.', 'Nakit işlemleri ve günlük raporlamaları gerçekleştirdi.']
+      },
+      germany: {
+        role: 'Almanya Deneyimi (Sanayi & Lojistik)',
+        company: 'Regensburg, Bavyera',
+        date: '2012 – 2017',
+        tasks: [
+          'BMW Group: Kalite kontrol ve üretim hatlarında çalıştım.',
+          'Continental & Infineon: Makine kullanımı ve teknik süreç takibi.',
+          'FedEx: Lojistik ve sevkiyat koordinasyonu.',
+          'Alman iş disiplini, dakiklik ve süreç hassasiyetini bu dönemde içselleştirdim.',
+        ],
       },
       anar_metal: {
         role: 'Makine Operatörü',
@@ -123,7 +134,7 @@ export const translations = {
     education: {
         title: 'Eğitim',
         tourism: { degree: 'Turizm ve Otel İşletmeciliği (Önlisans)', university: 'Anadolu Üniversitesi', date: '2025 – Devam ediyor', details: ['Ön büro yönetimi, konaklama hukuku ve gelir/gayrimenkul modülleri; Avusturya RWR başvurusuna uygun müfredat.'] },
-        aof: { degree: 'Web Tasarımı ve Kodlama (Önlisans)', university: 'Anadolu Üniversitesi', date: '2023 – Devam ediyor', details: ['Web tasarımı, JS/React temelleri ve SEO uyumlu arayüz geliştirme.'] },
+        aof: { degree: 'Web Tasarımı ve Kodlama (Önlisans)', university: 'Anadolu Üniversitesi', date: '2023 – Devam ediyor', details: ['Web geliştirme ve IT sistemleri odağı. (Bu diploma, RWR Kart için “Veri İşleme/Teknisyen” eksik meslek grubuna yeterlilik sağlar.)'] },
         oth: { degree: 'Üretim ve Otomasyon Teknolojileri', university: 'OTH Regensburg, Almanya', date: '2015 – 2017', details: ['Teknik üretim temelleri, otomasyon prensipleri ve Alman teknik dil yetkinliği.'] }
     },
     certificates: {
@@ -210,19 +221,19 @@ export const translations = {
     },
     hero: {
       pretitle: 'IT & Front Office Operations',
-      title: 'Team-Aligned.',
-      titleGradient: 'Solution-Oriented On Site.',
-      subtitle: 'Keeps Gastrodat/Opera, channel managers, and reception SOPs running smoothly while maintaining your website and IT stack. Obedient to process, reliable for Austrian hospitality standards.',
+      title: 'Hierarchy-Aware.',
+      titleGradient: 'Delivers On Site.',
+      subtitle: 'Hotel professional with a technical background. I keep your Front Office stable on Gastrodat/Opera and protect the IT stack. Process-compliant, stress-resilient, and ready for Austria.',
       button1: 'Discover More',
       button2: 'Tell Us Your Project',
     },
     features: {
-      title: 'What We Deliver',
+      title: 'My Core Competencies',
       items: {
-        operations: { title: 'Operational Efficiency', description: 'Automates repetitive tasks, reduces costs, and wins back time.' },
-        design: { title: 'Design + Engineering', description: 'We bring aesthetics and performance together at the same table.' },
-        data: { title: 'Data-Driven Decisions', description: 'We understand what works with dashboards, reports, and A/B tests.' },
-        sector: { title: 'Sectoral Depth', description: 'Experience in tourism-hospitality, e-commerce/product catalogs (dermocosmetics & veterinary), and event sales.' },
+        operations: { title: 'Process Optimization & Automation', description: 'Use digital tools like Gastrodat and Opera to cut manual steps and speed up operations.' },
+        design: { title: 'IT & Web Infrastructure', description: 'Manage hotel websites and keep systems stable and secure.' },
+        data: { title: 'Monitoring & Reporting', description: 'Surface issues early with dashboards and reports to guide decisions.' },
+        sector: { title: 'Hospitality Focus', description: 'Ran front office, channel management, and guest comms on-site; deliver technical support for tourism SMEs.' },
       }
     },
     experience: {
@@ -266,6 +277,17 @@ export const translations = {
         company: 'Granada Luxury Hotels',
         date: 'May 2018 – Aug 2018',
         tasks: ['Executed front desk operations during a high-demand season.', 'Handled cash transactions and daily reporting.']
+      },
+      germany: {
+        role: 'Germany Experience (Industry & Logistics)',
+        company: 'Regensburg, Bavaria',
+        date: '2012 – 2017',
+        tasks: [
+          'BMW Group: Worked in quality assurance and production lines.',
+          'Continental & Infineon: Operated machinery and followed technical processes.',
+          'FedEx: Coordinated logistics and shipping.',
+          'Internalized German work ethic, punctuality, and process rigor during this period.',
+        ],
       },
       anar_metal: {
         role: 'Machine Operator',
@@ -320,7 +342,7 @@ export const translations = {
     education: {
         title: 'Education',
         tourism: { degree: 'Associate Degree in Tourism & Hotel Management', university: 'Anadolu University', date: '2025 – Present', details: ['Front office management, hospitality law, revenue/real-estate modules aligned with Austrian RWR requirements.'] },
-        aof: { degree: 'Associate Degree in Web Design & Coding', university: 'Anadolu University', date: '2023 – Present', details: ['Web design, JS/React foundations, and SEO-compliant UI development.'] },
+        aof: { degree: 'Associate Degree in Web Design & Coding', university: 'Anadolu University', date: '2023 – Present', details: ['Focus on web development & IT systems. (This degree qualifies as shortage occupation “Data Processing/Technician” for the Red-White-Red Card.)'] },
         oth: { degree: 'Production & Automation Technologies', university: 'OTH Regensburg, Germany', date: '2015 – 2017', details: ['Technical production fundamentals, automation principles, and German technical language proficiency.'] }
     },
     certificates: {
@@ -407,19 +429,19 @@ export const translations = {
     },
     hero: {
       pretitle: 'IT & Front-Office-Betrieb',
-      title: 'Teamorientiert.',
-      titleGradient: 'Lösungsstark vor Ort.',
-      subtitle: 'Hält Gastrodat/Opera, Channel-Manager und Rezeptions-SOPs stabil und pflegt gleichzeitig Website und IT-Stack. Prozess- und befehlsgetreu, bereit für österreichische Hotellerie-Standards.',
+      title: 'IT-Systembetreuer & Front Office Manager',
+      titleGradient: 'Sofort einsatzbereit.',
+      subtitle: 'Erfahrener Hotel-Profi mit technischem Hintergrund. Ich sorge dafür, dass Ihr Front Office mit Gastrodat/Opera reibungslos läuft und Ihre IT-Infrastruktur sicher steht. Hierarchiebewusst, stressresistent und sofort einsatzbereit für Österreich.',
       button1: 'Mehr entdecken',
       button2: 'Erzählen Sie uns von Ihrem Projekt',
     },
     features: {
-      title: 'Was wir liefern',
+      title: 'Meine Kernkompetenzen',
       items: {
-        operations: { title: 'Operative Effizienz', description: 'Automatisiert wiederkehrende Aufgaben, senkt Kosten und gewinnt Zeit zurück.' },
-        design: { title: 'Design + Technik', description: 'Wir bringen Ästhetik und Leistung an einen Tisch.' },
-        data: { title: 'Datengestützte Entscheidungen', description: 'Mit Dashboards, Berichten und A/B-Tests verstehen wir, was funktioniert.' },
-        sector: { title: 'Branchenkenntnis', description: 'Erfahrung in Tourismus-Gastgewerbe, E-Commerce/Produktkatalogen (Dermokosmetik & Veterinärmedizin) und Veranstaltungsvertrieb.' },
+        operations: { title: 'Prozessoptimierung & Automatisierung', description: 'Reduzierung manueller Arbeitsschritte durch digitale Tools (Gastrodat, Opera).' },
+        design: { title: 'IT & Web-Infrastruktur', description: 'Verwaltung von Hotel-Webseiten und Sicherstellung der Systemstabilität.' },
+        data: { title: 'Monitoring & Reporting', description: 'Frühes Erkennen von Engpässen über Dashboards und klare Kennzahlen.' },
+        sector: { title: 'Hotellerie im Alltag', description: 'Front Office, Channel-Management und Gästekommunikation eigenhändig geführt; technische Unterstützung für Tourismusbetriebe.' },
       }
     },
     experience: {
@@ -449,6 +471,7 @@ export const translations = {
       mimoza_reception: { role: 'Rezeptionist', company: 'Mimoza Beach Hotel', date: 'Nov. 2019 – Juli 2021', tasks: ['Abwicklung des Front-Office-Betriebs, Check-in/Check-out der Gäste und Beschwerdemanagement.', 'Effektive Nutzung von Reservierungssystemen und Channel-Managern.'] },
       concorde: { role: 'Rezeptionist', company: 'Concorde Luxury Resort & Casino', date: 'Aug. 2018 – Nov. 2019', tasks: ['Management der Gästebetreuung und VIP-Services in einem 5-Sterne-Resort.', 'Sicherstellung einer hohen Gästezufriedenheit durch abteilungsübergreifende Koordination.'] },
       granada: { role: 'Rezeptionist', company: 'Granada Luxury Hotels', date: 'Mai 2018 – Aug. 2018', tasks: ['Durchführung des Rezeptionsbetriebs während einer Hochsaison.', 'Abwicklung von Bargeldtransaktionen und täglicher Berichterstattung.'] },
+      germany: { role: 'Berufserfahrung Deutschland (Industrie & Logistik)', company: 'Regensburg, Bayern', date: '2012 – 2017', tasks: ['BMW Group: Qualitätssicherung & Produktion.', 'Continental & Infineon: Maschinenführung & technische Abläufe.', 'FedEx: Logistik & Versand.', 'Hier habe ich deutsche Arbeitsmoral, Pünktlichkeit und präzise Abläufe verinnerlicht.'] },
       anar_metal: { role: 'Maschinenbediener', company: 'Anar Metal', date: 'Nov. 2017 – Mai 2018', tasks: ['Bedienung von metallverarbeitenden Maschinen und Sicherstellung der Produktion gemäß Qualitätsstandards.'] },
       saribekir: { role: 'Maschinenbediener', company: 'SARIBEKİR PACKAGING', date: 'Juni 2017 – Nov. 2017', tasks: ['Management des Maschinenbetriebs an Verpackungslinien und Überwachung der Effizienz.'] },
       bmw: { role: 'Produktion & Qualitätskontrolle', company: 'BMW Group, Regensburg', date: 'Juni 2015 – Okt. 2016', tasks: ['Durchführung von Montagearbeiten und Qualitätssicherungsprüfungen gemäß SOPs.', 'Prozessüberwachung, Fehlerbehebung und Dokumentation.'] },
@@ -462,7 +485,7 @@ export const translations = {
     education: {
         title: 'Ausbildung',
         tourism: { degree: 'Tourismus- & Hotelmanagement (FH-Grad)', university: 'Anadolu University', date: '2025 – Laufend', details: ['Front-Office-Management, Hospitality-Recht, Revenue/Immobilien-Module – passend für RWR-Antrag.'] },
-        aof: { degree: 'Webdesign & Coding (FH-Grad)', university: 'Anadolu University', date: '2023 – Laufend', details: ['Webdesign, JS/React-Grundlagen und SEO-konforme UI-Entwicklung.'] },
+        aof: { degree: 'Webdesign & Coding (FH-Grad)', university: 'Anadolu University', date: '2023 – Laufend', details: ['Schwerpunkt: Web-Entwicklung & IT-Systeme. (Dieser Abschluss qualifiziert als Mangelberuf “Datenverarbeitung/Techniker” für die Rot-Weiß-Rot-Karte.)'] },
         oth: { degree: 'Produktions- & Automatisierungstechnik', university: 'OTH Regensburg, Deutschland', date: '2015 – 2017', details: ['Technische Produktionsgrundlagen, Automatisierungsprinzipien und deutsche Fachsprache.'] }
     },
     certificates: {
@@ -541,21 +564,21 @@ export const translations = {
     },
     hero: {
       pretitle: 'Operaciones IT y Front Office',
-      title: 'Alineado con el equipo.',
-      titleGradient: 'Resolutivo en sitio.',
-      subtitle: 'Opera Gastrodat/Opera, Channel Manager y SOP de recepción sin fallos mientras cuida la web y el stack IT. Disciplinado con procesos y listo para los estándares hoteleros austríacos.',
+      title: 'IT-Systembetreuer & Front Office Manager',
+      titleGradient: 'Listo para Austria.',
+      subtitle: 'Profesional hotelero con base técnica. Mantengo su front office estable con Gastrodat/Opera y protejo la infraestructura IT. Respeto la jerarquía, gestiono el estrés y puedo incorporarme de inmediato en Austria.',
       button1: 'Descubrir Más',
       button2: 'Cuéntenos su Proyecto',
     },
     features: {
-      title: 'Lo que ofrecemos',
-      items: {
-        operations: { title: 'Eficiencia Operativa', description: 'Automatiza tareas repetitivas, reduce costos y recupera tiempo.' },
-        design: { title: 'Diseño + Ingeniería', description: 'Unimos estética y rendimiento en la misma mesa.' },
-        data: { title: 'Decisiones basadas en datos', description: 'Entendemos lo que funciona con paneles, informes y pruebas A/B.' },
-        sector: { title: 'Profundidad Sectorial', description: 'Experiencia en turismo-hostelería, catálogos de e-commerce/productos (dermocosmética y veterinaria) y ventas de eventos.' },
-      }
-    },
+        title: 'Mis Competencias Clave',
+        items: {
+          operations: { title: 'Optimización de Procesos y Automatización', description: 'Uso herramientas digitales como Gastrodat y Opera para reducir pasos manuales y acelerar la operación.' },
+          design: { title: 'Infraestructura IT y Web', description: 'Gestiono sitios web de hotel y mantengo los sistemas estables y seguros.' },
+          data: { title: 'Monitoreo y Reporting', description: 'Detecto incidencias pronto con paneles e informes claros para guiar decisiones.' },
+          sector: { title: 'Enfoque Hotelero', description: 'He gestionado recepción, canales y comunicación con huéspedes en sitio; brindo soporte técnico a pymes turísticas.' },
+        }
+      },
     experience: {
       title: 'Experiencia',
       neu: {
@@ -583,6 +606,7 @@ export const translations = {
       mimoza_reception: { role: 'Recepcionista', company: 'Mimoza Beach Hotel', date: 'Nov 2019 – Jul 2021', tasks: ['Manejo de operaciones de recepción, check-in/check-out de huéspedes y gestión de quejas.', 'Utilización efectiva de sistemas de reserva y channel managers.'] },
       concorde: { role: 'Recepcionista', company: 'Concorde Luxury Resort & Casino', date: 'Ago 2018 – Nov 2019', tasks: ['Gestión de relaciones con los huéspedes y servicios VIP en un resort de 5 estrellas.', 'Aseguré altos niveles de satisfacción de los huéspedes mediante la coordinación interdepartamental.'] },
       granada: { role: 'Recepcionista', company: 'Granada Luxury Hotels', date: 'May 2018 – Ago 2018', tasks: ['Ejecuté operaciones de recepción durante una temporada de alta demanda.', 'Manejo de transacciones en efectivo e informes diarios.'] },
+      germany: { role: 'Experiencia en Alemania (Industria y Logística)', company: 'Ratisbona, Baviera', date: '2012 – 2017', tasks: ['BMW Group: Control de calidad y producción.', 'Continental & Infineon: Manejo de maquinaria y procesos técnicos.', 'FedEx: Logística y envíos.', 'Aquí interioricé la disciplina laboral alemana, la puntualidad y los flujos precisos.'] },
       anar_metal: { role: 'Operador de Máquinas', company: 'Anar Metal', date: 'Nov 2017 – May 2018', tasks: ['Operé maquinaria para trabajar metales y aseguré que la producción cumpliera con los estándares de calidad.'] },
       saribekir: { role: 'Operador de Máquinas', company: 'SARIBEKİR PACKAGING', date: 'Jun 2017 – Nov 2017', tasks: ['Gestioné las operaciones de las máquinas en las líneas de producción de envases y supervisé la eficiencia.'] },
       bmw: { role: 'Producción y Control de Calidad', company: 'BMW Group, Ratisbona', date: 'Jun 2015 – Oct 2016', tasks: ['Realicé operaciones en la línea de montaje y controles de garantía de calidad según los SOP.', 'Llevé a cabo el monitoreo de procesos, la resolución de problemas y la documentación.'] },
@@ -596,7 +620,7 @@ export const translations = {
     education: {
         title: 'Educación',
         tourism: { degree: 'Grado Asociado en Turismo y Gestión Hotelera', university: 'Anadolu University', date: '2025 – En curso', details: ['Gestión de recepción, derecho hotelero y módulos de revenue/inmobiliario alineados con el proceso RWR.'] },
-        aof: { degree: 'Grado Asociado en Diseño y Programación Web', university: 'Anadolu University', date: '2023 – En curso', details: ['Diseño web, bases de JS/React y desarrollo de interfaces compatibles con SEO.'] },
+        aof: { degree: 'Grado Asociado en Diseño y Programación Web', university: 'Anadolu University', date: '2023 – En curso', details: ['Enfoque en desarrollo web y sistemas IT. (Este título califica como ocupación escasa “Procesamiento de datos/Técnico” para la tarjeta Rojo-Blanco-Rojo.)'] },
         oth: { degree: 'Tecnologías de Producción y Automatización', university: 'OTH Regensburg, Alemania', date: '2015 – 2017', details: ['Fundamentos de producción técnica, principios de automatización y dominio del alemán técnico.'] }
     },
     certificates: {
@@ -664,7 +688,7 @@ export const translations = {
 };
 
 export const experienceOrder = [
-  'neu', 'fures', 'bmw', 'continental', 'infineon', 'fedex', 'edag', 'scheugenpflug',
+  'neu', 'fures',
   'mimoza_manager', 'mimoza_reception', 'concorde', 'granada',
-  'anar_metal', 'saribekir'
+  'germany'
 ];
