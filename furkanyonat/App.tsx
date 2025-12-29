@@ -17,6 +17,20 @@ type Theme = 'light' | 'dark' | 'system';
 const Hero = ({ t }: { t: any }) => (
   <section id="hero" className="min-h-screen flex items-center justify-center text-center pt-12 md:pt-16">
     <div className="max-w-3xl mx-auto px-4 space-y-6">
+      <div className="flex justify-center">
+        <div className="relative">
+          <div
+            className="absolute inset-0 rounded-full blur-3xl opacity-30 bg-[var(--highlight-gradient)]"
+            aria-hidden="true"
+          />
+          <img
+            src={t.contactInfo.profileImage}
+            alt={`${t.name} portrait`}
+            className="relative h-36 w-36 rounded-full border border-white/30 shadow-xl object-cover"
+            loading="eager"
+          />
+        </div>
+      </div>
       <div className="space-y-3">
         <h1 className="text-5xl md:text-7xl font-bold text-primary-text font-display leading-tight">
           {t.name}
