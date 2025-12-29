@@ -6,6 +6,10 @@ Bu klasör Furkan Yonat'ın ÖNORM uyumlu CV sayfasını barındırır. Buradaki
 - Hero bölümü menü altında kalmamalı; `Hero` bileşeninde üstte pozitif padding kullan ve negatif margin ekleme.
 - İsim + telefon + e-posta + adres satırı her dilde `contactInfo` alanlarından beslenen yuvarlak kartlarla hero'da öne çıkmalı.
 - Ton tekil ve "bireysel yetkinlik" odaklıdır; ajans dili veya çoğul ifadeler ekleme.
+- Profil fotoğrafı `fotofurkan.jpeg` dosyasından import edilir ve menü avatarında da kullanılır; yeni fotoğrafa geçerken aynı dosya adını koru ki build çıktısındaki referanslar kırılmasın.
+- Hero görseli hero başlığının üstünde, blur auralı yuvarlak bir portre olarak gösterilir; `App.tsx` içindeki `Hero` bileşenindeki görsel sınıflarını (border, shadow, object-cover) koru ki fotoğraf kesilmesin.
+- Header içinde PDF indirme/print butonu bulunur; `window.print()` çağrısıyla çalışır ve `t.actions.downloadPdf` çevirisini kullanır. Butonun print çıktısında görünmediğini (header `no-print`) koru.
+- Deneyim başlığında çevirilerden gelen “Tüm kartları aç”/“Kartları tek tek görüntüle” toggle’ı vardır. Toggle açıkken tüm kartlar genişlemeli ve kart butonları devre dışı (`aria-disabled`), tekli moda dönünce varsayılan olarak `neu` kartı açık gelmelidir.
 
 ## İçerik ve Kronoloji
 - Deneyim sırası `experienceOrder` ile ters kronolojiktir: Dorana → Fures (yan iş) → Mimoza (müdür yrd./resepsiyon) → Concorde → Granada → Almanya bloğu.
@@ -19,5 +23,6 @@ Bu klasör Furkan Yonat'ın ÖNORM uyumlu CV sayfasını barındırır. Buradaki
 - İçerik değişikliklerinden sonra `npm run build` çalıştır.
 - Yeni rota eklenirse `public/sitemap.xml` dahil ilgili sitemap dosyalarını güncelle.
 - CV sayfasında siteye özgü CTA veya buton metinleri ("Mehr entdecken", "Projenizi Anlatalım" vb.) kullanılmaz; hero butonları kaldırılmıştır.
+- "Mehr", "Mehr entdecken", "Erzählen Sie uns von Ihrem Projekt", "Angetrieben von Fures" gibi ifadeler ve abartılı asistan selamlamaları kullanılmaz; metinlerde bu kalıpları görürsen temizle.
 
 Bu kılavuzu her değişiklik sonrası güncel tut ve yeni gereksinimleri buraya ekle.
