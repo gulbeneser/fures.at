@@ -15,7 +15,7 @@ import { AccessibilityModal } from './components/modals/AccessibilityModal';
 type Theme = 'light' | 'dark' | 'system';
 
 const Hero = ({ t }: { t: any }) => (
-  <section id="hero" className="min-h-screen flex items-center justify-center text-center -mt-20">
+  <section id="hero" className="min-h-screen flex items-center justify-center text-center pt-12 md:pt-16">
     <div className="max-w-3xl mx-auto px-4 space-y-6">
       <div className="space-y-3">
         <h1 className="text-5xl md:text-7xl font-bold text-primary-text font-display leading-tight">
