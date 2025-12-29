@@ -142,3 +142,12 @@ Bu dosyayı güncel tut ve yeni önemli süreçler eklendiğinde buraya belgelem
 - **Gemini & Maps Entegrasyonu:** `lib/env.ts` ortam değişkenlerini çoklu anahtar adlarından çözer; `App.tsx` bu anahtarları doğrular ve yoksa hataya düşer. `use-live-api` içindeki `onToolCall` işleyicisi `lib/tools/tool-registry.ts` üzerinden `mapsGrounding`, `frameEstablishingShot`, `frameLocations` fonksiyonlarını yürütür, sonuçları `useLogStore` ve `useMapStore` mağazalarına yazar. Google Maps Photorealistic 3D bileşeni `components/map-3d` altındaki wrapper ile yönetilir, kamera hareketleri `lib/map-controller.ts` ve `lib/look-at.ts` üzerinden hesaplanır.
 - **Ses ve Akış Katmanı:** Mikrofon girdisi `lib/audio-recorder.ts` + `lib/worklets/vol-meter` ile PCM'e dönüştürülür; çıktılar `lib/audio-streamer.ts` tarafından sıraya alınır ve gecikmesiz çalınır. Ses seviyeleri `ControlTray` üzerinden görselleştirilir, `use-live-api` `audioStreamer` referansını `LiveAPIContext` vasıtasıyla paylaştırır.
 - **Geliştirme & Yayın:** `.env.local` içinde `GEMINI_API_KEY` ve `MAPS_API_KEY` tanımla, ardından `npm install`, `npm run dev` komutlarıyla geliştirme sunucusunu aç. Üretim için `npm run build` çalıştır; çıktı `dist/` klasöründen `/aboutcyprus/` üretim dizinine kopyalanır. `travel/README.md` mimari ve API limitleri hakkında kapsamlı bir rehber sunar; yeni geliştiricileri önce buraya yönlendir.
+
+### furkanyonat – ÖNORM Odaklı CV Sayfası
+- **Amaç:** Furkan Yonat'ın Avusturya standartlarına uygun, emir-komuta zincirine uyumlu IT & Front Office profilini çok dilli (TR/EN/DE/ES) olarak sergilemek.
+- **İçerik Notları:**
+  - Başlık `IT-Systembetreuer & Front Office Manager | Web Design & Coding (Associate Degree)` çizgisini koru; giriş bölümünde disiplin, saha odaklılık ve Avusturya'ya hazır olma vurguları bulunmalı.
+  - Deneyim sırası `experienceOrder` içinde önce Dorana/Fures, ardından Almanya (BMW, Continental, Infineon, FedEx, EDAG, Scheugenpflug) deneyimlerini getirir; bu önceliği bozma.
+  - Fures Tech rolü yan iş (Nebenberuflich) olarak gösterilmeli; tam zamanlı sadakat mesajını zayıflatma.
+  - Eğitimde yeni turizm & otel işletmeciliği önlisansını (2025–) ve web tasarımı önlisansını (2023–) tut; Regensburg mühendislik eğitimi “tamamlanmadı” ifadesi kullanmadan teknik temel ve Almanca vurgusuyla geçsin.
+- **Bakım:** Dil çevirileri senkron olmalı; dört dilde de metinler aynı vurguyu taşımalı. İçerik güncelledikten sonra `npm run build` ile kontrol et.
