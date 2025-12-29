@@ -6,18 +6,25 @@ interface ExperienceCardProps {
     t: any;
     isExpanded: boolean;
     setExpandedKey: (key: string | null) => void;
+    expandAll: boolean;
 }
 
-const ExperienceCard: React.FC<ExperienceCardProps> = ({ expKey, exp, t, isExpanded, setExpandedKey }) => {
+const ExperienceCard: React.FC<ExperienceCardProps> = ({ expKey, exp, t, isExpanded, setExpandedKey, expandAll }) => {
     if (typeof exp !== 'object' || exp === null || !('role' in exp)) return null;
+
+    const handleToggle = () => {
+        if (expandAll) return;
+        setExpandedKey(isExpanded ? null : expKey);
+    };
 
     return (
         <div className="glass-card rounded-2xl shadow-lg transition-all duration-300 overflow-hidden">
             <button
                 className="w-full text-left p-6 hover:bg-white/5 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500/50 transition-colors"
-                onClick={() => setExpandedKey(isExpanded ? null : expKey)}
+                onClick={handleToggle}
                 aria-expanded={isExpanded}
                 aria-controls={`experience-details-${expKey}`}
+                aria-disabled={expandAll}
             >
                 <div className="flex justify-between items-center">
                     <div>

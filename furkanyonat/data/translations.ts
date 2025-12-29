@@ -40,6 +40,10 @@ export const translations = {
     },
     experience: {
       title: 'Deneyim',
+      controls: {
+        expandAll: 'Tüm kartları aç',
+        collapseAll: 'Kartları tek tek görüntüle',
+      },
       neu: {
         role: 'Operatif Lider & IT Yöneticisi — Oteller & Seyahat Acentası',
         company: 'Dorana Tourism Group / Near East University',
@@ -285,6 +289,10 @@ export const translations = {
     },
     experience: {
       title: 'Experience',
+      controls: {
+        expandAll: 'Open all cards',
+        collapseAll: 'Collapse to single view',
+      },
       neu: {
         role: 'Operations Lead & IT Manager — Hotels & Travel Agency',
         company: 'Dorana Tourism Group / Near East University',
@@ -528,6 +536,10 @@ export const translations = {
     },
     experience: {
       title: 'Berufserfahrung',
+      controls: {
+        expandAll: 'Alle Karten öffnen',
+        collapseAll: 'Einzelansicht verwenden',
+      },
       neu: {
         role: 'Operativer Leiter & IT-Manager — Hotels & Reisebüro',
         company: 'Dorana Tourism Group / Near East University',
@@ -708,6 +720,10 @@ export const translations = {
       },
     experience: {
       title: 'Experiencia',
+      controls: {
+        expandAll: 'Abrir todas las tarjetas',
+        collapseAll: 'Volver a la vista individual',
+      },
       neu: {
         role: 'Líder Operativo e IT-Manager — Hoteles y Agencia de Viajes',
         company: 'Dorana Tourism Group / Near East University',

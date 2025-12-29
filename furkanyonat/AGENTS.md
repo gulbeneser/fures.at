@@ -9,6 +9,7 @@ Bu klasör Furkan Yonat'ın ÖNORM uyumlu CV sayfasını barındırır. Buradaki
 - Profil fotoğrafı `fotofurkan.jpeg` dosyasından import edilir ve menü avatarında da kullanılır; yeni fotoğrafa geçerken aynı dosya adını koru ki build çıktısındaki referanslar kırılmasın.
 - Hero görseli hero başlığının üstünde, blur auralı yuvarlak bir portre olarak gösterilir; `App.tsx` içindeki `Hero` bileşenindeki görsel sınıflarını (border, shadow, object-cover) koru ki fotoğraf kesilmesin.
 - Header içinde PDF indirme/print butonu bulunur; `window.print()` çağrısıyla çalışır ve `t.actions.downloadPdf` çevirisini kullanır. Butonun print çıktısında görünmediğini (header `no-print`) koru.
+- Deneyim başlığında çevirilerden gelen “Tüm kartları aç”/“Kartları tek tek görüntüle” toggle’ı vardır. Toggle açıkken tüm kartlar genişlemeli ve kart butonları devre dışı (`aria-disabled`), tekli moda dönünce varsayılan olarak `neu` kartı açık gelmelidir.
 
 ## İçerik ve Kronoloji
 - Deneyim sırası `experienceOrder` ile ters kronolojiktir: Dorana → Fures (yan iş) → Mimoza (müdür yrd./resepsiyon) → Concorde → Granada → Almanya bloğu.
