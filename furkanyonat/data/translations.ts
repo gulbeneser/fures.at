@@ -1,3 +1,5 @@
+import profileImage from '../fotofurkan.jpeg';
+
 export const translations = {
   tr: {
     name: 'Furkan Yonat',
@@ -197,7 +199,7 @@ export const translations = {
       address: 'Famagusta, Zypern',
       whatsapp: 'https://wa.me/905338704176',
       portfolio: 'https://www.fures.at/furkanyonat/',
-      profileImage: 'https://i.imgur.com/5d2y3tD.jpeg',
+      profileImage,
       linkedin: 'https://www.linkedin.com/in/furkan-yonat-2745061ba/',
       facebook: 'https://www.facebook.com/furkanyonat900/',
       instagram: 'https://www.instagram.com/furkanyonat9/',
@@ -414,12 +416,12 @@ export const translations = {
       title: 'Accessibility Statement',
       statement: 'This website is designed and developed to be compliant with the Web Content Accessibility Guidelines (WCAG) 2.1 Level AA. We aim to provide an inclusive experience for all users.'
     },
-    contactInfo: { 
-      email: 'furkanyonat@gmail.com', 
+    contactInfo: {
+      email: 'furkanyonat@gmail.com',
       phone: '+905338704176',
-      whatsapp: 'https://wa.me/905338704176', 
-      portfolio: 'https://www.fures.at/furkanyonat/', 
-      profileImage: 'https://i.imgur.com/5d2y3tD.jpeg', 
+      whatsapp: 'https://wa.me/905338704176',
+      portfolio: 'https://www.fures.at/furkanyonat/',
+      profileImage,
       linkedin: 'https://www.linkedin.com/in/furkan-yonat-2745061ba/',
       facebook: 'https://www.facebook.com/furkanyonat900/',
       instagram: 'https://www.instagram.com/furkanyonat9/',
@@ -578,7 +580,7 @@ export const translations = {
       address: 'Famagusta, Zypern',
       whatsapp: 'https://wa.me/905338704176',
       portfolio: 'https://www.fures.at/furkanyonat/',
-      profileImage: 'https://i.imgur.com/5d2y3tD.jpeg',
+      profileImage,
       linkedin: 'https://www.linkedin.com/in/furkan-yonat-2745061ba/',
       facebook: 'https://www.facebook.com/furkanyonat900/',
       instagram: 'https://www.instagram.com/furkanyonat9/',
@@ -737,7 +739,7 @@ export const translations = {
       address: 'Famagusta, Zypern',
       whatsapp: 'https://wa.me/905338704176',
       portfolio: 'https://www.fures.at/furkanyonat/',
-      profileImage: 'https://i.imgur.com/5d2y3tD.jpeg',
+      profileImage,
       linkedin: 'https://www.linkedin.com/in/furkan-yonat-2745061ba/',
       facebook: 'https://www.facebook.com/furkanyonat900/',
       instagram: 'https://www.instagram.com/furkanyonat9/',

@@ -6,6 +6,7 @@ Bu klasör Furkan Yonat'ın ÖNORM uyumlu CV sayfasını barındırır. Buradaki
 - Hero bölümü menü altında kalmamalı; `Hero` bileşeninde üstte pozitif padding kullan ve negatif margin ekleme.
 - İsim + telefon + e-posta + adres satırı her dilde `contactInfo` alanlarından beslenen yuvarlak kartlarla hero'da öne çıkmalı.
 - Ton tekil ve "bireysel yetkinlik" odaklıdır; ajans dili veya çoğul ifadeler ekleme.
+- Profil fotoğrafı `fotofurkan.jpeg` dosyasından import edilir ve menü avatarında da kullanılır; yeni fotoğrafa geçerken aynı dosya adını koru ki build çıktısındaki referanslar kırılmasın.
 
 ## İçerik ve Kronoloji
 - Deneyim sırası `experienceOrder` ile ters kronolojiktir: Dorana → Fures (yan iş) → Mimoza (müdür yrd./resepsiyon) → Concorde → Granada → Almanya bloğu.
