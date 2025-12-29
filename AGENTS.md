@@ -147,9 +147,11 @@ Bu dosyayı güncel tut ve yeni önemli süreçler eklendiğinde buraya belgelem
 - **Amaç:** Furkan Yonat'ın Avusturya standartlarına uygun, emir-komuta zincirine uyumlu IT & Front Office profilini çok dilli (TR/EN/DE/ES) olarak sergilemek.
 - **İçerik Notları:**
   - Başlık `IT-Systembetreuer & Front Office Manager | Web Design & Coding (Associate Degree)` çizgisini koru; giriş bölümünde disiplin, saha odaklılık ve Avusturya'ya hazır olma vurguları bulunmalı.
+  - Bio metni doğrudan rezervasyon artışını destekleyen dijital pazarlama (Google Ads, SEO, içerik tasarımı) katkısını belirtmeli; ajans tarzı CTA'lar kullanılmaz.
   - Deneyim sırası `experienceOrder` içinde önce Dorana/Fures, ardından Almanya (BMW, Continental, Infineon, FedEx, EDAG, Scheugenpflug) deneyimlerini getirir; bu önceliği bozma.
   - Fures Tech rolü yan iş (Nebenberuflich) olarak gösterilmeli; tam zamanlı sadakat mesajını zayıflatma.
   - Eğitimde yeni turizm & otel işletmeciliği önlisansını (2025–) ve web tasarımı önlisansını (2023–) tut; Regensburg mühendislik eğitimi “tamamlanmadı” ifadesi kullanmadan teknik temel ve Almanca vurgusuyla geçsin.
   - Hero bölümünün en başında büyük puntolu isim (Furkan Yonat) ve tekil iletişim satırı yer almalı; `contactInfo` içindeki telefon (phoneDisplay), e-posta ve `address` alanlarını kullanarak tel/mail/adres üçlüsünü göster. `hero.contact` etiketlerini koru, iletişim bloklarını kaldırma.
+  - Hero butonları kaldırıldı; PDF/CV çıktısında "Mehr entdecken" gibi site CTA'ları görünmemeli.
 - **Bakım:** Dil çevirileri senkron olmalı; dört dilde de metinler aynı vurguyu taşımalı. İçerik güncelledikten sonra `npm run build` ile kontrol et.
  - **Güncel Ton & Sıralama (2025-02):** Hero/bio metinleri tekil ve “sahada teslimat” odaklı tut; Almanca başlıkta verilen hiyerarşi vurgusunu koru. `features`/`Meine Kernkompetenzen` bloklarını ajans çoğul dili yerine bireysel yetkinlik anlatımıyla yaz. `experienceOrder` ters kronolojik ilerler: Dorana → Fures (yan iş) → Mimoza (müdür yrd./resepsiyon) → Concorde → Granada → Almanya bloğu (2012–2017) tek kutu halinde. Almanya başlığında BMW/Continental/Infineon/FedEx örnekleri toplu durmalı, eski tekil kayıtlar gösterilmemeli. Web Tasarımı & Kodlama detay satırında RWR “Datenverarbeitung/Techniker” uygunluk notunu koru.

@@ -48,16 +48,6 @@ const Hero = ({ t }: { t: any }) => (
       <p className="text-lg md:text-xl max-w-2xl mx-auto text-secondary-text leading-relaxed">
         {t.hero.subtitle}
       </p>
-      <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-        <a href="#experience" className="btn btn-primary w-full sm:w-auto">
-          {t.hero.button1}
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.707-10.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L9.414 11H13a1 1 0 100-2H9.414l1.293-1.293z" clipRule="evenodd" /></svg>
-        </a>
-        <a href="#projects" className="btn btn-secondary w-full sm:w-auto">
-          {t.hero.button2}
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clipRule="evenodd" /></svg>
-        </a>
-      </div>
     </div>
   </section>
 );

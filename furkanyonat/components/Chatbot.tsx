@@ -214,10 +214,6 @@ const Chatbot: React.FC<ChatbotProps> = ({ t, language, isPrinting }) => {
                     <BotAvatar />
                     <div>
                         <h3 className="font-bold text-primary-text">{t.chatbot.title}</h3>
-                        <div className="flex items-center space-x-2">
-                            <span className="h-2 w-2 rounded-full bg-green-400 animate-pulse"></span>
-                            <p className="text-xs text-secondary-text">Online</p>
-                        </div>
                     </div>
                 </header>
                 <div className="flex-1 p-4 overflow-y-auto">

@@ -15,10 +15,9 @@ export const translations = {
       pretitle: 'IT & Ön Büro Operasyonları',
       title: 'Ön Büro ve IT\'de Sahada.',
       titleGradient: 'Teslimat Odaklı.',
-      subtitle: 'Teknik geçmişe sahip deneyimli otel profesyoneli. Gastrodat/Opera ile ön büroyu sorunsuz çalıştırır, IT altyapınızı güvenceye alırım. Strese dayanıklı ve Avusturya için hemen göreve hazırım.',
+      subtitle:
+        'Dijital pazarlama odaklı IT-Systembetreuer & Ön Büro Yöneticisi. Sadece resepsiyonu Gastrodat/Opera ile sorunsuz yürütmekle kalmam, Google Ads, SEO ve profesyonel içerik tasarımıyla doğrudan rezervasyonlarınızı artırırım. Teknoloji, misafirperverlik ve ciro artışı için tam donanımlı bir jokerim.',
       contact: { phone: 'Telefon', email: 'E-Posta', address: 'Adres' },
-      button1: 'Daha Fazlasını Keşfet',
-      button2: 'Projenizi Anlatalım',
     },
     features: {
       title: 'Temel Yetkinliklerim',
@@ -26,6 +25,11 @@ export const translations = {
         operations: { title: 'Süreç İyileştirme & Otomasyon', description: 'Gastrodat, Opera gibi dijital araçlarla manuel adımları azaltır, operasyonu hızlandırırım.' },
         design: { title: 'IT & Web Altyapısı', description: 'Otel web sitelerini yönetir, sistem stabilitesini ve güvenliğini sağlarım.' },
         data: { title: 'Veriyle İzleme', description: 'Paneller ve raporlarla hataları erken yakalar, kararları veriye bağlarım.' },
+        marketing: {
+          title: 'Online Pazarlama & Tasarım',
+          description:
+            'Ciro artışı için Google Ads & Analytics yönetimi. Dış ajans maliyeti olmadan sosyal medya içeriği ve otel tasarımları (menü, broşür) üretimi.',
+        },
         sector: { title: 'Konaklama Odaklı Deneyim', description: 'Ön büro, kanal yönetimi ve misafir iletişimini sahada yönettim; turizm KOBİ’lerine teknik destek verdim.' },
       }
     },
@@ -36,7 +40,8 @@ export const translations = {
         company: 'Dorana Tourism Group / Near East University',
         date: 'Mayıs 2023 – Halen',
         problem: '6 otel ve bir acente için ön büro, Gastrodat/Opera süreçleri ve kanal yöneticilerini tek çatı altında güvence altına almak; IT altyapısını standartlara uygun kurmak gerekiyordu.',
-        action: 'Gastrodat ve Booking.com/Expedia entegrasyonlarını devreye aldım, resepsiyon ekibini ön büro SOP’leri ve kalite kontrol konusunda eğittim. Ağ, POS ve yazıcı altyapılarını kurup bakımını yaptım; Booking motoru ve sadakat sistemi için web geliştirme yaptım.',
+        action:
+          'Gastrodat ve Booking.com/Expedia entegrasyonlarını devreye aldım, resepsiyon ekibini ön büro SOP’leri ve kalite kontrol konusunda eğittim. Ağ, POS ve yazıcı altyapılarını kurup bakımını yaptım; Booking motoru ve sadakat sistemi için web geliştirme yaptım. Dijital pazarlama kampanyalarını (Google Ads) yönettim ve doğrudan web sitesi rezervasyonlarını artırdım.',
         result: 'Altı tesiste check-in hatalarını ve rezervasyon uyuşmazlıklarını azalttım, kanal yönetimi hatalarını düşürdüm, ekip eğitimleri sayesinde hizmet sürekliliğini sağladım. IT güvenliği ve veri yedekleme süreçleri kurularak denetime hazır hale getirildi.',
       },
       fures: {
@@ -158,7 +163,15 @@ export const translations = {
         title: 'Uzmanlık Alanları',
         hospitality: { title: 'Konaklama Teknolojileri', items: [{ name: 'ElektraWeb', level: 'Uzman', percentage: 95 }, { name: 'Opera PMS', level: 'Uzman', percentage: 90 }, { name: 'Sedna/Protel/MICROS', level: 'Çok İyi', percentage: 85 }] },
         web: { title: 'Web & AI Geliştirme', items: [{ name: 'JavaScript', level: 'Çok İyi', percentage: 88 }, { name: 'React/TypeScript', level: 'Çok İyi', percentage: 82 }, { name: 'AI & Otomasyon (Gemini API)', level: 'Uzman', percentage: 95 }] },
-        digital: { title: 'Dijital Strateji', items: [{ name: 'SEO/SEM', level: 'Uzman', percentage: 95 }, { name: 'Sosyal Medya Yönetimi', level: 'Uzman', percentage: 90 }, { name: 'İçerik Stratejisi', level: 'Çok İyi', percentage: 85 }] },
+        digital: {
+          title: 'Dijital Pazarlama & Tasarım',
+          items: [
+            { name: 'Google Marketing Platform (Ads, Analytics, Search Console, My Business)', level: 'Uzman', percentage: 95 },
+            { name: 'Grafik & Tasarım (Adobe Photoshop, Canva, Video)', level: 'Çok İyi', percentage: 90 },
+            { name: 'Social Media Growth (Instagram Reels, içerik planlama)', level: 'Uzman', percentage: 92 },
+            { name: 'SEO & SEM (Otel SEO)', level: 'Uzman', percentage: 95 },
+          ],
+        },
         languages: { title: 'Diller', items: [{ name: 'Türkçe', level: 'Ana Dil', percentage: 100 }, { name: 'Almanca', level: 'İleri (C1)', percentage: 90 }, { name: 'İngilizce', level: 'Akıcı (B2.2)', percentage: 80 }] }
     },
      projects: {
@@ -226,10 +239,9 @@ export const translations = {
       pretitle: 'IT & Front Office Operations',
       title: 'On-Site Focused.',
       titleGradient: 'Delivers Steadily.',
-      subtitle: 'Hotel professional with a technical background. I keep your Front Office stable on Gastrodat/Opera and protect the IT stack. Stress-resilient and ready for Austria.',
+      subtitle:
+        'IT systems supporter and front office manager with a focus on digital marketing. I keep reception smooth on Gastrodat/Opera and grow direct bookings through Google Ads, SEO, and professional content design. A hands-on all-rounder for technology, hospitality, and revenue growth.',
       contact: { phone: 'Phone', email: 'Email', address: 'Address' },
-      button1: 'Discover More',
-      button2: 'Tell Us Your Project',
     },
     features: {
       title: 'My Core Competencies',
@@ -237,6 +249,11 @@ export const translations = {
         operations: { title: 'Process Optimization & Automation', description: 'Use digital tools like Gastrodat and Opera to cut manual steps and speed up operations.' },
         design: { title: 'IT & Web Infrastructure', description: 'Manage hotel websites and keep systems stable and secure.' },
         data: { title: 'Monitoring & Reporting', description: 'Surface issues early with dashboards and reports to guide decisions.' },
+        marketing: {
+          title: 'Online Marketing & Design',
+          description:
+            'Run Google Ads & Analytics to raise revenue. Produce social media content and hotel designs (menus, flyers) without agency costs.',
+        },
         sector: { title: 'Hospitality Focus', description: 'Ran front office, channel management, and guest comms on-site; deliver technical support for tourism SMEs.' },
       }
     },
@@ -247,7 +264,8 @@ export const translations = {
         company: 'Dorana Tourism Group / Near East University',
         date: 'May 2023 – Present',
         problem: 'Needed to secure front-office standards across 6 hotels and a travel agency while setting up Gastrodat/Opera, channel managers, and resilient IT infrastructure.',
-        action: 'Rolled out Gastrodat with Booking.com/Expedia connections, coached reception teams on SOPs and quality control, and built network/POS/printer setups with ongoing maintenance. Delivered booking engine and loyalty site upgrades to keep sales online.',
+        action:
+          'Rolled out Gastrodat with Booking.com/Expedia connections, coached reception teams on SOPs and quality control, and built network/POS/printer setups with ongoing maintenance. Delivered booking engine and loyalty site upgrades to keep sales online. Led digital marketing campaigns (Google Ads) and increased direct website bookings.',
         result: 'Reduced check-in errors and channel conflicts across six properties, stabilized uptime through backups and access policies, and kept teams audit-ready with repeatable training.',
       },
       fures: {
@@ -369,7 +387,15 @@ export const translations = {
         title: 'Expertise',
         hospitality: { title: 'Hospitality Tech', items: [{ name: 'ElektraWeb', level: 'Expert', percentage: 95 }, { name: 'Opera PMS', level: 'Expert', percentage: 90 }, { name: 'Sedna/Protel/MICROS', level: 'Excellent', percentage: 85 }] },
         web: { title: 'Web & AI Development', items: [{ name: 'JavaScript', level: 'Excellent', percentage: 88 }, { name: 'React/TypeScript', level: 'Excellent', percentage: 82 }, { name: 'AI & Automation (Gemini API)', level: 'Expert', percentage: 95 }] },
-        digital: { title: 'Digital Strategy', items: [{ name: 'SEO/SEM', level: 'Expert', percentage: 95 }, { name: 'Social Media Management', level: 'Expert', percentage: 90 }, { name: 'Content Strategy', level: 'Excellent', percentage: 85 }] },
+        digital: {
+          title: 'Digital Marketing & Design',
+          items: [
+            { name: 'Google Marketing Platform (Ads, Analytics, Search Console, My Business)', level: 'Expert', percentage: 95 },
+            { name: 'Graphic & Design (Adobe Photoshop, Canva, Video)', level: 'Very Good', percentage: 90 },
+            { name: 'Social Media Growth (Instagram Reels, content planning)', level: 'Expert', percentage: 92 },
+            { name: 'SEO & SEM (Hotel SEO)', level: 'Expert', percentage: 95 },
+          ],
+        },
         languages: { title: 'Languages', items: [{ name: 'Turkish', level: 'Native', percentage: 100 }, { name: 'German', level: 'Advanced (C1)', percentage: 90 }, { name: 'English', level: 'Fluent (B2.2)', percentage: 80 }] }
     },
     projects: {
@@ -421,7 +447,7 @@ export const translations = {
   },
   de: {
     name: 'Furkan Yonat',
-    title: 'IT-Systembetreuer & Front Office Manager | Webdesign & Coding (FH-Grad)',
+    title: 'IT-Systembetreuer & Front Office Manager | Webdesign & Coding (Associate Degree / Diplom)',
     vision: 'Hands-on IT- und Front-Office-Manager mit C1-Deutsch und Bereitschaft zur langfristigen Anstellung in Österreich. Sichert Gastrodat/Opera-Prozesse, Channel-Manager und Web-Infrastruktur im Einklang mit dem Dienstweg.',
     nav: {
       experience: 'Erfahrung',
@@ -435,10 +461,9 @@ export const translations = {
       pretitle: 'IT & Front-Office-Betrieb',
       title: 'IT-Systembetreuer & Front Office Manager',
       titleGradient: 'Sofort einsatzbereit.',
-      subtitle: 'Erfahrener Hotel-Profi mit technischem Hintergrund. Ich sorge dafür, dass Ihr Front Office mit Gastrodat/Opera reibungslos läuft und Ihre IT-Infrastruktur sicher steht. Stressresistent und sofort einsatzbereit für Österreich.',
+      subtitle:
+        'IT-Systembetreuer & Front Office Manager mit Fokus auf Digitales Marketing. Ich sorge nicht nur für reibungslose Abläufe an der Rezeption, sondern steigere auch Ihre Direktbuchungen durch Google Ads, SEO und professionelles Content-Design. Ein Allrounder für Technik, Gastfreundschaft und Umsatzwachstum.',
       contact: { phone: 'Telefon', email: 'E-Mail', address: 'Adresse' },
-      button1: 'Mehr entdecken',
-      button2: 'Erzählen Sie uns von Ihrem Projekt',
     },
     features: {
       title: 'Meine Kernkompetenzen',
@@ -446,6 +471,11 @@ export const translations = {
         operations: { title: 'Prozessoptimierung & Automatisierung', description: 'Reduzierung manueller Arbeitsschritte durch digitale Tools (Gastrodat, Opera).' },
         design: { title: 'IT & Web-Infrastruktur', description: 'Verwaltung von Hotel-Webseiten und Sicherstellung der Systemstabilität.' },
         data: { title: 'Monitoring & Reporting', description: 'Frühes Erkennen von Engpässen über Dashboards und klare Kennzahlen.' },
+        marketing: {
+          title: 'Online-Marketing & Design',
+          description:
+            'Professionelle Steuerung von Google Ads & Analytics zur Umsatzsteigerung. Erstellung von Social-Media-Content und Hotel-Designs (Speisekarten, Flyer) ohne externe Agenturkosten.',
+        },
         sector: { title: 'Hotellerie im Alltag', description: 'Front Office, Channel-Management und Gästekommunikation eigenhändig geführt; technische Unterstützung für Tourismusbetriebe.' },
       }
     },
@@ -456,7 +486,8 @@ export const translations = {
         company: 'Dorana Tourism Group / Near East University',
         date: 'Mai 2023 – Heute',
         problem: 'Rezeptions-Standards über 6 Hotels und ein Reisebüro sichern und gleichzeitig Gastrodat/Opera, Channel-Manager und belastbare IT-Infrastruktur einführen.',
-        action: 'Gastrodat mit Booking.com/Expedia-Anbindung ausgerollt, Rezeptions-Teams in SOPs und Qualitätssicherung geschult. Netzwerk-, POS- und Drucker-Setups aufgebaut und gewartet; Buchungsengine und Loyalty-Site technisch erneuert.',
+        action:
+          'Gastrodat mit Booking.com/Expedia-Anbindung ausgerollt, Rezeptions-Teams in SOPs und Qualitätssicherung geschult. Netzwerk-, POS- und Drucker-Setups aufgebaut und gewartet; Buchungsengine und Loyalty-Site technisch erneuert. Steuerung der digitalen Marketingkampagnen (Google Ads) und Steigerung der direkten Webseiten-Buchungen.',
         result: 'Check-in-Fehler und Channel-Konflikte in allen Häusern reduziert, Verfügbarkeiten durch Backups und Zugriffsrichtlinien stabilisiert und Teams durch wiederholbare Schulungen prüfungsbereit gehalten.',
       },
       fures: {
@@ -489,8 +520,8 @@ export const translations = {
     },
     education: {
         title: 'Ausbildung',
-        tourism: { degree: 'Tourismus- & Hotelmanagement (FH-Grad)', university: 'Anadolu University', date: '2025 – Laufend', details: ['Front-Office-Management, Hospitality-Recht, Revenue/Immobilien-Module – passend für RWR-Antrag.'] },
-        aof: { degree: 'Webdesign & Coding (FH-Grad)', university: 'Anadolu University', date: '2023 – Laufend', details: ['Schwerpunkt: Web-Entwicklung & IT-Systeme. (Dieser Abschluss qualifiziert als Mangelberuf “Datenverarbeitung/Techniker” für die Rot-Weiß-Rot-Karte.)'] },
+        tourism: { degree: 'Tourismus- & Hotelmanagement (Associate Degree / Diplom)', university: 'Anadolu University', date: '2025 – Laufend', details: ['Front-Office-Management, Hospitality-Recht, Revenue/Immobilien-Module – passend für RWR-Antrag.'] },
+        aof: { degree: 'Webdesign & Coding (Associate Degree / Diplom)', university: 'Anadolu University', date: '2023 – Laufend', details: ['Schwerpunkt: Web-Entwicklung & IT-Systeme. (Dieser Abschluss qualifiziert als Mangelberuf “Datenverarbeitung/Techniker” für die Rot-Weiß-Rot-Karte.)'] },
         oth: { degree: 'Produktions- & Automatisierungstechnik', university: 'OTH Regensburg, Deutschland', date: '2015 – 2017', details: ['Technische Produktionsgrundlagen, Automatisierungsprinzipien und deutsche Fachsprache.'] }
     },
     certificates: {
@@ -513,7 +544,15 @@ export const translations = {
         title: 'Fachgebiete',
         hospitality: { title: 'Hoteltechnologie', items: [{ name: 'ElektraWeb', level: 'Experte', percentage: 95 }, { name: 'Opera PMS', level: 'Experte', percentage: 90 }, { name: 'Sedna/Protel/MICROS', level: 'Ausgezeichnet', percentage: 85 }] },
         web: { title: 'Web- & KI-Entwicklung', items: [{ name: 'JavaScript', level: 'Ausgezeichnet', percentage: 88 }, { name: 'React/TypeScript', level: 'Ausgezeichnet', percentage: 82 }, { name: 'KI & Automatisierung (Gemini API)', level: 'Experte', percentage: 95 }] },
-        digital: { title: 'Digitale Strategie', items: [{ name: 'SEO/SEM', level: 'Experte', percentage: 95 }, { name: 'Social-Media-Management', level: 'Experte', percentage: 90 }, { name: 'Inhaltsstrategie', level: 'Ausgezeichnet', percentage: 85 }] },
+        digital: {
+          title: 'Digitales Marketing & Design',
+          items: [
+            { name: 'Google Marketing Platform (Ads, Analytics, Search Console, My Business)', level: 'Experte', percentage: 95 },
+            { name: 'Grafik & Design (Adobe Photoshop, Canva, Video)', level: 'Sehr gut', percentage: 90 },
+            { name: 'Social Media Growth (Instagram Reels, Content-Planung)', level: 'Experte', percentage: 92 },
+            { name: 'SEO & SEM (Hotels)', level: 'Experte', percentage: 95 },
+          ],
+        },
         languages: { title: 'Sprachen', items: [{ name: 'Türkisch', level: 'Muttersprache', percentage: 100 }, { name: 'Deutsch', level: 'Fortgeschritten (C1)', percentage: 90 }, { name: 'Englisch', level: 'Fließend (B2.2)', percentage: 80 }] }
     },
     projects: {
@@ -581,10 +620,9 @@ export const translations = {
       pretitle: 'Operaciones IT y Front Office',
       title: 'IT-Systembetreuer & Front Office Manager',
       titleGradient: 'Listo para Austria.',
-      subtitle: 'Profesional hotelero con base técnica. Mantengo su front office estable con Gastrodat/Opera y protejo la infraestructura IT. Gestiono el estrés y puedo incorporarme de inmediato en Austria.',
+      subtitle:
+        'Gestor de IT y recepción con enfoque en marketing digital. Mantengo la recepción estable con Gastrodat/Opera y aumento las reservas directas mediante Google Ads, SEO y diseño de contenido profesional. Un perfil integral para tecnología, hospitalidad y crecimiento de ingresos.',
       contact: { phone: 'Teléfono', email: 'Correo', address: 'Dirección' },
-      button1: 'Descubrir Más',
-      button2: 'Cuéntenos su Proyecto',
     },
     features: {
         title: 'Mis Competencias Clave',
@@ -592,6 +630,11 @@ export const translations = {
           operations: { title: 'Optimización de Procesos y Automatización', description: 'Uso herramientas digitales como Gastrodat y Opera para reducir pasos manuales y acelerar la operación.' },
           design: { title: 'Infraestructura IT y Web', description: 'Gestiono sitios web de hotel y mantengo los sistemas estables y seguros.' },
           data: { title: 'Monitoreo y Reporting', description: 'Detecto incidencias pronto con paneles e informes claros para guiar decisiones.' },
+          marketing: {
+            title: 'Marketing Online y Diseño',
+            description:
+              'Gestión profesional de Google Ads y Analytics para aumentar ingresos. Creo contenido social y diseños del hotel (menús, folletos) sin coste de agencia.',
+          },
           sector: { title: 'Enfoque Hotelero', description: 'He gestionado recepción, canales y comunicación con huéspedes en sitio; brindo soporte técnico a pymes turísticas.' },
         }
       },
@@ -602,7 +645,8 @@ export const translations = {
         company: 'Dorana Tourism Group / Near East University',
         date: 'Mayo 2023 – Actualidad',
         problem: 'Unificar SOP de recepción en 6 hoteles y una agencia, desplegar Gastrodat/Opera y Channel Manager con infraestructura IT estable.',
-        action: 'Implementé Gastrodat con conexiones Booking.com/Expedia, formé al equipo de recepción en SOP y control de calidad, y configuré/rediseñé red, TPV e impresoras. Actualicé motor de reservas y programa de fidelidad para asegurar ventas online.',
+        action:
+          'Implementé Gastrodat con conexiones Booking.com/Expedia, formé al equipo de recepción en SOP y control de calidad, y configuré/rediseñé red, TPV e impresoras. Actualicé motor de reservas y programa de fidelidad para asegurar ventas online. Gestioné campañas de marketing digital (Google Ads) y aumenté las reservas directas en la web.',
         result: 'Reduje errores de check-in y conflictos de canales, estabilicé la disponibilidad con backups y políticas de acceso y mantuve a los equipos listos para auditoría con formaciones repetibles.',
       },
       fures: {
@@ -659,7 +703,15 @@ export const translations = {
         title: 'Áreas de especialización',
         hospitality: { title: 'Tecnología Hotelera', items: [{ name: 'ElektraWeb', level: 'Experto', percentage: 95 }, { name: 'Opera PMS', level: 'Experto', percentage: 90 }, { name: 'Sedna/Protel/MICROS', level: 'Excelente', percentage: 85 }] },
         web: { title: 'Desarrollo Web e IA', items: [{ name: 'JavaScript', level: 'Excelente', percentage: 88 }, { name: 'React/TypeScript', level: 'Excelente', percentage: 82 }, { name: 'IA y Automatización (Gemini API)', level: 'Experto', percentage: 95 }] },
-        digital: { title: 'Estrategia Digital', items: [{ name: 'SEO/SEM', level: 'Experto', percentage: 95 }, { name: 'Gestión de Redes Sociales', level: 'Experto', percentage: 90 }, { name: 'Estrategia de Contenido', level: 'Excelente', percentage: 85 }] },
+        digital: {
+          title: 'Marketing Digital y Diseño',
+          items: [
+            { name: 'Google Marketing Platform (Ads, Analytics, Search Console, My Business)', level: 'Experto', percentage: 95 },
+            { name: 'Gráfico y Diseño (Adobe Photoshop, Canva, Video)', level: 'Muy bueno', percentage: 90 },
+            { name: 'Social Media Growth (Instagram Reels, planificación de contenido)', level: 'Experto', percentage: 92 },
+            { name: 'SEO y SEM (Hoteles)', level: 'Experto', percentage: 95 },
+          ],
+        },
         languages: { title: 'Idiomas', items: [{ name: 'Turco', level: 'Nativo', percentage: 100 }, { name: 'Alemán', level: 'Avanzado (C1)', percentage: 90 }, { name: 'Inglés', level: 'Fluido (B2.2)', percentage: 80 }] }
     },
     projects: {
