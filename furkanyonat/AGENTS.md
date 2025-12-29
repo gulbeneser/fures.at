@@ -13,6 +13,7 @@ Bu klasör Furkan Yonat'ın ÖNORM uyumlu CV sayfasını barındırır. Buradaki
 - Hero başlıklarında "hiyerarşi" vurgusu kullanılmaz; teslimat ve sahada hazır olma mesajı tekil dille verilir.
 - Bio/hero metni dijital pazarlama katkısını net vurgulamalı (Google Ads, SEO, içerik tasarımı ile direkt rezervasyon artışı) ve ajans dili içermemelidir.
 - Eğitimde turizm/otelcilik (2025–) ve Web Design & Coding (2023–) önlisansları ile Regensburg teknik eğitimi (tamamlanma belirtmeden) kalmalıdır; Web Design satırındaki RWR uygunluk notunu silme.
+- Web Design & Coding önlisansı 2020–2023 aralığında tamamlandı; tarih formatını bu şekilde koru.
 
 ## Test ve SEO
 - İçerik değişikliklerinden sonra `npm run build` çalıştır.

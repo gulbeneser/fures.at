@@ -140,7 +140,7 @@ export const translations = {
     education: {
         title: 'Eğitim',
         tourism: { degree: 'Turizm ve Otel İşletmeciliği (Önlisans)', university: 'Anadolu Üniversitesi', date: '2025 – Devam ediyor', details: ['Ön büro yönetimi, konaklama hukuku ve gelir/gayrimenkul modülleri; Avusturya RWR başvurusuna uygun müfredat.'] },
-        aof: { degree: 'Web Tasarımı ve Kodlama (Önlisans)', university: 'Anadolu Üniversitesi', date: '2023 – Devam ediyor', details: ['Web geliştirme ve IT sistemleri odağı. (Bu diploma, RWR Kart için “Veri İşleme/Teknisyen” eksik meslek grubuna yeterlilik sağlar.)'] },
+        aof: { degree: 'Web Tasarımı ve Kodlama (Önlisans)', university: 'Anadolu Üniversitesi', date: '2020 – 2023', details: ['Web geliştirme ve IT sistemleri odağı. (Bu diploma, RWR Kart için “Veri İşleme/Teknisyen” eksik meslek grubuna yeterlilik sağlar.)'] },
         oth: { degree: 'Üretim ve Otomasyon Teknolojileri', university: 'OTH Regensburg, Almanya', date: '2015 – 2017', details: ['Teknik üretim temelleri, otomasyon prensipleri ve Alman teknik dil yetkinliği.'] }
     },
     certificates: {
@@ -364,7 +364,7 @@ export const translations = {
     education: {
         title: 'Education',
         tourism: { degree: 'Associate Degree in Tourism & Hotel Management', university: 'Anadolu University', date: '2025 – Present', details: ['Front office management, hospitality law, revenue/real-estate modules aligned with Austrian RWR requirements.'] },
-        aof: { degree: 'Associate Degree in Web Design & Coding', university: 'Anadolu University', date: '2023 – Present', details: ['Focus on web development & IT systems. (This degree qualifies as shortage occupation “Data Processing/Technician” for the Red-White-Red Card.)'] },
+        aof: { degree: 'Associate Degree in Web Design & Coding', university: 'Anadolu University', date: '2020 – 2023', details: ['Focus on web development & IT systems. (This degree qualifies as shortage occupation “Data Processing/Technician” for the Red-White-Red Card.)'] },
         oth: { degree: 'Production & Automation Technologies', university: 'OTH Regensburg, Germany', date: '2015 – 2017', details: ['Technical production fundamentals, automation principles, and German technical language proficiency.'] }
     },
     certificates: {
@@ -521,7 +521,7 @@ export const translations = {
     education: {
         title: 'Ausbildung',
         tourism: { degree: 'Tourismus- & Hotelmanagement (Associate Degree / Diplom)', university: 'Anadolu University', date: '2025 – Laufend', details: ['Front-Office-Management, Hospitality-Recht, Revenue/Immobilien-Module – passend für RWR-Antrag.'] },
-        aof: { degree: 'Webdesign & Coding (Associate Degree / Diplom)', university: 'Anadolu University', date: '2023 – Laufend', details: ['Schwerpunkt: Web-Entwicklung & IT-Systeme. (Dieser Abschluss qualifiziert als Mangelberuf “Datenverarbeitung/Techniker” für die Rot-Weiß-Rot-Karte.)'] },
+        aof: { degree: 'Webdesign & Coding (Associate Degree / Diplom)', university: 'Anadolu University', date: '2020 – 2023', details: ['Schwerpunkt: Web-Entwicklung & IT-Systeme. (Dieser Abschluss qualifiziert als Mangelberuf “Datenverarbeitung/Techniker” für die Rot-Weiß-Rot-Karte.)'] },
         oth: { degree: 'Produktions- & Automatisierungstechnik', university: 'OTH Regensburg, Deutschland', date: '2015 – 2017', details: ['Technische Produktionsgrundlagen, Automatisierungsprinzipien und deutsche Fachsprache.'] }
     },
     certificates: {
@@ -680,7 +680,7 @@ export const translations = {
     education: {
         title: 'Educación',
         tourism: { degree: 'Grado Asociado en Turismo y Gestión Hotelera', university: 'Anadolu University', date: '2025 – En curso', details: ['Gestión de recepción, derecho hotelero y módulos de revenue/inmobiliario alineados con el proceso RWR.'] },
-        aof: { degree: 'Grado Asociado en Diseño y Programación Web', university: 'Anadolu University', date: '2023 – En curso', details: ['Enfoque en desarrollo web y sistemas IT. (Este título califica como ocupación escasa “Procesamiento de datos/Técnico” para la tarjeta Rojo-Blanco-Rojo.)'] },
+        aof: { degree: 'Grado Asociado en Diseño y Programación Web', university: 'Anadolu University', date: '2020 – 2023', details: ['Enfoque en desarrollo web y sistemas IT. (Este título califica como ocupación escasa “Procesamiento de datos/Técnico” para la tarjeta Rojo-Blanco-Rojo.)'] },
         oth: { degree: 'Tecnologías de Producción y Automatización', university: 'OTH Regensburg, Alemania', date: '2015 – 2017', details: ['Fundamentos de producción técnica, principios de automatización y dominio del alemán técnico.'] }
     },
     certificates: {
