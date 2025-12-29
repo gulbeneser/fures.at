@@ -5,13 +5,16 @@ export const translations = {
     name: 'Furkan Yonat',
     title: 'IT-Systembetreuer & Front Office Manager | Web Tasarımı ve Kodlama (Önlisans)',
     vision: 'Avusturya\'da uzun vadeli çalışmaya hazır, C1 Almancaya ve ön büro/IT altyapısı kurulumunda saha deneyimine sahip. Konaklama operasyonlarını güvence altına alırken aynı anda web altyapısını ve sistem desteğini yönetir.',
-    nav: { 
-      experience: 'Deneyim', 
-      skills: 'Yetenekler', 
-      projects: 'Projeler', 
-      more: 'Daha Fazla',
+    nav: {
+      experience: 'Deneyim',
+      skills: 'Yetenekler',
+      projects: 'Projeler',
+      more: 'Menü',
       education: 'Eğitim',
       certificates: 'Sertifikalar'
+    },
+    actions: {
+      downloadPdf: 'PDF İndir',
     },
     hero: {
       pretitle: 'IT & Ön Büro Operasyonları',
@@ -53,30 +56,48 @@ export const translations = {
         problem: 'Turizm ve KOBİ müşterileri, otel web sitelerini ve rezervasyon motorlarını güncel tutacak, aynı zamanda sistem desteği verecek güvenilir bir uzmana ihtiyaç duyuyordu.',
         action: 'Yan iş olarak otel web siteleri ve rezervasyon motorları geliştirdim (React/JS), SEO ve güvenlik ayarlarını kurdum. Sedna/ElektraWeb API entegrasyonları ve teknik destek sağladım; teslim sonrası bakım ve içerik güncellemelerini bizzat yaptım.',
         result: 'Yan projelerde hızlı devreye alma ve düşük bakım maliyeti sağladım; çağrı başına çözüm süresini kısaltarak müşteri memnuniyetini yükselttim. Ana işime engel olmayacak esnek bir destek modeli kurdum.',
+        tasks: [
+          'React/JS ile otel web sitelerini geliştirme ve bakım.',
+          'Turizm işletmelerine dijitalleşme projelerinde teknik danışmanlık.',
+          'Misafir iletişimi için yapay zeka araçlarının devreye alınması.',
+        ],
       },
-      mimoza_manager: { 
-        role: 'Otel Müdür Yardımcısı', 
-        company: 'Mimoza Beach Hotel & Dorana Hotels', 
-        date: 'Tem 2021 – May 2023', 
-        tasks: ['Kâr ve zarar analizini, maliyet optimizasyonunu, rezervasyon ve misafir iletişimini yönetti.', 'Ekip eğitimi ve departmanlar arası uyumu sağladı.', 'Otel sistemlerini (ElektraWeb, Sedna) kurdu ve pazarlama planları ile hizmet kalitesi programlarına liderlik etti.'] 
+      mimoza_manager: {
+        role: 'Otel Müdür Yardımcısı',
+        company: 'Mimoza Beach Hotel & Dorana Hotels',
+        date: 'Tem 2021 – May 2023',
+        tasks: [
+          'Günlük operasyonu ve personel planlamasını yönetti.',
+          'Misafir memnuniyeti ve şikayet yönetiminden sorumluydu.',
+          'Hijyen ve kalite standartlarını denetledi.',
+        ]
       },
       mimoza_reception: {
         role: 'Resepsiyonist',
         company: 'Mimoza Beach Hotel',
         date: 'Kas 2019 – Tem 2021',
-        tasks: ['Ön büro operasyonları, misafir karşılama, check-in/check-out işlemleri ve şikayet yönetimi.', 'Rezervasyon sistemlerini ve kanal yöneticilerini etkin bir şekilde kullandı.']
+        tasks: [
+          'Check-in/check-out, kasa ve faturalama işlemleri.',
+          'Misafirlerle ilgilenme ve rezervasyonların (OTA & direkt) yönetimi.',
+        ]
       },
       concorde: {
         role: 'Resepsiyonist',
         company: 'Concorde Luxury Resort & Casino',
         date: 'Ağu 2018 – Kas 2019',
-        tasks: ['5 yıldızlı bir tesiste misafir ilişkileri ve VIP hizmetleri yönetimi.', 'Departmanlar arası koordinasyonu sağlayarak misafir memnuniyetini en üst düzeyde tuttu.']
+        tasks: [
+          '5 yıldızlı ortamda misafir ilişkileri yönetimi.',
+          'Uluslararası VIP misafirlerle iletişim.',
+        ]
       },
       granada: {
         role: 'Resepsiyonist',
         company: 'Granada Luxury Hotels',
         date: 'May 2018 – Ağu 2018',
-        tasks: ['Yoğun sezonda ön büro operasyonlarını yürüttü.', 'Nakit işlemleri ve günlük raporlamaları gerçekleştirdi.']
+        tasks: [
+          '5 yıldızlı ortamda misafir ilişkileri yönetimi.',
+          'Uluslararası VIP misafirlerle iletişim.',
+        ]
       },
       germany: {
         role: 'Almanya Deneyimi (Sanayi & Lojistik)',
@@ -206,9 +227,9 @@ export const translations = {
       xing: 'https://www.xing.com/profile/Furkan_Yonat2/'
     },
     chatbot: {
-      greeting: 'Merhaba! Ben Furkan\'ın kariyer asistanı. Size nasıl yardımcı olabilirim?',
+      greeting: 'Merhaba! Furkan Yonat hakkında sorularınızı yanıtlıyorum.',
       placeholder: 'Bir soru sorun...',
-      title: 'Kariyer Asistanı',
+      title: 'Profil Sohbeti',
       notConfigured: 'AI asistanı yapılandırılmamış. API anahtarı eksik.',
       unavailable: 'AI asistanı şu anda kullanılamıyor. Lütfen daha sonra tekrar deneyin.',
       voiceStart: 'Sesli komutu başlat',
@@ -217,7 +238,7 @@ export const translations = {
     footer: {
         copyright: `© ${new Date().getFullYear()} Furkan Yonat.`,
         motto: 'Tutku ve hassasiyetle inşa edilmiştir.',
-        poweredBy: 'Powered by'
+        poweredBy: ''
     },
     theme: {
         light: 'Açık',
@@ -232,10 +253,13 @@ export const translations = {
     nav: {
       experience: 'Experience',
       skills: 'Skills',
-      projects: 'Projects', 
-      more: 'More',
+      projects: 'Projects',
+      more: 'Menu',
       education: 'Education',
       certificates: 'Certificates'
+    },
+    actions: {
+      downloadPdf: 'Download PDF',
     },
     hero: {
       pretitle: 'IT & Front Office Operations',
@@ -277,30 +301,48 @@ export const translations = {
         problem: 'Hotels and SMBs needed reliable website and booking engine upkeep without pulling focus from my primary role.',
         action: 'Delivered hotel websites and booking engines (React/JS), set up SEO and security, and supported Sedna/ElektraWeb API integrations. Provided post-launch maintenance personally on an on-call basis.',
         result: 'Achieved fast turnarounds and low maintenance costs; shortened issue resolution per call and kept all engagements explicitly part-time to avoid conflicts with full-time duties.',
+        tasks: [
+          'Developed and maintained hotel websites using React/JS.',
+          'Provided technical consulting for tourism businesses on digitalization projects.',
+          'Implemented AI tools to support guest services.',
+        ],
       },
-      mimoza_manager: { 
-        role: 'Hotel Assistant Manager', 
-        company: 'Mimoza Beach Hotel & Dorana Hotels', 
-        date: 'Jul 2021 – May 2023', 
-        tasks: ['Owned P&L analysis, cost optimization, reservation & guest comms.', 'Led team training and cross-department alignment.', 'Rolled out hotel systems (ElektraWeb, Sedna) and led marketing plans and service quality programs.'] 
+      mimoza_manager: {
+        role: 'Hotel Assistant Manager',
+        company: 'Mimoza Beach Hotel & Dorana Hotels',
+        date: 'Jul 2021 – May 2023',
+        tasks: [
+          'Led daily operations and workforce planning.',
+          'Accountable for guest satisfaction and complaint management.',
+          'Oversaw hygiene and quality standards.',
+        ]
       },
       mimoza_reception: {
         role: 'Receptionist',
         company: 'Mimoza Beach Hotel',
         date: 'Nov 2019 – Jul 2021',
-        tasks: ['Handled front-office operations, guest check-in/check-out, and complaint management.', 'Effectively utilized reservation systems and channel managers.']
+        tasks: [
+          'Managed check-in/check-out, cash desk, and invoicing.',
+          'Handled guest care and reservations (OTA & direct).',
+        ]
       },
       concorde: {
         role: 'Receptionist',
         company: 'Concorde Luxury Resort & Casino',
         date: 'Aug 2018 – Nov 2019',
-        tasks: ['Managed guest relations and VIP services in a 5-star resort setting.', 'Ensured high levels of guest satisfaction through inter-departmental coordination.']
+        tasks: [
+          'Guest relations in a 5-star environment.',
+          'Handled international VIP guests.',
+        ]
       },
       granada: {
         role: 'Receptionist',
         company: 'Granada Luxury Hotels',
         date: 'May 2018 – Aug 2018',
-        tasks: ['Executed front desk operations during a high-demand season.', 'Handled cash transactions and daily reporting.']
+        tasks: [
+          'Guest relations in a 5-star environment.',
+          'Handled international VIP guests.',
+        ]
       },
       germany: {
         role: 'Germany Experience (Industry & Logistics)',
@@ -428,9 +470,9 @@ export const translations = {
       xing: 'https://www.xing.com/profile/Furkan_Yonat2/'
     },
     chatbot: {
-      greeting: 'Hello! I am Furkan\'s career assistant. How can I help you?',
+      greeting: 'Hello! I\'m here to answer questions about Furkan Yonat.',
       placeholder: 'Ask a question...',
-      title: 'Career Assistant',
+      title: 'Profile Chat',
       notConfigured: 'AI assistant is not configured. API key is missing.',
       unavailable: 'The AI assistant is currently unavailable. Please try again later.',
       voiceStart: 'Start voice input',
@@ -439,7 +481,7 @@ export const translations = {
     footer: {
       copyright: `© ${new Date().getFullYear()} Furkan Yonat.`,
       motto: 'Built with passion and precision.',
-      poweredBy: 'Powered by'
+      poweredBy: ''
     },
     theme: {
         light: 'Light',
@@ -455,9 +497,12 @@ export const translations = {
       experience: 'Erfahrung',
       skills: 'Fähigkeiten',
       projects: 'Projekte',
-      more: 'Mehr',
+      more: 'Menü',
       education: 'Ausbildung',
       certificates: 'Zertifikate'
+    },
+    actions: {
+      downloadPdf: 'PDF herunterladen',
     },
     hero: {
       pretitle: 'IT & Front-Office-Betrieb',
@@ -499,16 +544,34 @@ export const translations = {
         problem: 'Hotels und KMU brauchten verlässliche Betreuung von Websites und Buchungsengines, ohne meinen Vollzeitfokus zu stören.',
         action: 'Nebenberuflich Hotel-Websites und Buchungsengines (React/JS) geliefert, SEO- und Sicherheits-Setups umgesetzt und Sedna/ElektraWeb-API-Integrationen unterstützt. Wartung nach Livegang persönlich im Bereitschaftsmodus übernommen.',
         result: 'Schnelle Implementierungen und geringe Wartungskosten erreicht; Ticket-Lösungen pro Anruf verkürzt und Engagements ausdrücklich als Nebentätigkeit gekennzeichnet, um Loyalität zum Hauptarbeitgeber zu sichern.',
+        tasks: [
+          'Entwicklung und Wartung von Hotel-Webseiten (React, JS).',
+          'Technische Beratung für Tourismusbetriebe bei Digitalisierungsprojekten.',
+          'Implementierung von KI-Tools zur Gästebetreuung.',
+        ],
       },
       mimoza_manager: {
         role: 'Stellvertretender Hoteldirektor',
         company: 'Mimoza Beach Hotel & Dorana Hotels',
         date: 'Juli 2021 – Mai 2023',
-        tasks: ['Verantwortlich für GuV-Analyse, Kostenoptimierung, Reservierung & Gästekommunikation.', 'Leitete Teamschulungen und abteilungsübergreifende Abstimmung.', 'Führte Hotelsysteme (ElektraWeb, Sedna) ein und leitete Marketingpläne und Servicequalitätsprogramme.']
+        tasks: [
+          'Leitung des operativen Tagesgeschäfts und Personalplanung.',
+          'Verantwortlich für Gästezufriedenheit und Beschwerdemanagement.',
+          'Überwachung der Hygiene- und Qualitätsstandards.',
+        ]
       },
-      mimoza_reception: { role: 'Rezeptionist', company: 'Mimoza Beach Hotel', date: 'Nov. 2019 – Juli 2021', tasks: ['Abwicklung des Front-Office-Betriebs, Check-in/Check-out der Gäste und Beschwerdemanagement.', 'Effektive Nutzung von Reservierungssystemen und Channel-Managern.'] },
-      concorde: { role: 'Rezeptionist', company: 'Concorde Luxury Resort & Casino', date: 'Aug. 2018 – Nov. 2019', tasks: ['Management der Gästebetreuung und VIP-Services in einem 5-Sterne-Resort.', 'Sicherstellung einer hohen Gästezufriedenheit durch abteilungsübergreifende Koordination.'] },
-      granada: { role: 'Rezeptionist', company: 'Granada Luxury Hotels', date: 'Mai 2018 – Aug. 2018', tasks: ['Durchführung des Rezeptionsbetriebs während einer Hochsaison.', 'Abwicklung von Bargeldtransaktionen und täglicher Berichterstattung.'] },
+      mimoza_reception: { role: 'Rezeptionist', company: 'Mimoza Beach Hotel', date: 'Nov. 2019 – Juli 2021', tasks: [
+        'Check-in/Check-out, Kassenführung und Rechnungsstellung.',
+        'Betreuung der Gäste und Bearbeitung von Reservierungen (OTA & Direkt).',
+      ] },
+      concorde: { role: 'Rezeptionist', company: 'Concorde Luxury Resort & Casino', date: 'Aug. 2018 – Nov. 2019', tasks: [
+        'Gästebetreuung in einem 5-Sterne-Umfeld.',
+        'Umgang mit internationalen VIP-Gästen.',
+      ] },
+      granada: { role: 'Rezeptionist', company: 'Granada Luxury Hotels', date: 'Mai 2018 – Aug. 2018', tasks: [
+        'Gästebetreuung in einem 5-Sterne-Umfeld.',
+        'Umgang mit internationalen VIP-Gästen.',
+      ] },
       germany: { role: 'Berufserfahrung Deutschland (Industrie & Logistik)', company: 'Regensburg, Bayern', date: '2012 – 2017', tasks: ['2015–2016 BMW Group: Qualitätssicherung & Produktion.', '2013–2014 Continental & Infineon: Maschinenführung & technische Abläufe.', '2014 FedEx: Logistik & Versand.', 'Hier habe ich deutsche Arbeitsmoral, Pünktlichkeit und präzise Abläufe verinnerlicht.'] },
       anar_metal: { role: 'Maschinenbediener', company: 'Anar Metal', date: 'Nov. 2017 – Mai 2018', tasks: ['Bedienung von metallverarbeitenden Maschinen und Sicherstellung der Produktion gemäß Qualitätsstandards.'] },
       saribekir: { role: 'Maschinenbediener', company: 'SARIBEKİR PACKAGING', date: 'Juni 2017 – Nov. 2017', tasks: ['Management des Maschinenbetriebs an Verpackungslinien und Überwachung der Effizienz.'] },
@@ -587,9 +650,9 @@ export const translations = {
       xing: 'https://www.xing.com/profile/Furkan_Yonat2/'
     },
     chatbot: {
-      greeting: 'Hallo! Ich bin Furkans Karriereassistent. Wie kann ich Ihnen helfen?',
+      greeting: 'Guten Tag! Ich beantworte gern Ihre Fragen zu Furkan Yonat.',
       placeholder: 'Stellen Sie eine Frage...',
-      title: 'Karriereassistent',
+      title: 'Profil-Chat',
       notConfigured: 'KI-Assistent ist nicht konfiguriert. API-Schlüssel fehlt.',
       unavailable: 'Der KI-Assistent ist derzeit nicht verfügbar. Bitte versuchen Sie es später erneut.',
       voiceStart: 'Spracheingabe starten',
@@ -598,7 +661,7 @@ export const translations = {
     footer: {
       copyright: `© ${new Date().getFullYear()} Furkan Yonat.`,
       motto: 'Mit Leidenschaft und Präzision gebaut.',
-      poweredBy: 'Angetrieben von'
+      poweredBy: ''
     },
     theme: {
         light: 'Hell',
@@ -614,9 +677,12 @@ export const translations = {
       experience: 'Experiencia',
       skills: 'Habilidades',
       projects: 'Proyectos',
-      more: 'Más',
+      more: 'Menú',
       education: 'Educación',
       certificates: 'Certificados'
+    },
+    actions: {
+      downloadPdf: 'Descargar PDF',
     },
     hero: {
       pretitle: 'Operaciones IT y Front Office',
@@ -658,16 +724,34 @@ export const translations = {
         problem: 'Hoteles y pymes necesitaban soporte fiable para webs y motores de reserva sin interferir con mi puesto principal.',
         action: 'Como actividad adicional, entregué webs y motores de reserva (React/JS), configuré SEO y seguridad, y apoyé integraciones API de Sedna/ElektraWeb. Asumí mantenimiento post-lanzamiento personalmente en modalidad on-call.',
         result: 'Logré puestas en marcha rápidas y bajo coste de mantenimiento; reduje tiempos de resolución por ticket y mantuve todos los proyectos declarados como actividad secundaria para proteger mi rol principal.',
+        tasks: [
+          'Desarrollo y mantenimiento de sitios web hoteleros (React, JS).',
+          'Asesoría técnica para empresas turísticas en proyectos de digitalización.',
+          'Implementación de herramientas de IA para la atención de huéspedes.',
+        ],
       },
       mimoza_manager: {
         role: 'Subdirector de Hotel',
         company: 'Mimoza Beach Hotel & Dorana Hotels',
         date: 'Jul 2021 – May 2023',
-        tasks: ['Responsable del análisis de P&L, optimización de costos, reservas y comunicación con los huéspedes.', 'Lideré la formación del equipo y la alineación interdepartamental.', 'Implementé sistemas hoteleros (ElektraWeb, Sedna) y lideré planes de marketing y programas de calidad de servicio.']
+        tasks: [
+          'Gestión de la operación diaria y la planificación de personal.',
+          'Responsable de la satisfacción de huéspedes y gestión de quejas.',
+          'Supervisión de los estándares de higiene y calidad.',
+        ]
       },
-      mimoza_reception: { role: 'Recepcionista', company: 'Mimoza Beach Hotel', date: 'Nov 2019 – Jul 2021', tasks: ['Manejo de operaciones de recepción, check-in/check-out de huéspedes y gestión de quejas.', 'Utilización efectiva de sistemas de reserva y channel managers.'] },
-      concorde: { role: 'Recepcionista', company: 'Concorde Luxury Resort & Casino', date: 'Ago 2018 – Nov 2019', tasks: ['Gestión de relaciones con los huéspedes y servicios VIP en un resort de 5 estrellas.', 'Aseguré altos niveles de satisfacción de los huéspedes mediante la coordinación interdepartamental.'] },
-      granada: { role: 'Recepcionista', company: 'Granada Luxury Hotels', date: 'May 2018 – Ago 2018', tasks: ['Ejecuté operaciones de recepción durante una temporada de alta demanda.', 'Manejo de transacciones en efectivo e informes diarios.'] },
+      mimoza_reception: { role: 'Recepcionista', company: 'Mimoza Beach Hotel', date: 'Nov 2019 – Jul 2021', tasks: [
+        'Check-in/check-out, caja y facturación.',
+        'Atención a huéspedes y gestión de reservas (OTA y directas).',
+      ] },
+      concorde: { role: 'Recepcionista', company: 'Concorde Luxury Resort & Casino', date: 'Ago 2018 – Nov 2019', tasks: [
+        'Atención a huéspedes en un entorno de 5 estrellas.',
+        'Gestión de huéspedes VIP internacionales.',
+      ] },
+      granada: { role: 'Recepcionista', company: 'Granada Luxury Hotels', date: 'May 2018 – Ago 2018', tasks: [
+        'Atención a huéspedes en un entorno de 5 estrellas.',
+        'Gestión de huéspedes VIP internacionales.',
+      ] },
       germany: { role: 'Experiencia en Alemania (Industria y Logística)', company: 'Ratisbona, Baviera', date: '2012 – 2017', tasks: ['2015–2016 BMW Group: Control de calidad y producción.', '2013–2014 Continental & Infineon: Manejo de maquinaria y procesos técnicos.', '2014 FedEx: Logística y envíos.', 'Aquí interioricé la disciplina laboral alemana, la puntualidad y los flujos precisos.'] },
       anar_metal: { role: 'Operador de Máquinas', company: 'Anar Metal', date: 'Nov 2017 – May 2018', tasks: ['Operé maquinaria para trabajar metales y aseguré que la producción cumpliera con los estándares de calidad.'] },
       saribekir: { role: 'Operador de Máquinas', company: 'SARIBEKİR PACKAGING', date: 'Jun 2017 – Nov 2017', tasks: ['Gestioné las operaciones de las máquinas en las líneas de producción de envases y supervisé la eficiencia.'] },
@@ -746,9 +830,9 @@ export const translations = {
       xing: 'https://www.xing.com/profile/Furkan_Yonat2/'
     },
     chatbot: {
-      greeting: '¡Hola! Soy el asistente profesional de Furkan. ¿Cómo puedo ayudarte?',
+      greeting: '¡Hola! Respondo tus preguntas sobre Furkan Yonat.',
       placeholder: 'Haz una pregunta...',
-      title: 'Asistente de Carrera',
+      title: 'Chat de Perfil',
       notConfigured: 'El asistente de IA no está configurado. Falta la clave de API.',
       unavailable: 'El asistente de IA no está disponible en este momento. Vuelve a intentarlo más tarde.',
       voiceStart: 'Iniciar entrada de voz',
@@ -757,7 +841,7 @@ export const translations = {
     footer: {
       copyright: `© ${new Date().getFullYear()} Furkan Yonat.`,
       motto: 'Construido con pasión y precisión.',
-      poweredBy: 'Impulsado por'
+      poweredBy: ''
     },
     theme: {
         light: 'Claro',

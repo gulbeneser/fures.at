@@ -30,9 +30,11 @@ const Footer: React.FC<FooterProps> = ({ t, onAccessibilityClick }) => {
           </button>
         </div>
       </div>
-      <div className="mt-4 text-xs">
-          {t.footer.poweredBy} <a href="https://fures.at" target="_blank" rel="noopener noreferrer" className="font-semibold text-primary-text hover:text-blue-400 transition-colors">Fures</a>
-      </div>
+      {t.footer.poweredBy && (
+        <div className="mt-4 text-xs">
+            {t.footer.poweredBy} <a href="https://fures.at" target="_blank" rel="noopener noreferrer" className="font-semibold text-primary-text hover:text-blue-400 transition-colors">Fures</a>
+        </div>
+      )}
     </footer>
   );
 };

@@ -41,6 +41,10 @@ const Header: React.FC<HeaderProps> = ({ t, language, setLanguage, activeSection
   const moreMenuRef = useRef<HTMLDivElement>(null);
   const moreButtonRef = useRef<HTMLButtonElement>(null);
 
+  const handlePrint = () => {
+    window.print();
+  };
+
   const mainNavItems = ['experience', 'skills', 'projects'];
   const moreNavItems = ['education', 'certificates'];
 
@@ -109,6 +113,18 @@ const Header: React.FC<HeaderProps> = ({ t, language, setLanguage, activeSection
         </nav>
 
         <div className="flex items-center gap-2 pl-2">
+            <button
+              onClick={handlePrint}
+              className="glass-card px-3 py-2 rounded-full text-sm font-semibold border-none flex items-center gap-2 hover:text-primary-text transition-colors"
+              aria-label={t.actions?.downloadPdf || 'Download PDF'}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path d="M5 2a2 2 0 00-2 2v3a1 1 0 102 0V4h10v3a1 1 0 102 0V4a2 2 0 00-2-2H5z" />
+                <path d="M4 9a1 1 0 011 1v3a2 2 0 002 2h6a2 2 0 002-2v-3a1 1 0 112 0v3a4 4 0 01-4 4H7a4 4 0 01-4-4v-3a1 1 0 011-1z" />
+                <path d="M7 9a1 1 0 000 2h2v1a1 1 0 102 0v-1h2a1 1 0 100-2H7z" />
+              </svg>
+              <span>{t.actions?.downloadPdf}</span>
+            </button>
             <div className="flex p-1 rounded-full glass-card bg-transparent border-none shadow-none">
               {Object.keys(translations).map(lang => (
               <button key={lang} onClick={() => setLanguage(lang)} className={`w-8 h-8 flex items-center justify-center text-xs font-semibold rounded-full transition-all duration-300 ${language === lang ? 'active-pill-button' : 'text-secondary-text hover:text-primary-text'}`}>
