@@ -16,20 +16,39 @@ type Theme = 'light' | 'dark' | 'system';
 
 const Hero = ({ t }: { t: any }) => (
   <section id="hero" className="min-h-screen flex items-center justify-center text-center -mt-20">
-    <div className="max-w-3xl mx-auto px-4">
-      <div className="inline-block glass-card rounded-full px-4 py-1.5 text-sm font-semibold mb-4 border-none">
+    <div className="max-w-3xl mx-auto px-4 space-y-6">
+      <div className="space-y-3">
+        <h1 className="text-5xl md:text-7xl font-bold text-primary-text font-display leading-tight">
+          {t.name}
+        </h1>
+        <div className="flex flex-wrap items-center justify-center gap-3 text-sm md:text-base text-secondary-text">
+          <a href={`tel:${t.contactInfo.phone}`} className="glass-card px-3 py-1.5 rounded-full border-none">
+            {t.hero.contact.phone}: {t.contactInfo.phoneDisplay || t.contactInfo.phone}
+          </a>
+          <a href={`mailto:${t.contactInfo.email}`} className="glass-card px-3 py-1.5 rounded-full border-none">
+            {t.hero.contact.email}: {t.contactInfo.email}
+          </a>
+          <div className="glass-card px-3 py-1.5 rounded-full border-none">
+            {t.hero.contact.address}: {t.contactInfo.address}
+          </div>
+        </div>
+      </div>
+      <div className="inline-block glass-card rounded-full px-4 py-1.5 text-sm font-semibold border-none">
+        {t.title}
+      </div>
+      <div className="inline-block glass-card rounded-full px-4 py-1.5 text-sm font-semibold border-none">
         {t.hero.pretitle}
       </div>
-      <h1 className="text-5xl md:text-7xl font-bold text-primary-text font-display leading-tight">
+      <h2 className="text-4xl md:text-6xl font-bold text-primary-text font-display leading-tight">
         {t.hero.title}{' '}
         <span className="text-transparent bg-clip-text bg-[var(--highlight-gradient)]">
           {t.hero.titleGradient}
         </span>
-      </h1>
-      <p className="mt-6 text-lg md:text-xl max-w-2xl mx-auto text-secondary-text leading-relaxed">
+      </h2>
+      <p className="text-lg md:text-xl max-w-2xl mx-auto text-secondary-text leading-relaxed">
         {t.hero.subtitle}
       </p>
-      <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
         <a href="#experience" className="btn btn-primary w-full sm:w-auto">
           {t.hero.button1}
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.707-10.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L9.414 11H13a1 1 0 100-2H9.414l1.293-1.293z" clipRule="evenodd" /></svg>

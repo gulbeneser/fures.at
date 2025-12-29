@@ -1,6 +1,6 @@
 export const translations = {
   tr: {
-    name: 'Furkan YONAT',
+    name: 'Furkan Yonat',
     title: 'IT-Systembetreuer & Front Office Manager | Web Tasarımı ve Kodlama (Önlisans)',
     vision: 'Avusturya\'da uzun vadeli çalışmaya hazır, C1 Almancaya ve ön büro/IT altyapısı kurulumunda saha deneyimine sahip. Konaklama operasyonlarını güvence altına alırken aynı anda web altyapısını ve sistem desteğini yönetir.',
     nav: { 
@@ -16,6 +16,7 @@ export const translations = {
       title: 'Hiyerarşiye Uyumlu.',
       titleGradient: 'Sahada Çözüm Üreten.',
       subtitle: 'Teknik geçmişe sahip deneyimli otel profesyoneli. Gastrodat/Opera ile ön büroyu sorunsuz çalıştırır, IT altyapınızı güvenceye alırım. Hiyerarşiye saygılı, strese dayanıklı ve Avusturya için hemen göreve hazırım.',
+      contact: { phone: 'Telefon', email: 'E-Posta', address: 'Adres' },
       button1: 'Daha Fazlasını Keşfet',
       button2: 'Projenizi Anlatalım',
     },
@@ -176,12 +177,14 @@ export const translations = {
       title: 'Erişilebilirlik Bildirimi',
       statement: 'Bu web sitesi, Web İçeriği Erişilebilirlik Yönergeleri (WCAG) 2.1 AA seviyesine uygun olarak tasarlanmış ve geliştirilmiştir. Tüm kullanıcılar için kapsayıcı bir deneyim sunmayı hedefliyoruz.'
     },
-    contactInfo: { 
-      email: 'furkanyonat@gmail.com', 
+    contactInfo: {
+      email: 'furkanyonat@gmail.com',
       phone: '+905338704176',
-      whatsapp: 'https://wa.me/905338704176', 
-      portfolio: 'https://www.fures.at/furkanyonat/', 
-      profileImage: 'https://i.imgur.com/5d2y3tD.jpeg', 
+      phoneDisplay: '+90 533 870 41 76',
+      address: 'Famagusta, Zypern',
+      whatsapp: 'https://wa.me/905338704176',
+      portfolio: 'https://www.fures.at/furkanyonat/',
+      profileImage: 'https://i.imgur.com/5d2y3tD.jpeg',
       linkedin: 'https://www.linkedin.com/in/furkan-yonat-2745061ba/',
       facebook: 'https://www.facebook.com/furkanyonat900/',
       instagram: 'https://www.instagram.com/furkanyonat9/',
@@ -208,7 +211,7 @@ export const translations = {
     }
   },
   en: {
-    name: 'Furkan YONAT',
+    name: 'Furkan Yonat',
     title: 'IT Systems Support & Front Office Manager | Web Design & Coding (Associate Degree)',
     vision: 'Hands-on hotel IT and front office lead with C1 German, ready for a long-term role in Austria. Keeps reception workflows, channel managers, and web infrastructure stable while following the chain of command.',
     nav: { 
@@ -224,6 +227,7 @@ export const translations = {
       title: 'Hierarchy-Aware.',
       titleGradient: 'Delivers On Site.',
       subtitle: 'Hotel professional with a technical background. I keep your Front Office stable on Gastrodat/Opera and protect the IT stack. Process-compliant, stress-resilient, and ready for Austria.',
+      contact: { phone: 'Phone', email: 'Email', address: 'Address' },
       button1: 'Discover More',
       button2: 'Tell Us Your Project',
     },
@@ -416,7 +420,7 @@ export const translations = {
     }
   },
   de: {
-    name: 'Furkan YONAT',
+    name: 'Furkan Yonat',
     title: 'IT-Systembetreuer & Front Office Manager | Webdesign & Coding (FH-Grad)',
     vision: 'Hands-on IT- und Front-Office-Manager mit C1-Deutsch und Bereitschaft zur langfristigen Anstellung in Österreich. Sichert Gastrodat/Opera-Prozesse, Channel-Manager und Web-Infrastruktur im Einklang mit dem Dienstweg.',
     nav: {
@@ -432,6 +436,7 @@ export const translations = {
       title: 'IT-Systembetreuer & Front Office Manager',
       titleGradient: 'Sofort einsatzbereit.',
       subtitle: 'Erfahrener Hotel-Profi mit technischem Hintergrund. Ich sorge dafür, dass Ihr Front Office mit Gastrodat/Opera reibungslos läuft und Ihre IT-Infrastruktur sicher steht. Hierarchiebewusst, stressresistent und sofort einsatzbereit für Österreich.',
+      contact: { phone: 'Telefon', email: 'E-Mail', address: 'Adresse' },
       button1: 'Mehr entdecken',
       button2: 'Erzählen Sie uns von Ihrem Projekt',
     },
@@ -528,7 +533,17 @@ export const translations = {
       statement: 'Diese Website wurde so konzipiert und entwickelt, dass sie den Web Content Accessibility Guidelines (WCAG) 2.1 Stufe AA entspricht. Wir bemühen uns, allen Nutzern ein inklusives Erlebnis zu bieten.'
     },
     contactInfo: {
-      email: 'furkanyonat@gmail.com', phone: '+905338704176', whatsapp: 'https://wa.me/905338704176', portfolio: 'https://www.fures.at/furkanyonat/', profileImage: 'https://i.imgur.com/5d2y3tD.jpeg', linkedin: 'https://www.linkedin.com/in/furkan-yonat-2745061ba/', facebook: 'https://www.facebook.com/furkanyonat900/', instagram: 'https://www.instagram.com/furkanyonat9/', xing: 'https://www.xing.com/profile/Furkan_Yonat2/'
+      email: 'furkanyonat@gmail.com',
+      phone: '+905338704176',
+      phoneDisplay: '+90 533 870 41 76',
+      address: 'Famagusta, Zypern',
+      whatsapp: 'https://wa.me/905338704176',
+      portfolio: 'https://www.fures.at/furkanyonat/',
+      profileImage: 'https://i.imgur.com/5d2y3tD.jpeg',
+      linkedin: 'https://www.linkedin.com/in/furkan-yonat-2745061ba/',
+      facebook: 'https://www.facebook.com/furkanyonat900/',
+      instagram: 'https://www.instagram.com/furkanyonat9/',
+      xing: 'https://www.xing.com/profile/Furkan_Yonat2/'
     },
     chatbot: {
       greeting: 'Hallo! Ich bin Furkans Karriereassistent. Wie kann ich Ihnen helfen?',
@@ -551,7 +566,7 @@ export const translations = {
     }
   },
   es: {
-    name: 'Furkan YONAT',
+    name: 'Furkan Yonat',
     title: 'IT-Systembetreuer y Front Office Manager | Diseño y Programación Web (Grado Asociado)',
     vision: 'Gestor práctico de IT y recepción con alemán C1 y disposición para un puesto estable en Austria. Mantiene SOP de recepción, Channel Manager y la web corporativa bajo una cadena de mando clara.',
     nav: {
@@ -567,6 +582,7 @@ export const translations = {
       title: 'IT-Systembetreuer & Front Office Manager',
       titleGradient: 'Listo para Austria.',
       subtitle: 'Profesional hotelero con base técnica. Mantengo su front office estable con Gastrodat/Opera y protejo la infraestructura IT. Respeto la jerarquía, gestiono el estrés y puedo incorporarme de inmediato en Austria.',
+      contact: { phone: 'Teléfono', email: 'Correo', address: 'Dirección' },
       button1: 'Descubrir Más',
       button2: 'Cuéntenos su Proyecto',
     },
@@ -663,7 +679,17 @@ export const translations = {
       statement: 'Este sitio web está diseñado y desarrollado para cumplir con las Pautas de Accesibilidad para el Contenido Web (WCAG) 2.1 Nivel AA. Nuestro objetivo es proporcionar una experiencia inclusiva para todos los usuarios.'
     },
     contactInfo: {
-      email: 'furkanyonat@gmail.com', phone: '+905338704176', whatsapp: 'https://wa.me/905338704176', portfolio: 'https://www.fures.at/furkanyonat/', profileImage: 'https://i.imgur.com/5d2y3tD.jpeg', linkedin: 'https://www.linkedin.com/in/furkan-yonat-2745061ba/', facebook: 'https://www.facebook.com/furkanyonat900/', instagram: 'https://www.instagram.com/furkanyonat9/', xing: 'https://www.xing.com/profile/Furkan_Yonat2/'
+      email: 'furkanyonat@gmail.com',
+      phone: '+905338704176',
+      phoneDisplay: '+90 533 870 41 76',
+      address: 'Famagusta, Zypern',
+      whatsapp: 'https://wa.me/905338704176',
+      portfolio: 'https://www.fures.at/furkanyonat/',
+      profileImage: 'https://i.imgur.com/5d2y3tD.jpeg',
+      linkedin: 'https://www.linkedin.com/in/furkan-yonat-2745061ba/',
+      facebook: 'https://www.facebook.com/furkanyonat900/',
+      instagram: 'https://www.instagram.com/furkanyonat9/',
+      xing: 'https://www.xing.com/profile/Furkan_Yonat2/'
     },
     chatbot: {
       greeting: '¡Hola! Soy el asistente profesional de Furkan. ¿Cómo puedo ayudarte?',
