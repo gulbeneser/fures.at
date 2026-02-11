@@ -205,13 +205,13 @@ export const translations = {
       title: 'Öne Çıkan Projeler',
       visitProject: 'Ziyaret Et',
       items: [
-        { name: 'Yapay Zeka Destekli Kıbrıs Tatil Planlayıcısı', description: 'Kullanıcı tercihlerine ve hava durumu bağlamına göre çok dilli, kişiselleştirilmiş seyahat planları oluşturan akıllı uygulama.', link: 'https://www.fures.at/projects/aboutcyprus', tags: ['AI', 'React', 'Travel Tech'] },
         { name: 'Serakıncı Yapay Zeka Ürün Platformu', description: 'Yapay zeka tarafından oluşturulan açıklamalar ve veri kazıma hatları ile otomatik, çok dilli, SEO odaklı katalog.', link: 'https://www.fures.at/projects/serakinci', tags: ['Automation', 'Scraping', 'SEO'] },
+        { name: 'ZuzuMood E‑Ticaret Deneyimi', description: 'Teksas merkezli ZuzuMood için Etsy odaklı ürün vitrinleri, kategori mimarisi, blog akışı ve dönüşüm odaklı butik marka anlatımı tasarlandı.', link: 'https://www.zuzumood.com', tags: ['E-Commerce', 'SEO', 'Brand Experience'] },
+        { name: 'Yapay Zeka Destekli Kıbrıs Tatil Planlayıcısı', description: 'Kullanıcı tercihlerine ve hava durumu bağlamına göre çok dilli, kişiselleştirilmiş seyahat planları oluşturan akıllı uygulama.', link: 'https://www.fures.at/projects/aboutcyprus', tags: ['AI', 'React', 'Travel Tech'] },
         { name: 'Otel ve Acente Entegrasyonu', description: '6 oteli acente operasyonlarıyla entegre ederek süreçleri kolaylaştırdı, maliyetleri düşürdü ve veri akışlarını birleştirdi.', link: 'https://www.fures.at/projects/hotel', tags: ['Digital Transformation', 'Systems'] },
         { name: 'ICALT 2024 Kongre Yönetimi', description: 'Dorana Turizm işbirliğiyle uluslararası bir konferansın planlanması ve koordinasyonu.', link: 'https://www.fures.at/projects/icalt', tags: ['Event Management', 'Logistics'] },
-        { name: 'ZuzuMood E‑Ticaret Deneyimi', description: 'Teksas merkezli ZuzuMood için Etsy odaklı ürün vitrinleri, kategori mimarisi, blog akışı ve dönüşüm odaklı butik marka anlatımı tasarlandı.', link: 'https://www.zuzumood.com', tags: ['E-Commerce', 'SEO', 'Brand Experience'] },
         { name: 'PixShop AI', description: 'Yapay zeka destekli fotoğraf düzenleme, basitleştirildi. Metin komutlarıyla profesyonel düzenlemeler yapın.', link: 'https://pixshop-720548631405.us-west1.run.app/', tags: ['Generative AI', 'SaaS', 'Image Editing'] },
-        { name: 'Pantry Chef AI', description: 'Elinizdeki malzemelerle ne pişireceğinizi bulun. Yapay zeka şefimiz size lezzetli tarifler sunsun.', link: 'https://ai-recipe-generator-720548631405.us-west1.run.app/', tags: ['AI', 'Recipe Generation', 'Web App'] },
+        { name: 'Pantry Chef AI', description: 'Elinizdeki malzemelerle ne pişireceğinizi bulun. Yapay zeka şefimiz size lezzetli tarifler sunsun.', link: 'https://ai-recipe-generator-720548631405.us-west1.run.app/', tags: ['AI', 'Recipe Generation', 'Web App'] }
       ]
     },
     accessibility: {
@@ -455,13 +455,13 @@ export const translations = {
       title: 'Featured Projects',
       visitProject: 'Visit',
       items: [
-        { name: 'AI-Powered Cyprus Holiday Planner', description: 'Intelligent app that creates multilingual, personalized travel plans based on user preferences and weather context.', link: 'https://www.fures.at/projects/aboutcyprus', tags: ['AI', 'React', 'Travel Tech'] },
         { name: 'Serakıncı AI Product Platform', description: 'Automated, multilingual, SEO-focused catalog with AI-generated descriptions and scraping pipelines.', link: 'https://www.fures.at/projects/serakinci', tags: ['Automation', 'Scraping', 'SEO'] },
+        { name: 'ZuzuMood E-Commerce Experience', description: 'Built a conversion-focused boutique storefront for the Texas-based ZuzuMood brand, including Etsy-driven product discovery, category structure, and daily blog flow.', link: 'https://www.zuzumood.com', tags: ['E-Commerce', 'SEO', 'Brand Experience'] },
+        { name: 'AI-Powered Cyprus Holiday Planner', description: 'Intelligent app that creates multilingual, personalized travel plans based on user preferences and weather context.', link: 'https://www.fures.at/projects/aboutcyprus', tags: ['AI', 'React', 'Travel Tech'] },
         { name: 'Hotel & Agency Integration', description: 'Integrated 6 hotels with agency operations; streamlined processes, cut costs, and unified data flows.', link: 'https://www.fures.at/projects/hotel', tags: ['Digital Transformation', 'Systems'] },
         { name: 'ICALT 2024 Congress Management', description: 'Planned and coordinated an international conference in collaboration with Dorana Tourism.', link: 'https://www.fures.at/projects/icalt', tags: ['Event Management', 'Logistics'] },
-        { name: 'ZuzuMood E-Commerce Experience', description: 'Built a conversion-focused boutique storefront for the Texas-based ZuzuMood brand, including Etsy-driven product discovery, category structure, and daily blog flow.', link: 'https://www.zuzumood.com', tags: ['E-Commerce', 'SEO', 'Brand Experience'] },
         { name: 'PixShop AI', description: 'AI-powered photo editing, simplified. Make professional edits with simple text instructions.', link: 'https://pixshop-720548631405.us-west1.run.app/', tags: ['Generative AI', 'SaaS', 'Image Editing'] },
-        { name: 'Pantry Chef AI', description: 'What\'s in your pantry? Enter your ingredients and let our AI chef whip up something delicious.', link: 'https://ai-recipe-generator-720548631405.us-west1.run.app/', tags: ['AI', 'Recipe Generation', 'Web App'] },
+        { name: 'Pantry Chef AI', description: 'What\'s in your pantry? Enter your ingredients and let our AI chef whip up something delicious.', link: 'https://ai-recipe-generator-720548631405.us-west1.run.app/', tags: ['AI', 'Recipe Generation', 'Web App'] }
       ]
     },
     accessibility: {
@@ -638,13 +638,13 @@ export const translations = {
       title: 'Ausgewählte Projekte',
       visitProject: 'Besuchen',
       items: [
-        { name: 'KI-gestützter Zypern-Urlaubsplaner', description: 'Intelligente App, die mehrsprachige, personalisierte Reisepläne basierend auf Benutzerpräferenzen und Wetterkontext erstellt.', link: 'https://www.fures.at/projects/aboutcyprus', tags: ['KI', 'React', 'Reisetechnologie'] },
         { name: 'Serakıncı KI-Produktplattform', description: 'Automatisierter, mehrsprachiger, SEO-fokussierter Katalog mit KI-generierten Beschreibungen und Scraping-Pipelines.', link: 'https://www.fures.at/projects/serakinci', tags: ['Automatisierung', 'Scraping', 'SEO'] },
+        { name: 'ZuzuMood E-Commerce-Erlebnis', description: 'Für die texanische Marke ZuzuMood wurde ein conversionstarker Boutique-Shop mit Etsy-zentrierter Produktfindung, klarer Kategoriestruktur und täglichem Blog-Flow umgesetzt.', link: 'https://www.zuzumood.com', tags: ['E-Commerce', 'SEO', 'Markenerlebnis'] },
+        { name: 'KI-gestützter Zypern-Urlaubsplaner', description: 'Intelligente App, die mehrsprachige, personalisierte Reisepläne basierend auf Benutzerpräferenzen und Wetterkontext erstellt.', link: 'https://www.fures.at/projects/aboutcyprus', tags: ['KI', 'React', 'Reisetechnologie'] },
         { name: 'Hotel- & Agenturintegration', description: 'Integration von 6 Hotels in den Agenturbetrieb; optimierte Prozesse, reduzierte Kosten und vereinheitlichte Datenflüsse.', link: 'https://www.fures.at/projects/hotel', tags: ['Digitale Transformation', 'Systeme'] },
         { name: 'ICALT 2024 Kongressmanagement', description: 'Planung und Koordination einer internationalen Konferenz in Zusammenarbeit mit Dorana Tourism.', link: 'https://www.fures.at/projects/icalt', tags: ['Eventmanagement', 'Logistik'] },
-        { name: 'ZuzuMood E-Commerce-Erlebnis', description: 'Für die texanische Marke ZuzuMood wurde ein conversionstarker Boutique-Shop mit Etsy-zentrierter Produktfindung, klarer Kategoriestruktur und täglichem Blog-Flow umgesetzt.', link: 'https://www.zuzumood.com', tags: ['E-Commerce', 'SEO', 'Markenerlebnis'] },
         { name: 'PixShop AI', description: 'KI-gestützte Fotobearbeitung, vereinfacht. Machen Sie professionelle Bearbeitungen mit einfachen Textanweisungen.', link: 'https://pixshop-720548631405.us-west1.run.app/', tags: ['Generative KI', 'SaaS', 'Bildbearbeitung'] },
-        { name: 'Pantry Chef AI', description: 'Was ist in Ihrer Speisekammer? Geben Sie Ihre Zutaten ein und lassen Sie unseren KI-Koch etwas Leckeres zaubern.', link: 'https://ai-recipe-generator-720548631405.us-west1.run.app/', tags: ['KI', 'Rezeptgenerierung', 'Web-App'] },
+        { name: 'Pantry Chef AI', description: 'Was ist in Ihrer Speisekammer? Geben Sie Ihre Zutaten ein und lassen Sie unseren KI-Koch etwas Leckeres zaubern.', link: 'https://ai-recipe-generator-720548631405.us-west1.run.app/', tags: ['KI', 'Rezeptgenerierung', 'Web-App'] }
       ]
     },
     accessibility: {
@@ -823,13 +823,13 @@ export const translations = {
       title: 'Proyectos Destacados',
       visitProject: 'Visitar',
       items: [
-        { name: 'Planificador de Vacaciones en Chipre con IA', description: 'Aplicación inteligente que crea planes de viaje multilingües y personalizados basados en las preferencias del usuario y el contexto meteorológico.', link: 'https://www.fures.at/projects/aboutcyprus', tags: ['IA', 'React', 'Tecnología de Viajes'] },
         { name: 'Plataforma de Productos con IA de Serakıncı', description: 'Catálogo automatizado, multilingüe y centrado en SEO con descripciones generadas por IA y pipelines de scraping.', link: 'https://www.fures.at/projects/serakinci', tags: ['Automatización', 'Scraping', 'SEO'] },
+        { name: 'Experiencia E-Commerce de ZuzuMood', description: 'Desarrollé para ZuzuMood una tienda boutique orientada a conversión, con descubrimiento de productos vía Etsy, arquitectura de categorías y flujo editorial diario.', link: 'https://www.zuzumood.com', tags: ['E-Commerce', 'SEO', 'Experiencia de Marca'] },
+        { name: 'Planificador de Vacaciones en Chipre con IA', description: 'Aplicación inteligente que crea planes de viaje multilingües y personalizados basados en las preferencias del usuario y el contexto meteorológico.', link: 'https://www.fures.at/projects/aboutcyprus', tags: ['IA', 'React', 'Tecnología de Viajes'] },
         { name: 'Integración de Hotel y Agencia', description: 'Integré 6 hoteles con las operaciones de la agencia; optimicé procesos, reduje costos y unifiqué los flujos de datos.', link: 'https://www.fures.at/projects/hotel', tags: ['Transformación Digital', 'Sistemas'] },
         { name: 'Gestión del Congreso ICALT 2024', description: 'Planifiqué y coordiné una conferencia internacional en colaboración con Dorana Tourism.', link: 'https://www.fures.at/projects/icalt', tags: ['Gestión de Eventos', 'Logística'] },
-        { name: 'Experiencia E-Commerce de ZuzuMood', description: 'Desarrollé para ZuzuMood una tienda boutique orientada a conversión, con descubrimiento de productos vía Etsy, arquitectura de categorías y flujo editorial diario.', link: 'https://www.zuzumood.com', tags: ['E-Commerce', 'SEO', 'Experiencia de Marca'] },
         { name: 'PixShop AI', description: 'Edición de fotos con IA, simplificada. Realice ediciones profesionales con sencillas instrucciones de texto.', link: 'https://pixshop-720548631405.us-west1.run.app/', tags: ['IA Generativa', 'SaaS', 'Edición de Imágenes'] },
-        { name: 'Pantry Chef AI', description: '¿Qué hay en su despensa? Introduzca sus ingredientes y deje que nuestro chef de IA prepare algo delicioso.', link: 'https://ai-recipe-generator-720548631405.us-west1.run.app/', tags: ['IA', 'Generación de Recetas', 'App Web'] },
+        { name: 'Pantry Chef AI', description: '¿Qué hay en su despensa? Introduzca sus ingredientes y deje que nuestro chef de IA prepare algo delicioso.', link: 'https://ai-recipe-generator-720548631405.us-west1.run.app/', tags: ['IA', 'Generación de Recetas', 'App Web'] }
       ]
     },
     accessibility: {

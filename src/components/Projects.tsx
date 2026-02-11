@@ -18,6 +18,60 @@ export const FALLBACK_LANGUAGE: Language = 'en';
 
 export const PROJECTS: readonly ProjectConfig[] = [
   {
+    id: 'serakinci-platform',
+    link: '/projeler/serakinci',
+    icon: Cpu,
+    translations: {
+      tr: {
+        name: 'Serakıncı AI Ürün Platformu',
+        description:
+          'Serakıncı için otomatik, çok dilli, SEO odaklı ürün kataloğu; AI içerik üretimi ve scraping hatlarıyla beslenir.',
+      },
+      en: {
+        name: 'AI-Powered Serakıncı Product Platform',
+        description:
+          'Automated, multilingual, SEO-driven product catalog for Serakıncı with AI-authored descriptions and scraping pipelines.',
+      },
+      de: {
+        name: 'KI-gestützte Serakıncı-Produktplattform',
+        description:
+          'Automatisierter, mehrsprachiger und SEO-starker Produktkatalog für Serakıncı mit KI-Beschreibungen und Scraping-Pipelines.',
+      },
+      ru: {
+        name: 'Платформа продуктов Serakıncı на базе ИИ',
+        description:
+          'Автоматизированный многоязычный SEO-каталог Serakıncı с генерацией описаний ИИ и пайплайнами для сбора данных.',
+      },
+    },
+  },
+  {
+    id: 'zuzumood',
+    link: 'https://www.zuzumood.com',
+    icon: Shirt,
+    translations: {
+      tr: {
+        name: 'ZuzuMood Butik E-Ticaret Deneyimi',
+        description:
+          'Texas merkezli ZuzuMood için Etsy fulfillment odaklı butik mağaza; kategori mimarisi, günlük blog ve koleksiyon akışlarıyla ölçeklendi.',
+      },
+      en: {
+        name: 'ZuzuMood Boutique E-Commerce Experience',
+        description:
+          'Conversion-focused boutique storefront for Texas-based ZuzuMood with Etsy-first fulfillment, category architecture, and daily blog cadence.',
+      },
+      de: {
+        name: 'ZuzuMood Boutique-E-Commerce-Erlebnis',
+        description:
+          'Conversion-orientierter Boutique-Store für ZuzuMood (Texas) mit Etsy-zentrierter Fulfillment-Logik, Kategoriestruktur und täglichem Blog-Flow.',
+      },
+      ru: {
+        name: 'Бутик e-commerce проект ZuzuMood',
+        description:
+          'Бутик-витрина для ZuzuMood (Техас) с Etsy-first исполнением заказов, архитектурой категорий и ежедневным контент-потоком блога.',
+      },
+    },
+  },
+  {
     id: 'fures-career-coach',
     link: '/kariyer.html',
     icon: Briefcase,
@@ -126,33 +180,6 @@ export const PROJECTS: readonly ProjectConfig[] = [
     },
   },
   {
-    id: 'serakinci-platform',
-    link: '/projeler/serakinci',
-    icon: Cpu,
-    translations: {
-      tr: {
-        name: 'Serakıncı AI Ürün Platformu',
-        description:
-          'Serakıncı için otomatik, çok dilli, SEO odaklı ürün kataloğu; AI içerik üretimi ve scraping hatlarıyla beslenir.',
-      },
-      en: {
-        name: 'AI-Powered Serakıncı Product Platform',
-        description:
-          'Automated, multilingual, SEO-driven product catalog for Serakıncı with AI-authored descriptions and scraping pipelines.',
-      },
-      de: {
-        name: 'KI-gestützte Serakıncı-Produktplattform',
-        description:
-          'Automatisierter, mehrsprachiger und SEO-starker Produktkatalog für Serakıncı mit KI-Beschreibungen und Scraping-Pipelines.',
-      },
-      ru: {
-        name: 'Платформа продуктов Serakıncı на базе ИИ',
-        description:
-          'Автоматизированный многоязычный SEO-каталог Serakıncı с генерацией описаний ИИ и пайплайнами для сбора данных.',
-      },
-    },
-  },
-  {
     id: 'hotel-agency-integration',
     link: '/projeler/hotel',
     icon: Hotel,
@@ -203,33 +230,6 @@ export const PROJECTS: readonly ProjectConfig[] = [
         name: 'Управление конгрессом ICALT 2024',
         description:
           'Полное планирование и координация международного конгресса ICALT 2024 совместно с Dorana Tourism.',
-      },
-    },
-  },
-  {
-    id: 'zuzumood',
-    link: 'https://www.zuzumood.com',
-    icon: Shirt,
-    translations: {
-      tr: {
-        name: 'ZuzuMood Butik E-Ticaret Deneyimi',
-        description:
-          'Texas merkezli ZuzuMood için Etsy fulfillment odaklı butik mağaza; kategori mimarisi, günlük blog ve koleksiyon akışlarıyla ölçeklendi.',
-      },
-      en: {
-        name: 'ZuzuMood Boutique E-Commerce Experience',
-        description:
-          'Conversion-focused boutique storefront for Texas-based ZuzuMood with Etsy-first fulfillment, category architecture, and daily blog cadence.',
-      },
-      de: {
-        name: 'ZuzuMood Boutique-E-Commerce-Erlebnis',
-        description:
-          'Conversion-orientierter Boutique-Store für ZuzuMood (Texas) mit Etsy-zentrierter Fulfillment-Logik, Kategoriestruktur und täglichem Blog-Flow.',
-      },
-      ru: {
-        name: 'Бутик e-commerce проект ZuzuMood',
-        description:
-          'Бутик-витрина для ZuzuMood (Техас) с Etsy-first исполнением заказов, архитектурой категорий и ежедневным контент-потоком блога.',
       },
     },
   },
@@ -313,7 +313,7 @@ export const PROJECTS: readonly ProjectConfig[] = [
           'Бизнес-аналитика нового поколения: выберите один из отелей или проанализируйте свой сайт.',
       },
     },
-  },
+  }
 ] as const;
 
 export function Projects() {
