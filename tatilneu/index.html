@@ -331,11 +331,11 @@
     
     // --- GEMINI API HELPER ---
     async function callGemini(prompt, history = []) {
-        const apiKey = "AIzaSyBEpqKAEZKYSyznxeZsQ1MYO-9hqV5LGoA"; // User-provided API Key
-        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
-        
+        const apiUrl = '/.netlify/functions/gemini-proxy';
+
         const payload = {
-            contents: [...history, { role: "user", parts: [{ text: prompt }] }]
+            prompt,
+            history
         };
 
         try {
@@ -345,14 +345,23 @@
                 body: JSON.stringify(payload)
             });
 
-            if (!response.ok) {
-                const errorBody = await response.json();
-                console.error("API Error Body:", errorBody);
-                throw new Error(`API isteği başarısız oldu: ${response.status} - ${errorBody.error?.message || 'Bilinmeyen hata'}`);
+            let result;
+            try {
+                result = await response.json();
+            } catch (parseError) {
+                console.error("API yanıtı JSON formatında değil:", parseError);
+                throw new Error('Sunucudan geçerli bir yanıt alınamadı.');
             }
 
-            const result = await response.json();
-            
+            if (!response.ok) {
+                console.error("API Error Body:", result);
+                const errorMessage =
+                    result?.error?.message ||
+                    (typeof result?.error === 'string' ? result.error : null) ||
+                    'Bilinmeyen hata';
+                throw new Error(`API isteği başarısız oldu: ${response.status} - ${errorMessage}`);
+            }
+
             if (result.candidates && result.candidates.length > 0 &&
                 result.candidates[0].content && result.candidates[0].content.parts &&
                 result.candidates[0].content.parts.length > 0) {
