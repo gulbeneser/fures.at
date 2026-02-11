@@ -1,7 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
-import { ExternalLink, Cpu, Globe, Hotel, Users, Camera, ChefHat, BarChart3, Briefcase, Plane, ShieldCheck } from "lucide-react";
+import { ExternalLink, Cpu, Globe, Hotel, Users, Camera, ChefHat, BarChart3, Briefcase, Plane, ShieldCheck, Shirt } from "lucide-react";
 import { useLanguage, type Language } from "../contexts/LanguageContext";
 import { Link } from "react-router-dom";
 
@@ -203,6 +203,33 @@ export const PROJECTS: readonly ProjectConfig[] = [
         name: 'Управление конгрессом ICALT 2024',
         description:
           'Полное планирование и координация международного конгресса ICALT 2024 совместно с Dorana Tourism.',
+      },
+    },
+  },
+  {
+    id: 'zuzumood',
+    link: 'https://www.zuzumood.com',
+    icon: Shirt,
+    translations: {
+      tr: {
+        name: 'ZuzuMood Butik E-Ticaret Deneyimi',
+        description:
+          'Texas merkezli ZuzuMood için Etsy fulfillment odaklı butik mağaza; kategori mimarisi, günlük blog ve koleksiyon akışlarıyla ölçeklendi.',
+      },
+      en: {
+        name: 'ZuzuMood Boutique E-Commerce Experience',
+        description:
+          'Conversion-focused boutique storefront for Texas-based ZuzuMood with Etsy-first fulfillment, category architecture, and daily blog cadence.',
+      },
+      de: {
+        name: 'ZuzuMood Boutique-E-Commerce-Erlebnis',
+        description:
+          'Conversion-orientierter Boutique-Store für ZuzuMood (Texas) mit Etsy-zentrierter Fulfillment-Logik, Kategoriestruktur und täglichem Blog-Flow.',
+      },
+      ru: {
+        name: 'Бутик e-commerce проект ZuzuMood',
+        description:
+          'Бутик-витрина для ZuzuMood (Техас) с Etsy-first исполнением заказов, архитектурой категорий и ежедневным контент-потоком блога.',
       },
     },
   },

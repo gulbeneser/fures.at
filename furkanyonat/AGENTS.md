@@ -12,6 +12,8 @@ Bu klasör Furkan Yonat'ın ÖNORM uyumlu CV sayfasını barındırır. Buradaki
 - Deneyim başlığında çevirilerden gelen “Tüm kartları aç”/“Kartları tek tek görüntüle” toggle’ı vardır. Toggle açıkken tüm kartlar genişlemeli ve kart butonları devre dışı (`aria-disabled`), tekli moda dönünce varsayılan olarak `neu` kartı açık gelmelidir.
 
 ## İçerik ve Kronoloji
+- Referans/proje listesinde `www.zuzumood.com` bağlantısı yer alır; bu kayıt çok dilli çeviri dosyalarında (TR/EN/DE/ES) eş zamanlı korunmalıdır.
+- ZuzuMood referansı yalnızca CV içinde değil, ana sitenin `src/components/Projects.tsx` dosyasındaki proje kartlarında da canlı tutulur; proje mesajları platformlar arasında çelişmemelidir.
 - Deneyim sırası `experienceOrder` ile ters kronolojiktir: Dorana → Fures (yan iş) → Mimoza (müdür yrd./resepsiyon) → Concorde → Granada → Almanya bloğu.
 - Almanya bloğu tek kartta tutulur; görevler içinde tarih aralıklarını (2015–2016 BMW, 2013–2014 Continental & Infineon, 2014 FedEx) koru ve C1 disiplin vurgusunu sürdür.
 - Hero başlıklarında "hiyerarşi" vurgusu kullanılmaz; teslimat ve sahada hazır olma mesajı tekil dille verilir.

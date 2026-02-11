@@ -134,6 +134,13 @@ Bu dosyayı güncel tut ve yeni önemli süreçler eklendiğinde buraya belgelem
 - **İçerik Yapısı:** Proje hedefleri, otomatik içerik üretim pipeline'ı, entegrasyonlar ve SEO stratejisi alt başlıklarla anlatılır.
 - **Güncelleme İpuçları:** Teknik yığın (Jamstack, AI pipeline) güncellenirse ilgili bölümlerde hem açıklama hem de liste halinde belirt. Meta etiketlerde `noindex` ayarı korunmalı.
 
+### zuzumood – Etsy Destekli Butik Mağaza Deneyimi
+- **Amaç:** `www.zuzumood.com` için Texas merkezli marka diliyle uyumlu, Etsy fulfillment odaklı butik e‑ticaret vitrini oluşturmak ve sürdürmek.
+- **İçerik Yapısı:** Üst menüdeki koleksiyon segmentleri (`All Products`, `Teacher`, `Bridal Atelier`, `Liberty & Statement`, `Stoic & Healing`), ürün kartları, günlük blog ve marka manifestosu birlikte çalışır.
+- **Güncelleme İpuçları:** Kategori adları menü, içerik blokları ve footer’da birebir aynı kalmalı; ürün başlığı, kategori ve fiyat alanları arasında tutarlılık korunmalı. Yinelenen ürünlerde SEO için canonical içerik yaklaşımı izlenmeli.
+- **Operasyon Notları:** Siparişlerin Etsy üzerinden karşılandığı mesajı (`Orders Fulfilled Globally via Etsy`) korunmalı; kullanıcıyı Etsy dışı checkout’a yönlendiren çelişkili ifadeler eklenmemeli.
+- **Referans Entegrasyonu:** Bu proje hem `furkanyonat/data/translations.ts` içindeki çok dilli referans listesinde hem de ana sitenin `src/components/Projects.tsx` dosyasındaki `PROJECTS` koleksiyonunda (tr/en/de/ru çevirileriyle) bulunmalı; iki tarafta isim/mesaj uyumu korunmalı.
+
 ### travel – Fures Travel AI Companion
 - **Amaç:** Sesli/yazılı komutlarla çalışan, Gemini Live API ve Google Maps'i harmanlayan seyahat asistanını tanıtır.
 - **İçerik Yapısı:** "Bölüm 1: Bu Uygulama Nedir", "Bölüm 2: Teknik Derinlemesine İnceleme", "Bölüm 3: Geliştirme ve Dağıtım" başlıklarıyla kullanıcı senaryoları, teknik mimari ve devops sürecini anlatır. CTA `/travel` altındaki canlı demoyu açar.
