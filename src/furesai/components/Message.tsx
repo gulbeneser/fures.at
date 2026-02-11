@@ -5,9 +5,10 @@ import { FuresAIIcon } from './icons';
 interface MessageProps {
   role: Role;
   text: string;
+  imageDataUrl?: string;
 }
 
-const Message: React.FC<MessageProps> = ({ role, text }) => {
+const Message: React.FC<MessageProps> = ({ role, text, imageDataUrl }) => {
   const isAI = role === Role.AI;
 
   return (
@@ -20,7 +21,14 @@ const Message: React.FC<MessageProps> = ({ role, text }) => {
             : 'bg-indigo-600 text-white rounded-tr-none'
         }`}
       >
-        <p className="text-sm leading-relaxed">{text}</p>
+        <p className="text-sm leading-relaxed whitespace-pre-line">{text}</p>
+        {imageDataUrl && (
+          <img
+            src={imageDataUrl}
+            alt={text || 'Gemini tarafından oluşturulan görsel'}
+            className="mt-3 w-full max-w-xs sm:max-w-sm rounded-lg border border-gray-600"
+          />
+        )}
       </div>
     </div>
   );

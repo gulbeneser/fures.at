@@ -3,7 +3,7 @@ import { Message as MessageType, Role } from '../types';
 import Message from './Message';
 import ChatInput from './ChatInput';
 import { FuresAIIcon, CloseIcon } from './icons';
-import { connectLiveSession, sendTextMessage, createPcmBlob, decode, decodeAudioData } from '../services/geminiService';
+import { connectLiveSession, sendTextMessage, createPcmBlob, decode, decodeAudioData, generateImage } from '../services/geminiService';
 import type { LiveServerMessage, Session } from '@google/genai';
 
 interface ChatWindowProps {
@@ -13,6 +13,7 @@ interface ChatWindowProps {
 const ChatWindow: React.FC<ChatWindowProps> = ({ closeChat }) => {
   const [messages, setMessages] = useState<MessageType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isGeneratingImage, setIsGeneratingImage] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Live API State
@@ -67,6 +68,35 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ closeChat }) => {
       setMessages((prev) => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleGenerateImage = async (prompt: string) => {
+    const userMessage: MessageType = { id: Date.now().toString(), role: Role.USER, text: prompt };
+    setMessages((prev) => [...prev, userMessage]);
+    setIsGeneratingImage(true);
+
+    try {
+      const { base64Image, mimeType, description } = await generateImage(prompt);
+      const imageDataUrl = `data:${mimeType};base64,${base64Image}`;
+      const aiText = description?.trim() || "İstediğin görseli hazırladım.";
+      const aiMessage: MessageType = {
+        id: (Date.now() + 1).toString(),
+        role: Role.AI,
+        text: aiText,
+        imageDataUrl,
+      };
+      setMessages((prev) => [...prev, aiMessage]);
+    } catch (error) {
+      console.error("Error generating image:", error);
+      const errorMessage: MessageType = {
+        id: (Date.now() + 1).toString(),
+        role: Role.AI,
+        text: "Üzgünüm, şu anda görsel oluşturamıyorum. Lütfen tekrar dene.",
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+    } finally {
+      setIsGeneratingImage(false);
     }
   };
 
@@ -229,9 +259,9 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ closeChat }) => {
       </header>
       <main className="flex-grow p-4 overflow-y-auto">
         {messages.map((msg) => (
-          <Message key={msg.id} role={msg.role} text={msg.text} />
+          <Message key={msg.id} role={msg.role} text={msg.text} imageDataUrl={msg.imageDataUrl} />
         ))}
-        {isLoading && !isListening && (
+        {(isLoading || isGeneratingImage) && !isListening && (
           <div className="flex items-start gap-3 my-4">
             <FuresAIIcon className="w-8 h-8 flex-shrink-0" />
             <div className="px-4 py-3 rounded-2xl max-w-sm md:max-w-md bg-gray-700 text-white rounded-tl-none flex items-center gap-2">
@@ -243,7 +273,14 @@ const ChatWindow: React.FC<ChatWindowProps> = ({ closeChat }) => {
         )}
         <div ref={messagesEndRef} />
       </main>
-      <ChatInput onSendMessage={handleSendMessage} onMicClick={handleMicClick} isLoading={isLoading} isListening={isListening} />
+      <ChatInput
+        onSendMessage={handleSendMessage}
+        onGenerateImage={handleGenerateImage}
+        onMicClick={handleMicClick}
+        isLoading={isLoading}
+        isListening={isListening}
+        isGeneratingImage={isGeneratingImage}
+      />
     </div>
   );
 };
