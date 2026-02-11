@@ -35,4 +35,5 @@ Bu kılavuzu her değişiklik sonrası güncel tut ve yeni gereksinimleri buraya
 - Her görev sonunda bu klasör özelindeki içerik, kronoloji ve SEO kurallarının güncelliğini hızlıca doğrula.
 - Ana site proje sıralaması değiştiğinde ZuzuMood referans metinlerinin çok dilli dosyalarda tutarlı kaldığını kontrol et.
 - Yeni bir rota oluşursa ilgili sitemap güncellemesinin yapıldığını doğrulamadan görevi kapatma.
+- Header/nav üzerinde yapılan global glass değişiklikleri CV sayfasındaki metin netliğini düşürmemeli; okunabilirlik testini hızlıca kontrol et.
 

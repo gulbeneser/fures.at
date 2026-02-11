@@ -345,7 +345,7 @@ export function Projects() {
                 key={project.id}
                 className="group relative overflow-hidden border-white/12 bg-white/[0.03] [--glass-highlight-height:14%] [--glass-reflection-height:46%] [--glass-saturate-scale:0.94] [--glass-surface-bg:rgba(8,12,24,0.84)] [--glass-surface-border:rgba(255,255,255,0.14)] [--glass-surface-highlight:rgba(216,229,255,0.3)] [--glass-surface-reflection:rgba(160,188,255,0.18)] shadow-[0_28px_80px_-58px_rgba(8,12,30,0.95)] transition-all duration-500 hover:-translate-y-0.5 hover:border-white/20 hover:[--glass-saturate-scale:1.04] hover:shadow-[0_30px_90px_-56px_rgba(14,20,44,0.9)]"
               >
-                <div className="pointer-events-none absolute inset-0 rounded-[2rem] bg-[radial-gradient(125%_78%_at_50%_-14%,rgba(255,255,255,0.16),transparent_72%)] opacity-70 transition-opacity duration-500 group-hover:opacity-95"></div>
+                <div className="pointer-events-none absolute inset-0 rounded-[2rem] bg-[radial-gradient(120%_72%_at_50%_-16%,rgba(255,255,255,0.14),transparent_74%)] opacity-58 transition-opacity duration-500 group-hover:opacity-95"></div>
 
                 <CardHeader className="relative px-7 pt-7">
                   <div className="liquid-icon mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border-white/18 bg-white/[0.04] [--glass-highlight-height:15%] [--glass-reflection-height:42%] [--glass-saturate-scale:0.9] transition-transform duration-300 group-hover:scale-[1.03]">
@@ -357,7 +357,7 @@ export function Projects() {
                 </CardHeader>
 
                 <CardContent className="relative px-7 pb-7 pt-0">
-                  <CardDescription className="mb-7 line-clamp-3 text-[1.03rem] leading-8 text-white/62">
+                  <CardDescription className="mb-7 line-clamp-3 text-[1.03rem] leading-8 text-white/72">
                     {translation.description}
                   </CardDescription>
                   
@@ -380,8 +380,8 @@ export function Projects() {
         {/* Bottom CTA */}
         <div className="mt-20 text-center">
           <div className="relative">
-            <div className="absolute inset-0 -z-10 bg-gradient-to-r from-orange-500/15 via-transparent to-purple-600/15 blur-3xl"></div>
-            <div className="liquid-glass relative rounded-[2.5rem] border border-white/15 p-12 text-white">
+            <div className="absolute inset-0 -z-10 bg-gradient-to-r from-orange-500/12 via-transparent to-purple-600/12 blur-2xl"></div>
+            <div className="liquid-glass relative rounded-[2.5rem] border border-white/18 bg-white/[0.04] [--glass-highlight-height:13%] [--glass-reflection-height:44%] p-12 text-white">
               <h3 className="text-3xl lg:text-4xl mb-6 bg-gradient-to-r from-orange-400 to-purple-600 bg-clip-text text-transparent">
                 {t('projects.start_heading')}
               </h3>

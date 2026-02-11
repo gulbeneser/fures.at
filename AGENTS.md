@@ -175,6 +175,8 @@ Bu dosyayı güncel tut ve yeni önemli süreçler eklendiğinde buraya belgelem
 - SEO Perfect ilkesi için yeni/yenilenen metinlerde anahtar kelime, başlık hiyerarşisi ve açıklama bütünlüğünü koru.
 
 ## Proje Kartları UI (Ana Site)
+
+- Header ve üst menü cam katmanlarında okunabilirlik önceliklidir: aşırı blur/saturate değerleriyle metni puslandırma; ikon ve etiketlerde net kontrast korunmalı.
 - `src/components/Projects.tsx` içindeki kartlar iOS benzeri cam (glassmorphism/aero) dilini koruyacak şekilde yumuşak kontrastla tasarlanır; ani neon geçişlerden kaçın.
 - Kart metinlerinde göz yorgunluğunu azaltmak için satır yüksekliği (`leading`) ve opaklık dengesi korunmalı; açıklama metinleri çok koyu veya çok parlak yapılmamalı.
 - Hover animasyonlarında agresif ölçekleme yerine hafif `translate` ve düşük yoğunluklu glow tercih et.
