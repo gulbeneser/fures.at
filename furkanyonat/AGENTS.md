@@ -30,6 +30,8 @@ Bu klasör Furkan Yonat'ın ÖNORM uyumlu CV sayfasını barındırır. Buradaki
 Bu kılavuzu her değişiklik sonrası güncel tut ve yeni gereksinimleri buraya ekle.
 
 ## Görev Sonu Mini Checklist
+
+- Ana sitedeki (`src/components/Projects.tsx`) görsel güncellemeler yapıldığında iOS/aero dilinin Furkan sayfasındaki genel tonla çelişmediğini doğrula.
 - Her görev sonunda bu klasör özelindeki içerik, kronoloji ve SEO kurallarının güncelliğini hızlıca doğrula.
 - Ana site proje sıralaması değiştiğinde ZuzuMood referans metinlerinin çok dilli dosyalarda tutarlı kaldığını kontrol et.
 - Yeni bir rota oluşursa ilgili sitemap güncellemesinin yapıldığını doğrulamadan görevi kapatma.
