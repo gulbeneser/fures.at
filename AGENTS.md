@@ -167,3 +167,10 @@ Bu dosyayı güncel tut ve yeni önemli süreçler eklendiğinde buraya belgelem
   - **Hero Portresi:** Hero bölümünde merkezde blur aurası olan yuvarlak profil fotoğrafı gösterilir; `App.tsx` içindeki `<Hero>` bileşeninde yer alır. Fotoğrafın görünür olduğundan emin olmak için build öncesi lokal görüntü kontrolü yap.
   - **Güncel Ton & Sıralama (2025-02):** Hero/bio metinleri tekil ve “sahada teslimat” odaklı tut; Almanca başlıkta verilen hiyerarşi vurgusunu koru. `features`/`Meine Kernkompetenzen` bloklarını ajans çoğul dili yerine bireysel yetkinlik anlatımıyla yaz. `experienceOrder` ters kronolojik ilerler: Dorana → Fures (yan iş) → Mimoza (müdür yrd./resepsiyon) → Concorde → Granada → Almanya bloğu (2012–2017) tek kutu halinde. Almanya başlığında BMW/Continental/Infineon/FedEx örnekleri toplu durmalı, eski tekil kayıtlar gösterilmemeli. Web Tasarımı & Kodlama detay satırında RWR “Datenverarbeitung/Techniker” uygunluk notunu koru.
   - **Deneyim Kartları:** Header’daki PDF butonundan ayrı olarak deneyim bölümünün başlığında `experience.controls` metinleriyle çevirilmiş “Tüm kartları aç”/“Kartları tek tek görüntüle” toggle’ı bulunur. Açık modda tüm kartlar genişler, kart butonları devre dışı (`aria-disabled`) kalır; tekli moda dönerken varsayılan olarak `neu` kartı seçilir.
+
+## Görev Sonu Bakım Checklist (Zorunlu)
+- Her görev sonunda depodaki tüm `AGENTS.md` dosyalarını gözden geçir; proje anlatım kılavuzlarının güncel kaldığını doğrula ve gerekiyorsa netleştirici notlar ekle.
+- Her görev sonunda `public/sitemap.xml` ve varsa diğer sitemap dosyalarını kontrol et; yeni rota eklendiyse aynı görev içinde sitemap'e ekle.
+- Proje kartı sıralaması değişikliklerinde `src/components/Projects.tsx` ile diğer referans listeleri arasında tutarlılığı koru.
+- SEO Perfect ilkesi için yeni/yenilenen metinlerde anahtar kelime, başlık hiyerarşisi ve açıklama bütünlüğünü koru.
+

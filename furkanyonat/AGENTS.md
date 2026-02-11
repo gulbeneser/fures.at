@@ -28,3 +28,9 @@ Bu klasör Furkan Yonat'ın ÖNORM uyumlu CV sayfasını barındırır. Buradaki
 - "Mehr", "Mehr entdecken", "Erzählen Sie uns von Ihrem Projekt", "Angetrieben von Fures" gibi ifadeler ve abartılı asistan selamlamaları kullanılmaz; metinlerde bu kalıpları görürsen temizle.
 
 Bu kılavuzu her değişiklik sonrası güncel tut ve yeni gereksinimleri buraya ekle.
+
+## Görev Sonu Mini Checklist
+- Her görev sonunda bu klasör özelindeki içerik, kronoloji ve SEO kurallarının güncelliğini hızlıca doğrula.
+- Ana site proje sıralaması değiştiğinde ZuzuMood referans metinlerinin çok dilli dosyalarda tutarlı kaldığını kontrol et.
+- Yeni bir rota oluşursa ilgili sitemap güncellemesinin yapıldığını doğrulamadan görevi kapatma.
+
