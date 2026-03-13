@@ -22,13 +22,13 @@ export function LanguageSelector() {
   const currentLanguage = languages.find(lang => lang.code === language);
 
   const triggerGlassStyle = {
-    "--glass-surface-bg": "rgba(255, 255, 255, 0.12)",
+    "--glass-surface-bg": "rgba(255, 255, 255, 0.16)",
     "--glass-surface-border": "rgba(255, 255, 255, 0.24)",
     "--glass-highlight-height": "12%",
   } as CSSProperties;
 
   const dropdownGlassStyle = {
-    "--glass-surface-bg": "rgba(255, 255, 255, 0.1)",
+    "--glass-surface-bg": "rgba(255, 255, 255, 0.14)",
     "--glass-surface-border": "rgba(255, 255, 255, 0.2)",
     "--glass-highlight-height": "11%",
     "--glass-reflection-height": "42%",
@@ -40,7 +40,7 @@ export function LanguageSelector() {
         <Button
           variant="outline"
           size="sm"
-          className="gap-2 text-xs text-white/80 hover:text-white"
+          className="gap-2 border-white/18 bg-white/[0.06] text-xs text-white/88 hover:text-white"
           style={triggerGlassStyle}
         >
           <Globe className="relative z-10 h-4 w-4" />
@@ -50,7 +50,7 @@ export function LanguageSelector() {
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="end"
-        className="liquid-glass mt-2 w-48 rounded-2xl p-1 text-white"
+        className="liquid-glass mt-2 w-48 rounded-2xl border-white/20 bg-white/[0.06] p-1 text-white"
         style={dropdownGlassStyle}
       >
         {languages.map((lang) => (
@@ -58,7 +58,7 @@ export function LanguageSelector() {
             key={lang.code}
             onClick={() => setLanguage(lang.code as any)}
             className={`liquid-glass flex cursor-pointer items-center gap-2 rounded-xl px-3 py-2 text-sm transition-all duration-200 ${
-              language === lang.code ? 'is-active text-white' : 'text-slate-200/75 hover:text-white'
+              language === lang.code ? 'is-active text-white' : 'text-slate-100/82 hover:text-white'
             }`}
             data-active={language === lang.code || undefined}
             style={dropdownGlassStyle}
