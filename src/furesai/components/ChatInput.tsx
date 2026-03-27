@@ -1,20 +1,35 @@
 import React, { useState } from 'react';
-import { SendIcon, MicIcon, StopIcon } from './icons';
+import { SendIcon, MicIcon, StopIcon, ImageIcon } from './icons';
 
 interface ChatInputProps {
   onSendMessage: (message: string) => void;
+  onGenerateImage: (prompt: string) => Promise<void>;
   onMicClick: () => void;
   isLoading: boolean;
   isListening: boolean;
+  isGeneratingImage: boolean;
 }
 
-const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, onMicClick, isLoading, isListening }) => {
+const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, onGenerateImage, onMicClick, isLoading, isListening, isGeneratingImage }) => {
   const [text, setText] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (text.trim() && !isLoading) {
-      onSendMessage(text);
+    const trimmed = text.trim();
+    if (trimmed && !isLoading && !isGeneratingImage) {
+      onSendMessage(trimmed);
+      setText('');
+    }
+  };
+
+  const handleGenerateImage = async () => {
+    const trimmed = text.trim();
+    if (!trimmed || isLoading || isListening || isGeneratingImage) {
+      return;
+    }
+    try {
+      await onGenerateImage(trimmed);
+    } finally {
       setText('');
     }
   };
@@ -30,20 +45,31 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, onMicClick, isLoad
             handleSubmit(e);
           }
         }}
-        placeholder={isListening ? "Listening..." : "Ask FuresAI..."}
+        placeholder={isGeneratingImage ? "Generating image..." : isListening ? "Listening..." : "Ask FuresAI..."}
         className="flex-grow bg-gray-700 text-white rounded-lg p-2 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-50"
         rows={1}
-        disabled={isLoading || isListening}
+        disabled={isLoading || isListening || isGeneratingImage}
       />
       {text ? (
-         <button
+        <div className="flex gap-2">
+          <button
             type="submit"
-            disabled={isLoading}
+            disabled={isLoading || isGeneratingImage}
             className="p-2 rounded-full bg-indigo-600 text-white hover:bg-indigo-500 disabled:bg-indigo-800 disabled:cursor-not-allowed transition-colors"
             aria-label="Send message"
-        >
+          >
             <SendIcon className="w-6 h-6" />
-        </button>
+          </button>
+          <button
+            type="button"
+            onClick={handleGenerateImage}
+            disabled={isLoading || isGeneratingImage}
+            className="p-2 rounded-full bg-teal-600 text-white hover:bg-teal-500 disabled:bg-teal-900 disabled:cursor-not-allowed transition-colors"
+            aria-label="Generate image"
+          >
+            <ImageIcon className="w-6 h-6" />
+          </button>
+        </div>
       ) : (
         <button
             type="button"

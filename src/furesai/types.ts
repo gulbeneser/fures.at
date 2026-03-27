@@ -7,4 +7,5 @@ export interface Message {
   id: string;
   role: Role;
   text: string;
+  imageDataUrl?: string;
 }
