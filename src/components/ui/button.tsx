@@ -5,27 +5,27 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "./utils";
 
 const buttonVariants = cva(
-  "liquid-pill relative inline-flex items-center justify-center gap-2 whitespace-nowrap text-[11px] font-semibold tracking-[0.16em] transition-all duration-300 text-white/80 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/35",
+  "liquid-pill relative inline-flex items-center justify-center gap-2 whitespace-nowrap text-[11px] font-medium tracking-[0.08em] transition-all duration-250 text-white/80 disabled:pointer-events-none disabled:opacity-40 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30",
   {
     variants: {
       variant: {
         default:
-          "border border-white/20 bg-white/6 text-white hover:border-white/35 hover:text-white hover:bg-white/10",
+          "border border-white/15 bg-white/5 text-white hover:border-white/28 hover:text-white hover:bg-white/8",
         gradient:
-          "border border-white/30 bg-[linear-gradient(135deg,rgba(91,143,255,0.45),rgba(136,90,255,0.4),rgba(72,207,255,0.45))] text-white shadow-[0_25px_60px_-40px_rgba(96,125,255,0.8)] hover:border-white/45",
+          "border border-white/20 bg-[linear-gradient(135deg,rgba(255,122,41,0.55),rgba(143,91,255,0.50))] text-white shadow-[0_16px_48px_-32px_rgba(255,122,41,0.55)] hover:border-white/32 hover:shadow-[0_20px_56px_-32px_rgba(255,122,41,0.65)]",
         destructive:
-          "border border-[#ff3b30]/40 bg-[#ff3b30]/40 text-white hover:border-[#ff3b30]/60",
+          "border border-[#ff3b30]/35 bg-[#ff3b30]/35 text-white hover:border-[#ff3b30]/52",
         outline:
-          "border border-white/20 bg-white/4 text-white/75 hover:text-white hover:border-white/35 hover:bg-white/8",
+          "border border-white/15 bg-white/3 text-white/65 hover:text-white hover:border-white/28 hover:bg-white/6",
         ghost:
-          "border border-transparent bg-transparent text-white/70 hover:text-white hover:border-white/20 hover:bg-white/6",
-        link: "border-0 bg-transparent px-0 text-white/80 underline-offset-4 hover:text-white hover:underline",
+          "border border-transparent bg-transparent text-white/60 hover:text-white hover:border-white/15 hover:bg-white/5",
+        link: "border-0 bg-transparent px-0 text-white/70 underline-offset-4 hover:text-white hover:underline",
       },
       size: {
-        default: "h-11 px-6",
-        sm: "h-9 px-4 gap-1.5 text-[10px]",
-        lg: "h-12 px-8 text-[12px]",
-        icon: "h-11 w-11",
+        default: "h-10 px-5",
+        sm: "h-8 px-3.5 gap-1.5 text-[10px]",
+        lg: "h-11 px-7 text-[11px]",
+        icon: "h-10 w-10",
       },
     },
     defaultVariants: {
