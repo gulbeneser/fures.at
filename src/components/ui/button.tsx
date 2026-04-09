@@ -10,15 +10,15 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "border border-white/15 bg-white/5 text-white hover:border-white/28 hover:text-white hover:bg-white/8",
+          "border border-white/20 bg-white/5 text-white hover:border-white/30 hover:text-white hover:bg-white/10",
         gradient:
-          "border border-white/20 bg-[linear-gradient(135deg,rgba(255,122,41,0.55),rgba(143,91,255,0.50))] text-white shadow-[0_16px_48px_-32px_rgba(255,122,41,0.55)] hover:border-white/32 hover:shadow-[0_20px_56px_-32px_rgba(255,122,41,0.65)]",
+          "border border-white/20 bg-[linear-gradient(135deg,rgba(255,122,41,0.55),rgba(143,91,255,0.50))] text-white shadow-[0_16px_48px_-32px_rgba(255,122,41,0.55)] hover:border-white/30 hover:shadow-[0_20px_56px_-32px_rgba(255,122,41,0.65)]",
         destructive:
-          "border border-[#ff3b30]/35 bg-[#ff3b30]/35 text-white hover:border-[#ff3b30]/52",
+          "border border-[#ff3b30]/40 bg-[#ff3b30]/40 text-white hover:border-[#ff3b30]/60",
         outline:
-          "border border-white/15 bg-white/3 text-white/65 hover:text-white hover:border-white/28 hover:bg-white/6",
+          "border border-white/20 bg-white/5 text-white/70 hover:text-white hover:border-white/30 hover:bg-white/10",
         ghost:
-          "border border-transparent bg-transparent text-white/60 hover:text-white hover:border-white/15 hover:bg-white/5",
+          "border border-transparent bg-transparent text-white/60 hover:text-white hover:border-white/20 hover:bg-white/5",
         link: "border-0 bg-transparent px-0 text-white/70 underline-offset-4 hover:text-white hover:underline",
       },
       size: {

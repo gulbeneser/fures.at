@@ -712,15 +712,15 @@
   }
 
   .blog-content blockquote {
-    @apply rounded-2xl border-l-2 border-orange-400/40 bg-white/4 px-6 py-4 text-slate-100 italic;
+    @apply rounded-2xl border-l-2 border-orange-400/40 bg-white/5 px-6 py-4 text-slate-100 italic;
   }
 
   .blog-content img {
-    @apply my-8 rounded-3xl border border-white/8 shadow-[0_16px_32px_-24px_rgba(255,122,41,0.4)];
+    @apply my-8 rounded-3xl border border-white/10 shadow-[0_16px_32px_-24px_rgba(255,122,41,0.4)];
   }
 
   .blog-content code {
-    @apply rounded-md bg-white/8 px-1.5 py-0.5 text-sm text-orange-200;
+    @apply rounded-md bg-white/10 px-1.5 py-0.5 text-sm text-orange-200;
     font-feature-settings: 'liga' 0;
   }
 }
