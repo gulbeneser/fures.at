@@ -17,28 +17,28 @@ export function CTA() {
         <div className="absolute inset-0 bg-gradient-to-br from-orange-500/10 via-purple-600/5 to-orange-500/10"></div>
         <motion.div
           animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.3, 0.5, 0.3]
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-          className="absolute top-0 left-1/4 w-96 h-96 bg-orange-500/20 rounded-full blur-3xl"
-        />
-        <motion.div
-          animate={{
-            scale: [1, 1.3, 1],
-            opacity: [0.3, 0.6, 0.3]
+            scale: [1, 1.06, 1],
+            opacity: [0.25, 0.40, 0.25]
           }}
           transition={{
             duration: 10,
             repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1
+            ease: "easeInOut"
           }}
-          className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl"
+          className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-orange-500/15 rounded-full blur-3xl"
+        />
+        <motion.div
+          animate={{
+            scale: [1, 1.08, 1],
+            opacity: [0.20, 0.35, 0.20]
+          }}
+          transition={{
+            duration: 12,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 2
+          }}
+          className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-purple-600/15 rounded-full blur-3xl"
         />
       </div>
 
@@ -88,20 +88,28 @@ export function CTA() {
             {t('contact.description')}
           </p>
 
-          {/* CTA Buttons with Micro-Motion */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-20">
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-3 justify-center items-center mb-20">
             <a href="mailto:info@fures.at">
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button size="lg" variant="gradient" className="group text-lg">
-                  <Send className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform" />
+              <motion.div
+                whileHover={{ scale: 1.02, y: -1 }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <Button size="lg" variant="gradient" className="group">
+                  <Send className="w-4 h-4 mr-2 group-hover:rotate-12 transition-transform duration-200" />
                   {t('contact.send_message')}
                 </Button>
               </motion.div>
             </a>
 
             <a href="https://calendly.com/fures" target="_blank" rel="noopener noreferrer">
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button size="lg" variant="outline" className="text-lg">
+              <motion.div
+                whileHover={{ scale: 1.02, y: -1 }}
+                whileTap={{ scale: 0.97 }}
+                transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <Button size="lg" variant="outline">
                   {t('contact.schedule_meeting')}
                 </Button>
               </motion.div>
