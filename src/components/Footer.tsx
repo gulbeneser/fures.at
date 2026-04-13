@@ -6,20 +6,20 @@ export function Footer() {
   const logoSrc = "/images/fures.png";
 
   const footerLinks = [
-    { title: t('nav.about'), href: "/hakkimizda" },
-    { title: t('nav.services'), href: "/hizmetler" },
-    { title: t('nav.projects'), href: "/projeler" },
-    { title: t('nav.campaigns'), href: "/kampanyalar" },
-    { title: t('nav.blog'), href: "/blog" },
-    { title: 'Ekip', href: "/ekip" },
-    { title: 'SSS', href: "/sss" },
-    { title: t('nav.contact'), href: "/iletisim" }
+    { title: t('nav.about'), href: "/tr/hakkimizda" },
+    { title: t('nav.services'), href: "/tr/hizmetler" },
+    { title: t('nav.projects'), href: "/tr/projeler" },
+    { title: t('nav.campaigns'), href: "/tr/kampanyalar" },
+    { title: t('nav.blog'), href: "/tr/blog" },
+    { title: 'Ekip', href: "/tr/ekip" },
+    { title: 'SSS', href: "/tr/sss" },
+    { title: t('nav.contact'), href: "/tr/iletisim" }
   ];
 
   const legalLinks = [
-    { title: t('footer.privacy'), href: "/gizlilik-politikasi" },
-    { title: t('footer.cookies'), href: "/cerez-politikasi" },
-    { title: t('footer.kvkk'), href: "/kvkk-aydinlatma-metni" }
+    { title: t('footer.privacy'), href: "/tr/gizlilik-politikasi" },
+    { title: t('footer.cookies'), href: "/tr/cerez-politikasi" },
+    { title: t('footer.kvkk'), href: "/tr/kvkk-aydinlatma-metni" }
   ];
 
   return (
