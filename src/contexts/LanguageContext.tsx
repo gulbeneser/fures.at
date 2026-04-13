@@ -6,7 +6,7 @@ export const LANGUAGE_META: Record<Language, { label: string; locale: string; hr
   tr: { label: 'Türkçe', locale: 'tr_CY', hrefLang: 'tr-CY', direction: 'ltr' },
   en: { label: 'English', locale: 'en_CY', hrefLang: 'en-CY', direction: 'ltr' },
   ru: { label: 'Русский', locale: 'ru_RU', hrefLang: 'ru-RU', direction: 'ltr' },
-  de: { label: 'Deutsch', locale: 'de_DE', hrefLang: 'de-DE', direction: 'ltr' }
+  de: { label: 'Deutsch', locale: 'de_AT', hrefLang: 'de-AT', direction: 'ltr' }
 };
 
 export const DEFAULT_LANGUAGE: Language = 'tr';
@@ -50,58 +50,21 @@ const translations = {
     'campaigns.not_found_description': 'Aradığınız kampanya yayından kaldırılmış olabilir. Güncel kampanyalara göz atın.',
 
     // SEO
-    'seo.site_name': 'Fures Tech · Kuzey Kıbrıs Dijital Ajansı',
+    'seo.site_name': 'Fures Tech · Otel & Turizm Dijital Ajansı',
     'seo.tagline': 'Web & AI tasarım, yapay zekâ otomasyonu, sosyal medya ve büyüme çözümleri',
-    'seo.common.keywords': [
-      'kktc web tasarım',
-      'kktc web tasarım ajansı',
-      'kktc sosyal medya yönetimi',
-      'kktc ai tasarım',
-      'kktc yapay zeka otomasyon',
-      'kktc ürün web sitesi',
-      'kktc tanıtım web sitesi',
-      'kktc otel web sitesi',
-      'kktc logo tasarımı',
-      'kktc otomasyon tasarımı',
-      'kktc ürün satış web sitesi',
-      'girne web tasarım',
-      'lefkoşa web tasarım',
-      'gazimağusa web tasarım',
-      'mağusa web tasarım',
-      'kuzey kıbrıs yapay zeka çözümleri',
-      'kıbrıs dijital ajans',
-      'kıbrıs seo ajansı'
-    ].join(', '),
+    'seo.common.keywords': 'kktc otel web sitesi, kktc yerel seo, kuzey kıbrıs dijital ajans, kktc otel sosyal medya, kktc rezervasyon otomasyonu, girne otel web tasarım, gazimağusa otel web sitesi, avusturya otel dijital ajansı',
     'seo.organization.description': [
       'Fures Tech, Gazimağusa merkezli çok dilli web tasarım, AI tasarım, yapay zekâ otomasyon ve büyüme ajansıdır.',
       'KKTC web tasarım ajansı olarak Girne, Lefkoşa ve Gazimağusa\'da oteller, turizm işletmeleri, ürün markaları ve hizmet şirketleri için ürün web siteleri, tanıtım web siteleri, otel web sitesi oluşturma ve otomasyon tasarımı projeleri geliştiriyoruz.'
     ].join(' '),
-    'seo.home.title': 'Fures Tech | Kuzey Kıbrıs Web Tasarım, Yapay Zekâ ve Sosyal Medya Ajansı',
-    'seo.home.description': [
-      'Fures Tech, Girne, Lefkoşa ve Gazimağusa\'daki işletmeler için KKTC web tasarım, sosyal medya yönetimi, AI tasarım, yapay zekâ otomasyonları, ürün ve tanıtım web siteleri, otel web sitesi oluşturma, logo tasarımı ve otomasyon tasarımıyla ürün satış web sitesi geliştirme hizmetleri sunar.',
-      'Çok dilli SEO odaklı çözümlerimizle aramalarda öne çıkmanızı sağlarız.'
-    ].join(' '),
-    'seo.home.keywords': [
-      'kktc web tasarım',
-      'kktc sosyal medya yönetimi',
-      'kktc ai tasarım',
-      'kktc yapay zeka otomasyon',
-      'ürün web sitesi',
-      'tanıtım web sitesi',
-      'otel web sitesi oluşturma',
-      'logo tasarımı',
-      'otomasyon tasarımı',
-      'ürün satış web sitesi',
-      'girne web tasarım',
-      'lefkoşa web tasarım',
-      'gazimağusa web tasarım',
-      'mağusa web tasarım'
-    ].join(', '),
+    'seo.home.title': 'Fures Tech | Otel Web Sitesi, Local SEO & Rezervasyon Otomasyonu | KKTC',
+    'seo.home.description': 'Fures Tech, KKTC ve Avusturya ofislerinden DACH bölgesi otellerine otel web sitesi tasarımı, Google Haritalar optimizasyonu, sosyal medya yönetimi ve misafir deneyimi otomasyonu hizmetleri sunar.',
+    'seo.home.keywords': 'kktc otel web sitesi, kktc otel seo, kuzey kıbrıs otel dijital ajansı, kktc rezervasyon otomasyonu, kktc otel sosyal medya, girne otel web tasarım, gazimağusa otel web sitesi',
     'seo.about.title': 'Hakkımızda | Fures Tech Dijital Ajansı',
     'seo.about.description': 'Fures Tech ekibi tasarım, yazılım, yapay zekâ ve büyüme alanlarında deneyimli uzmanlardan oluşur. Kuzey Kıbrıs ve uluslararası projelerde uçtan uca dijital dönüşüm sağlıyoruz.',
     'seo.about.keywords': 'fures tech ekibi, kıbrıs dijital uzmanları, kuzey kıbrıs teknoloji şirketi',
-    'seo.services.title': 'Hizmetler | Kıbrıs Web Tasarım, Yapay Zekâ Otomasyonu ve Sosyal Medya',
-    'seo.services.description': 'Fures Tech; Girne, Lefkoşa ve Gazimağusa\'da ürün ve tanıtım web siteleri, otel web sitesi oluşturma, logo tasarımı, yapay zekâ otomasyonları, sosyal medya yönetimi, veri analitiği ve içerik üretimiyle işletmenizi büyütür.',
+    'seo.services.title': 'Hizmetler | Otel Web Sitesi, SEO, Sosyal Medya | Fures Tech',
+    'seo.services.description': 'Fures Tech; otel web sitesi tasarımı, Google Haritalar optimizasyonu, sosyal medya yönetimi, otel yazılım entegrasyonu ve misafir deneyimi otomasyonu hizmetleriyle KKTC ve DACH bölgesi otellerini büyütür.',
     'seo.services.keywords': 'kktc web tasarım hizmetleri, kktc ürün web sitesi geliştirme, kktc tanıtım web sitesi, kktc otel web sitesi, kktc logo tasarımı, kktc otomasyon tasarımı, kktc sosyal medya yönetimi',
     'seo.campaigns.title': 'Kampanyalar | Fures Tech Günlük Yapay Zekâ Reklam Planları',
     'seo.campaigns.description': 'Fures Tech her gün Türkiye ve KKTC için yapay zekâ destekli kampanya konseptleri, otomasyon akışları ve sosyal medya fikirleri üretir.',
@@ -138,20 +101,20 @@ const translations = {
     'seo.kvkk.keywords': 'kvkk aydınlatma metni, kişisel veri işleme, kktc veri sorumlusu, fures tech kvkk',
 
     // Hero
-    'hero.title': 'Dijital Ajans',
-    'hero.rotating': 'Dijital Ajans|Akıllı Sistem|Yaratıcı Otomasyon|Fures Tech',
-    'hero.subtitle': 'Sınırların Ötesinde. Deneyime odaklı.',
-    'hero.ai_powered': 'Yapay Zekâ ile Güçlendirilmiş Tasarım, Kod ve Büyüme.',
-    'hero.description': 'Ürün, tanıtım ve otel web siteleri; AI tasarım, yapay zekâ otomasyonu ve sosyal medya yönetimi ile markanızı büyütüyoruz.',
-    'hero.badge': 'AI-Native Dijital Ajans',
-    'hero.cta_discover': 'Daha Fazlasını Keşfet',
+    'hero.title': 'Otel Dijital Ajansı',
+    'hero.rotating': 'Otel Web Sitesi|Yerel SEO|Google Haritalar|Misafir Otomasyonu',
+    'hero.subtitle': 'Daha Fazla Direkt Rezervasyon. Daha Az Aracı.',
+    'hero.ai_powered': 'KKTC Otellerine Özel Dijital Çözümler.',
+    'hero.description': 'Otel web sitesi tasarımı, yerel SEO, sosyal medya yönetimi ve misafir deneyimi otomasyonu ile rezervasyon oranınızı artırıyoruz. Avusturya ve KKTC ofislerimizden DACH ve KKTC bölgesine hizmet veriyoruz.',
+    'hero.badge': 'Otel & Turizm Dijital Ajansı',
+    'hero.cta_discover': 'Hizmetleri Keşfet',
     'hero.cta_pricing': 'Fiyatları Gör',
     'hero.cta_talk': 'Hadi Konuşalım',
-    'hero.secondary_cta': 'Projenizi Anlatalım →',
+    'hero.secondary_cta': 'Danışmanlık Talep Edin →',
 
     // Quotes
     'quotes.items': 'Teknolojiyle değil, zekâyla ölçekleniyoruz.|Fures = Akıllı sistem tasarımı|Estetik ≠ lüks, işlevdir|Yapay zekâ = yaratıcı hız',
-    
+
     // Why Us
     'why_us.title': 'AI-Native yaklaşım. Reel sonuç.',
     'why_us.subtitle': 'Neden Biz',
@@ -163,7 +126,7 @@ const translations = {
     'why_us.data_driven_desc': 'Paneller, raporlar, A/B testleriyle neyin işe yaradığını anlarız.',
     'why_us.industry_depth': 'Sektörel Derinlik',
     'why_us.industry_depth_desc': 'Turizm–otelcilik, e-ticaret/ürün katalogları (dermokozmetik & veteriner), deneyim ve etkinlik satışı.',
-    
+
     // Benefits
     'benefits.title': 'Kazandırdıklarımız',
     'benefits.customer_experience': 'Geliştirilmiş Müşteri Deneyimi',
@@ -172,32 +135,28 @@ const translations = {
     'benefits.efficiency_desc': 'Süreçlerin akıllı otomasyonu',
     'benefits.better_decisions': 'Daha İyi Kararlar',
     'benefits.better_decisions_desc': 'Şeffaf veri ve içgörü akışı',
-    
+
     // Mission
     'mission.title': 'Misyonumuz',
     'mission.description': 'İşletmeleri ürün web siteleri, otel web sitesi projeleri, logo tasarımı ve yapay zekâ otomasyonu ile dijitalde zirveye taşımak.',
     'mission.priority': 'Önceliğimiz: netlik, hız ve kalıcı estetik.',
     'mission.cta': 'Bir Görüşme Ayarla',
-    
+
     // Services
     'services.title': 'Hizmetler',
-    'services.web_design': 'Web Tasarımı',
-    'services.web_design_desc': 'KKTC web tasarım ajansı refleksiyle ürün web siteleri, tanıtım siteleri, otel web siteleri ve ürün satış web siteleri tasarlıyor, AI tasarım ile yüksek performanslı deneyimler kuruyoruz',
-    'services.ai_automation': 'Akıllı Otomasyon',
-    'services.ai_automation_desc': 'Operasyonları kolaylaştırmak, maliyetleri azaltmak ve verimliliği artırmak için yapay zekâ otomasyonu ve özel otomasyon tasarımı geliştiriyoruz; rezervasyon, satış ve pazarlama akışlarını tek panelde topluyoruz.',
+    'services.seo': 'SEO (Arama Motoru Optimizasyonu)',
+    'services.seo_desc': 'Google\'da üst sıralarda görünün. Otel ve turizm işletmeniz için hedefli anahtar kelime optimizasyonu, teknik SEO ve içerik stratejisiyle organik trafiğinizi artırıyoruz.',
+    'services.local_seo': 'Google Haritalar & Yerel SEO',
+    'services.local_seo_desc': 'Google İşletme Profilinizi optimize ediyoruz; tutarlı NAP verileri, yerel atıflar ve yorum stratejisiyle bölgesel aramalarda rakiplerinizin önüne geçiyoruz.',
     'services.social_media': 'Sosyal Medya Yönetimi',
-    'services.social_media_desc': 'Veriye dayalı sosyal medya ve içerik stratejileriyle Girne, Lefkoşa ve Gazimağusa markaları için etkileşimi ve marka bilinirliğini artırıyor, ürün tanıtımı ve otel kampanyalarını yönetiyoruz.',
-    'services.data_analytics': 'Veri & Analitik',
-    'services.data_analytics_desc': 'GTM/GA4, ısı haritaları, dashboard\'lar, ROI takibi, deney tasarımı; KKTC operasyonlarınız için uçtan uca görünürlük.',
-    'services.cloud_integration': 'Bulut & Entegrasyon',
-    'services.cloud_integration_desc': 'API entegrasyonları (ör. rezervasyon/ödeme), yapısal veriler ve altyapı düzeni.',
-    'services.certified_translation': 'Onaylı Çeviri Hizmetleri',
-    'services.certified_translation_desc': 'Hukuki, akademik ve ticari belgeler için yeminli ve sertifikalı çeviri hizmetleri sunuyoruz, uluslararası standartlara uygunluk ve doğruluğu sağlıyoruz.',
-    'services.ad_targeting': 'Reklam Hedefleme (AI)',
-    'services.ad_targeting_desc': 'Kitle modelleme, yaratıcı varyasyonları, çok kanallı optimizasyon.',
-    'services.ai_content': 'AI Destekli İçerik & Sosyal Strateji',
-    'services.ai_content_desc': 'Metin–görsel–video üretimi; marka rehberine bağlı, tutarlı üretim.',
-    
+    'services.social_media_desc': 'Instagram, Facebook ve TikTok\'ta düzenli, kaliteli içerikler; misafir deneyimini öne çıkaran kampanyalar; rezervasyon artışına odaklı sosyal strateji.',
+    'services.hotel_web': 'Otel Web Sitesi Tasarımı',
+    'services.hotel_web_desc': 'Çok dilli, rezervasyon motorlu, mobil-öncelikli otel web siteleri. Hızlı yükleme, KVKK/GDPR uyumlu yapı ve doğrudan rezervasyon oranını artıran dönüşüm optimizasyonu.',
+    'services.hotel_pms': 'Otel Yönetim Yazılımı Entegrasyonu',
+    'services.hotel_pms_desc': 'PMS, channel manager ve online rezervasyon portallarınızı web sitenize entegre ediyoruz. Otomatik müsaitlik ve fiyat senkronizasyonu; manuel iş yükünü sıfıra indiriyoruz.',
+    'services.guest_automation': 'Misafir Deneyimi Otomasyonu',
+    'services.guest_automation_desc': 'Otomatik ön-varış mesajları, dijital check-in formları, WhatsApp ve e-posta akışları ile ayrılış sonrası yorum toplama; sadık misafir kitlesi oluşturun.',
+
     // Service Packages
     'packages.title': 'Ayrıntılı Hizmet Paketleri',
     'packages.subtitle': 'Modüler ve ölçekte esnek paketler',
@@ -222,7 +181,7 @@ const translations = {
     'packages.translation_subtitle': 'Yeminli/sertifikalı çeviri',
     'packages.translation_desc': 'Yeminli/sertifikalı çeviri, teknik/akademik kalite güvencesi',
     'packages.translation_price': 'Dil ve kapsam için iletişime geçin',
-    
+
     // Projects
     'projects.title': 'Projeler',
     'projects.subtitle': 'AI destekli referanslarımız',
@@ -243,11 +202,11 @@ const translations = {
     'projects.start_body': 'İletişime geçtiğinizde hedeflerinizi dinleyip uygun çözüm yolunu planlıyoruz. Yapay zekâ destekli ekiplerimiz projenizi fikir aşamasından yayına kadar taşıyor.',
     'projects.start_primary_cta': 'İletişime geç',
     'projects.start_secondary_cta': 'Tüm projeleri gör',
-    
+
     // Why Fures
     'why_fures.title': 'Neden Fures Tech?',
     'why_fures.description': 'Tasarımcı duyarlılığı + Mühendis aklı + AI refleksi. KKTC dijital ekosisteminde güncel araçları değil, doğru sistemleri kurarız: sürdürülebilir, ölçülebilir ve devredilebilir.',
-    
+
     // Team
     'team.badge': 'Ekibimiz',
     'team.title': 'Ekip',
@@ -257,14 +216,14 @@ const translations = {
     'team.furkan.name': 'Furkan Yonat',
     'team.furkan.role': 'Co-Founder',
     'team.furkan.description': 'Sistem mimarisi, otomasyon, entegrasyon ve büyüme',
-    
+
     // Pricing
     'pricing.title': 'Fiyatlandırma',
     'pricing.subtitle': 'Şeffaf ve modüler',
     'pricing.description': 'İhtiyaca göre paketler birleştirilebilir; sabit kapsam + sprint yaklaşımıyla ilerleriz.',
     'pricing.cta': 'Teklif Al',
     'pricing.cta_desc': '48 saat içinde özet çözüm ve tahmini bütçe.',
-    
+
     // FAQ
     'faq.title': 'Sıkça Sorulan Sorular',
     'faq.q1': 'Süreler ne kadar?',
@@ -275,26 +234,27 @@ const translations = {
     'faq.a3': 'Roller, erişim seviyeleri ve loglama standarttır. Üçüncü taraf servislerde best-practice uygularız.',
     'faq.q4': 'Hangi diller?',
     'faq.a4': 'TR/EN/DE/RU başta olmak üzere talebe göre genişletilir.',
-    
+
     // Contact
     'contact.title': 'İletişim',
-    'contact.subtitle': 'Buradayız, yardıma hazırız.',
-    'contact.description': 'Uzman ekibimizle fikirden canlıya hızlıca ilerleyelim.',
+    'contact.subtitle': 'Projenizi birlikte büyütelim.',
+    'contact.description': 'KKTC ve Avusturya ofislerimizden uzman ekibimizle otel dijital dönüşümünüzü planlıyoruz.',
     'contact.email': 'E-posta',
-    'contact.headquarters': 'Merkez',
-    'contact.headquarters_location': 'Gazimağusa, KKTC (TRNC)',
-    'contact.second_location': 'İkinci Lokasyon',
-    'contact.second_location_place': 'İstanbul, Türkiye',
+    'contact.headquarters': 'Avusturya Ofisi',
+    'contact.headquarters_location': 'Maria Alm, Salzburgerland, Avusturya',
+    'contact.second_location': 'KKTC Ofisi',
+    'contact.second_location_place': 'Gazimağusa, Kuzey Kıbrıs',
     'contact.phone': 'Telefon',
+    'contact.phone_at': '+43 664 99735268',
     'contact.send_message': 'Mesaj Gönder',
     'contact.schedule_meeting': 'Toplantı Planla',
-    
+
     // Footer
     'footer.copyright': '© 2025 Fures Tech — fures.at · Tüm hakları saklıdır.',
     'footer.privacy': 'Gizlilik',
     'footer.cookies': 'Çerezler',
     'footer.kvkk': 'KVKK/Aydınlatma',
-    
+
     // Form
     'form.title': 'Hadi projenizi kıvılcımlayalım.',
     'form.name': 'Ad Soyad',
@@ -399,7 +359,7 @@ const translations = {
 
     // Quotes
     'quotes.items': 'We scale with intelligence, not just technology.|Fures = Intelligent systems design|Aesthetics ≠ luxury, they are function.|AI = creative speed',
-    
+
     // Why Us
     'why_us.title': 'AI-Native approach. Real results.',
     'why_us.subtitle': 'Why Us',
@@ -411,7 +371,7 @@ const translations = {
     'why_us.data_driven_desc': 'Dashboards, reports, A/B tests to understand what works.',
     'why_us.industry_depth': 'Industry Depth',
     'why_us.industry_depth_desc': 'Tourism-hospitality, e-commerce/product catalogs (dermocosmetics & veterinary), experience and event sales.',
-    
+
     // Benefits
     'benefits.title': 'What We Deliver',
     'benefits.customer_experience': 'Enhanced Customer Experience',
@@ -420,13 +380,13 @@ const translations = {
     'benefits.efficiency_desc': 'Smart automation of processes',
     'benefits.better_decisions': 'Better Decisions',
     'benefits.better_decisions_desc': 'Transparent data and insight flow',
-    
+
     // Mission
     'mission.title': 'Our Mission',
     'mission.description': 'To elevate businesses across North Cyprus (TRNC) to the top of their field through comprehensive AI automation and timeless design.',
     'mission.priority': 'Our priority: clarity, speed, and lasting aesthetics.',
     'mission.cta': 'Schedule a Meeting',
-    
+
     // Services
     'services.title': 'Services',
     'services.web_design': 'Web Design',
@@ -445,7 +405,7 @@ const translations = {
     'services.ad_targeting_desc': 'Audience modeling, creative variations, multi-channel optimization.',
     'services.ai_content': 'AI-Powered Content & Social Strategy',
     'services.ai_content_desc': 'Text–image–video generation; brand-aligned, consistent production.',
-    
+
     // Service Packages
     'packages.title': 'Detailed Service Packages',
     'packages.subtitle': 'Modular and scalable packages',
@@ -461,7 +421,7 @@ const translations = {
     'packages.ai_automation': 'AI Automation',
     'packages.ai_automation_subtitle': 'Process automation and integration',
     'packages.ai_automation_desc': 'Data collection/sync, content automation, agent/tool orchestration • Management panel and reporting',
-    'packages.ai_automation_price': 'Let’s define the solution together',
+    'packages.ai_automation_price': 'Let\'s define the solution together',
     'packages.social_media_pro': 'Social Media Pro',
     'packages.social_media_pro_subtitle': 'Strategy + production + advertising',
     'packages.social_media_pro_desc': 'Monthly content plan (TR/EN/DE/RU), production and publication • Performance reporting, optimization',
@@ -470,7 +430,7 @@ const translations = {
     'packages.translation_subtitle': 'Sworn/certified translation',
     'packages.translation_desc': 'Sworn/certified translation, technical/academic quality assurance',
     'packages.translation_price': 'Contact us to discuss languages & scope',
-    
+
     // Projects
     'projects.title': 'Projects',
     'projects.subtitle': 'AI-native case snapshots',
@@ -491,11 +451,11 @@ const translations = {
     'projects.start_body': 'Tell us about your objectives and we will map the right solution. Our AI-native team supports you from discovery to launch.',
     'projects.start_primary_cta': 'Talk to our team',
     'projects.start_secondary_cta': 'Browse all projects',
-    
+
     // Why Fures
     'why_fures.title': 'Why Fures Tech?',
     'why_fures.description': 'Designer sensitivity + Engineer mind + AI reflex. In the TRNC digital ecosystem we build the right systems, not just current tools: sustainable, measurable, and transferable.',
-    
+
     // Team
     'team.badge': 'Our Team',
     'team.title': 'Team',
@@ -505,14 +465,14 @@ const translations = {
     'team.furkan.name': 'Furkan Yonat',
     'team.furkan.role': 'Co-Founder',
     'team.furkan.description': 'System architecture, automation, integration and growth',
-    
+
     // Pricing
     'pricing.title': 'Pricing',
     'pricing.subtitle': 'Transparent and modular',
     'pricing.description': 'Packages can be combined as needed; we proceed with fixed scope + sprint approach.',
     'pricing.cta': 'Get Quote',
     'pricing.cta_desc': 'Summary solution and estimated budget within 48 hours.',
-    
+
     // FAQ
     'faq.title': 'Frequently Asked Questions',
     'faq.q1': 'What are the timelines?',
@@ -523,7 +483,7 @@ const translations = {
     'faq.a3': 'Roles, access levels, and logging are standard. We apply best practices with third-party services.',
     'faq.q4': 'Which languages?',
     'faq.a4': 'TR/EN/DE/RU primarily, expandable on demand.',
-    
+
     // Contact
     'contact.title': 'Contact',
     'contact.subtitle': 'We\'re here to help.',
@@ -534,15 +494,16 @@ const translations = {
     'contact.second_location': 'Second Location',
     'contact.second_location_place': 'Istanbul, Turkey',
     'contact.phone': 'Phone',
+    'contact.phone_at': '+43 664 99735268',
     'contact.send_message': 'Send Message',
     'contact.schedule_meeting': 'Schedule Meeting',
-    
+
     // Footer
     'footer.copyright': '© 2025 Fures Tech — fures.at · All rights reserved.',
     'footer.privacy': 'Privacy',
     'footer.cookies': 'Cookies',
     'footer.kvkk': 'GDPR/Disclosure',
-    
+
     // Form
     'form.title': 'Let\'s spark your project.',
     'form.name': 'Full Name',
@@ -647,9 +608,9 @@ const translations = {
 
     // Quotes
     'quotes.items': 'Мы масштабируемся не технологиями, а интеллектом.|Fures = дизайн умных систем|Эстетика ≠ роскошь, это функция|ИИ = творческая скорость',
-    
+
     // Why Us
-    'why_us.title': 'ИИ-нативный подх��д. Реальные результаты.',
+    'why_us.title': 'ИИ-нативный подход. Реальные результаты.',
     'why_us.subtitle': 'Почему Мы',
     'why_us.operational': 'Операционная Эффективность',
     'why_us.operational_desc': 'Автоматизирует повторяющиеся задачи, снижает затраты, экономит время.',
@@ -659,7 +620,7 @@ const translations = {
     'why_us.data_driven_desc': 'Панели, отчеты, A/B тесты для понимания того, что работает.',
     'why_us.industry_depth': 'Отраслевая Глубина',
     'why_us.industry_depth_desc': 'Туризм-гостиничный бизнес, электронная коммерция/каталоги продуктов (дермокосметика и ветеринария), продажа впечатлений и мероприятий.',
-    
+
     // Benefits
     'benefits.title': 'Что Мы Предоставляем',
     'benefits.customer_experience': 'Улучшенный Клиентский Опыт',
@@ -668,13 +629,13 @@ const translations = {
     'benefits.efficiency_desc': 'Умная автоматизация процессов',
     'benefits.better_decisions': 'Лучшие Решения',
     'benefits.better_decisions_desc': 'Прозрачный поток данных и аналитики',
-    
+
     // Mission
     'mission.title': 'Наша Миссия',
     'mission.description': 'Вывести бизнес на вершину своей области с помощью комплексной автоматизации ИИ и вневременного дизайна.',
     'mission.priority': 'Наш приоритет: ясность, скорость и долговечная эстетика.',
     'mission.cta': 'Назначить Встречу',
-    
+
     // Services
     'services.title': 'Услуги',
     'services.web_design': 'Веб-Дизайн',
@@ -693,7 +654,7 @@ const translations = {
     'services.ad_targeting_desc': 'Моделирование аудитории, креативные вариации, многоканальная оптимизация.',
     'services.ai_content': 'Контент и Социальная Стратегия на основе ИИ',
     'services.ai_content_desc': 'Генерация текста–изображения–видео; согласованное с брендом, последовательное производство.',
-    
+
     // Service Packages
     'packages.title': 'Подробные Пакеты Услуг',
     'packages.subtitle': 'Модульные и масштабируемые пакеты',
@@ -718,7 +679,7 @@ const translations = {
     'packages.translation_subtitle': 'Присяжный/сертифицированный перевод',
     'packages.translation_desc': 'Присяжный/сертифицированный перевод, техническое/академическое обеспечение качества',
     'packages.translation_price': 'Свяжитесь с нами для деталей и языков',
-    
+
     // Projects
     'projects.title': 'Проекты',
     'projects.subtitle': 'Наши кейсы на основе ИИ',
@@ -739,11 +700,11 @@ const translations = {
     'projects.start_body': 'Расскажите о целях — мы предложим оптимальное решение. Наша команда, работающая с ИИ, сопровождает проект от идеи до запуска.',
     'projects.start_primary_cta': 'Связаться с нами',
     'projects.start_secondary_cta': 'Все проекты',
-    
+
     // Why Fures
     'why_fures.title': 'Почему Fures Tech?',
     'why_fures.description': 'Чувствительность дизайнера + Разум инженера + Рефлекс ИИ. Мы создаем правильные системы, а не просто текущие инструменты: устойчивые, измеримые и передаваемые.',
-    
+
     // Team
     'team.badge': 'Наша Команда',
     'team.title': 'Команда',
@@ -753,14 +714,14 @@ const translations = {
     'team.furkan.name': 'Фуркан Йонат',
     'team.furkan.role': 'Со-основатель',
     'team.furkan.description': 'Архитектура систем, автоматизация, интеграция и рост',
-    
+
     // Pricing
     'pricing.title': 'Цены',
     'pricing.subtitle': 'Прозрачно и модульно',
     'pricing.description': 'Пакеты можно комбинировать по мере необходимости; мы работаем с фиксированным объемом + спринт-подход.',
     'pricing.cta': 'Получить Предложение',
     'pricing.cta_desc': 'Краткое решение и предполагаемый бюджет в течение 48 часов.',
-    
+
     // FAQ
     'faq.title': 'Часто Задаваемые Вопросы',
     'faq.q1': 'Какие сроки?',
@@ -771,7 +732,7 @@ const translations = {
     'faq.a3': 'Роли, уровни доступа и логирование являются стандартными. Мы применяем лучшие практики со сторонними сервисами.',
     'faq.q4': 'Какие языки?',
     'faq.a4': 'В основном TR/EN/DE/RU, расширяемо по запросу.',
-    
+
     // Contact
     'contact.title': 'Контакты',
     'contact.subtitle': 'Мы здесь, чтобы помочь.',
@@ -784,13 +745,13 @@ const translations = {
     'contact.phone': 'Телефон',
     'contact.send_message': 'Отправить Сообщение',
     'contact.schedule_meeting': 'Назначить Встречу',
-    
+
     // Footer
     'footer.copyright': '© 2025 Fures Tech — fures.at · Все права защищены.',
     'footer.privacy': 'Конфиденциальность',
     'footer.cookies': 'Куки',
     'footer.kvkk': 'GDPR/Раскрытие',
-    
+
     // Form
     'form.title': 'Давайте зажжем ваш проект.',
     'form.name': 'Полное Имя',
@@ -804,252 +765,249 @@ const translations = {
     'form.error': 'Что-то пошло не так. Пожалуйста, проверьте поля.',
   },
   de: {
-    // Header
+    // Nav
     'nav.home': 'Startseite',
     'nav.about': 'Über uns',
-    'nav.services': 'Dienstleistungen',
-    'nav.projects': 'Projekte',
+    'nav.services': 'Leistungen',
+    'nav.projects': 'Referenzen',
     'nav.campaigns': 'Kampagnen',
     'nav.blog': 'Blog',
     'nav.contact': 'Kontakt',
     'nav.more': 'Mehr',
-    'nav.lets_talk': 'Lass uns reden',
+    'nav.lets_talk': 'Beratung anfragen',
 
     // Blog
     'blog.title': 'Fures Blog',
-    'blog.subtitle': 'Tägliche KI-News und Impulse für digitale Transformation.',
+    'blog.subtitle': 'Einblicke zu Digital, Hotel-Marketing und lokaler SEO im DACH-Raum.',
     'blog.no_posts': 'Für diese Sprache sind noch keine Beiträge verfügbar.',
     'blog.read_more': 'Weiterlesen',
     'blog.back_to_list': 'Zurück zum Blog',
     'blog.not_found': 'Beitrag nicht gefunden',
-    'blog.not_found_description': 'Der gewünschte Artikel wurde möglicherweise verschoben oder entfernt. Entdecken Sie unsere weiteren Beiträge.',
+    'blog.not_found_description': 'Der gesuchte Artikel wurde möglicherweise verschoben. Entdecken Sie unsere aktuellen Beiträge.',
 
     // Campaigns
     'campaigns.title': 'Fures Kampagnen',
-    'campaigns.subtitle': 'Tägliche KI-Kampagnenkits für die Türkei und Nordzypern.',
-    'campaigns.no_posts': 'Kampagnen sind derzeit nur auf Türkisch verfügbar. Bitte später erneut prüfen.',
+    'campaigns.subtitle': 'Tägliche KI-gestützte Kampagnenimpulse für die Hotellerie.',
+    'campaigns.no_posts': 'Kampagnen sind derzeit auf Türkisch verfügbar. Bald auch auf Deutsch.',
     'campaigns.read_more': 'Details ansehen',
-    'campaigns.back_to_list': 'Zurück zu den Kampagnen',
+    'campaigns.back_to_list': 'Zurück zu Kampagnen',
     'campaigns.not_found': 'Kampagne nicht gefunden',
-    'campaigns.not_found_description': 'Diese Kampagne ist eventuell nicht mehr verfügbar. Entdecken Sie aktuelle Kits.',
+    'campaigns.not_found_description': 'Diese Kampagne wurde möglicherweise entfernt. Sehen Sie sich unsere aktuellen Angebote an.',
 
     // SEO
-    'seo.site_name': 'Fures Tech · Digitalagentur Nordzypern',
-    'seo.tagline': 'Webdesign, KI-Automatisierung, Social Media und Wachstumslösungen',
-    'seo.common.keywords': 'nordzypern webdesign, zypern webdesign agentur, zypern digitalagentur, famagusta webdesign, nikosia webdesign, zypern ki-automatisierung, zypern social media betreuung, zypern seo agentur',
-    'seo.organization.description': 'Fures Tech ist eine mehrsprachige Digitalagentur aus Famagusta. Wir entwickeln Webdesign, KI-Automatisierung und Growth-Marketing für Hotels, Tourismusunternehmen, E-Commerce-Marken und Dienstleister in Nordzypern und den umliegenden Märkten.',
-    'seo.home.title': 'Fures Tech | Webdesign, KI-Automatisierung & Social Media in Nordzypern',
-    'seo.home.description': 'Fures Tech liefert maßgeschneiderte Websites, KI-Automatisierungen, Social-Media-Betreuung und datengetriebenes Wachstum für Unternehmen in Nordzypern und der Türkei. Unsere mehrsprachigen, SEO-optimierten Projekte bringen Sie in den Suchergebnissen nach vorn.',
-    'seo.home.keywords': 'nordzypern digitalagentur, zypern social media agentur, zypern ki agentur, zypern seo beratung, famagusta marketing agentur',
-    'seo.about.title': 'Über uns | Fures Tech Digitalagentur',
-    'seo.about.description': 'Das Team von Fures Tech vereint Expertise in Design, Entwicklung, KI und Growth, um für Marken in Nordzypern und weltweit ganzheitliche digitale Transformation zu liefern.',
-    'seo.about.keywords': 'fures tech team, zypern digitale experten, nordzypern technologie unternehmen',
-    'seo.services.title': 'Leistungen | Webdesign, KI-Automatisierung & Social Media auf Zypern',
-    'seo.services.description': 'Fures Tech unterstützt Ihr Wachstum mit Webdesign und Entwicklung, KI-Automatisierung, Social-Media-Management, Analytics und mehrsprachiger Content-Produktion.',
-    'seo.services.keywords': 'nordzypern webdienstleistungen, zypern automatisierungslösungen, zypern social media management, zypern datenanalysen',
-    'seo.campaigns.title': 'Kampagnen | Fures Tech KI-Marketing Kits',
-    'seo.campaigns.description': 'Fures Tech entwickelt täglich KI-basierte Kampagnenkonzepte, Automations-Workflows und Social-Media-Ideen für die Türkei und Nordzypern.',
-    'seo.campaigns.keywords': 'fures kampagnen, türkei ki marketing, nordzypern werbeautomation, kampagnen automation, social media kit',
-    'seo.projects.title': 'Projekte | Fures Tech Referenzen',
-    'seo.projects.description': 'Entdecken Sie unsere Webdesign-, KI- und Wachstumsprojekte für Kunden in Nordzypern und internationalen Märkten.',
-    'seo.projects.keywords': 'nordzypern web projekte, zypern ki projekte, zypern digitale transformation referenzen',
-    'seo.team.title': 'Team | Fures Tech Gründer & Expert:innen',
-    'seo.team.description': 'Lernen Sie die Gründer:innen und Spezialist:innen von Fures Tech kennen – Designer:innen und Ingenieur:innen für mehrsprachige digitale Experiences und KI-Automatisierung.',
-    'seo.team.keywords': 'fures tech gründer, fures tech team, zypern technologie experten',
-    'seo.faq.title': 'FAQ | Fures Tech',
-    'seo.faq.description': 'Antworten auf häufige Fragen zu unseren Leistungen, Projektlaufzeiten, Support und Datensicherheit.',
-    'seo.faq.keywords': 'nordzypern webdesign fragen, zypern digitalagentur preise, fures tech support',
-    'seo.contact.title': 'Kontakt | Fures Tech Digitalagentur Nordzypern',
-    'seo.contact.description': 'Kontaktieren Sie Fures Tech. Unser Team in Famagusta plant mit Ihnen Webdesign-, KI-Automations- und Social-Media-Projekte.',
-    'seo.contact.keywords': 'fures tech kontakt, nordzypern digitalagentur kontakt, famagusta webdesign kontakt',
-    'seo.profile.furkanyonat.title': 'Furkan Yonat Digitaler Lebenslauf | Fures Tech',
-    'seo.profile.furkanyonat.description': 'Entdecken Sie den KI-gestützten Karriereauftritt, Projekte und Zertifikate von Fures Tech Mitgründer Furkan Yonat.',
-    'seo.profile.furkanyonat.keywords': 'furkan yonat, fures tech mitgründer, zypern ki spezialist',
-    'seo.profile.gulbeneser.title': 'Gülben Eser Portfolio | Fures Tech',
-    'seo.profile.gulbeneser.description': 'Erfahren Sie mehr über die Designführung, Content-Strategie und Projekte der Fures Tech Gründerin Gülben Eser.',
-    'seo.profile.gulbeneser.keywords': 'gulben eser, fures tech gründerin, zypern creative director',
-    'seo.profile.kariyer.title': 'Fures Tech Karriere-Assistent | KI-gestütztes Recruiting',
-    'seo.profile.kariyer.description': 'Die Karriereplattform von Fures Tech bietet KI-gestützte Kandidatenbewertung, Interview-Simulationen und automatisierte Job-Ausschreibungen.',
-    'seo.profile.kariyer.keywords': 'fures tech karriere, zypern recruiting automation, ki karriere assistent',
+    'seo.site_name': 'Fures Tech · Hotel-Digitalpartner für DACH',
+    'seo.tagline': 'Hotel-Website, Local SEO & Gästekommunikation für Österreich, Deutschland & Schweiz',
+    'seo.common.keywords': 'hotel website österreich, hotel seo dach, google maps hotel optimierung, hotelmanagementsoftware integration, hotel social media management, direktbuchungen steigern, hotel digital marketing salzburg, hotel webseite österreich',
+    'seo.organization.description': 'Fures Tech ist ein auf Hotellerie und Tourismus spezialisiertes Digitalunternehmen mit Büro in Maria Alm, Salzburgerland. Wir entwickeln Hotel-Webseiten, optimieren lokale Suchpräsenz und automatisieren die Gästekommunikation für Hotels und Gastronomiebetriebe im DACH-Raum.',
+    'seo.home.title': 'Fures Tech | Hotel-Website, Local SEO & Direktbuchungen | Salzburgerland',
+    'seo.home.description': 'Fures Tech aus Maria Alm im Salzburgerland entwickelt maßgeschneiderte Hotel-Webseiten mit Buchungsmotor, Google Maps Optimierung und automatisierte Gästekommunikation für Hotels und Tourismusbetriebe in Österreich, Deutschland und der Schweiz.',
+    'seo.home.keywords': 'hotel website österreich, hotel seo salzburg, local seo hotel dach, hotel buchungsmotor, direktbuchungen steigern österreich, hotel webseite salzburgerland, google maps hotel optimierung, hotel digital agentur austria',
+    'seo.about.title': 'Über uns | Fures Tech – Ihr Hotel-Digitalpartner',
+    'seo.about.description': 'Fures Tech verbindet Design, Technologie und Hotellerie-Know-how für nachhaltige digitale Präsenz. Unser Team aus Maria Alm, Salzburgerland, betreut Hotelbetriebe im gesamten DACH-Raum.',
+    'seo.about.keywords': 'fures tech hotel agentur, digitalpartner hotellerie österreich, hotel marketing salzburg',
+    'seo.services.title': 'Leistungen | Hotel-Website, SEO & Automatisierung | Fures Tech',
+    'seo.services.description': 'Fures Tech bietet Hotel-Webseiten mit Buchungsmotor, Google Maps Optimierung, Social-Media-Management, Hotelmanagementsoftware-Integration und Gästeerlebnis-Automatisierung für Hotels im DACH-Raum.',
+    'seo.services.keywords': 'hotel webseite erstellen österreich, hotel seo dach, google maps hotel, hotel pms integration, gästekommunikation automatisieren, hotel social media österreich',
+    'seo.campaigns.title': 'Kampagnen | Fures Tech Hotel-Marketing',
+    'seo.campaigns.description': 'Aktuelle digitale Marketingimpulse und Kampagnenideen für Hotels und Tourismusbetriebe im DACH-Raum.',
+    'seo.campaigns.keywords': 'hotel marketing kampagnen österreich, dach tourismus marketing, hotel social media kampagne',
+    'seo.projects.title': 'Referenzen | Fures Tech Hotel-Projekte',
+    'seo.projects.description': 'Entdecken Sie unsere Hotel-Website-Projekte, SEO-Erfolge und Digitalprojekte für die Hotellerie im DACH-Raum.',
+    'seo.projects.keywords': 'hotel website referenzen österreich, hotel seo projekte, dach hotellerie digital',
+    'seo.team.title': 'Team | Fures Tech – Ihr Hotel-Digitalexperte',
+    'seo.team.description': 'Lernen Sie das Team hinter Fures Tech kennen – Digitalexperten mit Hotellerie-Erfahrung und Sitz im Salzburgerland.',
+    'seo.team.keywords': 'fures tech team, hotel digital experten österreich, digitalpartner salzburgerland',
+    'seo.faq.title': 'Häufige Fragen | Fures Tech Hotel-Digital',
+    'seo.faq.description': 'Antworten auf häufige Fragen zu Hotel-Websites, Local SEO, Buchungsmotor-Integration und Gästekommunikation.',
+    'seo.faq.keywords': 'hotel website fragen österreich, hotel seo faq, buchungsmotor integration fragen',
+    'seo.contact.title': 'Kontakt | Fures Tech – Maria Alm, Salzburgerland',
+    'seo.contact.description': 'Kontaktieren Sie Fures Tech in Maria Alm, Salzburgerland. Wir beraten Hotels und Tourismusbetriebe im DACH-Raum kostenlos zu Website, SEO und Gästedigitalisierung.',
+    'seo.contact.keywords': 'fures tech kontakt, hotel digital agentur salzburg kontakt, hotel marketing beratung österreich, maria alm digital agentur',
+    'seo.profile.furkanyonat.title': 'Furkan Yonat | Fures Tech',
+    'seo.profile.furkanyonat.description': 'Mitgründer von Fures Tech – Systemarchitektur, Automatisierung und digitales Wachstum für Hotellerie.',
+    'seo.profile.furkanyonat.keywords': 'furkan yonat fures tech, hotel digital experte',
+    'seo.profile.gulbeneser.title': 'Gülben Eser | Fures Tech',
+    'seo.profile.gulbeneser.description': 'Gründerin von Fures Tech – Design, Inhalt und Projektmanagement für Hotellerie-Digitalprojekte.',
+    'seo.profile.gulbeneser.keywords': 'gülben eser fures tech, hotel design expertin',
+    'seo.profile.kariyer.title': 'Karriere | Fures Tech',
+    'seo.profile.kariyer.description': 'Werden Sie Teil von Fures Tech und gestalten Sie die Digitalisierung der Hotellerie mit.',
+    'seo.profile.kariyer.keywords': 'fures tech karriere, hotel digital jobs',
     'seo.privacy.title': 'Datenschutzerklärung | Fures Tech',
-    'seo.privacy.description': 'Erfahren Sie, wie Fures Tech personenbezogene Daten gemäß KVKK und DSGVO verarbeitet und schützt.',
-    'seo.privacy.keywords': 'datenschutzerklärung zypern, kvkk datenschutz, fures tech data protection',
+    'seo.privacy.description': 'Erfahren Sie, wie Fures Tech personenbezogene Daten gemäß DSGVO verarbeitet und schützt.',
+    'seo.privacy.keywords': 'datenschutz fures tech, dsgvo hotel website, datenschutzerklärung österreich',
     'seo.cookies.title': 'Cookie-Richtlinie | Fures Tech',
-    'seo.cookies.description': 'Welche Cookies wir einsetzen, zu welchen Zwecken und wie Sie Ihre Präferenzen verwalten.',
-    'seo.cookies.keywords': 'cookie richtlinie, marketing cookies, analytics cookies, fures tech',
-    'seo.kvkk.title': 'KVKK-Hinweis | Fures Tech',
-    'seo.kvkk.description': 'Informationen zu Verarbeitungszwecken, Rechtsgrundlagen, Übermittlungen und Betroffenenrechten bei Fures Tech.',
-    'seo.kvkk.keywords': 'kvkk hinweis, personenbezogene daten zypern, datenverantwortlicher trnc',
+    'seo.cookies.description': 'Informationen zu den Cookies, die Fures Tech verwendet, und wie Sie Ihre Präferenzen verwalten können.',
+    'seo.cookies.keywords': 'cookies fures tech, cookie richtlinie österreich, dsgvo cookies',
+    'seo.kvkk.title': 'Datenschutzhinweis | Fures Tech',
+    'seo.kvkk.description': 'Detaillierte Informationen zur Datenverarbeitung, Rechtsgrundlagen und Betroffenenrechten bei Fures Tech.',
+    'seo.kvkk.keywords': 'datenschutzhinweis fures tech, dsgvo österreich, betroffenenrechte',
 
     // Hero
-    'hero.title': 'Digitale Agentur',
-    'hero.rotating': 'Digitale Agentur|Intelligentes System|Kreative Automatisierung|Fures Tech',
-    'hero.subtitle': 'Jenseits von Grenzen.',
-    'hero.ai_powered': 'KI-gestütztes Design, Code & Wachstum.',
-    'hero.description': 'Intelligente Automatisierung, eindrucksvolle Web-Erlebnisse und datengestütztes Marketing für Ihre Marke. Schnell, messbar, skalierbar.',
-    'hero.badge': 'AI-native Digitalagentur',
-    'hero.cta_discover': 'Mehr Erfahren',
-    'hero.cta_pricing': 'Preise Ansehen',
-    'hero.cta_talk': 'Lass uns reden',
-    'hero.secondary_cta': 'Erzählen Sie uns von Ihrem Projekt →',
+    'hero.title': 'Hotel-Digitalpartner',
+    'hero.rotating': 'Hotel-Webseiten|Lokale SEO|Google Maps|Gäste-Automatisierung',
+    'hero.subtitle': 'Mehr Direktbuchungen. Mehr Sichtbarkeit.',
+    'hero.ai_powered': 'Digitale Lösungen für Hotels & Gastronomie im DACH-Raum.',
+    'hero.description': 'Von Maria Alm im Salzburgerland betreuen wir Hotels, Gasthöfe und Tourismusbetriebe in Österreich, Deutschland und der Schweiz. Professionelle Webseiten mit Buchungsmotor, lokale Suchoptimierung und automatisierte Gästekommunikation — alles aus einer Hand.',
+    'hero.badge': 'Hotel-Digitalpartner | Maria Alm, Salzburgerland',
+    'hero.cta_discover': 'Leistungen entdecken',
+    'hero.cta_pricing': 'Preise ansehen',
+    'hero.cta_talk': 'Beratung anfragen',
+    'hero.secondary_cta': 'Jetzt Beratung anfragen →',
 
     // Quotes
-    'quotes.items': 'Wir skalieren nicht mit Technologie, sondern mit Intelligenz.|Fures = Design intelligenter Systeme|Ästhetik ≠ Luxus, sondern Funktion|KI = kreative Geschwindigkeit',
-    
+    'quotes.items': 'Mehr Direktbuchungen durch kluge Digitalisierung.|Fures = Hotellerie trifft Technologie|Ihre Website ist Ihr bester Verkäufer.|Automatisierung schafft Zeit für Ihre Gäste.',
+
     // Why Us
-    'why_us.title': 'KI-nativer Ansatz. Echte Ergebnisse.',
-    'why_us.subtitle': 'Warum Wir',
-    'why_us.operational': 'Operative Effizienz',
-    'why_us.operational_desc': 'Automatisiert sich wiederholende Aufgaben, senkt Kosten, gewinnt Zeit zurück.',
-    'why_us.design_engineering': 'Design + Engineering',
-    'why_us.design_engineering_desc': 'Wir vereinen Ästhetik mit Leistung.',
-    'why_us.data_driven': 'Datengestützte Entscheidungen',
-    'why_us.data_driven_desc': 'Dashboards, Berichte, A/B-Tests, um zu verstehen, was funktioniert.',
-    'why_us.industry_depth': 'Branchentiefe',
-    'why_us.industry_depth_desc': 'Tourismus-Gastgewerbe, E-Commerce/Produktkataloge (Dermokosmetik & Veterinärmedizin), Erlebnis- und Eventverkauf.',
-    
+    'why_us.title': 'Wir verstehen die Hotellerie.',
+    'why_us.subtitle': 'Warum Fures Tech',
+    'why_us.operational': 'Zeitsparende Automatisierung',
+    'why_us.operational_desc': 'Reservierungsbestätigungen, Bewertungsanfragen und Gästenachrichten laufen automatisch — Sie konzentrieren sich auf das Wesentliche: Ihre Gäste.',
+    'why_us.design_engineering': 'Design & Technik aus einer Hand',
+    'why_us.design_engineering_desc': 'Ästhetische, schnelle und technisch saubere Hotel-Webseiten — DSGVO-konform, barrierefrei und für alle Geräte optimiert.',
+    'why_us.data_driven': 'Datenbasierte Entscheidungen',
+    'why_us.data_driven_desc': 'Klare Google Analytics-Berichte, Buchungsstatistiken und A/B-Tests zeigen Ihnen, was wirklich funktioniert.',
+    'why_us.industry_depth': 'Hotellerie-Expertise',
+    'why_us.industry_depth_desc': 'Von Boutique-Hotels in Salzburg bis zu Stadthotels in Wien und München — wir kennen die Anforderungen der DACH-Hotellerie.',
+
     // Benefits
-    'benefits.title': 'Was Wir Liefern',
-    'benefits.customer_experience': 'Verbesserte Kundenerfahrung',
-    'benefits.customer_experience_desc': 'Erhöhtes Engagement und Zufriedenheit',
-    'benefits.efficiency': 'Effizienzsteigerung',
-    'benefits.efficiency_desc': 'Intelligente Automatisierung von Prozessen',
-    'benefits.better_decisions': 'Bessere Entscheidungen',
-    'benefits.better_decisions_desc': 'Transparenter Daten- und Einblick-Fluss',
-    
+    'benefits.title': 'Was Sie gewinnen',
+    'benefits.customer_experience': 'Besseres Gästeerlebnis',
+    'benefits.customer_experience_desc': 'Vom ersten Google-Klick bis zur Bewertung nach dem Aufenthalt — ein nahtloses digitales Erlebnis.',
+    'benefits.efficiency': 'Weniger Verwaltungsaufwand',
+    'benefits.efficiency_desc': 'Automatisierte Abläufe sparen Zeit und Personalressourcen.',
+    'benefits.better_decisions': 'Klarere Zahlen',
+    'benefits.better_decisions_desc': 'Transparente Berichte und Buchungsstatistiken für fundierte Entscheidungen.',
+
     // Mission
     'mission.title': 'Unsere Mission',
-    'mission.description': 'Unternehmen durch umfassende KI-Automatisierung und zeitloses Design an die Spitze ihres Bereichs zu heben.',
-    'mission.priority': 'Unsere Priorität: Klarheit, Geschwindigkeit und dauerhafte Ästhetik.',
-    'mission.cta': 'Termin Vereinbaren',
-    
+    'mission.description': 'Hotels und Tourismusbetriebe im DACH-Raum durch professionelle Webseiten, lokale Sichtbarkeit und smarte Gästekommunikation nachhaltig erfolgreicher zu machen.',
+    'mission.priority': 'Unser Anspruch: Verständlichkeit, Verlässlichkeit und messbarer Erfolg.',
+    'mission.cta': 'Kostenloses Erstgespräch vereinbaren',
+
     // Services
-    'services.title': 'Dienstleistungen',
-    'services.web_design': 'Webdesign',
-    'services.web_design_desc': 'Wir entwerfen und entwickeln moderne, hochleistungsfähige Websites, die die Benutzererfahrung verbessern und das Geschäftswachstum fördern',
-    'services.ai_automation': 'Intelligente Automatisierung',
-    'services.ai_automation_desc': 'Wir bieten KI-gestützte Automatisierungslösungen zur Rationalisierung von Abläufen, Kostensenkung und Effizienzsteigerung.',
-    'services.social_media': 'Social Media Management',
-    'services.social_media_desc': 'Wir erstellen datengestützte Social-Media-Strategien und verwalten Ihre Online-Präsenz, um Engagement und Markenbekanntheit zu maximieren.',
-    'services.data_analytics': 'Daten & Analytik',
-    'services.data_analytics_desc': 'GTM/GA4, Heatmaps, Dashboards, ROI-Tracking, Experimentdesign.',
-    'services.cloud_integration': 'Cloud & Integration',
-    'services.cloud_integration_desc': 'API-Integrationen (z.B. Buchung/Zahlung), strukturierte Daten und Infrastruktur-Setup.',
-    'services.certified_translation': 'Zertifizierte Übersetzungsdienste',
-    'services.certified_translation_desc': 'Wir bieten beglaubigte und zertifizierte Übersetzungsdienste für juristische, akademische und kommerzielle Dokumente und gewährleisten die Einhaltung internationaler Standards und Genauigkeit.',
-    'services.ad_targeting': 'Anzeigen-Targeting (KI)',
-    'services.ad_targeting_desc': 'Zielgruppenmodellierung, kreative Variationen, Mehrkanaloptimierung.',
-    'services.ai_content': 'KI-gestützter Inhalt & Social-Strategie',
-    'services.ai_content_desc': 'Text–Bild–Video-Generierung; markenkonform, konsistente Produktion.',
-    
+    'services.title': 'Unsere Leistungen',
+    'services.seo': 'Suchmaschinenoptimierung (SEO)',
+    'services.seo_desc': 'Mehr organische Sichtbarkeit auf Google. Wir optimieren Ihre Hotel-Website gezielt für relevante Suchbegriffe — damit Gäste Sie finden, bevor sie zur Konkurrenz gehen.',
+    'services.local_seo': 'Google Maps & Lokale SEO',
+    'services.local_seo_desc': 'Ihr Betrieb auf der digitalen Landkarte: optimiertes Google-Unternehmensprofil, konsistente Eintragsdetails, lokale Zitate und gezielte Bewertungsstrategien für Ihren Standort im DACH-Raum.',
+    'services.social_media': 'Social-Media-Management',
+    'services.social_media_desc': 'Professionelle Präsenz auf Instagram, Facebook und weiteren Kanälen. Regelmäßige, authentische Inhalte, die Ihre Marke stärken, Gäste inspirieren und Buchungsanreize schaffen.',
+    'services.hotel_web': 'Hotel-Website mit Buchungsmotor',
+    'services.hotel_web_desc': 'Mehrsprachige, conversion-optimierte Hotel-Webseiten mit integriertem Buchungsmotor. Mobile-first, schnell geladen, DSGVO-konform — für maximale Direktbuchungen ohne Provisionsverluste.',
+    'services.hotel_pms': 'Hotelmanagementsoftware-Integration',
+    'services.hotel_pms_desc': 'Nahtlose Anbindung Ihres Property-Management-Systems, Channel-Managers und Online-Buchungsportale an Ihre Website. Automatische Verfügbarkeits- und Preissynchronisation ohne manuellen Aufwand.',
+    'services.guest_automation': 'Gästeerlebnis-Automatisierung',
+    'services.guest_automation_desc': 'Automatisierte Vor-Anreise-Kommunikation, digitale Check-in-Formulare, WhatsApp- und E-Mail-Workflows sowie Post-Stay-Nachfassung für mehr Bewertungen und wiederkehrende Gäste.',
+
     // Service Packages
-    'packages.title': 'Detaillierte Service-Pakete',
-    'packages.subtitle': 'Modulare und skalierbare Pakete',
-    'packages.note': 'Pakete sind im Umfang flexibel; konfiguriert nach Projekt- und Branchenanforderungen.',
-    'packages.launch_web': 'Launch Web',
-    'packages.launch_web_subtitle': 'Schnelle Einrichtung für kleine/mittlere Marken',
-    'packages.launch_web_desc': 'Informationsarchitektur, mehrsprachige Vorlage, SEO-Grundlage, 5–7 Seiten • Integrationen: Formulare, Karten, Basis-Analytik',
-    'packages.launch_web_price': 'Kontaktieren Sie uns für Details zum Umfang',
-    'packages.growth_web': 'Growth Web+',
-    'packages.growth_web_subtitle': 'Conversion-fokussierte, datengesteuerte Website',
-    'packages.growth_web_desc': 'Individuelles Design, Geschwindigkeitsoptimierung, Blog/Produktstruktur • A/B-Testing, Content-Pipeline, erweiterte Analytik',
-    'packages.growth_web_price': 'Fordern Sie ein individuelles Angebot an',
-    'packages.ai_automation': 'AI Automation',
-    'packages.ai_automation_subtitle': 'Prozessautomatisierung und Integration',
-    'packages.ai_automation_desc': 'Datenerfassung/-synchronisation, Content-Automatisierung, Agenten-/Tool-Orchestrierung • Management-Panel und Berichterstattung',
-    'packages.ai_automation_price': 'Lassen Sie uns die Lösung gemeinsam definieren',
+    'packages.title': 'Unsere Leistungspakete',
+    'packages.subtitle': 'Modular und individuell anpassbar',
+    'packages.note': 'Alle Pakete sind flexibel kombinierbar und werden auf Ihre spezifischen Anforderungen zugeschnitten.',
+    'packages.launch_web': 'Hotel-Website Basis',
+    'packages.launch_web_subtitle': 'Professioneller Einstieg für kleinere Betriebe',
+    'packages.launch_web_desc': 'Mehrsprachige Hotel-Website, Buchungsmotor-Integration, SEO-Grundlagen, mobil-optimiertes Design • Kontaktformular, Google Maps, Bewertungswidget',
+    'packages.launch_web_price': 'Unverbindlich anfragen',
+    'packages.growth_web': 'Hotel-Website Premium',
+    'packages.growth_web_subtitle': 'Conversion-optimiert für mehr Direktbuchungen',
+    'packages.growth_web_desc': 'Individuelles Design, erweiterte Buchungsfunktionen, Blog-/Angebotsbereich, A/B-Testing • Analytics-Dashboard, Content-Pipeline, Mehrsprachigkeit DE/EN/FR',
+    'packages.growth_web_price': 'Angebot anfordern',
+    'packages.ai_automation': 'Gäste-Automatisierung',
+    'packages.ai_automation_subtitle': 'Smarte Kommunikation, weniger Aufwand',
+    'packages.ai_automation_desc': 'Automatisierte Check-in/Check-out-Kommunikation, WhatsApp-Workflows, Bewertungsanfragen, CRM-Integration • Verwaltungs-Dashboard und monatliche Berichte',
+    'packages.ai_automation_price': 'Details besprechen',
     'packages.social_media_pro': 'Social Media Pro',
     'packages.social_media_pro_subtitle': 'Strategie + Produktion + Werbung',
-    'packages.social_media_pro_desc': 'Monatlicher Content-Plan (TR/EN/DE/RU), Produktion und Veröffentlichung • Leistungsberichterstattung, Optimierung',
-    'packages.social_media_pro_price': 'Planung gemeinsam mit unserem Team',
-    'packages.translation': 'Übersetzung & Lokalisierung',
-    'packages.translation_subtitle': 'Beglaubigte/zertifizierte Übersetzung',
-    'packages.translation_desc': 'Beglaubigte/zertifizierte Übersetzung, technische/akademische Qualitätssicherung',
-    'packages.translation_price': 'Kontakt für Sprachen & Umfang aufnehmen',
-    
+    'packages.social_media_pro_desc': 'Monatlicher Contentplan (DE/EN), Produktion und Veröffentlichung • Performance-Bericht, Optimierung, Saisonkampagnen',
+    'packages.social_media_pro_price': 'Plan gemeinsam definieren',
+    'packages.translation': 'Mehrsprachigkeit & Lokalisierung',
+    'packages.translation_subtitle': 'Professionelle Übersetzung & Lokalisierung',
+    'packages.translation_desc': 'Hotel-Website-Übersetzung, lokalisierte Inhalte für verschiedene Märkte, kulturgerechte Anpassung',
+    'packages.translation_price': 'Sprachen und Umfang anfragen',
+
     // Projects
-    'projects.title': 'Projekte',
-    'projects.subtitle': 'Unsere KI-basierten Referenzen',
-    'projects.description': 'Unsere KI-gestützten Lösungen und Erfolgsgeschichten aus Zypern und internationalen Märkten.',
-    'projects.visit': 'Alle Anzeigen',
+    'projects.title': 'Referenzen',
+    'projects.subtitle': 'Digitale Projekte für die Hotellerie',
+    'projects.description': 'Ausgewählte Hotel-Website-Projekte und SEO-Erfolge aus dem DACH-Raum.',
+    'projects.visit': 'Alle ansehen',
     'projects.visit_project': 'Projekt ansehen',
-    'projects.cta': 'Lass uns reden',
-    'projects.start.title': 'Starten Sie Ihr Projekt',
-    'projects.start.description': 'Bereit, Ihre Idee mit KI-gestützter Umsetzung zu realisieren? Unser Team begleitet Ihre digitale Transformation.',
-    'projects.start.cta': 'Projekt starten',
-    'projects.start.email': 'Projektbrief per E-Mail senden',
-    'projects.start.email_desc': 'Teilen Sie Ihre Ziele unter info@fures.at und erhalten Sie einen individuellen Plan.',
-    'projects.start.whatsapp': 'Schnell über WhatsApp sprechen',
-    'projects.start.whatsapp_desc': 'Schreiben Sie an +90 548 876 68 19 – wir melden uns innerhalb eines Werktags.',
+    'projects.cta': 'Beratung anfragen',
+    'projects.start.title': 'Ihr Projekt starten',
+    'projects.start.description': 'Bereit für mehr Direktbuchungen und bessere Online-Sichtbarkeit? Unser Team berät Sie kostenlos und unverbindlich.',
+    'projects.start.cta': 'Mein Projekt starten',
+    'projects.start.email': 'Projektbeschreibung per E-Mail senden',
+    'projects.start.email_desc': 'Schreiben Sie uns an info@fures.at — wir antworten innerhalb von 24 Stunden.',
+    'projects.start.whatsapp': 'Schnell über WhatsApp kontaktieren',
+    'projects.start.whatsapp_desc': 'Senden Sie uns eine Nachricht an +43 664 99735268, wir melden uns innerhalb eines Werktages.',
     'projects.start.phone': 'Direkt anrufen',
-    'projects.start.phone_desc': 'Erreichen Sie unser Team während der Geschäftszeiten.',
-    'projects.start_heading': 'Bereit für den Projektstart?',
-    'projects.start_body': 'Erzählen Sie uns von Ihren Zielen und wir planen den richtigen Lösungsweg. Unser KI-natives Team begleitet Sie vom Konzept bis zum Go-Live.',
-    'projects.start_primary_cta': 'Kontakt aufnehmen',
-    'projects.start_secondary_cta': 'Alle Projekte ansehen',
-    
+    'projects.start.phone_desc': 'Erreichen Sie unser Team während der Geschäftszeiten für ein sofortiges Erstgespräch.',
+    'projects.start_heading': 'Gemeinsam Ihr Projekt starten',
+    'projects.start_body': 'Erzählen Sie uns von Ihren Zielen — wir entwickeln die passende digitale Strategie. Vom ersten Gespräch bis zum Launch begleiten wir Sie Schritt für Schritt.',
+    'projects.start_primary_cta': 'Jetzt Kontakt aufnehmen',
+    'projects.start_secondary_cta': 'Alle Referenzen ansehen',
+
     // Why Fures
     'why_fures.title': 'Warum Fures Tech?',
-    'why_fures.description': 'Designer-Sensibilität + Ingenieur-Verstand + KI-Reflex. Wir bauen die richtigen Systeme, nicht nur aktuelle Tools: nachhaltig, messbar und übertragbar.',
-    
+    'why_fures.description': 'Wir kombinieren Hotellerie-Erfahrung mit moderner Webtechnologie. Mit unserem Büro in Maria Alm kennen wir den DACH-Markt aus erster Hand — und entwickeln Lösungen, die wirklich zum Betrieb passen: nachhaltig, messbar und verständlich erklärt.',
+
     // Team
     'team.badge': 'Unser Team',
     'team.title': 'Team',
     'team.gulben.name': 'Gülben Eser',
-    'team.gulben.role': 'Gründer',
-    'team.gulben.description': 'Design, Inhalt, Qualität und Projektmanagement',
+    'team.gulben.role': 'Gründerin',
+    'team.gulben.description': 'Design, Inhalt, Qualitätssicherung und Projektmanagement',
     'team.furkan.name': 'Furkan Yonat',
     'team.furkan.role': 'Mitgründer',
     'team.furkan.description': 'Systemarchitektur, Automatisierung, Integration und Wachstum',
-    
+
     // Pricing
     'pricing.title': 'Preise',
     'pricing.subtitle': 'Transparent und modular',
-    'pricing.description': 'Pakete können nach Bedarf kombiniert werden; wir gehen mit festem Umfang + Sprint-Ansatz vor.',
-    'pricing.cta': 'Angebot Einholen',
-    'pricing.cta_desc': 'Zusammenfassende Lösung und geschätztes Budget innerhalb von 48 Stunden.',
-    
+    'pricing.description': 'Klare Leistungen, faire Konditionen — individuell auf Ihren Betrieb zugeschnitten.',
+    'pricing.cta': 'Angebot anfordern',
+    'pricing.cta_desc': 'Innerhalb von 48 Stunden erhalten Sie ein individuelles Angebot.',
+
     // FAQ
-    'faq.title': 'Häufig Gestellte Fragen',
-    'faq.q1': 'Wie sind die Zeitpläne?',
-    'faq.a1': 'Launch Web 2–4 Wochen, Growth Web+ 4–8 Wochen; Automatisierung und Integrationen variieren je nach Umfang.',
-    'faq.q2': 'Support/Garantie?',
-    'faq.a2': '30-tägige Stabilisierung nach Go-Live; optionaler monatlicher Wartungs-/Verbesserungsplan.',
-    'faq.q3': 'Datensicherheit?',
-    'faq.a3': 'Rollen, Zugriffsebenen und Protokollierung sind Standard. Wir wenden Best Practices mit Drittanbieterdiensten an.',
-    'faq.q4': 'Welche Sprachen?',
-    'faq.a4': 'Hauptsächlich TR/EN/DE/RU, erweiterbar auf Anfrage.',
-    
+    'faq.title': 'Häufige Fragen',
+    'faq.q1': 'Wie lange dauert eine Hotel-Website?',
+    'faq.a1': 'Eine Basis-Hotel-Website ist in 3–5 Wochen fertig. Premium-Projekte mit individuellen Funktionen dauern 6–10 Wochen.',
+    'faq.q2': 'Gibt es Support nach dem Launch?',
+    'faq.a2': '30 Tage Stabilisierungsphase inklusive — danach optional monatliche Wartungs- und Optimierungspakete.',
+    'faq.q3': 'Ist die Website DSGVO-konform?',
+    'faq.a3': 'Ja, alle unsere Websites werden DSGVO-konform umgesetzt: Cookie-Consent, Datenschutzerklärung, sichere Formularverarbeitung.',
+    'faq.q4': 'Welche Sprachen werden unterstützt?',
+    'faq.a4': 'Standardmäßig Deutsch und Englisch. Auf Wunsch auch Französisch, Russisch, Arabisch und weitere Sprachen.',
+
     // Contact
     'contact.title': 'Kontakt',
-    'contact.subtitle': 'Wir sind hier, um zu helfen.',
-    'contact.description': 'Lassen Sie uns schnell von der Idee zur Umsetzung mit unserem Expertenteam übergehen.',
+    'contact.subtitle': 'Wir freuen uns auf Ihre Anfrage.',
+    'contact.description': 'Unser Team in Maria Alm, Salzburgerland, berät Sie kostenlos und unverbindlich zu Ihrer Hotel-Website und digitalen Strategie.',
     'contact.email': 'E-Mail',
-    'contact.headquarters': 'Hauptsitz',
-    'contact.headquarters_location': 'Famagusta, TRNC',
-    'contact.second_location': 'Zweiter Standort',
-    'contact.second_location_place': 'Istanbul, Türkei',
+    'contact.headquarters': 'Büro Österreich',
+    'contact.headquarters_location': 'Maria Alm, Salzburgerland, Österreich',
+    'contact.second_location': 'Internationales Büro',
+    'contact.second_location_place': 'Nordzypern (KKTC)',
     'contact.phone': 'Telefon',
-    'contact.send_message': 'Nachricht Senden',
-    'contact.schedule_meeting': 'Termin Vereinbaren',
-    
+    'contact.phone_at': '+43 664 99735268',
+    'contact.send_message': 'Nachricht senden',
+    'contact.schedule_meeting': 'Termin vereinbaren',
+
     // Footer
     'footer.copyright': '© 2025 Fures Tech — fures.at · Alle Rechte vorbehalten.',
     'footer.privacy': 'Datenschutz',
     'footer.cookies': 'Cookies',
-    'footer.kvkk': 'DSGVO/Offenlegung',
-    
+    'footer.kvkk': 'DSGVO/Datenschutzhinweis',
+
     // Form
-    'form.title': 'Lassen Sie uns Ihr Projekt zünden.',
-    'form.name': 'Vollständiger Name',
-    'form.email': 'E-Mail',
-    'form.company': 'Firma',
-    'form.needs': 'Bedarf(e)',
-    'form.budget': 'Budgetbereich',
-    'form.date': 'Datum',
-    'form.submit': 'Angebot Vorbereiten',
-    'form.success': 'Danke! Wir melden uns innerhalb von 1 Werktag bei Ihnen.',
-    'form.error': 'Etwas ist schief gelaufen. Bitte überprüfen Sie die Felder.',
+    'form.title': 'Beschreiben Sie uns Ihr Projekt.',
+    'form.name': 'Vor- und Nachname',
+    'form.email': 'E-Mail-Adresse',
+    'form.company': 'Hotel / Betrieb',
+    'form.needs': 'Was benötigen Sie?',
+    'form.budget': 'Budgetrahmen',
+    'form.date': 'Gewünschter Starttermin',
+    'form.submit': 'Anfrage senden',
+    'form.success': 'Vielen Dank! Wir melden uns innerhalb von 24 Stunden.',
+    'form.error': 'Etwas ist schiefgelaufen. Bitte überprüfen Sie Ihre Eingaben.',
   }
 };
 
@@ -1093,8 +1051,8 @@ const detectInitialLanguage = (): Language => {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
-export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguageState] = useState<Language>(detectInitialLanguage);
+export function LanguageProvider({ children, initialLanguage }: { children: ReactNode; initialLanguage?: Language }) {
+  const [language, setLanguageState] = useState<Language>(initialLanguage ?? detectInitialLanguage);
 
   const setLanguage = useCallback((lang: Language) => {
     setLanguageState((current) => (current === lang ? current : lang));
@@ -1116,18 +1074,22 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
         // ignore storage errors
       }
 
-      const url = new URL(window.location.href);
-      if (language === DEFAULT_LANGUAGE) {
-        url.searchParams.delete('lang');
-      } else {
-        url.searchParams.set('lang', language);
+      // Only sync URL params when not using a fixed initialLanguage
+      if (initialLanguage === undefined) {
+        const url = new URL(window.location.href);
+        if (language === DEFAULT_LANGUAGE) {
+          url.searchParams.delete('lang');
+        } else {
+          url.searchParams.set('lang', language);
+        }
+        window.history.replaceState({}, '', url.toString());
       }
-      window.history.replaceState({}, '', url.toString());
     }
-  }, [language]);
+  }, [language, initialLanguage]);
 
   useEffect(() => {
-    if (typeof window === 'undefined') {
+    // Only listen to popstate when not using a fixed initialLanguage
+    if (typeof window === 'undefined' || initialLanguage !== undefined) {
       return;
     }
 
@@ -1146,7 +1108,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
-  }, []);
+  }, [initialLanguage]);
 
   const t = (key: string): string => {
     return translations[language][key as keyof typeof translations.tr] || key;

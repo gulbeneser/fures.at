@@ -70,21 +70,21 @@ export function Header() {
   };
 
   const navItems: NavItem[] = [
-    { path: "/hakkimizda", label: t("nav.about"), icon: Info },
-    { path: "/hizmetler", label: t("nav.services"), icon: Briefcase },
-    { path: "/projeler", label: t("nav.projects"), icon: Rocket },
-    { path: "/kampanyalar", label: t("nav.campaigns"), icon: Megaphone },
-    { path: "/blog", label: t("nav.blog"), icon: Newspaper },
-    { path: "/ekip", label: "Ekip", icon: Users2 },
-    { path: "/iletisim", label: t("nav.contact"), icon: MessageCircle },
+    { path: "/tr/hakkimizda", label: t("nav.about"), icon: Info },
+    { path: "/tr/hizmetler", label: t("nav.services"), icon: Briefcase },
+    { path: "/tr/projeler", label: t("nav.projects"), icon: Rocket },
+    { path: "/tr/kampanyalar", label: t("nav.campaigns"), icon: Megaphone },
+    { path: "/tr/blog", label: t("nav.blog"), icon: Newspaper },
+    { path: "/tr/ekip", label: "Ekip", icon: Users2 },
+    { path: "/tr/iletisim", label: t("nav.contact"), icon: MessageCircle },
   ];
 
   const navItemPaths = new Set(navItems.map((item) => normalizePath(item.path)));
 
   const moreLinks: MoreLink[] = [
-    { path: "/kampanyalar", label: t("nav.campaigns"), icon: Megaphone },
-    { path: "/blog", label: t("nav.blog"), icon: Newspaper },
-    { path: "/sss", label: "SSS", icon: HelpCircle },
+    { path: "/tr/kampanyalar", label: t("nav.campaigns"), icon: Megaphone },
+    { path: "/tr/blog", label: t("nav.blog"), icon: Newspaper },
+    { path: "/tr/sss", label: "SSS", icon: HelpCircle },
     { path: "/gulbeneser", label: "Gülben Eser", icon: Users2, external: true },
     { path: "/furkanyonat", label: "Furkan Yonat", icon: UserRound, external: true },
     { path: "/kariyer", label: "Kariyer Asistanı", icon: Sparkles, external: true },
@@ -416,7 +416,7 @@ export function Header() {
 
         <div className="hidden items-center gap-3 sm:flex">
           <LanguageSelector />
-          <Link to="/iletisim">
+          <Link to="/tr/iletisim">
             <Button variant="gradient" size="sm" className="group">
               <span className="relative z-10">{t("nav.lets_talk")}</span>
               <span className="relative z-10">→</span>

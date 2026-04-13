@@ -129,8 +129,8 @@ export function CTA() {
             {
               icon: Phone,
               title: t('contact.phone'),
-              content: "+90 (548) 876 68 19",
-              href: "tel:+905488766819"
+              content: "+43 664 99735268",
+              href: "tel:+4366499735268"
             },
             {
               icon: MapPin,

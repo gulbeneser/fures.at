@@ -83,6 +83,39 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+/* ─── Light theme (DE site) ─────────────────────────────────────── */
+.theme-light,
+[data-theme="light"] {
+  --background: #fafafa;
+  --foreground: #111111;
+  --card: #ffffff;
+  --card-foreground: #111111;
+  --border: rgba(0, 0, 0, 0.07);
+  --input-background: rgba(0, 0, 0, 0.04);
+  --muted: #f0f0f0;
+  --muted-foreground: #6b7280;
+  --glass-blur: 16px;
+  --glass-saturate: 1.2;
+  --glass-bg: rgba(255, 255, 255, 0.70);
+  --glass-border: rgba(0, 0, 0, 0.08);
+  --glass-highlight: rgba(255, 255, 255, 0.90);
+  --glass-reflection: rgba(200, 210, 230, 0.20);
+  --glass-shadow: 0 4px 24px -8px rgba(0, 0, 0, 0.10);
+}
+
+.theme-light body,
+[data-theme="light"] body {
+  background: #fafafa;
+  color: #111111;
+}
+
+/* Tailwind classes inside light theme overrides */
+.theme-light .bg-black { background-color: #ffffff; }
+.theme-light .text-white { color: #111111; }
+.theme-light .text-gray-300 { color: #374151; }
+.theme-light .text-gray-400 { color: #6b7280; }
+.theme-light .border-white\/10 { border-color: rgba(0,0,0,0.07); }
+
 @layer base {
   * {
     border-color: var(--border);
